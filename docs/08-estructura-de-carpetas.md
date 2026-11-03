@@ -1,0 +1,105 @@
+# 08 · Estructura de carpetas
+
+Un solo proyecto Astro (no monorepo). Repositorio propio, separado del sistema interno.
+
+```
+quick-robot-web/
+├─ CLAUDE.md
+├─ docs/                          esta documentación
+│  └─ fases/                      un archivo por fase
+├─ reference/                     NO se modifica
+│  ├─ mockups/                    index, catalogo, producto, admin (.html)
+│  ├─ seed-photos/                fotos de ejemplo por producto
+│  └─ hero/                       portada por defecto (escritorio y celular)
+├─ assets/                        marca: logo-cabeza.svg, q404/, ideas/
+├─ astro.config.mjs               adaptador de Cloudflare, React, Tailwind, CSP (`13 §3`)
+├─ wrangler.jsonc                 bindings: DB (D1), BUCKET (R2), variables
+├─ drizzle.config.ts
+├─ package.json, pnpm-lock.yaml, tsconfig.json, .nvmrc
+├─ eslint.config.js, .prettierrc
+├─ vitest.config.ts, playwright.config.ts, lighthouserc.json
+├─ migrations/                    SQL generado por drizzle-kit
+├─ scripts/
+│  ├─ seed.ts                     carga la semilla en D1 local (y sube fotos a R2 local)
+│  ├─ build-assets.mjs            versiones optimizadas de assets/ en public/brand/ (`15 §3`)
+│  ├─ r2-orphans.ts               pnpm r2:orphans (`17 §5`)
+│  ├─ security.mjs                pnpm security
+│  └─ size-check.mjs              pnpm size (presupuestos de JS, `15 §2`)
+├─ public/
+│  ├─ favicon.svg                 cabeza de Q-404
+│  ├─ brand/                      generado por build-assets.mjs: Q-404, ideas, portada por defecto,
+│  │                              portada del video, og-default.jpg, apple-touch-icon.png (no se edita a mano)
+│  └─ media/                      timelapse.mp4 (cuando exista)
+├─ e2e/                           pruebas de Playwright (flujos A–G de `04 §6`)
+└─ src/
+   ├─ pages/
+   │  ├─ index.astro              inicio
+   │  ├─ catalogo/index.astro
+   │  ├─ catalogo/[categoria].astro
+   │  ├─ producto/[slug].astro
+   │  ├─ privacidad.astro
+   │  ├─ 404.astro
+   │  ├─ 500.astro
+   │  ├─ admin/index.astro        isla del panel · productos
+   │  ├─ admin/portada.astro       isla del panel · portada
+   │  ├─ api/admin/upload.ts      subir versiones de una foto
+   │  ├─ api/click.ts             contar toques a WhatsApp
+   │  ├─ sitemap.xml.ts, robots.txt.ts   para buscadores (`14 §3`)
+   │  └─ img/[...key].ts          SOLO en desarrollo: sirve fotos desde R2 local
+   ├─ layouts/
+   │  └─ BaseLayout.astro         <head> (SEO, `14`), header, footer, ClientRouter
+   ├─ components/
+   │  ├─ site/                    Header, Footer, Logo, ProductCard, Price, Breadcrumbs (Astro)
+   │  ├─ sections/                una por sección del inicio: Hero, Navidad, Ideas, Video,
+   │  │                           Imprimiendo, Q404, Alberca, Pedido (Astro + su isla si hace falta)
+   │  ├─ product/                 Gallery, ProductOptions (islas)
+   │  ├─ catalog/                 CategoryTabs, NameCustomizer (isla 3D)
+   │  ├─ admin/                   AdminApp, ProductList, ProductEditor, PhotoUploader,
+   │  │                           PhotoCropper, HeroEditor, AdminShell
+   │  ├─ ui/                      componentes de shadcn/ui
+   │  └─ external/                componentes que da el dueño (`11 §4`) y su README
+   ├─ actions/
+   │  ├─ index.ts                 export const server = { admin: {...} }
+   │  └─ admin/                   products.ts, hero.ts, backup.ts
+   ├─ server/                     lo único que toca D1 y R2
+   │  ├─ db/
+   │  │  ├─ schema.ts             tablas (`09`)
+   │  │  └─ client.ts             getDb(env)
+   │  ├─ queries/                 lecturas: products.ts, hero.ts, clicks.ts
+   │  ├─ storage.ts               R2: getBucket, putObject, deleteByPrefix, photoUrl
+│  ├─ clock.ts                 now() (con x-test-now fuera de producción, `10 §8`)
+│  ├─ env.ts                   variables y secretos
+   │  ├─ auth.ts                  requireAdmin (verifica el token de Access)
+   │  └─ cleanup.ts               barrido de fotos pending
+   ├─ lib/                        lógica pura con pruebas
+   │  ├─ whatsapp.ts              armar mensajes y links (`05 §5`)
+   │  ├─ money.ts                 centavos ↔ "$1,250"
+   │  ├─ plural.ts
+   │  ├─ publish.ts               reglas para publicar (`09 §3`)
+   │  ├─ crop.ts                  recorte → versiones (`12 §3`)
+   │  ├─ season.ts                temporada de Navidad, contador, posición en la línea
+   │  ├─ schemas.ts               esquemas Zod compartidos (producto, portada)
+│  ├─ result.ts                Result<T> de las acciones (`10 §3`)
+   │  └─ *.test.ts
+   ├─ config/
+   │  ├─ site.ts                  dominio, WhatsApp, redes, fecha límite, imagen por defecto
+   │  ├─ categories.ts
+   │  ├─ colors.ts
+   │  ├─ ideas.ts                 las 7 ideas (`05 §3`)
+   │  └─ q404.ts                  combinaciones de color y sus renders
+   ├─ i18n/
+   │  └─ es.ts                    todos los textos
+   ├─ styles/
+   │  └─ global.css               Tailwind + tokens (`03 §2`)
+   ├─ middleware.ts               cabeceras de seguridad (`13 §3`)
+   └─ env.d.ts                    tipos de los bindings
+```
+
+## Convenciones de nombres
+
+- Componentes: `PascalCase` (`ProductCard.astro`, `PhotoCropper.tsx`).
+- Lógica y servidor: `kebab-case` o `camelCase` según el archivo (`whatsapp.ts`, `size-check.mjs`).
+- Rutas en español porque son lo que ve la persona (`/catalogo`, `/producto`); todo lo demás en inglés.
+- Tablas y columnas en inglés, `snake_case` (`products`, `price_from_cents`).
+
+Más en `16`.
