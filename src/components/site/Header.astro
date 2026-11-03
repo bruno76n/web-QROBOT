@@ -1,0 +1,85 @@
+---
+import { es } from '@/i18n/es';
+import Logo from './Logo.astro';
+import Button from './Button.astro';
+
+const current = Astro.url.pathname;
+const isCurrent = (href: string) => !href.includes('#') && current.startsWith(href);
+---
+
+<header
+  id="top"
+  data-top
+  class="group/top sticky top-0 z-50 bg-white shadow-[0_1px_0_var(--line)] transition-shadow duration-300 data-[over-hero]:shadow-none"
+>
+  <div class="wrap grid min-h-[var(--top)] max-w-none grid-cols-[1fr_auto] items-center min-[901px]:grid-cols-[1fr_auto_1fr]">
+    <div class="col-start-1 grid items-center *:[grid-area:1/1]">
+      <span class="pointer-events-none text-[14px] text-ink-2 opacity-0 transition-opacity duration-300 group-data-[over-hero]/top:pointer-events-auto group-data-[over-hero]/top:opacity-100">
+        {es.site.tagline}
+      </span>
+      <a
+        href="/"
+        aria-label={es.a11y.goHome}
+        class="flex items-center no-underline transition-opacity duration-300 group-data-[over-hero]/top:pointer-events-none group-data-[over-hero]/top:opacity-0"
+      >
+        <Logo />
+      </a>
+    </div>
+
+    <nav
+      aria-label={es.a11y.mainNav}
+      class="col-start-2 hidden min-h-[54px] items-center gap-1 self-start rounded-b-[16px] bg-ink px-3.5 min-[901px]:flex"
+    >
+      {es.header.nav.map((item) => (
+        <a
+          href={item.href}
+          aria-current={isCurrent(item.href) ? 'page' : undefined}
+          class="inline-flex min-h-11 items-center px-3.5 text-[15px] text-[#c3c3cc] no-underline transition-colors duration-200 hover:text-white aria-[current]:text-white"
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <Button
+      href={es.header.quoteHref}
+      size="sm"
+      class="col-start-2 justify-self-end min-[901px]:col-start-3"
+    >
+      {es.header.quote}
+    </Button>
+  </div>
+</header>
+
+<script>
+  // Phase 4 puts an element with `data-hero` at the top of the home page. While it is on
+  // screen the header shows the tagline instead of the logo (class `data-over-hero`).
+  // Page scripts start on `astro:page-load` and clean up on `astro:before-swap` (CLAUDE.md §13).
+  let observer: IntersectionObserver | undefined;
+
+  function setup() {
+    const header = document.querySelector<HTMLElement>('[data-top]');
+    const hero = document.querySelector<HTMLElement>('[data-hero]');
+    if (!header) return;
+    if (!hero) {
+      header.removeAttribute('data-over-hero');
+      return;
+    }
+    const topPx = header.getBoundingClientRect().height;
+    observer = new IntersectionObserver(
+      ([entry]) => {
+        header.toggleAttribute('data-over-hero', Boolean(entry?.isIntersecting));
+      },
+      { rootMargin: `-${topPx}px 0px 0px 0px`, threshold: 0 },
+    );
+    observer.observe(hero);
+  }
+
+  function cleanup() {
+    observer?.disconnect();
+    observer = undefined;
+  }
+
+  document.addEventListener('astro:page-load', setup);
+  document.addEventListener('astro:before-swap', cleanup);
+</script>

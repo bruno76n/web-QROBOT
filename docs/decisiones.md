@@ -48,3 +48,14 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 - **Assets generados:** `public/brand/`, `public/fonts/` y `public/favicon.svg` están en `.gitignore`; `pnpm dev`, `pnpm build` y `pnpm typecheck` corren `scripts/build-assets.mjs` primero (pnpm no ejecuta scripts `pre*` por defecto). Nunca se agranda una imagen: los anchos pedidos se recortan al del original (Q-404 530 px, ideas ≤ 480 px). `og-default.jpg` es provisional (Q-404 sobre `--soft`, sin texto, porque el texto SVG depende de fuentes del sistema); se revisa en la fase 3 (SEO).
 - **`/dev/ui`** responde 404 fuera de desarrollo (verificado contra el build).
 - Impacto: `src/styles/global.css`, `src/components/ui/*`, `src/components/site/{Button,Logo,Picture}.astro`, `src/pages/dev/ui.astro`, `scripts/build-assets.mjs`, `components.json`.
+
+## 2026-11-03 · Fase 1 · Paso 1.4 · Layout, header y footer
+- **Footer con nombre gigante aunque el mockup no lo tiene:** `03 §5`, `04 §2.9` y `11 §2` lo piden y `02 §1` dice que cuando documento y mockup no coinciden manda el documento. No cambia ningún comportamiento (solo se suma un bloque).
+- **Ancho exacto sin JavaScript:** el contenedor `.footer-name` es `container-type: inline-size` y el `<span>` interior usa `font-size: calc(100cqw / 5.168)`. 5.168 es el ancho de "Quick Robot" a 1 em con Geist 600 e interletrado −0.068em, medido en el navegador. La prueba e2e verifica que el texto mide el ancho del contenedor (±2 px) en 390, 820 y 1440. Si cambia la fuente o el peso, hay que remedir. (`cqw` en el propio contenedor no funciona: toma el contenedor del ancestro; por eso hay dos elementos.)
+- **Header sin hero todavía:** el `<script>` busca `[data-hero]` y, mientras esté visible, pone `data-over-hero` en el header (muestra "Impresión 3D · Guadalajara" en lugar del logo). Sin `data-hero` el logo siempre se ve. Arranca en `astro:page-load` y se limpia en `astro:before-swap` (regla 13).
+- **Enlaces:** Navidad, Ideas, Q-404 y Cotizar apuntan a `/#navidad`, `/#ideas`, `/#q404`, `/#pedido` (`04 §1`); el logo, a `/`. `aria-current="page"` solo para rutas sin ancla (Catálogo).
+- **Enlace "Ir al contenido":** se agregó (accesibilidad, `03 §7`); texto en `es.ts`. No está en el mockup.
+- **`<html lang="es-MX">`** (pide la fase), aunque el mockup dice `es`.
+- **Textos y datos:** todo en `src/i18n/es.ts`; el teléfono, redes y dominio en `src/config/site.ts` con los valores provisionales de `01` (también en `progreso.md`). Redes sin URL se pintan como texto.
+- **Año del ©:** `new Date().getFullYear()` en el footer (la página se arma en cada visita).
+- Impacto: `src/layouts/BaseLayout.astro`, `src/components/site/{Header,Footer}.astro`, `src/i18n/es.ts`, `src/config/site.ts`, `src/pages/index.astro`, `e2e/layout.spec.ts`.

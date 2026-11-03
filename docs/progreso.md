@@ -6,8 +6,8 @@ Lo actualiza Claude Code al terminar cada paso. Estados: **pendiente** · **en c
 
 | Página / sección | Fase | 390 | 820 | 1440 | Notas |
 |---|---|---|---|---|---|
-| Header | 1 | pendiente | pendiente | pendiente | |
-| Footer | 1 | pendiente | pendiente | pendiente | |
+| Header | 1 | igual al mockup | igual al mockup | igual al mockup | Alto 68 px, botón Cotizar 40 px, pestaña negra desde 901 px. La pestaña mide 352 px y no 360 (el archivo de Geist de Fontsource tiene métricas apenas distintas al de Google). Sin hero aún: muestra el logo; el cambio a "Impresión 3D · Guadalajara" está listo (`data-hero`) para la fase 4 |
+| Footer | 1 | igual al mockup | igual al mockup | igual al mockup | Logo, WhatsApp, Facebook, Instagram y ©, como el mockup. Se suma el nombre gigante al ancho exacto que piden `03 §5`, `04 §2.9` y `11 §2` (el mockup no lo tiene; manda el documento, `02 §1`). Sin liga a privacidad hasta la fase 5 |
 | Panel · Productos (lista) | 2 | pendiente | pendiente | pendiente | |
 | Panel · Editor de producto | 2 | pendiente | pendiente | pendiente | |
 | Panel · Fotos y recorte | 2 | pendiente | pendiente | pendiente | |
@@ -48,7 +48,12 @@ Lo actualiza Claude Code al terminar cada paso. Estados: **pendiente** · **en c
 
 | Dato | Valor provisional | Desde |
 |---|---|---|
-| | | |
+| Dominio | `https://quickrobot.example` | Fase 1 (`src/config/site.ts`) |
+| Número de WhatsApp | `52XXXXXXXXXX` (se muestra `+52 [tu número]`) | Fase 1 |
+| Facebook | `[tu página]` (texto, sin liga) | Fase 1 |
+| Instagram | `[@tu.usuario]` (texto, sin liga) | Fase 1 |
+| Fecha límite de Navidad | 12 de diciembre | Fase 1 |
+| Video del timelapse | `src: null` | Fase 1 |
 
 ## Bloqueos
 
