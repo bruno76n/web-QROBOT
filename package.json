@@ -24,7 +24,8 @@
     "assets": "node scripts/build-assets.mjs",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "wrangler d1 migrations apply DB --local",
-    "cf-typegen": "wrangler types --include-runtime=false --strict-vars=false"
+    "cf-typegen": "wrangler types --include-runtime=false --strict-vars=false",
+    "deploy": "wrangler deploy"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.4.4",
