@@ -1,0 +1,17 @@
+{
+  // Used only by Vitest (vitest.config.ts): same bindings as wrangler.jsonc, but no Astro
+  // entry point, so server code runs inside the Workers runtime without building the site.
+  // Keep the bindings in sync with wrangler.jsonc.
+  "name": "quick-robot-web-test",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "quick-robot-web",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations",
+    },
+  ],
+  "r2_buckets": [{ "binding": "BUCKET", "bucket_name": "quick-robot-photos" }],
+}

@@ -8,7 +8,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "dev": "node scripts/build-assets.mjs && astro dev",
+    "dev": "node scripts/dev.mjs",
     "build": "node scripts/build-assets.mjs && astro build",
     "preview": "astro preview",
     "test": "vitest run",
@@ -21,7 +21,10 @@
     "security": "node scripts/security.mjs",
     "size": "node scripts/size-check.mjs",
     "lhci": "lhci autorun",
-    "assets": "node scripts/build-assets.mjs"
+    "assets": "node scripts/build-assets.mjs",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "wrangler d1 migrations apply DB --local",
+    "cf-typegen": "wrangler types --include-runtime=false --strict-vars=false"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.4.4",
@@ -32,6 +35,7 @@
     "astro": "^7.4.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "drizzle-orm": "^0.45.4",
     "lucide-react": "^1.67.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
@@ -41,11 +45,14 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
     "@axe-core/playwright": "^4.14.0",
+    "@cloudflare/vitest-plugin": "^1.5.1",
+    "@cloudflare/workers-types": "^5.20261103.1",
     "@eslint/js": "^10.0.1",
     "@lhci/cli": "^0.16.0",
     "@playwright/test": "^1.64.1",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "drizzle-kit": "^0.31.11",
     "eslint": "^10.14.0",
     "eslint-plugin-astro": "^3.2.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",

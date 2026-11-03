@@ -28,7 +28,10 @@ async function responsive(src, destDir, name, widths) {
   for (const w of sizes) {
     const dest = join(destDir, `${name}-${w}.webp`);
     if (fresh(src, dest)) continue;
-    await sharp(src).resize({ width: w, withoutEnlargement: true }).webp({ quality: QUALITY }).toFile(dest);
+    await sharp(src)
+      .resize({ width: w, withoutEnlargement: true })
+      .webp({ quality: QUALITY })
+      .toFile(dest);
     made++;
   }
 }
@@ -50,12 +53,27 @@ if (!fresh(fontSrc, join(out.fonts, 'geist-latin.woff2'))) {
 // Q-404 renders, ideas, default hero
 for (const f of readdirSync(at('assets/q404'))) {
   const impresion = f.includes('impresion');
-  await responsive(at('assets/q404', f), at('public/brand/q404'), basename(f, extname(f)), impresion ? [400, 800] : [265, 530]);
+  await responsive(
+    at('assets/q404', f),
+    at('public/brand/q404'),
+    basename(f, extname(f)),
+    impresion ? [400, 800] : [265, 530],
+  );
 }
 for (const f of readdirSync(at('assets/ideas'))) {
-  await responsive(at('assets/ideas', f), at('public/brand/ideas'), basename(f, extname(f)), [240, 480]);
+  await responsive(
+    at('assets/ideas', f),
+    at('public/brand/ideas'),
+    basename(f, extname(f)),
+    [240, 480],
+  );
 }
-await responsive(at('reference/hero/hero-escritorio.webp'), out.brand, 'hero-desktop', [1200, 2400]);
+await responsive(
+  at('reference/hero/hero-escritorio.webp'),
+  out.brand,
+  'hero-desktop',
+  [1200, 2400],
+);
 await responsive(at('reference/hero/hero-celular.webp'), out.brand, 'hero-mobile', [600, 1200]);
 
 // Blurred poster for the video section (docs/05: portada desenfocada)
@@ -82,7 +100,10 @@ await responsive(at('reference/hero/hero-celular.webp'), out.brand, 'hero-mobile
   }
   const icon = join(out.brand, 'apple-touch-icon.png');
   if (!fresh(logo, icon)) {
-    const head = await sharp(readFileSync(logo), { density: 600 }).resize({ width: 120 }).png().toBuffer();
+    const head = await sharp(readFileSync(logo), { density: 600 })
+      .resize({ width: 120 })
+      .png()
+      .toBuffer();
     await sharp({ create: { width: 180, height: 180, channels: 3, background: '#ffffff' } })
       .composite([{ input: head, gravity: 'centre' }])
       .png()

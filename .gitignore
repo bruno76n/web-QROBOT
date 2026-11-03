@@ -18,3 +18,6 @@ test-results/
 public/brand/
 public/fonts/
 public/favicon.svg
+.dev.vars.*
+!.dev.vars.example
+.dev.vars.local
