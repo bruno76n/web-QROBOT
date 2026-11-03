@@ -1,0 +1,34 @@
+---
+interface Props {
+  /** Path without width and extension, e.g. `/brand/hero-desktop` (files `-1200.webp`, `-2400.webp`). */
+  base: string;
+  /** Widths that exist for this image (see scripts/build-assets.mjs). */
+  widths: number[];
+  sizes: string;
+  alt: string;
+  /** Intrinsic size of the LARGEST version, so the layout never jumps. */
+  width: number;
+  height: number;
+  /** Main image of the page: fetchpriority=high and eager. Everything else is lazy. */
+  priority?: boolean;
+  class?: string;
+}
+
+const { base, widths, sizes, alt, width, height, priority = false, class: className } = Astro.props;
+const sorted = [...widths].sort((a, b) => a - b);
+const largest = sorted[sorted.length - 1] ?? width;
+const srcset = sorted.map((w) => `${base}-${w}.webp ${w}w`).join(', ');
+---
+
+<img
+  src={`${base}-${largest}.webp`}
+  srcset={srcset}
+  sizes={sizes}
+  width={width}
+  height={height}
+  alt={alt}
+  loading={priority ? 'eager' : 'lazy'}
+  fetchpriority={priority ? 'high' : 'auto'}
+  decoding="async"
+  class={className}
+/>
