@@ -19,7 +19,7 @@ env:
 jobs:
   checks:
     name: Checks
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
@@ -64,7 +64,7 @@ jobs:
     name: Deploy to Cloudflare
     needs: checks
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     environment: production
     env:
