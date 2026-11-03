@@ -27,3 +27,14 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 - El adaptador agrega por defecto un binding KV `SESSION` para sesiones de Astro. No usamos sesiones; se deja como viene y se revisa en la fase 2 al configurar Access.
 - `pnpm-workspace.yaml` aprueba los scripts de instalación de `esbuild`, `workerd` y `sharp` (pnpm 10 los bloquea por defecto).
 - Impacto: `package.json`, `astro.config.mjs`, `tsconfig.json`, `wrangler.jsonc`, `pnpm-workspace.yaml`, `.nvmrc`.
+
+## 2026-11-03 · Fase 1 · Paso 1.2 · Herramientas de calidad
+- Versiones: eslint 10.14, typescript-eslint 8.72, eslint-plugin-astro 3.2, eslint-plugin-react-hooks 7.1, eslint-plugin-jsx-a11y 6.10 (su peer declara hasta ESLint 9 pero funciona con 10; se vigila), prettier 3.9 (+ plugins de Astro y Tailwind), vitest 5.1, @playwright/test 1.64, @axe-core/playwright 4.14, @lhci/cli 0.16.
+- **Prueba negativa por stdin:** los archivos de `tests/negative/` se lintean con `eslint --stdin --stdin-filename <ruta falsa>` (`scripts/lint-negative.mjs`) para que las reglas por carpeta (fronteras de `07 §6`) se apliquen como si el archivo viviera en `src/components/` o `src/lib/`. Cada uno debe disparar su regla; si no, `pnpm security` falla.
+- **Fronteras en ESLint:** `drizzle-orm` y `cloudflare:workers` solo se importan desde `src/server/`, `scripts/`, pruebas y configs; `src/lib/` no importa Astro, React, Cloudflare ni `src/server`/`src/components`. `set:html` con `astro/no-set-html-directive`; `dangerouslySetInnerHTML`, `innerHTML`, `outerHTML`, `insertAdjacentHTML`, `eval` y `new Function` con `no-restricted-syntax`.
+- **`astro preview` en Astro 7 corre en segundo plano y guarda un lock.** Los scripts (`size`, Playwright, Lighthouse) lo arrancan con `--ignore-lock`. `pnpm size` y `lhci` levantan su propio servidor.
+- **`pnpm size`** mide los `<script src>` y `modulepreload` de cada página (gzip), saltándose las páginas que aún no existen (404).
+- **gitleaks** no está instalado en este entorno: `pnpm security` lo omite con aviso en local y lo exige en CI (`CI=true`).
+- **Navegador de Playwright:** en entornos con Chromium preinstalado se pasa `PW_CHROMIUM_PATH`; si no, Playwright usa el suyo (`pnpm exec playwright install chromium`).
+- **Vitest** con `passWithNoTests` hasta que existan las primeras pruebas (paso 1.6).
+- Impacto: `eslint.config.js`, `.prettierrc`, `vitest.config.ts`, `playwright.config.ts`, `lighthouserc.json`, `scripts/*`, `tests/negative/*`, `e2e/*`.

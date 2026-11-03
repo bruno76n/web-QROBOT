@@ -1,0 +1,6 @@
+---
+const html = '<b>x</b>';
+---
+
+<!-- NEGATIVE FIXTURE: set:html must break the lint (docs/13 §6). -->
+<div set:html={html}></div>
