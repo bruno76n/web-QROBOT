@@ -1,9 +1,19 @@
+import { existsSync, readdirSync } from 'node:fs';
 import { defineConfig, devices } from '@playwright/test';
 
 const port = Number(process.env.PORT ?? 4321);
 const baseURL = `http://localhost:${port}`;
-// Pre-installed browser in some environments; otherwise Playwright's own download is used.
-const executablePath = process.env.PW_CHROMIUM_PATH || undefined;
+// Some environments ship a pre-installed Chromium (PW_CHROMIUM_PATH or /opt/pw-browsers);
+// otherwise Playwright uses its own download (`pnpm exec playwright install chromium`).
+function findChromium(): string | undefined {
+  if (process.env.PW_CHROMIUM_PATH) return process.env.PW_CHROMIUM_PATH;
+  const base = '/opt/pw-browsers';
+  if (!existsSync(base)) return undefined;
+  const dir = readdirSync(base).find((d) => /^chromium-\d+$/.test(d));
+  const candidate = dir ? `${base}/${dir}/chrome-linux64/chrome` : '';
+  return candidate && existsSync(candidate) ? candidate : undefined;
+}
+const executablePath = findChromium();
 const launchOptions = executablePath ? { executablePath, args: ['--no-sandbox'] } : {};
 
 const widths = [

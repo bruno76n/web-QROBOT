@@ -35,7 +35,7 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 - **`astro preview` en Astro 7 corre en segundo plano y guarda un lock.** Los scripts (`size`, Playwright, Lighthouse) lo arrancan con `--ignore-lock`. `pnpm size` y `lhci` levantan su propio servidor.
 - **`pnpm size`** mide los `<script src>` y `modulepreload` de cada página (gzip), saltándose las páginas que aún no existen (404).
 - **gitleaks** no está instalado en este entorno: `pnpm security` lo omite con aviso en local y lo exige en CI (`CI=true`).
-- **Navegador de Playwright:** en entornos con Chromium preinstalado se pasa `PW_CHROMIUM_PATH`; si no, Playwright usa el suyo (`pnpm exec playwright install chromium`).
+- **Navegador de Playwright:** `playwright.config.ts` usa `PW_CHROMIUM_PATH` o detecta el Chromium preinstalado en `/opt/pw-browsers`; si no hay, usa el propio de Playwright (`pnpm exec playwright install chromium`).
 - **Vitest** con `passWithNoTests` hasta que existan las primeras pruebas (paso 1.6).
 - Impacto: `eslint.config.js`, `.prettierrc`, `vitest.config.ts`, `playwright.config.ts`, `lighthouserc.json`, `scripts/*`, `tests/negative/*`, `e2e/*`.
 
@@ -59,3 +59,11 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 - **Textos y datos:** todo en `src/i18n/es.ts`; el teléfono, redes y dominio en `src/config/site.ts` con los valores provisionales de `01` (también en `progreso.md`). Redes sin URL se pintan como texto.
 - **Año del ©:** `new Date().getFullYear()` en el footer (la página se arma en cada visita).
 - Impacto: `src/layouts/BaseLayout.astro`, `src/components/site/{Header,Footer}.astro`, `src/i18n/es.ts`, `src/config/site.ts`, `src/pages/index.astro`, `e2e/layout.spec.ts`.
+
+## 2026-11-03 · Fase 1 · Paso 1.5 · CSP y cabeceras de seguridad
+- **CSP: función integrada de Astro (`security.csp`), disponible y estable en Astro 7.** No hace falta `scripts/csp-hashes.mjs`. Con el adaptador de Cloudflare en modo servidor, Astro manda la política como **cabecera** `Content-Security-Policy` (no como `<meta>`), con los hashes `sha256` de los scripts en línea (islas, `ClientRouter`, el script del header), así que `frame-ancestors 'none'` va dentro de la misma política (en cabecera sí funciona) y no hace falta una cabecera CSP aparte del middleware como decía `13 §3`.
+- Política de la fase 1: `default-src 'self'; img-src 'self' data: blob:; media-src 'self'; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; script-src 'self' <hashes>; style-src 'self' 'unsafe-inline'` (sin hashes de estilos, `13 §3`). Todavía **no** se agregan `https://img.[dominio]` (fase 2, dominio de fotos) ni `static.cloudflareinsights.com` / `cloudflareinsights.com` (fase 5, Web Analytics); se suman cuando esas piezas existan.
+- **Riesgo anotado para las fases 3–4:** la documentación de Astro dice que la CSP integrada "no soporta" las View Transitions (`ClientRouter`). En la fase 1 la página carga sin errores de CSP y `ClientRouter` funciona, pero al navegar entre páginas con islas distintas los hashes de la página inicial podrían no cubrir los scripts de la nueva. Se agrega una prueba de navegación entre páginas cuando existan dos páginas públicas (fase 3); si falla, plan B: `scripts/csp-hashes.mjs` que calcula la unión de hashes de todas las páginas.
+- **Middleware (`src/middleware.ts`)** pone `X-Frame-Options`, `Strict-Transport-Security`, `X-Content-Type-Options`, `Referrer-Policy` y `Permissions-Policy` (con `camera=(self)` en `/admin*`) en las respuestas del Worker. Los archivos estáticos que sirve Cloudflare sin pasar por el Worker (`/_astro/*`, `/brand/*`, `/fonts/*`) no pasan por el middleware; si hiciera falta cabeceras ahí, se agrega `public/_headers` (se revisa en 1.7 con el despliegue real).
+- Prueba: `tests/security/headers.spec.ts` (Playwright contra `pnpm preview`, en 390/820/1440): cabeceras exactas, CSP sin `unsafe-inline`/`unsafe-eval` en `script-src`, y cero errores de consola. Corre dentro de `pnpm security`.
+- Impacto: `astro.config.mjs`, `src/middleware.ts`, `tests/security/headers.spec.ts`.
