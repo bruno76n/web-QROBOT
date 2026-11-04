@@ -11,8 +11,12 @@ export async function putObject(
   body: ArrayBuffer | ReadableStream | Uint8Array | string,
   contentType: string,
   bucket: R2Bucket = getBucket(),
+  /** `public, max-age=31536000, immutable` for photos: their key changes when they change. */
+  cacheControl?: string,
 ): Promise<void> {
-  await bucket.put(key, body, { httpMetadata: { contentType } });
+  await bucket.put(key, body, {
+    httpMetadata: cacheControl ? { contentType, cacheControl } : { contentType },
+  });
 }
 
 /** Deletes every object whose key starts with `prefix`; returns how many were removed. */

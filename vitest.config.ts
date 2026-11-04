@@ -16,7 +16,7 @@ export default defineConfig({
           name: 'unit',
           environment: 'node',
           include: ['src/lib/**/*.test.ts', 'src/components/**/*.test.ts', 'tests/**/*.test.ts'],
-          exclude: ['tests/negative/**', 'node_modules/**'],
+          exclude: ['tests/negative/**', '**/*.server.test.ts', 'node_modules/**'],
         },
       },
       {
@@ -37,7 +37,11 @@ export default defineConfig({
         ],
         test: {
           name: 'server',
-          include: ['src/server/**/*.test.ts', 'src/actions/**/*.test.ts'],
+          include: [
+            'src/server/**/*.test.ts',
+            'src/actions/**/*.test.ts',
+            'tests/**/*.server.test.ts',
+          ],
           setupFiles: ['./src/server/test-setup.ts'],
         },
       },
