@@ -3,6 +3,7 @@
  * Values marked "provisional" come from docs/01 › Pendientes del dueño.
  */
 export const site = {
+  name: 'Quick Robot',
   /** Provisional: the real domain is still pending. */
   domain: 'https://quickrobot.example',
   /** Country code + number, no "+" or spaces. Provisional. */
