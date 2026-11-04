@@ -7,7 +7,9 @@
       "url": [
         "http://localhost:4321/",
         "http://localhost:4321/catalogo",
-        "http://localhost:4321/producto/llaveros-con-nombre"
+        "http://localhost:4321/producto/llaveros-con-nombre",
+        "http://localhost:4321/privacidad",
+        "http://localhost:4321/catalogo/navidad"
       ],
       "numberOfRuns": 1,
       "settings": { "chromeFlags": "--no-sandbox --headless" }
