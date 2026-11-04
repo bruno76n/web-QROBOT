@@ -1,0 +1,282 @@
+---
+import { es } from '@/i18n/es';
+import { TOTAL_LAYERS } from '@/lib/print';
+
+const t = es.home.printing;
+---
+
+<section class="print" id="imprimiendo" aria-labelledby="h-print" data-print>
+  <div class="print-stick">
+    <div class="wrap print-grid">
+      <div>
+        <h2 id="h-print">{t.title}</h2>
+        <p class="pr-st" aria-hidden="true">
+          {t.layer} <b data-layer>{TOTAL_LAYERS}</b> {t.of} {TOTAL_LAYERS} ·{' '}
+          <span data-time>listo</span>
+        </p>
+        <div class="pr-bar" aria-hidden="true">
+          <i></i>
+        </div>
+        <p class="pr-done">
+          {t.done}
+          <a href="#q404">{t.meet}</a>
+        </p>
+      </div>
+      <div class="print-stage">
+        <div class="pr-box" data-box>
+          <img
+            class="ghost"
+            src="/brand/q404/q404-impresion-800.webp"
+            width="800"
+            height="1200"
+            alt=""
+            aria-hidden="true"
+          />
+          <img
+            class="real"
+            src="/brand/q404/q404-impresion-800.webp"
+            srcset="/brand/q404/q404-impresion-400.webp 400w, /brand/q404/q404-impresion-800.webp 800w"
+            sizes="(max-width: 900px) 40vw, 400px"
+            width="800"
+            height="1200"
+            alt={t.alt}
+            loading="lazy"
+          />
+          <div class="nozzle" aria-hidden="true">
+            <i></i>
+          </div>
+        </div>
+        <div class="bed" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .print.on {
+    height: 250vh;
+  }
+  .print-stick {
+    padding-block: clamp(60px, 8vw, 120px);
+  }
+  .print.on .print-stick {
+    position: sticky;
+    top: var(--top);
+    height: calc(100svh - var(--top));
+    display: flex;
+    align-items: center;
+    padding-block: 0;
+  }
+  .print-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(30px, 6vw, 100px);
+    align-items: center;
+    width: 100%;
+  }
+  .print h2 {
+    max-width: 11em;
+  }
+  .pr-st {
+    margin-top: 26px;
+    font-size: 17px;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .pr-st b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .pr-bar {
+    margin-top: 14px;
+    height: 6px;
+    max-width: 360px;
+    background:
+      linear-gradient(var(--line), var(--line)) 0 0 / 100% 2px no-repeat,
+      linear-gradient(var(--line), var(--line)) 0 100% / 100% 2px no-repeat;
+    position: relative;
+  }
+  .pr-bar i {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: calc(var(--p, 1) * 100%);
+    background:
+      linear-gradient(var(--purple), var(--purple)) 0 0 / 100% 2px no-repeat,
+      linear-gradient(var(--green), var(--green)) 0 100% / 100% 2px no-repeat;
+  }
+  .pr-done {
+    margin-top: 22px;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 0.4s,
+      transform 0.4s;
+  }
+  .pr-done a {
+    color: var(--purple);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    margin-left: 6px;
+  }
+  /* Hidden until printed: invisible, not just transparent, so nothing low-contrast is left on screen. */
+  .print.on:not(.done) .pr-done {
+    visibility: hidden;
+  }
+  .print.done .pr-done,
+  .print:not(.on) .pr-done {
+    opacity: 1;
+    transform: none;
+  }
+  .print-stage {
+    display: grid;
+    justify-items: center;
+  }
+  .pr-box {
+    position: relative;
+    height: min(64vh, 600px);
+    aspect-ratio: 800/1200;
+    max-width: 100%;
+  }
+  .pr-box img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .pr-box .ghost {
+    opacity: 0.08;
+    filter: grayscale(1);
+    display: none;
+  }
+  .print.on .pr-box .ghost {
+    display: block;
+  }
+  .print.on .pr-box .real {
+    clip-path: inset(calc(var(--cut, 0) * 1%) 0 0 0);
+  }
+  .nozzle {
+    display: none;
+    position: absolute;
+    left: -8%;
+    right: -8%;
+    top: calc(var(--cut, 0) * 1%);
+    height: 6px;
+    transform: translateY(-50%);
+    background:
+      linear-gradient(var(--purple), var(--purple)) 0 0 / 100% 2px no-repeat,
+      linear-gradient(var(--green), var(--green)) 0 100% / 100% 2px no-repeat;
+  }
+  .print.on .nozzle {
+    display: block;
+  }
+  .nozzle i {
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    width: 24px;
+    height: 16px;
+    background: var(--ink);
+    border-radius: 3px 3px 0 0;
+    animation: noz 1.2s ease-in-out infinite alternate;
+  }
+  .nozzle i::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -5px;
+    margin-left: -4px;
+    border: 4px solid transparent;
+    border-top-color: var(--ink);
+    border-bottom: 0;
+  }
+  @keyframes noz {
+    to {
+      left: calc(100% - 24px);
+    }
+  }
+  .print.done .nozzle {
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .bed {
+    width: min(460px, 90%);
+    height: 1px;
+    background: var(--line);
+  }
+  @media (max-width: 900px) {
+    .print-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 20px;
+    }
+    .print.on .print-stick {
+      align-items: flex-start;
+      padding-top: 28px;
+    }
+    .pr-box {
+      height: min(50vh, 440px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nozzle i {
+      animation: none;
+      left: calc(50% - 12px);
+    }
+  }
+</style>
+
+<script>
+  import { scroll } from 'motion';
+  import { isDone, layerOf, printProgress, timeLabel } from '@/lib/print';
+
+  // The scroll prints Q-404 layer by layer (motion's `scroll()` tells us when to update).
+  // With reduced motion the robot is shown complete. Rule 13 for the lifecycle.
+  let stop: (() => void) | undefined;
+  let timer: number | undefined;
+
+  function setup() {
+    const sec = document.querySelector<HTMLElement>('[data-print]');
+    if (!sec || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const box = sec.querySelector<HTMLElement>('[data-box]');
+    const bar = sec.querySelector<HTMLElement>('.pr-bar');
+    const layer = sec.querySelector<HTMLElement>('[data-layer]');
+    const time = sec.querySelector<HTMLElement>('[data-time]');
+    if (!box || !bar || !layer || !time) return;
+    sec.classList.add('on');
+
+    const update = () => {
+      const r = sec.getBoundingClientRect();
+      const header =
+        parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--top')) || 68;
+      const p = printProgress({
+        sectionTop: r.top,
+        sectionHeight: r.height,
+        viewportHeight: window.innerHeight,
+        headerHeight: header,
+      });
+      box.style.setProperty('--cut', ((1 - p) * 100).toFixed(2));
+      bar.style.setProperty('--p', p.toFixed(3));
+      layer.textContent = String(layerOf(p));
+      time.textContent = timeLabel(p);
+      sec.classList.toggle('done', isDone(p));
+    };
+    stop = scroll(update);
+    window.addEventListener('resize', update);
+    timer = window.setInterval(update, 500);
+    update();
+    const prevStop = stop;
+    stop = () => {
+      prevStop();
+      window.removeEventListener('resize', update);
+    };
+  }
+
+  document.addEventListener('astro:page-load', setup);
+  document.addEventListener('astro:before-swap', () => {
+    stop?.();
+    stop = undefined;
+    window.clearInterval(timer);
+  });
+</script>
