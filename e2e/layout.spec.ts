@@ -1,7 +1,10 @@
 import { test, expect } from '@playwright/test';
+import { stubPhotoHost } from './stub-images';
 import { publicUrls } from './urls';
 
 // Header and footer must match the mockup in structure and size (docs/fases/fase-1.md §1.4).
+test.beforeEach(({ context }) => stubPhotoHost(context));
+
 for (const url of publicUrls) {
   test.describe(`layout ${url}`, () => {
     test('header, footer and no horizontal overflow', async ({ page }, info) => {

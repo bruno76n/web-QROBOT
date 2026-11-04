@@ -1,10 +1,14 @@
 {
   "ci": {
     "collect": {
-      "startServerCommand": "pnpm preview --port 4321 --ignore-lock",
-      "startServerReadyPattern": "Preview server",
+      "startServerCommand": "node scripts/lhci-server.mjs",
+      "startServerReadyPattern": "Ready on",
       "startServerReadyTimeout": 60000,
-      "url": ["http://localhost:4321/"],
+      "url": [
+        "http://localhost:4321/",
+        "http://localhost:4321/catalogo",
+        "http://localhost:4321/producto/llaveros-con-nombre"
+      ],
       "numberOfRuns": 1,
       "settings": { "chromeFlags": "--no-sandbox --headless" }
     },

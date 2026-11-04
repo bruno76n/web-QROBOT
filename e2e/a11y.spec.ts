@@ -1,6 +1,9 @@
 import { test, expect } from '@playwright/test';
+import { stubPhotoHost } from './stub-images';
 import AxeBuilder from '@axe-core/playwright';
 import { publicUrls } from './urls';
+
+test.beforeEach(({ context }) => stubPhotoHost(context));
 
 for (const url of publicUrls) {
   test(`axe: no serious violations on ${url}`, async ({ page }) => {

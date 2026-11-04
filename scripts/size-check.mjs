@@ -10,7 +10,8 @@ const budgets = [
   { label: 'Catálogo', url: '/catalogo', limitKb: 25 },
   { label: 'Producto', url: '/producto/llaveros-con-nombre', limitKb: 70 },
   { label: 'Privacidad', url: '/privacidad', limitKb: 0 },
-  { label: '404', url: '/404', limitKb: 0 },
+  // 404 and privacy carry no React: only the header scripts count (docs/15 §2)
+  { label: '404', url: '/no-existe', limitKb: 8, status: 404 },
 ];
 
 async function jsOnOpen(base, html) {
@@ -20,12 +21,30 @@ async function jsOnOpen(base, html) {
     srcs.add(m[1]);
   for (const m of html.matchAll(/<link\b[^>]*href="([^"]+)"[^>]*rel="modulepreload"/g))
     srcs.add(m[1]);
+  // Islands (`client:visible` / `client:load`) load their component and renderer too: count them
+  // as if they hydrate on open (conservative, docs/15 §2).
+  for (const m of html.matchAll(/\b(?:component-url|renderer-url|before-hydration-url)="([^"]+)"/g))
+    srcs.add(m[1]);
+  // Follow the static imports of each file (React and Embla live in shared chunks).
+  const seen = new Set();
   let total = 0;
-  for (const src of srcs) {
-    const res = await fetch(new URL(src, base));
-    if (!res.ok) throw new Error(`Cannot fetch ${src}: ${res.status}`);
-    total += gzipSync(Buffer.from(await res.arrayBuffer())).length;
+  const queue = [...srcs].map((src) => new URL(src, base).href);
+  while (queue.length > 0) {
+    const url = queue.shift();
+    if (seen.has(url)) continue;
+    seen.add(url);
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Cannot fetch ${url}: ${res.status}`);
+    const buf = Buffer.from(await res.arrayBuffer());
+    total += gzipSync(buf).length;
+    if (/\.m?js(\?|$)/.test(url)) {
+      const code = buf.toString('utf8');
+      for (const m of code.matchAll(/(?:from|import)\s*["'](\.{1,2}\/[^"']+\.js)["']/g))
+        queue.push(new URL(m[1], url).href);
+    }
   }
+  srcs.clear();
+  seen.forEach((u) => srcs.add(u));
   return { total, files: srcs.size };
 }
 
@@ -34,7 +53,7 @@ async function run(base) {
   let checked = 0;
   for (const b of budgets) {
     const res = await fetch(base + b.url);
-    if (res.status !== 200) {
+    if (res.status !== (b.status ?? 200)) {
       console.log(`- ${b.label} (${b.url}): not built yet (HTTP ${res.status}), skipped`);
       continue;
     }

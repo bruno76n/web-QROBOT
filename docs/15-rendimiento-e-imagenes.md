@@ -23,10 +23,10 @@ Lo verifica `pnpm size` (`scripts/size-check.mjs`) leyendo el build.
 
 | Página | JS al abrir | Notas |
 |---|---|---|
-| Producto | ≤ 70 KB | React + galería + opciones |
+| Producto | ≤ 70 KB | Embla + galería + opciones (sin React: React solo con el recortador del panel) |
 | Catálogo | ≤ 25 KB al abrir | El personalizador muestra primero una **vista fija** (isla ligera); three, R3F y la fuente se descargan **al tocarlo** (o al enfocarlo con teclado). Ese paquete ≤ 250 KB y no cuenta aquí ni en Lighthouse |
 | Inicio | ≤ 90 KB al abrir | Sin contar islas `client:visible` de más abajo ni `matter-js` (se carga al tocar) |
-| Privacidad, 404 | 0 KB de React | Solo los `<script>` del header |
+| Privacidad, 404 | 0 KB de React (≤ 8 KB en total) | Solo los `<script>` del header y `ClientRouter` |
 | Panel | Sin límite estricto | Se carga solo para el dueño; las librerías pesadas (`heic2any`, recortador) con carga diferida |
 
 ## 3. Imágenes

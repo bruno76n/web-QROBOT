@@ -103,6 +103,14 @@ test('flujo D: producto nuevo con dos fotos, se centra, se publica y se ve en la
   const row = page.locator('.list > li').filter({ hasText: /Producto e2e/ });
   await expect(row).toContainText('Publicado');
   await expect(row).toContainText('$75');
+
+  // flow D, public half: it shows up in the catalog and on its own page with the photo we chose
+  const published = await page.request.get('/producto/producto-e2e');
+  expect(published.status()).toBe(200);
+  const html = await published.text();
+  expect(html).toContain('<h1');
+  expect(html).toMatch(/\/img\/ph\/[a-z0-9]+\/[0-9a-f]{8}\/(400|800)\.webp/);
+  expect(await (await page.request.get('/catalogo')).text()).toContain('Producto e2e');
 });
 
 test('centrar una foto guarda el recorte elegido y borra la versión vieja', async ({
@@ -190,6 +198,9 @@ test('flujo F: ocultar un producto y reordenar la lista con el teclado', async (
   await expect(page.locator('.list > li').filter({ hasText: /Dinosaurio/ })).toContainText(
     'Oculto',
   );
+  // flow F, public half: the hidden product is a 404 and is not in the catalog
+  expect((await page.request.get('/producto/dinosaurio')).status()).toBe(404);
+  expect(await (await page.request.get('/catalogo')).text()).not.toContain('Dinosaurio');
 
   // keyboard sorting with dnd-kit: Space picks up, arrows move, Space drops
   const names = async () =>
@@ -212,6 +223,9 @@ test('flujo F: ocultar un producto y reordenar la lista con el teclado', async (
   await page.reload();
   await expect(page.locator('.list > li').first()).toBeVisible();
   expect((await names())[0]).toBe(before[1]);
+  // and the catalog follows the same order
+  const catalog = await (await page.request.get('/catalogo')).text();
+  expect(catalog.indexOf(before[1] ?? '')).toBeLessThan(catalog.indexOf(before[0] ?? ''));
 });
 
 test('duplicar y eliminar con confirmación', async ({ page }) => {
