@@ -21,6 +21,8 @@ export const photoRefSchema = z.object({
 });
 export type PhotoRef = z.infer<typeof photoRefSchema>;
 
+const isUnique = (items: readonly string[]) => new Set(items).size === items.length;
+
 const text = (max: number) => z.string().trim().max(max);
 
 export const productInputSchema = z.object({
@@ -42,9 +44,10 @@ export const productInputSchema = z.object({
   personalHint: text(limits.personalHintMax).default(''),
   featured: z.boolean().default(false),
   published: z.boolean().default(false),
-  categories: z.array(z.enum(categoryIds)).max(categoryIds.length),
-  colors: z.array(z.enum(colorIds)).max(limits.maxColors),
-  photos: z.array(photoRefSchema).max(limits.maxPhotos),
+  categories: z.array(z.enum(categoryIds)).max(categoryIds.length).refine(isUnique, 'duplicates'),
+  colors: z.array(z.enum(colorIds)).max(limits.maxColors).refine(isUnique, 'duplicates'),
+  // Loose here on purpose: the 10-photo limit is a business rule that answers TOO_MANY_PHOTOS.
+  photos: z.array(photoRefSchema).max(100),
 });
 export type ProductInput = z.infer<typeof productInputSchema>;
 
@@ -56,7 +59,8 @@ export const heroSlideInputSchema = z.object({
 export const heroIntervals = [4, 6, 8, 12] as const;
 
 export const heroInputSchema = z.object({
-  slides: z.array(heroSlideInputSchema).max(limits.maxSlides),
+  // Loose here on purpose: the 6-slide limit answers TOO_MANY_SLIDES.
+  slides: z.array(heroSlideInputSchema).max(50),
   intervalSeconds: z.union([z.literal(4), z.literal(6), z.literal(8), z.literal(12)]).default(6),
 });
 export type HeroInput = z.infer<typeof heroInputSchema>;

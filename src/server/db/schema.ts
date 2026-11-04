@@ -43,6 +43,8 @@ export const products = sqliteTable(
     personalHint: text('personal_hint').notNull().default(''),
     featured: integer('featured', { mode: 'boolean' }).notNull().default(false),
     published: integer('published', { mode: 'boolean' }).notNull().default(false),
+    /** True once the product has been published at least once: its slug stops following the name. */
+    everPublished: integer('ever_published', { mode: 'boolean' }).notNull().default(false),
     sortOrder: integer('sort_order').notNull().default(0),
     ...timestamps,
   },

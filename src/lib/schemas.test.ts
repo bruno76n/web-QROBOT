@@ -30,14 +30,23 @@ describe('productInputSchema', () => {
     expect(productInputSchema.safeParse({ ...minimal, slug: 'Con Espacios' }).success).toBe(false);
     expect(productInputSchema.safeParse({ ...minimal, categories: ['otra'] }).success).toBe(false);
     expect(productInputSchema.safeParse({ ...minimal, colors: ['fucsia'] }).success).toBe(false);
+    // The limit of 10 photos is a business rule: saveProduct answers TOO_MANY_PHOTOS.
     expect(
       productInputSchema.safeParse({ ...minimal, photos: Array.from({ length: 11 }, () => photo) })
         .success,
-    ).toBe(false);
-    expect(
-      productInputSchema.safeParse({ ...minimal, photos: Array.from({ length: 10 }, () => photo) })
-        .success,
     ).toBe(true);
+    expect(
+      productInputSchema.safeParse({ ...minimal, photos: Array.from({ length: 101 }, () => photo) })
+        .success,
+    ).toBe(false);
+  });
+  it('rejects repeated categories and colors', () => {
+    expect(productInputSchema.safeParse({ ...minimal, categories: ['casa', 'casa'] }).success).toBe(
+      false,
+    );
+    expect(productInputSchema.safeParse({ ...minimal, colors: ['verde', 'verde'] }).success).toBe(
+      false,
+    );
   });
   it('rejects limits on text fields', () => {
     expect(productInputSchema.safeParse({ ...minimal, short: 'x'.repeat(121) }).success).toBe(
@@ -56,13 +65,13 @@ describe('productInputSchema', () => {
 });
 
 describe('heroInputSchema', () => {
-  it('allows up to 6 slides and only the four intervals', () => {
+  it('allows only the four intervals (the limit of 6 slides is a business rule)', () => {
     const slide = { desktop: photo };
     expect(
-      heroInputSchema.safeParse({ slides: Array.from({ length: 6 }, () => slide) }).success,
+      heroInputSchema.safeParse({ slides: Array.from({ length: 7 }, () => slide) }).success,
     ).toBe(true);
     expect(
-      heroInputSchema.safeParse({ slides: Array.from({ length: 7 }, () => slide) }).success,
+      heroInputSchema.safeParse({ slides: Array.from({ length: 51 }, () => slide) }).success,
     ).toBe(false);
     expect(heroInputSchema.safeParse({ slides: [], intervalSeconds: 5 }).success).toBe(false);
     expect(heroInputSchema.parse({ slides: [] }).intervalSeconds).toBe(6);
