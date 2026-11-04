@@ -7,7 +7,7 @@ Lo actualiza Claude Code al terminar cada paso. Estados: **pendiente** · **en c
 | Página / sección | Fase | 390 | 820 | 1440 | Notas |
 |---|---|---|---|---|---|
 | Header | 1 | igual al mockup | igual al mockup | igual al mockup | Alto 68 px, botón Cotizar 40 px, pestaña negra desde 901 px. La pestaña mide 352 px y no 360 (el archivo de Geist de Fontsource tiene métricas apenas distintas al de Google). Sin hero aún: muestra el logo; el cambio a "Impresión 3D · Guadalajara" está listo (`data-hero`) para la fase 4 |
-| Footer | 1 | igual al mockup | igual al mockup | igual al mockup | Logo, WhatsApp, Facebook, Instagram y ©, como el mockup. Se suma el nombre gigante al ancho exacto que piden `03 §5`, `04 §2.9` y `11 §2` (el mockup no lo tiene; manda el documento, `02 §1`). Sin liga a privacidad hasta la fase 5 |
+| Footer | 1 | igual al mockup | igual al mockup | igual al mockup | Logo, WhatsApp, Facebook, Instagram y ©, como el mockup. Se suma el nombre gigante al ancho exacto que piden `03 §5`, `04 §2.9` y `11 §2` (el mockup no lo tiene; manda el documento, `02 §1`). Con liga al aviso de privacidad (fase 5) |
 | Panel · Productos (lista) | 2 | igual al mockup | igual al mockup | igual al mockup | Diferencias aceptadas: filas con precio y estado (como pide `12 §2`; el mockup agrega "· 1 foto"); colores de texto gris más oscuros para cumplir contraste AA (`#62626b` y `#6a6a73` en lugar de `#6b6b74` y `#9a9aa3`, `13`/`03 §7`); los avisos salen arriba y no abajo para no tapar la barra de guardar |
 | Panel · Editor de producto | 2 | igual al mockup | igual al mockup | igual al mockup | Dirección con prefijo `/producto/` (no `producto.html#`, `02 §1`); contadores "55/120" en lugar de "55 / 110" (límite de `09`) |
 | Panel · Fotos y recorte | 2 | igual al mockup | igual al mockup | igual al mockup | El recortador (react-easy-crop, zoom 1×–4×, pellizco, vista previa) es nuevo respecto al mockup (`12 §3–4`). Las fotos de ejemplo se ven chicas y con la insignia "Foto chica": es lo esperado (`09 §4`) |
@@ -24,7 +24,7 @@ Lo actualiza Claude Code al terminar cada paso. Estados: **pendiente** · **en c
 | Inicio · Q-404 | 4 | igual al mockup | igual al mockup | igual al mockup | Precio y alto salen del producto `q-404` de la base ("mide [alto] cm" mientras el dueño no lo llene) |
 | Inicio · Alberca | 4 | igual al mockup | igual al mockup | igual al mockup | Física con matter-js (el mockup tenía una a mano); se carga al tocar |
 | Inicio · Pedido | 4 | igual al mockup | igual al mockup | igual al mockup | Isla React `OrderComposer` (`client:visible`); huecos que crecen medidos con canvas |
-| Aviso de privacidad | 5 | pendiente | pendiente | pendiente | Revisar con el dueño |
+| Aviso de privacidad | 5 | hecho | hecho | hecho | **Revisar con el dueño**: faltan `[domicilio]` y `[correo]` (`site.ts › owner`) y que alguien que sepa de la LFPDPPP lo revise (`19`) |
 
 ## Flujos (`04 §6`)
 

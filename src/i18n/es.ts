@@ -26,7 +26,59 @@ export const es = {
     whatsapp: 'WhatsApp',
     facebook: 'Facebook',
     instagram: 'Instagram',
+    privacy: 'Aviso de privacidad',
     legal: (year: number) => `© ${year} Quick Robot · Impresión 3D en Guadalajara`,
+  },
+  /** Aviso de privacidad (docs/19 §2): plain words, no personal data is asked on the site. */
+  privacy: {
+    title: 'Aviso de privacidad',
+    metaDescription:
+      'Qué datos usa Quick Robot: ninguno personal en la web. Lo que compartas por WhatsApp se usa solo para tu pedido.',
+    lead: 'Esta web no te pide nombre, teléfono ni correo. Aquí te explicamos qué pasa con lo poco que sí se usa.',
+    updated: (date: string) => `Última actualización: ${date}`,
+    sections: [
+      {
+        id: 'responsable',
+        title: 'Quién es responsable',
+        body: (o: { name: string; address: string; email: string }) => [
+          `${o.name}, con el nombre comercial Quick Robot, es responsable de tus datos. Domicilio: ${o.address}. Contacto: ${o.email}.`,
+        ],
+      },
+      {
+        id: 'datos',
+        title: 'Qué datos se obtienen en la web',
+        body: () => [
+          'Ningún dato personal. El mensaje de tu pedido se arma en tu navegador y se va directo a WhatsApp: la web nunca lo recibe.',
+          'Solo se miden estadísticas anónimas de visitas (qué páginas se abren y desde qué tipo de dispositivo), sin cookies y sin guardar tu IP. También se suma cuántas veces se toca cada botón de WhatsApp, como un contador por día, sin nada que te identifique.',
+        ],
+      },
+      {
+        id: 'whatsapp',
+        title: 'Cuando escribes por WhatsApp',
+        body: () => [
+          'Al tocar “Pedir por WhatsApp” sales de esta web y la conversación se rige por las reglas de WhatsApp. Los datos que compartas en el chat (nombre, teléfono, fotos, logo) se usan solo para cotizar y hacer tu pedido.',
+        ],
+      },
+      {
+        id: 'fotos',
+        title: 'Fotos y logos que nos mandas',
+        body: () => ['Las usamos solo para tu pedido y no las publicamos sin tu permiso.'],
+      },
+      {
+        id: 'arco',
+        title: 'Tus derechos',
+        body: (o: { name: string; address: string; email: string }) => [
+          `Puedes pedir acceso, rectificación, cancelación u oposición sobre tus datos (derechos ARCO) escribiendo a ${o.email}.`,
+        ],
+      },
+      {
+        id: 'cambios',
+        title: 'Cambios a este aviso',
+        body: () => [
+          'Si algo cambia, lo publicamos en esta misma página y cambiamos la fecha de arriba.',
+        ],
+      },
+    ],
   },
   /** Panel (docs/12 §7). */
   admin: {

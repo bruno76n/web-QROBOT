@@ -8,5 +8,6 @@ export const publicUrls: string[] = [
   '/catalogo/navidad',
   '/producto/llaveros-con-nombre',
   '/producto/q-404',
+  '/privacidad',
   '/no-existe',
 ];

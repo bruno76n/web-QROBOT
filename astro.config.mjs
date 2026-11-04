@@ -13,6 +13,9 @@ export default defineConfig({
   // 'ignore' because the middleware answers 301 to the slash-less URL (docs/14 §4); Astro's own
   // 'never' answers 404 before the middleware runs.
   trailingSlash: 'ignore',
+  // `privacidad.html` (not `privacidad/index.html`): the asset server then answers /privacidad without
+  // the redirect to a trailing slash that the middleware would undo (docs/decisiones.md).
+  build: { format: 'file' },
   // The dev toolbar floats over the save bars of the panel and breaks the browser tests.
   devToolbar: { enabled: false },
   adapter: cloudflare({ imageService: 'passthrough' }),

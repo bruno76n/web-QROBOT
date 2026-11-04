@@ -9,8 +9,8 @@ const budgets = [
   { label: 'Inicio', url: '/', limitKb: 90, skipVisible: true },
   { label: 'Catálogo', url: '/catalogo', limitKb: 25 },
   { label: 'Producto', url: '/producto/llaveros-con-nombre', limitKb: 70 },
-  { label: 'Privacidad', url: '/privacidad', limitKb: 0 },
-  // 404 and privacy carry no React: only the header scripts count (docs/15 §2)
+  { label: 'Privacidad', url: '/privacidad', limitKb: 8 },
+  // 404 and privacy carry no React: only the header and beacon scripts count (docs/15 §2)
   { label: '404', url: '/no-existe', limitKb: 8, status: 404 },
 ];
 

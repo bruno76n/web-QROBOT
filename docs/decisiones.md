@@ -193,3 +193,11 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 - **Video:** el póster es el hero por defecto solo redimensionado; el desenfoque lo hace CSS (el mockup lo hacía así). Sin `site.video.src` el botón queda deshabilitado con `aria-label` "todavía no hay video".
 - **Rendimiento del inicio:** las secciones de abajo llevan `content-visibility: auto` (utilidad `cv`); con eso el inicio pasó de 67 a 98 en rendimiento (TBT 660 → 0 ms). Lighthouse celular: inicio 98 / 100 / 100 / 100, LCP 2.3 s, CLS 0; catálogo y producto 100. `pnpm size`: inicio 18.9 KB (las islas `client:visible` de más abajo no cuentan, como pide `15 §2`; `pnpm size` ahora lo respeta con `skipVisible`).
 - **Dependencias nuevas (todas en `06`):** motion 14.9, matter-js 0.20 (+ @types/matter-js), embla-carousel-fade y embla-carousel-autoplay 8.6.
+
+## 2026-11-04 · Fase 5 · Pasos 5.1 y 5.2 · Toques a WhatsApp y aviso de privacidad
+
+- **Un solo oyente de clic** (`ClickBeacon.astro`, en `BaseLayout`) atiende cualquier elemento con `data-click="<source>"` (y `data-click-product`): los cuatro botones solo llevan atributos, sin script propio. Se agrega una vez al documento y sirve también tras las transiciones de vista (regla 13: no hay nada de la página que limpiar).
+- **`/api/click`** responde `204` (contado), `400` (JSON, origen o producto inválido, o producto inexistente) o `429` (limitador). Un `productId` solo se acepta con `source = product` y viceversa. Cuerpo máximo de 512 bytes. El día se calcula en hora de Guadalajara. La IP solo es la llave del limitador (`CLICK_LIMITER`, 30 por 60 s; el binding es opcional en el código para no romper en local).
+- **El panel** pide `admin.clickStats` (30 días) y lo muestra arriba de la lista y en cada fila (solo si el número es mayor que 0).
+- **`/privacidad` es estática** (`prerender = true`) con `build.format: 'file'`: con `directory` el servidor de archivos redirigía a `/privacidad/` y el middleware de vuelta a `/privacidad` (bucle). Los datos del responsable y la fecha viven en `site.ts` (`owner`, `privacyUpdated`), el texto en `es.privacy`.
+- Presupuesto de JS de `/privacidad`: 8 KB, igual que la 404 (el `0` anterior no contaba con los scripts de cabecera).

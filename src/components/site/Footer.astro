@@ -24,7 +24,9 @@ const contacts = [
         </p>
       ))}
     </div>
-    <p class="w-full text-[13px] text-ink-2">{es.footer.legal(year)}</p>
+    <p class="w-full text-[13px] text-ink-2">
+      {es.footer.legal(year)} · <a href="/privacidad">{es.footer.privacy}</a>
+    </p>
   </div>
   <!-- The name spans the exact width of the container: font-size in cqw, no JS (docs/11 §2). -->
   <div class="wrap overflow-hidden pb-[clamp(10px,1.6vw,26px)]" aria-hidden="true">
