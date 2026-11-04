@@ -30,6 +30,11 @@
 }
 
 @theme inline {
+  /* Names the external 21st.dev components expect, mapped to the brand tokens (docs/11 §4). */
+  --color-background: #fff;
+  --color-foreground: var(--ink);
+  --color-muted: var(--line);
+  --color-muted-foreground: var(--ink-2);
   --color-ink: var(--ink);
   --color-ink-2: var(--ink-2);
   --color-line: var(--line);

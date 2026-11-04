@@ -1,7 +1,7 @@
 ---
 import { ideas } from '@/config/ideas';
 import { es } from '@/i18n/es';
-import { HoverLinks } from '@/components/external';
+import IdeasLinks from './IdeasLinks';
 
 const t = es.home.ideas;
 // The wrapper only adapts the data: the 7 ideas, each a link to `#pedido=<id>` (docs/11 §3).
@@ -28,7 +28,7 @@ const items = ideas.map((i) => ({
         </a>
       </p>
     </div>
-    <HoverLinks client:visible items={items} />
+    <IdeasLinks client:visible items={items} />
   </div>
 </section>
 
@@ -59,115 +59,5 @@ const items = ideas.map((i) => ({
   }
   .idx-head .lead {
     max-width: 30ch;
-  }
-  .idx {
-    position: relative;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    border-bottom: 1px solid var(--line);
-  }
-  .idx li {
-    border-top: 1px solid var(--line);
-  }
-  .row {
-    position: relative;
-    color: inherit;
-    text-decoration: none;
-    text-align: left;
-    cursor: pointer;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 24px;
-    padding: clamp(18px, 2.4vw, 30px) 0;
-  }
-  .row .tx {
-    display: block;
-    position: relative;
-    z-index: 2;
-  }
-  .row .nm {
-    display: block;
-    font-weight: 600;
-    font-size: clamp(34px, 5.4vw, 84px);
-    line-height: 1;
-    letter-spacing: -0.05em;
-    color: #86868f;
-    transition:
-      color 0.35s,
-      transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-  .row .d {
-    display: block;
-    margin-top: 8px;
-    color: var(--ink-2);
-    font-size: clamp(15px, 1.2vw, 18px);
-    transition: color 0.35s;
-  }
-  .row .th {
-    position: absolute;
-    z-index: 1;
-    left: 62%;
-    top: 50%;
-    width: clamp(150px, 20vw, 280px);
-    height: auto;
-    aspect-ratio: 1;
-    object-fit: contain;
-    pointer-events: none;
-    opacity: 0;
-    transform: translate(-50%, -50%) rotate(-10deg) scale(0.4);
-    transition:
-      opacity 0.3s,
-      transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
-    filter: drop-shadow(0 18px 24px rgba(18, 18, 20, 0.18));
-  }
-  .row .go {
-    position: relative;
-    z-index: 2;
-    font-size: clamp(26px, 3vw, 44px);
-    color: var(--ink);
-    opacity: 0;
-    transform: translateX(-24px);
-    transition:
-      opacity 0.3s,
-      transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-  .row.act .nm {
-    color: var(--ink);
-    transform: translateX(10px);
-  }
-  .row.act .d {
-    color: var(--ink);
-  }
-  .row.act .th {
-    opacity: 1;
-    transform: translate(-50%, -50%) rotate(-10deg) scale(1);
-  }
-  .row.act .go {
-    opacity: 1;
-    transform: none;
-  }
-  @media (hover: none), (max-width: 760px) {
-    .row .th {
-      left: auto;
-      right: 9%;
-      width: clamp(90px, 24vw, 150px);
-    }
-    .row.act .th {
-      transform: translate(0, -50%) rotate(-8deg) scale(1);
-    }
-    .row.act .nm {
-      transform: none;
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .row .th,
-    .row .go,
-    .row .nm,
-    .row .d {
-      transition: none;
-    }
   }
 </style>

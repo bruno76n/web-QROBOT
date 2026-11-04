@@ -169,7 +169,7 @@ test('¿Qué se te antoja?: en pantallas táctiles sale la foto de la fila de la
   await page.goto('/');
   await page.locator('#ideas').scrollIntoViewIfNeeded();
   await page.evaluate(() => window.scrollBy(0, 200));
-  await expect(page.locator('.idx .row.act')).toHaveCount(1, { timeout: 10_000 });
+  await expect(page.locator('#ideas a[data-active="true"]')).toHaveCount(1, { timeout: 10_000 });
 });
 
 test('el servidor de producción ignora x-test-now', async ({ request }) => {
