@@ -3,6 +3,8 @@
  * Changes from the delivered file, all allowed by docs/11 §4 rules 1 and 5 (see docs/decisiones.md):
  *  - the demo data (English texts, images from another domain) is gone: `links` is required;
  *  - the section no longer adds its own padding (the page section already spaces it);
+ *  - the link has an `aria-label` (the per-letter spans made its name "S e r v…");
+ *  - the heading wraps by whole words (letters were separate inline-blocks and broke mid-word);
  *  - the image is decorative (`alt=""`; the row text names it) and loads lazily;
  *  - MANDATORY CHANGE: on touch screens (`(hover: none)` or ≤ 760 px) the photo of the row nearest
  *    to the vertical middle of the screen is shown while scrolling; with a mouse nothing changes.
@@ -118,6 +120,8 @@ function Link({ heading, imgSrc, subheading, href, touch, active, innerRef }: Li
   return (
     <motion.a
       href={href}
+      // The heading is split into one span per letter: without this, screen readers spell it out.
+      aria-label={`${heading}. ${subheading}`}
       ref={(el) => {
         ref.current = el;
         innerRef(el);
@@ -147,18 +151,26 @@ function Link({ heading, imgSrc, subheading, href, touch, active, innerRef }: Li
           }}
           className="text-muted-foreground group-hover:text-foreground group-data-[active=true]:text-foreground relative z-10 block text-4xl font-bold transition-colors duration-500 md:text-6xl"
         >
-          {heading.split('').map((l, i) => (
-            <motion.span
-              variants={{
-                initial: { x: 0 },
-                whileHover: { x: 16 },
-              }}
-              transition={{ type: 'spring' }}
-              className="inline-block"
-              key={i}
-            >
-              {l === ' ' ? ' ' : l}
-            </motion.span>
+          {heading.split(' ').map((word, w) => (
+            // Words stay whole when the line wraps; only the letters move.
+            <React.Fragment key={w}>
+              {w > 0 ? ' ' : null}
+              <span className="inline-block whitespace-nowrap">
+                {word.split('').map((l, i) => (
+                  <motion.span
+                    variants={{
+                      initial: { x: 0 },
+                      whileHover: { x: 16 },
+                    }}
+                    transition={{ type: 'spring' }}
+                    className="inline-block"
+                    key={i}
+                  >
+                    {l}
+                  </motion.span>
+                ))}
+              </span>
+            </React.Fragment>
           ))}
         </motion.span>
         <span className="text-muted-foreground group-hover:text-foreground group-data-[active=true]:text-foreground relative z-10 mt-2 block text-base transition-colors duration-500">

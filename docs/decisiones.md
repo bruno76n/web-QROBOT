@@ -201,3 +201,11 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 - **El panel** pide `admin.clickStats` (30 días) y lo muestra arriba de la lista y en cada fila (solo si el número es mayor que 0).
 - **`/privacidad` no se prerenderiza** (`prerender = false`): es contenido fijo sin datos ni islas, pero los archivos que Cloudflare sirve directo de `dist` no pasan por el middleware y se quedarían sin las cabeceras de seguridad ni la CSP (`13 §3`). Que la sirva el Worker las conserva y evita además la redirección a `/privacidad/`. Los datos del responsable y la fecha viven en `site.ts` (`owner`, `privacyUpdated`), el texto en `es.privacy`.
 - Presupuesto de JS de `/privacidad`: 8 KB, igual que la 404 (el `0` anterior no contaba con los scripts de cabecera).
+
+## 2026-11-04 · Fase 5 · Paso 5.6 · Componente externo "Interactive Hover Links"
+
+- El dueño entregó el componente (21st.dev). Vive en `src/components/external/InteractiveHoverLinks.tsx`; el reemplazo se borró. El envoltorio `components/sections/IdeasLinks.tsx` adapta las 7 ideas a sus props; `external/index.ts` sigue siendo el único punto de importación.
+- **Dependencias:** `motion` y `lucide-react` ya estaban instaladas (no hubo que agregar nada). El proyecto no usa la carpeta `components/ui` de shadcn para esto: `docs/11 §4` manda los externos a `external/`.
+- **Cambio obligatorio aplicado:** en táctil (`(hover: none)` o ≤ 760 px) la foto de la fila más cercana a la mitad de la pantalla se muestra al hacer scroll; con mouse queda como se entregó.
+- **Cambios permitidos (`11 §4` reglas 1 y 5), anotados también en el encabezado del archivo:** sin datos de demostración (textos en inglés e imágenes de otro dominio rompían los textos en `es.ts` y la CSP), sin padding propio en la sección, `aria-label` en cada link (las letras en `span` separados hacían que el nombre fuera "S e r v…"), el título se parte por palabras (se cortaba a media palabra en 390 px), foto decorativa (`alt=""`) con carga diferida.
+- **Colores:** el componente usa `background`, `foreground`, `muted` y `muted-foreground`; se mapean en `@theme` de `global.css` a los colores de la marca.
