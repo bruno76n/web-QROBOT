@@ -8,10 +8,10 @@ Lo actualiza Claude Code al terminar cada paso. Estados: **pendiente** · **en c
 |---|---|---|---|---|---|
 | Header | 1 | igual al mockup | igual al mockup | igual al mockup | Alto 68 px, botón Cotizar 40 px, pestaña negra desde 901 px. La pestaña mide 352 px y no 360 (el archivo de Geist de Fontsource tiene métricas apenas distintas al de Google). Sin hero aún: muestra el logo; el cambio a "Impresión 3D · Guadalajara" está listo (`data-hero`) para la fase 4 |
 | Footer | 1 | igual al mockup | igual al mockup | igual al mockup | Logo, WhatsApp, Facebook, Instagram y ©, como el mockup. Se suma el nombre gigante al ancho exacto que piden `03 §5`, `04 §2.9` y `11 §2` (el mockup no lo tiene; manda el documento, `02 §1`). Sin liga a privacidad hasta la fase 5 |
-| Panel · Productos (lista) | 2 | pendiente | pendiente | pendiente | |
-| Panel · Editor de producto | 2 | pendiente | pendiente | pendiente | |
-| Panel · Fotos y recorte | 2 | pendiente | pendiente | pendiente | |
-| Panel · Portada | 2 | pendiente | pendiente | pendiente | |
+| Panel · Productos (lista) | 2 | igual al mockup | igual al mockup | igual al mockup | Diferencias aceptadas: filas con precio y estado (como pide `12 §2`; el mockup agrega "· 1 foto"); colores de texto gris más oscuros para cumplir contraste AA (`#62626b` y `#6a6a73` en lugar de `#6b6b74` y `#9a9aa3`, `13`/`03 §7`); los avisos salen arriba y no abajo para no tapar la barra de guardar |
+| Panel · Editor de producto | 2 | igual al mockup | igual al mockup | igual al mockup | Dirección con prefijo `/producto/` (no `producto.html#`, `02 §1`); contadores "55/120" en lugar de "55 / 110" (límite de `09`) |
+| Panel · Fotos y recorte | 2 | igual al mockup | igual al mockup | igual al mockup | El recortador (react-easy-crop, zoom 1×–4×, pellizco, vista previa) es nuevo respecto al mockup (`12 §3–4`). Las fotos de ejemplo se ven chicas y con la insignia "Foto chica": es lo esperado (`09 §4`) |
+| Panel · Portada | 2 | igual al mockup | igual al mockup | igual al mockup | En pantallas de menos de 860 px la miniatura de celular se queda visible (el mockup la ocultaba) para poder ver y cambiar esa foto desde el teléfono |
 | Catálogo | 3 | pendiente | pendiente | pendiente | |
 | Personalizador 3D | 3 | pendiente | pendiente | pendiente | |
 | Producto | 3 | pendiente | pendiente | pendiente | |
@@ -33,9 +33,9 @@ Lo actualiza Claude Code al terminar cada paso. Estados: **pendiente** · **en c
 | A · Pedir un producto | 3 | pendiente |
 | B · Pedir desde una idea | 4 | pendiente |
 | C · Nombre en 3D | 3 | pendiente |
-| D · Subir un producto | 2–3 | pendiente |
+| D · Subir un producto | 2–3 | panel hasta "guardar y publicar" pasa en Playwright (`e2e/admin-products.spec.ts`); verlo en el catálogo es de la fase 3 |
 | E · Cambiar la portada | 4 | pendiente |
-| F · Ocultar y reordenar | 2–3 | pendiente |
+| F · Ocultar y reordenar | 2–3 | panel pasa en Playwright (ocultar y reordenar con el teclado); verlo en el catálogo es de la fase 3 |
 | G · Compartir | 3 | pendiente |
 
 ## Componentes externos (`11 §4`)

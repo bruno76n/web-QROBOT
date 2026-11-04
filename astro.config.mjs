@@ -6,6 +6,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   output: 'server',
+  // The dev toolbar floats over the save bars of the panel and breaks the browser tests.
+  devToolbar: { enabled: false },
   adapter: cloudflare({ imageService: 'passthrough' }),
   integrations: [react()],
   security: {
