@@ -5,6 +5,7 @@
  *  - the section no longer adds its own padding (the page section already spaces it);
  *  - the link has an `aria-label` (the per-letter spans made its name "S e r v…");
  *  - the heading wraps by whole words (letters were separate inline-blocks and broke mid-word);
+ *  - the heading uses the site type (Geist 600, -0.04em tracking, like h1-h3) instead of `font-bold`;
  *  - the image is decorative (`alt=""`; the row text names it) and loads lazily;
  *  - MANDATORY CHANGE: on touch screens (`(hover: none)` or ≤ 760 px) the photo of the row nearest
  *    to the vertical middle of the screen is shown while scrolling; with a mouse nothing changes.
@@ -149,7 +150,7 @@ function Link({ heading, imgSrc, subheading, href, touch, active, innerRef }: Li
             staggerChildren: 0.075,
             delayChildren: 0.25,
           }}
-          className="text-muted-foreground group-hover:text-foreground group-data-[active=true]:text-foreground relative z-10 block text-4xl font-bold transition-colors duration-500 md:text-6xl"
+          className="text-muted-foreground group-hover:text-foreground group-data-[active=true]:text-foreground relative z-10 block font-sans text-4xl leading-[1.02] font-semibold tracking-[-0.04em] transition-colors duration-500 md:text-6xl"
         >
           {heading.split(' ').map((word, w) => (
             // Words stay whole when the line wraps; only the letters move.
