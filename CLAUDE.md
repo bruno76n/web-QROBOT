@@ -2,7 +2,7 @@
 
 Web pública del taller de impresión 3D **Quick Robot** (Guadalajara): **muestrario con precio "desde"** y página por producto; todo pedido termina en **WhatsApp**. Incluye un **panel** (`/admin`) para subir productos, centrar sus fotos y cambiar la portada. No es tienda.
 
-Documentación en `docs/` (empieza por `docs/README.md`). Plan general en `docs/20-plan-de-construccion.md`; **detalle de cada fase en `docs/fases/fase-N.md`**. Prompts en `docs/prompts.md`.
+Documentación en `docs/` (empieza por `docs/README.md`; para arrancar y probar en local, `docs/continuar-en-local.md`). Plan general en `docs/20-plan-de-construccion.md`; **detalle de cada fase en `docs/fases/fase-N.md`**. Prompts en `docs/prompts.md`.
 
 **Dónde está cada cosa:** idea y alcance → `01` · referencias → `02` · diseño → `03` · páginas y flujos → `04` · textos → `05` · stack → `06` · arquitectura → `07` · carpetas → `08` · datos → `09` · servidor → `10` · interfaz → `11` · panel → `12` · seguridad → `13` · SEO → `14` · rendimiento e imágenes → `15` · convenciones y pruebas → `16` · despliegue → `17` · analítica → `18` · legal → `19`.
 
