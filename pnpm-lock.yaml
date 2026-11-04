@@ -20,6 +20,9 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.5.0
         version: 1.5.0(@types/react@19.3.0)(react@19.3.1)
+      '@sindresorhus/slugify':
+        specifier: ^4.0.0
+        version: 4.0.0
       '@tailwindcss/vite':
         specifier: ^4.3.4
         version: 4.3.4(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
@@ -50,6 +53,9 @@ importers:
       tailwindcss:
         specifier: ^4.3.4
         version: 4.3.4
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
     devDependencies:
       '@astrojs/check':
         specifier: ^0.9.12
@@ -1610,6 +1616,14 @@ packages:
     resolution: {integrity: sha512-P1Cz1dWaFfR4IR+U13mqqiGsLFf1KbayybWwdd2vfctdV6hDpUkgCY0nKOLLTMSoRd/jJNjtbqzf13K8DCCXQw==}
     engines: {node: '>=18'}
 
+  '@sindresorhus/slugify@4.0.0':
+    resolution: {integrity: sha512-/5oEBXpUWCHxaQqcvQE8bLj6JD7KkMkJFy6UxSAETgy2RAZ09VxUo6XFl4YHksORImmdFUvNguwFKDVRP0ZxHQ==}
+    engines: {node: '>=22'}
+
+  '@sindresorhus/transliterate@3.0.0':
+    resolution: {integrity: sha512-mqOUtMxpY419WtwwYw1EX865Oh+QWpa37yhGLXNmVc6d91wsBYLG51TgSePqrdnCSnTJn2AygX+35StK86tNOA==}
+    engines: {node: '>=22'}
+
   '@speed-highlight/core@1.2.24':
     resolution: {integrity: sha512-qeW2e1l78afw8VhRPfPQ1Gjj+KU5XFQ/OFV5ti6eTa9bruO7mJyZtA4vw0ofqmA3tKCkROE9xLk3VZoeRc98nw==}
 
@@ -2658,6 +2672,10 @@ packages:
   escape-string-regexp@4.0.0:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
+
+  escape-string-regexp@5.0.0:
+    resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
+    engines: {node: '>=12'}
 
   escodegen@2.1.0:
     resolution: {integrity: sha512-2NlIDTwUWJN0mRPQOdtQBzbUHvdGY2P1VXSyU83Q3xKxM7WHX2Ql8dKq782Q9TgQUNOLEzEYu9bzLNj1q88I5w==}
@@ -6115,6 +6133,13 @@ snapshots:
 
   '@sindresorhus/is@7.2.0': {}
 
+  '@sindresorhus/slugify@4.0.0':
+    dependencies:
+      '@sindresorhus/transliterate': 3.0.0
+      escape-string-regexp: 5.0.0
+
+  '@sindresorhus/transliterate@3.0.0': {}
+
   '@speed-highlight/core@1.2.24': {}
 
   '@tailwindcss/node@4.3.4':
@@ -7286,6 +7311,8 @@ snapshots:
   escape-string-regexp@1.0.5: {}
 
   escape-string-regexp@4.0.0: {}
+
+  escape-string-regexp@5.0.0: {}
 
   escodegen@2.1.0:
     dependencies:

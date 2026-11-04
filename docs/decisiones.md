@@ -95,3 +95,13 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 - `photos.aspect`, `owner_type` y `status` son enumeraciones de TypeScript (texto en SQL).
 - `categories.ts` y `colors.ts` exportan listas de ids tipadas para los esquemas Zod. Color "café" con id `cafe` (sin tilde, para ids estables).
 - Prueba `schema.test.ts`: producto con categorías, colores y fotos; slug único; borrado en cascada; portada exige foto existente. Cada prueba filtra por sus propios ids (el almacenamiento se comparte dentro del archivo).
+
+## 2026-11-04 · Fase 2 · Paso 2.2 · Lógica pura
+- **Dependencias nuevas (ya en `06`):** zod 4.6.7 y @sindresorhus/slugify 4.0.0 (slug sin tildes ni ñ).
+- `src/lib/` queda sin Astro, React ni Cloudflare (el lint lo exige): `money`, `plural`, `publish`, `crop`, `schemas`, `whatsapp`, `season`, `result`, `cn`. 66 pruebas, cobertura 100 % de líneas (meta 90 %), incluidos todos los casos obligatorios de `16 §4`.
+- **Dinero:** `formatMoney` muestra pesos enteros ("$1,250") y centavos solo si existen; `parsePesos` acepta "$1,250", "50", "1250.5".
+- **Recorte (`crop.ts`):** `widthsToGenerate` nunca agranda; `centerCrop` (4000×3000 en 1:1 → 3000×3000 en x=500); `ogLayout`; `cropVersion` = hash FNV-1a de 8 caracteres del recorte + un `nonce` que pasa quien llama (la función sigue pura; el servidor usa hora + aleatorio, `10 §4`).
+- **Mensajes de WhatsApp:** además de lo escrito en `05 §5`, el color concuerda en género con la forma del personalizador ("una estrella negra", "un llavero negro"; `colorFor`). Decisión mía porque `05 §5` solo dice `{color}` y "una estrella negro" sería un error visible. El personalizador devuelve `null` sin nombre (botón desactivado).
+- **Temporada:** `season.ts` usa `Intl` con la zona `America/Mexico_City`; como México ya no tiene horario de verano, la diferencia de relojes de pared es la diferencia real. Todas las funciones reciben `now`.
+- **`uploadFieldsSchema`:** los campos de texto de `POST /api/admin/upload` (`kind`, `aspect`, recorte, tamaño del original, `widths` en JSON); los archivos viajan aparte (`10 §4`).
+- **`Result<T>` y los 11 códigos** de `10 §5` en `result.ts`.
