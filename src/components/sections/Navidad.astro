@@ -1,0 +1,413 @@
+---
+import Head from '../../../assets/logo-cabeza.svg';
+import { site } from '@/config/site';
+import { es } from '@/i18n/es';
+import { formatMoney } from '@/lib/money';
+import { countdown, deadlineMark, timelinePosition, type SeasonConfig } from '@/lib/season';
+import { getEnv } from '@/server/env';
+import type { CardView } from '@/server/queries/public';
+import Picture from '@/components/site/Picture.astro';
+import Button from '@/components/site/Button.astro';
+
+interface Props {
+  picks: CardView[];
+  now: Date;
+}
+const { picks, now } = Astro.props;
+const t = es.home.xmas;
+const cfg: SeasonConfig = { ...site.christmas, timeZone: site.timeZone };
+const c = countdown(now, cfg);
+const pos = timelinePosition(now, cfg);
+const mark = deadlineMark(now, cfg);
+const pad = (n: number) => String(n).padStart(2, '0');
+const imgBase = getEnv().PUBLIC_IMG_BASE;
+---
+
+<section
+  class="xmas cv"
+  id="navidad"
+  aria-labelledby="h-xmas"
+  data-xmas
+  data-season-start={site.christmas.seasonStart}
+  data-eve={site.christmas.eve}
+  data-deadline={site.christmas.orderDeadline}
+  data-tz={site.timeZone}
+>
+  <div class="wrap">
+    <div class="x-top">
+      <div>
+        <h2 id="h-xmas">{t.title}</h2>
+        <p class="lead">{t.lead}</p>
+        <Button href="#pedido=navidad" variant="green" class="mt-[26px]" arrow>
+          {t.cta}
+        </Button>
+      </div>
+      <div class="x-clock">
+        <p class="x-k" data-k>
+          {c.isEve ? t.eveToday : t.remaining}
+        </p>
+        <div class="tiles" role="timer" aria-label={t.clockLabel} data-tiles>
+          <div>
+            <b data-d>{c.days}</b>
+            <span data-dl>{c.days === 1 ? t.day : t.days}</span>
+          </div>
+          <div>
+            <b data-h>{pad(c.hours)}</b>
+            <span>{t.hours}</span>
+          </div>
+          <div>
+            <b data-m>{pad(c.minutes)}</b>
+            <span>{t.minutes}</span>
+          </div>
+          <div>
+            <b data-s>{pad(c.seconds)}</b>
+            <span>{t.seconds}</span>
+          </div>
+        </div>
+        <div class="trip" aria-hidden="true">
+          <div class="track">
+            <i class="done" data-done style={`width:${pos}%`}></i>
+            <span class="dl-mark" data-dl-mark style={`left:${mark.position}%`}>
+              <em>
+                {t.deadline}
+                <br />
+                <b data-dl-t>{mark.label}</b>
+              </em>
+            </span>
+            <span class="bot" data-bot style={`left:${pos}%`} data-today={t.today}>
+              <Head />
+            </span>
+          </div>
+          <div class="trip-l">
+            <span>{t.start}</span>
+            <span>{t.end}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul class="gifts">
+      {picks.map((p) => (
+        <li>
+          <a class="gift" href={`/producto/${p.slug}`}>
+            <span class="pic">
+              {p.photo && (
+                <Picture
+                  photo={p.photo}
+                  imgBase={imgBase}
+                  sizes="64px"
+                  alt=""
+                  class="size-16 rounded-lg object-cover"
+                />
+              )}
+            </span>
+            <span class="gt">
+              <b>{p.name}</b>
+              {p.short && <span>{p.short}</span>}
+              {p.priceFromCents !== null && (
+                <em>
+                  {es.catalog.from} {formatMoney(p.priceFromCents)}
+                </em>
+              )}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="x-more">
+      <a class="lnk" href="/catalogo/navidad">
+        {t.all} →
+      </a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .xmas {
+    background: var(--ink);
+    color: #fff;
+    padding-block: clamp(56px, 7vw, 96px);
+    overflow: hidden;
+  }
+  .x-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(30px, 5vw, 80px);
+    align-items: center;
+  }
+  .xmas h2 {
+    color: #fff;
+    font-size: clamp(34px, 4vw, 60px);
+    max-width: 12em;
+  }
+  .xmas :global(.lead) {
+    color: #b6b6c0;
+    margin-top: 16px;
+  }
+  .x-clock {
+    background: #1b1b20;
+    border-radius: 22px;
+    padding: clamp(20px, 2.4vw, 30px);
+  }
+  .x-k {
+    font-size: 14px;
+    color: #9d9da8;
+  }
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .tiles div {
+    background: #25252c;
+    border-radius: 12px;
+    padding: 12px 6px 10px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .tiles b {
+    display: block;
+    font-weight: 500;
+    font-size: clamp(34px, 3.6vw, 56px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+  .tiles div:first-child b {
+    color: var(--green);
+  }
+  .tiles b.flip {
+    animation: flip 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  @keyframes flip {
+    from {
+      transform: translateY(-40%);
+      opacity: 0;
+    }
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+  .tiles span {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #9d9da8;
+  }
+  .trip {
+    margin-top: 30px;
+  }
+  .track {
+    position: relative;
+    height: 6px;
+    border-radius: 3px;
+    background: #2e2e36;
+    margin: 46px 14px 0 14px;
+  }
+  .track .done {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--green));
+  }
+  .dl-mark {
+    position: absolute;
+    top: 50%;
+    width: 2px;
+    height: 18px;
+    background: #fff;
+    transform: translate(-50%, -50%);
+  }
+  .dl-mark em {
+    position: absolute;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-style: normal;
+    font-size: 11px;
+    line-height: 1.3;
+    color: #9d9da8;
+    white-space: nowrap;
+    text-align: center;
+  }
+  .dl-mark em b {
+    color: #fff;
+    font-weight: 500;
+  }
+  .bot {
+    position: absolute;
+    top: 50%;
+    width: 34px;
+    transform: translate(-50%, -62%);
+  }
+  .bot::after {
+    content: attr(data-today);
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 10px);
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: #fff;
+  }
+  .bot :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+    animation: bob 1.2s ease-in-out infinite alternate;
+  }
+  @keyframes bob {
+    to {
+      transform: translateY(-3px) rotate(-4deg);
+    }
+  }
+  .trip-l {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 14px;
+    font-size: 12px;
+    color: #9d9da8;
+  }
+  .gifts {
+    list-style: none;
+    margin: clamp(34px, 4vw, 52px) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .gift {
+    background: #1b1b20;
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    height: 100%;
+    padding: 12px 16px 12px 12px;
+    border-radius: 16px;
+    transition: background 0.25s;
+  }
+  .gift .pic {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 84px;
+    height: 84px;
+    background: #25252c;
+    border-radius: 12px;
+  }
+  .gt b {
+    display: block;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+  }
+  .gt span {
+    display: block;
+    margin-top: 2px;
+    color: #a5a5b0;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+  .gt em {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    font-size: 13px;
+    color: var(--green);
+  }
+  .gift:hover {
+    background: #25252c;
+  }
+  .x-more {
+    margin-top: 22px;
+  }
+  .x-more .lnk {
+    color: var(--green);
+  }
+  .lnk {
+    text-decoration: none;
+  }
+  .lnk:hover {
+    text-decoration: underline;
+  }
+  @media (max-width: 1100px) {
+    .gifts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 900px) {
+    .x-top {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 560px) {
+    .gifts {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bot :global(svg),
+    .tiles b.flip {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  import { countdown, deadlineMark, timelinePosition, type SeasonConfig } from '@/lib/season';
+  import { es } from '@/i18n/es';
+
+  // The clock ticks every second from the visitor's clock; the server already decided whether the
+  // section exists (docs/04 §2.2). Starts on astro:page-load, cleans on astro:before-swap (rule 13).
+  let timer: number | undefined;
+
+  function setup() {
+    const root = document.querySelector<HTMLElement>('[data-xmas]');
+    if (!root) return;
+    const q = <T extends Element>(s: string) => root.querySelector<T>(s) as T;
+    const cfg: SeasonConfig = {
+      seasonStart: root.dataset.seasonStart ?? '10-01',
+      eve: root.dataset.eve ?? '12-24',
+      orderDeadline: root.dataset.deadline ?? '12-12',
+      timeZone: root.dataset.tz ?? 'America/Mexico_City',
+    };
+    const t = es.home.xmas;
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const set = (el: HTMLElement, value: string) => {
+      if (el.textContent === value) return;
+      el.textContent = value;
+      el.classList.remove('flip');
+      void el.offsetWidth;
+      el.classList.add('flip');
+    };
+    const tick = () => {
+      const now = new Date();
+      const c = countdown(now, cfg);
+      set(q('[data-d]'), String(c.days));
+      q<HTMLElement>('[data-dl]').textContent = c.days === 1 ? t.day : t.days;
+      set(q('[data-h]'), pad(c.hours));
+      set(q('[data-m]'), pad(c.minutes));
+      set(q('[data-s]'), pad(c.seconds));
+      q<HTMLElement>('[data-k]').textContent = c.isEve ? t.eveToday : t.remaining;
+      const pos = timelinePosition(now, cfg);
+      q<HTMLElement>('[data-done]').style.width = `${pos}%`;
+      q<HTMLElement>('[data-bot]').style.left = `${pos}%`;
+      const mark = deadlineMark(now, cfg);
+      q<HTMLElement>('[data-dl-mark]').style.left = `${mark.position}%`;
+      q<HTMLElement>('[data-dl-t]').textContent = mark.label;
+    };
+    tick();
+    timer = window.setInterval(tick, 1000);
+  }
+
+  document.addEventListener('astro:page-load', setup);
+  document.addEventListener('astro:before-swap', () => {
+    window.clearInterval(timer);
+    timer = undefined;
+  });
+</script>

@@ -3,7 +3,13 @@ import { env } from 'cloudflare:workers';
 import { getDb } from '../db/client';
 import { saveProduct, setPublished } from '../admin/products';
 import { makeDeps, productInput, resetAll, seedPhoto } from '../admin/test-utils';
-import { getPublishedProduct, listPublishedProducts, listRelated } from './public';
+import {
+  getProductPrice,
+  getPublishedProduct,
+  listChristmasPicks,
+  listPublishedProducts,
+  listRelated,
+} from './public';
 
 const db = () => getDb(env.DB);
 let t: ReturnType<typeof makeDeps>;
@@ -114,5 +120,53 @@ describe('public queries', () => {
     await saveProduct(t.deps, productInput({ name: 'Sin foto', published: false }));
     // unpublished: not listed; publishing needs a photo, so public pages never show a photo-less product
     expect(await listPublishedProducts({}, db())).toEqual([]);
+  });
+});
+
+describe('home queries', () => {
+  it('Christmas picks: published, Navidad and "Más pedido", in order, up to 4', async () => {
+    for (let i = 0; i < 6; i++) {
+      const photo = await seedPhoto({ id: `x${++n}` });
+      await saveProduct(
+        t.deps,
+        productInput({
+          name: `Regalo ${i}`,
+          categories: ['navidad'],
+          featured: i !== 1,
+          photos: [photo],
+          published: i !== 2,
+        }),
+      );
+    }
+    const photo = await seedPhoto({ id: `x${++n}` });
+    await saveProduct(
+      t.deps,
+      productInput({
+        name: 'No navideño',
+        categories: ['casa'],
+        featured: true,
+        photos: [photo],
+        published: true,
+      }),
+    );
+    expect((await listChristmasPicks(4, db())).map((p) => p.name)).toEqual([
+      'Regalo 0',
+      'Regalo 3',
+      'Regalo 4',
+      'Regalo 5',
+    ]);
+    expect((await listChristmasPicks(2, db())).map((p) => p.name)).toEqual([
+      'Regalo 0',
+      'Regalo 3',
+    ]);
+  });
+  it('product price: only for published products', async () => {
+    const photo = await seedPhoto({ id: `x${++n}` });
+    await saveProduct(
+      t.deps,
+      productInput({ name: 'Q-404', priceFromCents: 35000, photos: [photo], published: true }),
+    );
+    expect(await getProductPrice('q-404', db())).toBe(35000);
+    expect(await getProductPrice('nope', db())).toBeNull();
   });
 });

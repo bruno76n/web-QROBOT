@@ -219,3 +219,18 @@ export async function listSitemapProducts(
     .where(eq(schema.products.published, true))
     .orderBy(asc(schema.products.sortOrder));
 }
+
+/** The first `limit` published Christmas products marked "Más pedido", in catalog order (docs/04 §2.2). */
+export async function listChristmasPicks(limit = 4, db: Db = getDb()): Promise<CardView[]> {
+  const all = await listPublishedProducts({ category: 'navidad' }, db);
+  return all.filter((p) => p.featured).slice(0, limit);
+}
+
+/** "Price from" of one published product, or null (for the Q-404 section). */
+export async function getProductPrice(slug: string, db: Db = getDb()): Promise<number | null> {
+  const [row] = await db
+    .select({ price: schema.products.priceFromCents })
+    .from(schema.products)
+    .where(and(eq(schema.products.slug, slug), eq(schema.products.published, true)));
+  return row?.price ?? null;
+}
