@@ -84,12 +84,13 @@ await responsive(
 );
 await responsive(at('reference/hero/hero-celular.webp'), out.brand, 'hero-mobile', [600, 1200]);
 
-// Blurred poster for the video section (docs/05: portada desenfocada)
+// Poster of the video section: the default hero, smaller
 {
   const src = at('reference/hero/hero-escritorio.webp');
   const dest = join(out.brand, 'video-poster-1200.webp');
   if (!fresh(src, dest)) {
-    await sharp(src).resize({ width: 1200 }).blur(24).webp({ quality: 70 }).toFile(dest);
+    // Only resized: the blur and the dimming are done by CSS on the page (docs/05: portada desenfocada).
+    await sharp(src).resize({ width: 1200 }).webp({ quality: 70 }).toFile(dest);
     made++;
   }
 }

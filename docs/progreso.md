@@ -16,14 +16,14 @@ Lo actualiza Claude Code al terminar cada paso. Estados: **pendiente** · **en c
 | Personalizador 3D | 3 | igual al mockup | igual al mockup | igual al mockup | La vista fija es SVG y la 3D (three + R3F) carga solo al tocarla; el mockup giraba capas CSS. Se agregaron botones ← → para girar sin arrastrar |
 | Producto | 3 | igual al mockup | igual al mockup | igual al mockup | Migas con el nombre del producto al final; nota de precio sin la frase extra del mockup (el texto sale del campo del panel) |
 | 404 y error | 3 | igual (sin mockup) | igual (sin mockup) | igual (sin mockup) | Q-404 de cuerpo completo, textos de `05 §2`, botones de `04 §5`; `/500` con "Intentar de nuevo". No hay mockup de estas páginas |
-| Inicio · Hero | 4 | pendiente | pendiente | pendiente | |
-| Inicio · Navidad | 4 | pendiente | pendiente | pendiente | |
-| Inicio · ¿Qué se te antoja? | 4 | pendiente | pendiente | pendiente | Componente externo |
-| Inicio · Video | 4 | pendiente | pendiente | pendiente | |
-| Inicio · Imprimiendo | 4 | pendiente | pendiente | pendiente | |
-| Inicio · Q-404 | 4 | pendiente | pendiente | pendiente | |
-| Inicio · Alberca | 4 | pendiente | pendiente | pendiente | |
-| Inicio · Pedido | 4 | pendiente | pendiente | pendiente | |
+| Inicio · Hero | 4 | igual al mockup | igual al mockup | igual al mockup | Nombre en una línea al ancho exacto (`cqw`); la frase de venta del mockup va como texto oculto (`04 §2.1`, `05 §2`); varias fotos con Embla fade + autoplay (sin React) |
+| Inicio · Navidad | 4 | igual al mockup | igual al mockup | igual al mockup | Las 4 tarjetas son productos reales (Navidad + "Más pedido") que abren su página (`02 §1`); solo del 1 de octubre al 24 de diciembre; el 24 dice "Hoy es Nochebuena." |
+| Inicio · ¿Qué se te antoja? | 4 | igual (con el reemplazo) | igual (con el reemplazo) | igual (con el reemplazo) | **Pendiente de componente externo:** corre `HoverLinks.placeholder.tsx` (`src/components/external/`); cambiar a la real es una línea de `external/index.ts`. Nombres en gris más oscuro (contraste) |
+| Inicio · Video | 4 | igual al mockup | igual al mockup | igual al mockup | `site.video.src = null`: botón deshabilitado con su `aria-label` |
+| Inicio · Imprimiendo | 4 | igual al mockup | igual al mockup | igual al mockup | `scroll()` de `motion`; con movimiento reducido el robot sale completo |
+| Inicio · Q-404 | 4 | igual al mockup | igual al mockup | igual al mockup | Precio y alto salen del producto `q-404` de la base ("mide [alto] cm" mientras el dueño no lo llene) |
+| Inicio · Alberca | 4 | igual al mockup | igual al mockup | igual al mockup | Física con matter-js (el mockup tenía una a mano); se carga al tocar |
+| Inicio · Pedido | 4 | igual al mockup | igual al mockup | igual al mockup | Isla React `OrderComposer` (`client:visible`); huecos que crecen medidos con canvas |
 | Aviso de privacidad | 5 | pendiente | pendiente | pendiente | Revisar con el dueño |
 
 ## Flujos (`04 §6`)
@@ -31,10 +31,10 @@ Lo actualiza Claude Code al terminar cada paso. Estados: **pendiente** · **en c
 | Flujo | Fase | Estado |
 |---|---|---|
 | A · Pedir un producto | 3 | pasa en Playwright (`e2e/flow-public.spec.ts`); falta el tramo Inicio → Catálogo (fase 4) |
-| B · Pedir desde una idea | 4 | pendiente |
+| B · Pedir desde una idea | 4 | pasa en Playwright |
 | C · Nombre en 3D | 3 | pasa en Playwright (mensaje exacto; three no se descarga hasta tocar la vista) |
 | D · Subir un producto | 2–3 | pasa completo en Playwright: el producto subido aparece en el catálogo y en su página con la foto elegida |
-| E · Cambiar la portada | 4 | pendiente |
+| E · Cambiar la portada | 4 | pasa en Playwright (portada de escritorio en 1440 y de celular en 390) |
 | F · Ocultar y reordenar | 2–3 | pasa completo en Playwright: el oculto da 404 y no sale en el catálogo; el orden se refleja en el catálogo |
 | G · Compartir | 3 | pasa en Playwright (etiquetas `og:`, precio, JSON-LD) |
 
@@ -42,7 +42,7 @@ Lo actualiza Claude Code al terminar cada paso. Estados: **pendiente** · **en c
 
 | Componente | Estado | Notas |
 |---|---|---|
-| Interactive Hover Links (Ideas) | pendiente de entrega | |
+| Interactive Hover Links (Ideas) | pendiente de entrega | Reemplazo sencillo en uso: `src/components/external/HoverLinks.placeholder.tsx` (fase 4, paso 4.3) |
 
 ## Valores provisionales en uso (`01 › Pendientes del dueño`)
 
@@ -53,7 +53,7 @@ Lo actualiza Claude Code al terminar cada paso. Estados: **pendiente** · **en c
 | Facebook | `[tu página]` (texto, sin liga) | Fase 1 |
 | Instagram | `[@tu.usuario]` (texto, sin liga) | Fase 1 |
 | Fecha límite de Navidad | 12 de diciembre | Fase 1 |
-| Video del timelapse | `src: null` | Fase 1 |
+| Video del timelapse | `src: null` (botón deshabilitado) | Fase 1 |
 
 ## Bloqueos
 

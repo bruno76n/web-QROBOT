@@ -6,7 +6,7 @@ import { withPreview } from './_server.mjs';
 const KB = 1024;
 /** path (sample URL) → budget in KB of compressed JS loaded on open. null = no strict limit. */
 const budgets = [
-  { label: 'Inicio', url: '/', limitKb: 90 },
+  { label: 'Inicio', url: '/', limitKb: 90, skipVisible: true },
   { label: 'Catálogo', url: '/catalogo', limitKb: 25 },
   { label: 'Producto', url: '/producto/llaveros-con-nombre', limitKb: 70 },
   { label: 'Privacidad', url: '/privacidad', limitKb: 0 },
@@ -14,17 +14,22 @@ const budgets = [
   { label: '404', url: '/no-existe', limitKb: 8, status: 404 },
 ];
 
-async function jsOnOpen(base, html) {
+async function jsOnOpen(base, html, { skipVisible = false } = {}) {
   const srcs = new Set();
   for (const m of html.matchAll(/<script\b[^>]*\bsrc="([^"]+)"/g)) srcs.add(m[1]);
   for (const m of html.matchAll(/<link\b[^>]*rel="modulepreload"[^>]*href="([^"]+)"/g))
     srcs.add(m[1]);
   for (const m of html.matchAll(/<link\b[^>]*href="([^"]+)"[^>]*rel="modulepreload"/g))
     srcs.add(m[1]);
-  // Islands (`client:visible` / `client:load`) load their component and renderer too: count them
-  // as if they hydrate on open (conservative, docs/15 §2).
-  for (const m of html.matchAll(/\b(?:component-url|renderer-url|before-hydration-url)="([^"]+)"/g))
-    srcs.add(m[1]);
+  // Islands load their component and renderer too. `client:visible` ones below the fold do not
+  // count on open when the budget says so (docs/15 §2); everything else counts as if hydrated.
+  for (const [tag] of html.matchAll(/<astro-island\b[^>]*>/g)) {
+    if (skipVisible && /\bclient="visible"/.test(tag)) continue;
+    for (const m of tag.matchAll(
+      /\b(?:component-url|renderer-url|before-hydration-url)="([^"]+)"/g,
+    ))
+      srcs.add(m[1]);
+  }
   // Follow the static imports of each file (React and Embla live in shared chunks).
   const seen = new Set();
   let total = 0;
@@ -58,7 +63,7 @@ async function run(base) {
       continue;
     }
     checked++;
-    const { total, files } = await jsOnOpen(base, await res.text());
+    const { total, files } = await jsOnOpen(base, await res.text(), { skipVisible: b.skipVisible });
     const kb = total / KB;
     const ok = kb <= b.limitKb;
     console.log(

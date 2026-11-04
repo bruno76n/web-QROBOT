@@ -14,13 +14,13 @@ const isCurrent = (href: string) => !href.includes('#') && current.startsWith(hr
 >
   <div class="wrap grid min-h-[var(--top)] max-w-none grid-cols-[1fr_auto] items-center min-[901px]:grid-cols-[1fr_auto_1fr]">
     <div class="col-start-1 grid items-center *:[grid-area:1/1]">
-      <span class="pointer-events-none text-[14px] text-ink-2 opacity-0 transition-opacity duration-300 group-data-[over-hero]/top:pointer-events-auto group-data-[over-hero]/top:opacity-100">
+      <span class="pointer-events-none invisible text-[14px] text-ink-2 opacity-0 transition-[opacity,visibility] duration-300 group-data-[over-hero]/top:pointer-events-auto group-data-[over-hero]/top:visible group-data-[over-hero]/top:opacity-100">
         {es.site.tagline}
       </span>
       <a
         href="/"
         aria-label={es.a11y.goHome}
-        class="flex items-center no-underline transition-opacity duration-300 group-data-[over-hero]/top:pointer-events-none group-data-[over-hero]/top:opacity-0"
+        class="flex items-center no-underline transition-[opacity,visibility] duration-300 group-data-[over-hero]/top:pointer-events-none group-data-[over-hero]/top:invisible group-data-[over-hero]/top:opacity-0"
       >
         <Logo />
       </a>

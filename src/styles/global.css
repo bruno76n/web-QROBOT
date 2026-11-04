@@ -125,6 +125,12 @@
     linear-gradient(var(--green), var(--green)) 0 100% / 100% 2px no-repeat;
 }
 
+/* Sections below the fold are not laid out or painted until they get close (home page, docs/15). */
+@utility cv {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 700px;
+}
+
 /* Reading helpers. */
 @utility lead {
   color: var(--ink-2);

@@ -25,7 +25,7 @@ const widths = [
 export default defineConfig({
   testDir: '.',
   testMatch: ['e2e/**/*.spec.ts', 'tests/**/*.spec.ts'],
-  testIgnore: /admin-.*\.spec\.ts/,
+  testIgnore: /(admin|dev)-.*\.spec\.ts/,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
