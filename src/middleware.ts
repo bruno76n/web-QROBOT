@@ -27,6 +27,13 @@ const isPanel = (pathname: string) => pathname === '/admin' || pathname.startsWi
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const { pathname } = context.url;
+  // One URL per page: `/catalogo/` answers 301 to `/catalogo` (docs/14 §4).
+  if (pathname.length > 1 && pathname.endsWith('/') && context.request.method === 'GET') {
+    return Response.redirect(
+      new URL(pathname.replace(/\/+$/, '') + context.url.search, context.url),
+      301,
+    );
+  }
   const response =
     isAdminApi(pathname) && !(await isAdminRequest(context.request))
       ? Response.json({ ok: false, code: 'UNAUTHORIZED' }, { status: 401 })

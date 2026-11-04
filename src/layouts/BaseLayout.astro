@@ -2,16 +2,37 @@
 import { ClientRouter } from 'astro:transitions';
 import '@/styles/global.css';
 import { es } from '@/i18n/es';
+import { site } from '@/config/site';
+import { absoluteUrl, jsonLdString } from '@/lib/seo';
 import Header from '@/components/site/Header.astro';
 import Footer from '@/components/site/Footer.astro';
 
 interface Props {
   title?: string;
   description?: string;
+  noindex?: boolean;
+  /** `product` adds the price tags (docs/14 §1). */
+  ogType?: 'website' | 'product';
+  /** Absolute URL or path of the share image; the brand one by default. */
+  ogImage?: string;
+  /** Price in cents, for `product:price:amount`. */
+  priceFromCents?: number | null;
+  /** JSON-LD objects (docs/14 §2). */
+  jsonLd?: object[];
 }
 
-// Basic head only; the full SEO (canonical, Open Graph, JSON-LD) arrives in phase 3.
-const { title = es.site.title, description = es.site.description } = Astro.props;
+// Complete head: canonical, Open Graph, Twitter and structured data (docs/14 §1).
+const {
+  title = es.site.title,
+  description = es.site.description,
+  noindex = false,
+  ogType = 'website',
+  ogImage = '/brand/og-default.jpg',
+  priceFromCents = null,
+  jsonLd = [],
+} = Astro.props;
+const canonical = absoluteUrl(site.domain, Astro.url.pathname);
+const image = absoluteUrl(site.domain, ogImage);
 ---
 
 <!doctype html>
@@ -21,6 +42,28 @@ const { title = es.site.title, description = es.site.description } = Astro.props
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:site_name" content="Quick Robot" />
+    <meta name="twitter:card" content="summary_large_image" />
+    {ogType === 'product' && priceFromCents !== null && (
+      <>
+        <meta property="product:price:amount" content={(priceFromCents / 100).toFixed(2)} />
+        <meta property="product:price:currency" content="MXN" />
+      </>
+    )}
+    {jsonLd.map((item) => (
+      // eslint-disable-next-line astro/no-set-html-directive -- JSON-LD from `jsonLdString`, which escapes < > & (docs/14 §2)
+      <script type="application/ld+json" set:html={jsonLdString(item)} />
+    ))}
+    {noindex && <meta name="robots" content="noindex" />}
+    <slot name="head" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link
       rel="preload"

@@ -2,11 +2,23 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Picture from '@/components/site/Picture.astro';
 import { es } from '@/i18n/es';
+import { site } from '@/config/site';
+import { localBusinessJsonLd } from '@/lib/seo';
 
 // Provisional home (phase 1): the real sections arrive in phase 4.
 ---
 
-<BaseLayout>
+<BaseLayout
+  jsonLd={[
+    localBusinessJsonLd({
+      domain: site.domain,
+      name: 'Quick Robot',
+      logo: '/favicon.svg',
+      image: '/brand/og-default.jpg',
+      sameAs: [site.facebook.url, site.instagram.url].filter((u): u is string => Boolean(u)),
+    }),
+  ]}
+>
   <section class="wrap flex flex-col items-center gap-6 py-[clamp(70px,9vw,130px)] text-center">
     <span class="dl"></span>
     <Picture
