@@ -105,3 +105,11 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 - **Temporada:** `season.ts` usa `Intl` con la zona `America/Mexico_City`; como México ya no tiene horario de verano, la diferencia de relojes de pared es la diferencia real. Todas las funciones reciben `now`.
 - **`uploadFieldsSchema`:** los campos de texto de `POST /api/admin/upload` (`kind`, `aspect`, recorte, tamaño del original, `widths` en JSON); los archivos viajan aparte (`10 §4`).
 - **`Result<T>` y los 11 códigos** de `10 §5` en `result.ts`.
+
+## 2026-11-04 · Fase 2 · Paso 2.3 · Entrar al panel
+- **jose 6.2.15** para el token de Access (`Cf-Access-Jwt-Assertion`): firma con las llaves públicas del equipo (`createRemoteJWKSet` en caché por isolate), `iss`, `aud`, vencimiento y solo `RS256`. Si falta `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD` o `ADMIN_EMAILS`, **falla cerrado** (nadie entra).
+- **Dos archivos:** `auth-core.ts` (verifica, sin imports de Cloudflare, se prueba en Node con llaves generadas) y `auth.ts` (`requireAdmin`, `isAdminRequest`, lee el entorno). La sesión falsa de desarrollo (`import.meta.env.DEV`) vive solo en `auth.ts`, porque en Vitest `DEV` también es `true`.
+- **Middleware:** toda petición a `/_actions/admin.*` y `/api/admin/*` pasa por `isAdminRequest` **antes** de `next()`, así que responde `401 {"ok":false,"code":"UNAUTHORIZED"}` también con entrada inválida; esas respuestas llevan `Cache-Control: no-store`. `/admin*` lleva `X-Robots-Tag: noindex, nofollow`. Los handlers vuelven a llamar `requireAdmin` (se agrega en 2.4 y 2.5).
+- **Secretos** `ACCESS_AUD` y `ADMIN_EMAILS` declarados como opcionales en `src/env.d.ts` (no están en `wrangler.jsonc`).
+- **Pruebas:** `tests/security/auth.test.ts` (válido; sin token; vencido; `aud`, `iss` y llave equivocados; token manipulado; `alg: none`; correo no permitido o ausente; sin configurar) y `tests/security/admin-routes.spec.ts` (401 con y sin token falso en 4 rutas, `noindex`, y que `dist/` no contiene la cadena de la sesión falsa).
+- **Access en Cloudflare:** sin credenciales no se pudo crear la aplicación "Panel Quick Robot". Queda en `progreso.md › Bloqueos`.
