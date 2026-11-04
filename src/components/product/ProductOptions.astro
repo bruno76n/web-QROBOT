@@ -1,0 +1,204 @@
+---
+import { colors, type ColorId } from '@/config/colors';
+import { es } from '@/i18n/es';
+import { productMessage, waLink } from '@/lib/whatsapp';
+
+interface Props {
+  name: string;
+  unitSingular: string;
+  unitPlural: string;
+  colors: ColorId[];
+  personalizable: boolean;
+  personalHint: string;
+  /** WhatsApp number from `site.ts`. */
+  whatsapp: string;
+  /** Public link of the product page (goes inside the message). */
+  productUrl: string;
+}
+const p = Astro.props;
+const t = es.product;
+const options = p.colors.flatMap((id) => colors.filter((c) => c.id === id));
+const first = options[0];
+// The server renders the base link (quantity 1, first color): it works without JavaScript.
+const href = waLink(
+  p.whatsapp,
+  productMessage({
+    quantity: 1,
+    unitSingular: p.unitSingular,
+    unitPlural: p.unitPlural,
+    productName: p.name,
+    color: first?.label.toLowerCase(),
+    personal: p.personalizable ? { hint: p.personalHint, answer: '' } : undefined,
+    url: p.productUrl,
+  }),
+);
+---
+
+<div
+  aria-label={t.optionsLabel}
+  data-options
+  data-name={p.name}
+  data-unit-singular={p.unitSingular}
+  data-unit-plural={p.unitPlural}
+  data-personalizable={p.personalizable ? 'true' : 'false'}
+  data-hint={p.personalHint}
+  data-whatsapp={p.whatsapp}
+  data-url={p.productUrl}
+>
+  {options.length > 0 && (
+    <div class="mt-6">
+      <span id="opt-color" class="mb-2.5 block text-sm text-ink-2">
+        {t.color}
+        <span data-color-name class="ml-1.5 font-medium text-ink">
+          {first?.label}
+        </span>
+      </span>
+      <div role="radiogroup" aria-labelledby="opt-color" class="flex flex-wrap gap-2.5">
+        {options.map((c, i) => (
+          <button
+            type="button"
+            role="radio"
+            data-color={c.label.toLowerCase()}
+            data-color-label={c.label}
+            aria-checked={i === 0 ? 'true' : 'false'}
+            aria-label={c.label}
+            title={c.label}
+            style={`background:${c.hex}`}
+            class="size-9 cursor-pointer rounded-full border-0 shadow-[inset_0_0_0_1px_rgba(18,18,20,.14)] aria-checked:shadow-[inset_0_0_0_1px_rgba(18,18,20,.14),0_0_0_3px_#fff,0_0_0_5px_var(--ink)]"
+          />
+        ))}
+      </div>
+    </div>
+  )}
+  {p.personalizable && (
+    <div class="mt-6">
+      <label for="opt-personal" class="mb-2.5 block text-sm text-ink-2">
+        {p.personalHint || t.optionsLabel}
+      </label>
+      <input
+        id="opt-personal"
+        data-personal
+        type="text"
+        maxlength="60"
+        autocomplete="off"
+        class="min-h-[52px] w-full rounded-[10px] border border-line px-3.5 text-lg font-medium focus:border-purple focus:shadow-[0_0_0_3px_#efe9fd] focus:outline-none"
+      />
+    </div>
+  )}
+  <div class="mt-6">
+    <label for="opt-qty" class="mb-2.5 block text-sm text-ink-2">
+      {t.quantity}
+    </label>
+    <div class="inline-flex items-center rounded-[10px] border border-line">
+      <button
+        type="button"
+        data-step="-1"
+        aria-label={t.quantityLess}
+        class="h-12 w-[46px] text-xl"
+      >
+        −
+      </button>
+      <input
+        id="opt-qty"
+        data-qty
+        inputmode="numeric"
+        value="1"
+        class="h-12 w-16 border-0 text-center text-lg font-medium"
+      />
+      <button type="button" data-step="1" aria-label={t.quantityMore} class="h-12 w-[46px] text-xl">
+        +
+      </button>
+    </div>
+  </div>
+  <div class="mt-7 grid gap-2.5">
+    <a
+      data-order
+      href={href}
+      target="_blank"
+      rel="noopener"
+      class="inline-flex min-h-[58px] items-center justify-center gap-2 rounded-xl bg-green px-6 text-[17px] font-medium text-ink no-underline transition-colors hover:bg-[#00c24b]"
+    >
+      {t.order}
+      <span aria-hidden="true">→</span>
+    </a>
+    <p class="text-center text-[13px] text-ink-2">{t.orderNote}</p>
+  </div>
+</div>
+
+<script>
+  import { normalizeQuantity } from '@/lib/plural';
+  import { productMessage, waLink } from '@/lib/whatsapp';
+
+  // Starts on astro:page-load and cleans on astro:before-swap (CLAUDE.md rule 13).
+  let cleanup: (() => void) | undefined;
+
+  function setup() {
+    const root = document.querySelector<HTMLElement>('[data-options]');
+    if (!root) return;
+    const q = <T extends Element>(s: string) => root.querySelector<T>(s);
+    const order = q<HTMLAnchorElement>('[data-order]');
+    const qty = q<HTMLInputElement>('[data-qty]');
+    const personal = q<HTMLInputElement>('[data-personal]');
+    const colorName = q<HTMLElement>('[data-color-name]');
+    const swatches = [...root.querySelectorAll<HTMLElement>('[data-color]')];
+    if (!order || !qty) return;
+    let color: string | undefined = swatches[0]?.dataset.color;
+
+    const update = () => {
+      const quantity = normalizeQuantity(qty.value);
+      order.href = waLink(
+        root.dataset.whatsapp ?? '',
+        productMessage({
+          quantity,
+          unitSingular: root.dataset.unitSingular ?? '',
+          unitPlural: root.dataset.unitPlural ?? '',
+          productName: root.dataset.name ?? '',
+          color,
+          personal:
+            root.dataset.personalizable === 'true'
+              ? { hint: root.dataset.hint ?? '', answer: personal?.value ?? '' }
+              : undefined,
+          url: root.dataset.url ?? '',
+        }),
+      );
+    };
+
+    const handlers: [Element, string, EventListener][] = [];
+    const on = (el: Element | null, ev: string, fn: EventListener) => {
+      if (!el) return;
+      el.addEventListener(ev, fn);
+      handlers.push([el, ev, fn]);
+    };
+    swatches.forEach((s) =>
+      on(s, 'click', () => {
+        color = s.dataset.color;
+        swatches.forEach((o) => o.setAttribute('aria-checked', String(o === s)));
+        if (colorName) colorName.textContent = s.dataset.colorLabel ?? '';
+        update();
+      }),
+    );
+    root.querySelectorAll<HTMLElement>('[data-step]').forEach((b) =>
+      on(b, 'click', () => {
+        qty.value = String(Math.max(1, normalizeQuantity(qty.value) + Number(b.dataset.step)));
+        update();
+      }),
+    );
+    on(qty, 'input', () => {
+      qty.value = qty.value.replace(/[^0-9]/g, '').slice(0, 4);
+      update();
+    });
+    on(qty, 'blur', () => {
+      qty.value = String(normalizeQuantity(qty.value));
+      update();
+    });
+    on(personal, 'input', update);
+    cleanup = () => handlers.forEach(([el, ev, fn]) => el.removeEventListener(ev, fn));
+    update();
+  }
+
+  document.addEventListener('astro:page-load', setup);
+  document.addEventListener('astro:before-swap', () => {
+    cleanup?.();
+    cleanup = undefined;
+  });
+</script>

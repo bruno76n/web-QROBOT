@@ -1,0 +1,175 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/site/Breadcrumbs.astro';
+import Price from '@/components/site/Price.astro';
+import ProductCard from '@/components/site/ProductCard.astro';
+import Gallery from '@/components/product/Gallery.astro';
+import ProductOptions from '@/components/product/ProductOptions.astro';
+import { categories } from '@/config/categories';
+import { site } from '@/config/site';
+import { es } from '@/i18n/es';
+import { photoImg, photoOgUrl, photoVariantUrl } from '@/lib/photos';
+import {
+  absoluteUrl,
+  breadcrumbJsonLd,
+  productDescription,
+  productJsonLd,
+  productTitle,
+} from '@/lib/seo';
+import { getEnv } from '@/server/env';
+import { getPublishedProduct, listRelated } from '@/server/queries/public';
+
+export const prerender = false;
+const { slug = '' } = Astro.params;
+// Hidden or missing products are a 404, never a page (docs/04 §1).
+const product = await getPublishedProduct(slug);
+if (!product) return Astro.rewrite('/404');
+
+const imgBase = getEnv().PUBLIC_IMG_BASE;
+const related = await listRelated(product);
+const label = (id: string) => categories.find((c) => c.id === id)?.label ?? id;
+const mainCategory = product.category;
+const crumbs = [
+  { label: es.catalog.catalog, href: '/catalogo' },
+  ...(mainCategory ? [{ label: label(mainCategory), href: `/catalogo/${mainCategory}` }] : []),
+  { label: product.name },
+];
+const first = product.photos[0] ? photoImg(product.photos[0], imgBase) : null;
+const paragraphs = product.description
+  .split(/\n\s*\n/)
+  .map((p) => p.trim())
+  .filter(Boolean);
+const sheet = [
+  [es.product.sheet.size, product.size],
+  [es.product.sheet.material, product.material],
+  [es.product.sheet.leadTime, product.leadTime],
+].filter(([, value]) => value);
+const productUrl = `${site.domain}/producto/${product.slug}`;
+const images = product.photos.map((p) =>
+  absoluteUrl(
+    site.domain,
+    photoVariantUrl(
+      p,
+      Math.max(...p.widths.filter((w) => w <= 1200), Math.min(...p.widths)),
+      imgBase,
+    ),
+  ),
+);
+const ogImage = product.photos[0]
+  ? absoluteUrl(site.domain, photoOgUrl(product.photos[0], imgBase))
+  : undefined;
+const jsonLd = [
+  productJsonLd({
+    domain: site.domain,
+    slug: product.slug,
+    name: product.name,
+    description: productDescription(product.short),
+    priceFromCents: product.priceFromCents,
+    images,
+  }),
+  breadcrumbJsonLd(
+    site.domain,
+    crumbs.map((c) => ({ name: c.label, ...(c.href ? { href: c.href } : {}) })),
+  ),
+];
+---
+
+<BaseLayout
+  title={productTitle(product.name, product.priceFromCents)}
+  description={productDescription(product.short)}
+  ogType="product"
+  priceFromCents={product.priceFromCents}
+  {...(ogImage ? { ogImage } : {})}
+  jsonLd={jsonLd}
+>
+  {first && (
+    <link
+      slot="head"
+      rel="preload"
+      as="image"
+      imagesrcset={first.srcset}
+      imagesizes="(max-width: 760px) 100vw, 640px"
+      fetchpriority="high"
+    />
+  )}
+  <div class="wrap">
+    <Breadcrumbs items={crumbs} />
+    <div class="mt-[22px] grid grid-cols-[minmax(0,1fr)] items-start gap-[clamp(30px,5vw,80px)] min-[901px]:grid-cols-[minmax(0,1.15fr)_minmax(0,.85fr)]">
+      <div class="min-[901px]:sticky min-[901px]:top-[calc(var(--top)+20px)]">
+        <Gallery photos={product.photos} imgBase={imgBase} />
+      </div>
+      <div>
+        <h1 class="text-[clamp(36px,4.4vw,62px)] leading-none">{product.name}</h1>
+        {product.short && <p class="lead mt-3.5">{product.short}</p>}
+        <ul class="m-0 mt-4 flex list-none flex-wrap gap-1.5 p-0">
+          {product.featured && (
+            <li class="rounded-md bg-[#efe9fd] px-2.5 py-1 text-[13px] text-purple">
+              {es.catalog.hot}
+            </li>
+          )}
+          {product.categories.map((c) => (
+            <li>
+              <a
+                href={`/catalogo/${c}`}
+                class="rounded-md bg-soft px-2.5 py-1 text-[13px] text-ink-2 no-underline hover:text-ink"
+              >
+                {label(c)}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div class="mt-[26px] border-y border-line py-5">
+          <Price cents={product.priceFromCents} perPiece size="page" />
+          {product.priceNote && <p class="mt-1.5 text-[15px] text-ink-2">{product.priceNote}</p>}
+        </div>
+        <ProductOptions
+          name={product.name}
+          unitSingular={product.unitSingular}
+          unitPlural={product.unitPlural}
+          colors={product.colors}
+          personalizable={product.personalizable}
+          personalHint={product.personalHint}
+          whatsapp={site.whatsapp}
+          productUrl={productUrl}
+        />
+        {sheet.length > 0 && (
+          <dl class="m-0 mt-[30px] grid grid-cols-[auto_1fr] border-t border-line">
+            {sheet.map(([k, v]) => (
+              <>
+                <dt class="border-b border-line py-3 pr-7 text-[15px] text-ink-2">{k}</dt>
+                <dd class="m-0 border-b border-line py-3 font-medium">{v}</dd>
+              </>
+            ))}
+          </dl>
+        )}
+        {paragraphs.length > 0 && (
+          <div class="mt-[26px] leading-[1.65] text-[#3a3a42]">
+            {paragraphs.map((p, i) => (
+              <p class={i > 0 ? 'mt-3' : ''}>{p}</p>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+
+    {related.length > 0 && (
+      <section aria-labelledby="related" class="mt-[clamp(70px,9vw,120px)]">
+        <h2 id="related" class="text-[clamp(28px,3vw,40px)]">
+          {es.product.related}
+        </h2>
+        <ul class="m-0 mt-6 grid list-none grid-cols-[repeat(2,minmax(0,1fr))] gap-[18px] p-0 min-[901px]:grid-cols-[repeat(4,minmax(0,1fr))]">
+          {related.map((p) => (
+            <li>
+              <ProductCard product={p} />
+            </li>
+          ))}
+        </ul>
+        <p class="mt-8">
+          <a href="/catalogo" class="text-purple no-underline hover:underline">
+            {es.product.relatedAll} →
+          </a>
+        </p>
+      </section>
+    )}
+  </div>
+</BaseLayout>
