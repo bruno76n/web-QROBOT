@@ -87,3 +87,11 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 - **`wrangler deploy --dry-run` funciona** (551 KiB de Worker, 48 archivos estáticos) con los bindings `DB`, `BUCKET`, `ASSETS`, `SESSION` y las variables de producción.
 - **Lighthouse CI en modo celular** (el modo por defecto, como pide `15 §1`) con aserciones de error: rendimiento ≥ 0.9, accesibilidad ≥ 0.95, buenas prácticas ≥ 0.95, SEO = 1. Resultado local de `/`: 100 / 100 / 100 / 100, LCP 1.4 s, CLS 0. `startServerReadyPattern` apunta a "Preview server".
 - **Bloqueado por credenciales (solo el despliegue real):** ver `progreso.md › Bloqueos` y el informe. Además de las credenciales, antes del primer despliegue hay que crear en Cloudflare la D1 `quick-robot-web` y el bucket `quick-robot-photos` (`17 §1`) y poner el `database_id` real en `wrangler.jsonc`; el binding KV `SESSION` que agrega el adaptador se crea solo con `wrangler deploy` (aprovisionamiento automático) pero se puede quitar si no se usan sesiones.
+
+## 2026-11-04 · Fase 2 · Paso 2.1 · Esquema y migraciones
+- Tablas de `09 §1` (sin `whatsapp_clicks`, fase 5): `products`, `product_categories`, `product_colors`, `photos`, `hero_slides` (+ `settings` de la fase 1) e índices de `09 §2`. Migración `0001_modern_sphinx.sql`.
+- Fechas como milisegundos unix (`integer`, `mode: timestamp_ms`) con valor por defecto en SQL.
+- `photos.owner_id` no tiene llave foránea (es polimórfico: producto o portada y nulo mientras está `pending`). `hero_slides` sí referencia `photos` (sin cascada: las fotos de una portada se borran en la acción, junto con R2).
+- `photos.aspect`, `owner_type` y `status` son enumeraciones de TypeScript (texto en SQL).
+- `categories.ts` y `colors.ts` exportan listas de ids tipadas para los esquemas Zod. Color "café" con id `cafe` (sin tilde, para ids estables).
+- Prueba `schema.test.ts`: producto con categorías, colores y fotos; slug único; borrado en cascada; portada exige foto existente. Cada prueba filtra por sus propios ids (el almacenamiento se comparte dentro del archivo).
