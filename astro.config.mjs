@@ -24,13 +24,15 @@ export default defineConfig({
         `img-src 'self' ${imgHost} data: blob:`,
         `media-src 'self' ${imgHost}`,
         "font-src 'self'",
-        "connect-src 'self'",
+        "connect-src 'self' https://cloudflareinsights.com",
         "worker-src 'self' blob:",
         "base-uri 'self'",
         "form-action 'self'",
         "frame-ancestors 'none'",
       ],
       // Components (motion, Embla, 21st.dev) use inline styles: no style hashes (docs/13 §3).
+      // The only third-party script: Cloudflare Web Analytics, switched on from the dashboard (docs/13 §3, §7).
+      scriptDirective: { resources: ["'self'", 'https://static.cloudflareinsights.com'] },
       styleDirective: { resources: ["'self'", "'unsafe-inline'"] },
     },
   },

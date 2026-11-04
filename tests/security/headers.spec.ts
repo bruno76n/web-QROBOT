@@ -35,6 +35,9 @@ for (const url of publicUrls) {
     const scriptSrc = csp.split(';').find((d) => d.trim().startsWith('script-src')) ?? '';
     expect(scriptSrc).not.toContain('unsafe-inline');
     expect(scriptSrc).not.toContain('unsafe-eval');
+    // Cloudflare Web Analytics is the only external script allowed (docs/13 §7).
+    expect(scriptSrc).toContain('https://static.cloudflareinsights.com');
+    expect(scriptSrc).not.toMatch(/https:\/\/(?!static\.cloudflareinsights\.com)/);
     expect(csp).toContain("base-uri 'self'");
     expect(csp).toContain("form-action 'self'");
 

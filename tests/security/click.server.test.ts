@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { env } from 'cloudflare:workers';
-import { getDb, schema } from './db/client';
+import { getDb, schema } from '../../src/server/db/client';
 import { clickInputSchema } from '@/lib/schemas';
-import { clickStats, dayKey, recordClick } from './clicks';
-import { makeDeps, productInput, resetAll } from './admin/test-utils';
-import { saveProduct } from './admin/products';
+import { clickStats, dayKey, recordClick } from '../../src/server/clicks';
+import { makeDeps, productInput, resetAll } from '../../src/server/admin/test-utils';
+import { saveProduct } from '../../src/server/admin/products';
 
 const TZ = 'America/Mexico_City';
 const db = () => getDb(env.DB);
