@@ -1,0 +1,12 @@
+dist
+.astro
+.wrangler
+node_modules
+reference
+assets
+public
+pnpm-lock.yaml
+migrations
+tests/negative
+docs
+.lighthouseci

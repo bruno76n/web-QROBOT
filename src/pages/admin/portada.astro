@@ -1,0 +1,10 @@
+---
+import AdminLayout from '@/layouts/AdminLayout.astro';
+import AdminApp from '@/components/admin/AdminApp';
+
+export const prerender = false;
+---
+
+<AdminLayout title="Portada · Panel de Quick Robot">
+  <AdminApp view="hero" client:only="react" />
+</AdminLayout>

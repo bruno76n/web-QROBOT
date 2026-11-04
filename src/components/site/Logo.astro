@@ -1,0 +1,18 @@
+---
+import Head from '../../../assets/logo-cabeza.svg';
+
+interface Props {
+  /** Show the "Quick Robot" word next to the head. */
+  withName?: boolean;
+  /** Head width in px (height follows the 120 × 104 proportion). */
+  size?: number;
+  class?: string;
+}
+
+const { withName = true, size = 30, class: className } = Astro.props;
+---
+
+<span class:list={['inline-flex items-center gap-2.5', className]}>
+  <Head width={size} height={Math.round((size * 104) / 120)} aria-hidden="true" />
+  {withName && <b class="text-lg font-semibold tracking-[-0.02em]">Quick Robot</b>}
+</span>

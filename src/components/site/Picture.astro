@@ -1,0 +1,55 @@
+---
+import { photoImg, type PhotoSrc } from '@/lib/photos';
+
+type Props = {
+  sizes: string;
+  /** Main image of the page: `fetchpriority="high"` and eager. Everything else is lazy. */
+  priority?: boolean;
+  alt?: string;
+  class?: string;
+} & (
+  | {
+      /** A stored photo (product, hero): `srcset` from the widths that really exist. */
+      photo: PhotoSrc;
+      imgBase: string;
+    }
+  | {
+      /** A brand image of `public/brand/`: `<base>-<width>.webp` files (docs/15 §3). */
+      base: string;
+      widths: number[];
+      width: number;
+      height: number;
+      alt: string;
+    }
+);
+
+const props = Astro.props;
+const { sizes, priority = false, class: className } = props;
+
+let attrs: { src: string; srcset: string; width: number; height: number };
+let alt: string;
+if ('photo' in props) {
+  attrs = photoImg(props.photo, props.imgBase);
+  alt = props.alt ?? props.photo.alt;
+} else {
+  const sorted = [...props.widths].sort((a, b) => a - b);
+  const largest = sorted[sorted.length - 1] ?? props.width;
+  attrs = {
+    src: `${props.base}-${largest}.webp`,
+    srcset: sorted.map((w) => `${props.base}-${w}.webp ${w}w`).join(', '),
+    width: props.width,
+    height: props.height,
+  };
+  alt = props.alt;
+}
+---
+
+<img
+  {...attrs}
+  sizes={sizes}
+  alt={alt}
+  loading={priority ? 'eager' : 'lazy'}
+  fetchpriority={priority ? 'high' : 'auto'}
+  decoding="async"
+  class={className}
+/>

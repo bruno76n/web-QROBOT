@@ -1,0 +1,75 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/sections/Hero.astro';
+import Navidad from '@/components/sections/Navidad.astro';
+import Ideas from '@/components/sections/Ideas.astro';
+import Video from '@/components/sections/Video.astro';
+import Imprimiendo from '@/components/sections/Imprimiendo.astro';
+import Q404 from '@/components/sections/Q404.astro';
+import Alberca from '@/components/sections/Alberca.astro';
+import Pedido from '@/components/sections/Pedido.astro';
+import { site } from '@/config/site';
+import { es } from '@/i18n/es';
+import { heroSlides } from '@/lib/hero';
+import { isChristmasSeason } from '@/lib/season';
+import { localBusinessJsonLd } from '@/lib/seo';
+import { now } from '@/server/clock';
+import { getHero } from '@/server/queries/hero';
+import { getPublishedProduct, listChristmasPicks } from '@/server/queries/public';
+
+export const prerender = false;
+
+const moment = now(Astro.request);
+// Christmas only exists from 1 October to 24 December, Guadalajara time (docs/04 §2.2).
+const inSeason = isChristmasSeason(moment, { ...site.christmas, timeZone: site.timeZone });
+const [hero, picks, q404] = await Promise.all([
+  getHero(),
+  inSeason ? listChristmasPicks(4) : Promise.resolve([]),
+  getPublishedProduct('q-404'),
+]);
+const first = heroSlides(hero, es.home.hero.alt, es.home.hero.slideAlt)[0];
+const sameAs = [site.facebook.url, site.instagram.url].filter((u): u is string => Boolean(u));
+---
+
+<BaseLayout
+  jsonLd={[
+    localBusinessJsonLd({
+      domain: site.domain,
+      name: 'Quick Robot',
+      logo: '/favicon.svg',
+      image: '/brand/og-default.jpg',
+      sameAs,
+    }),
+  ]}
+>
+  {first && (
+    <>
+      <link
+        slot="head"
+        rel="preload"
+        as="image"
+        media="(max-width:760px)"
+        imagesrcset={first.mobile?.srcset ?? first.desktop.srcset}
+        imagesizes="100vw"
+        fetchpriority="high"
+      />
+      <link
+        slot="head"
+        rel="preload"
+        as="image"
+        media="(min-width:761px)"
+        imagesrcset={first.desktop.srcset}
+        imagesizes="100vw"
+        fetchpriority="high"
+      />
+    </>
+  )}
+  <Hero hero={hero} />
+  {inSeason && <Navidad picks={picks} now={moment} />}
+  <Ideas />
+  <Video />
+  <Imprimiendo />
+  <Q404 priceFromCents={q404?.priceFromCents ?? null} size={q404?.size ?? ''} />
+  <Alberca />
+  <Pedido />
+</BaseLayout>

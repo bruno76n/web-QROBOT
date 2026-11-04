@@ -1,0 +1,23 @@
+---
+// Counts taps on the WhatsApp buttons (docs/18 §2). One listener on the document for the whole
+// site: it is added once and serves every page, also after View Transitions swaps.
+---
+
+<script>
+  document.addEventListener(
+    'click',
+    (event) => {
+      const link = (event.target as Element | null)?.closest<HTMLElement>('[data-click]');
+      if (!link || link.getAttribute('aria-disabled') === 'true') return;
+      const source = link.dataset.click;
+      const productId = link.dataset.clickProduct;
+      const body = JSON.stringify(productId ? { source, productId } : { source });
+      // sendBeacon never delays opening WhatsApp; fetch with keepalive is the fallback.
+      const blob = new Blob([body], { type: 'application/json' });
+      if (!navigator.sendBeacon?.('/api/click', blob)) {
+        void fetch('/api/click', { method: 'POST', body, keepalive: true }).catch(() => {});
+      }
+    },
+    { passive: true },
+  );
+</script>

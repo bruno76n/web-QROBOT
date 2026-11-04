@@ -1,0 +1,155 @@
+@import 'tailwindcss';
+
+/* Geist: one variable latin file served from the site (docs/03 §3, docs/15 §4). */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/geist-latin.woff2') format('woff2-variations');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Tokens (docs/03 §2): CSS variables, and Tailwind theme colors that point to them. */
+:root {
+  --ink: #121214;
+  --ink-2: #6a6a73;
+  --line: #e7e7ec;
+  --soft: #f6f6f8;
+  --purple: #6b3fd4;
+  --green: #00ae42;
+  --green-l: #e3f5e9;
+  --top: 68px;
+  --gutter: clamp(20px, 4.5vw, 64px);
+  --wrap-max: 1360px;
+  --radius-btn: 8px;
+  --radius-card: 20px;
+  color-scheme: light;
+}
+
+@theme inline {
+  /* Names the external 21st.dev components expect, mapped to the brand tokens (docs/11 §4). */
+  --color-background: #fff;
+  --color-foreground: var(--ink);
+  --color-muted: var(--line);
+  --color-muted-foreground: var(--ink-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-line: var(--line);
+  --color-soft: var(--soft);
+  --color-purple: var(--purple);
+  --color-green: var(--green);
+  --color-green-l: var(--green-l);
+  --font-sans: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --radius-btn: var(--radius-btn);
+  --radius-card: var(--radius-card);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    margin: 0;
+    background: #fff;
+    color: var(--ink);
+    font: 400 18px/1.55 var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  ::selection {
+    background: var(--purple);
+    color: #fff;
+  }
+  [hidden] {
+    display: none !important;
+  }
+  h1,
+  h2,
+  h3,
+  p {
+    margin: 0;
+  }
+  h1,
+  h2 {
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+  }
+  h2 {
+    font-size: clamp(36px, 4.6vw, 68px);
+    line-height: 1.02;
+  }
+  a {
+    color: inherit;
+  }
+  img {
+    max-width: 100%;
+    display: block;
+  }
+  section[id] {
+    scroll-margin-top: var(--top);
+  }
+  /* Focus: purple 2 px ring, 3 px away, on everything touchable (docs/03 §4). */
+  :where(a, button, input, select, textarea, label, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--purple);
+    outline-offset: 3px;
+  }
+}
+
+/* Side margin container (.wrap in the mockup). */
+@utility wrap {
+  width: 100%;
+  max-width: var(--wrap-max);
+  margin-inline: auto;
+  padding-inline: max(var(--gutter), env(safe-area-inset-left, 0px));
+}
+
+/* Visually hidden, still read aloud (.vh in the mockup). */
+@utility vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* The double rule: purple over green, 44 px wide, marks the start of a section. */
+@utility dl {
+  display: block;
+  width: 44px;
+  height: 6px;
+  background:
+    linear-gradient(var(--purple), var(--purple)) 0 0 / 100% 2px no-repeat,
+    linear-gradient(var(--green), var(--green)) 0 100% / 100% 2px no-repeat;
+}
+
+/* Sections below the fold are not laid out or painted until they get close (home page, docs/15). */
+@utility cv {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 700px;
+}
+
+/* Reading helpers. */
+@utility lead {
+  color: var(--ink-2);
+  font-size: clamp(17px, 1.3vw, 19px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

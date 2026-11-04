@@ -1,0 +1,63 @@
+---
+import { ideas } from '@/config/ideas';
+import { es } from '@/i18n/es';
+import IdeasLinks from './IdeasLinks';
+
+const t = es.home.ideas;
+// The wrapper only adapts the data: the 7 ideas, each a link to `#pedido=<id>` (docs/11 §3).
+const items = ideas.map((i) => ({
+  title: i.name,
+  description: i.phrase,
+  image: {
+    src: `/brand/ideas/${i.image.file}-${i.image.width}.webp`,
+    width: i.image.width,
+    height: i.image.height,
+  },
+  href: `#pedido=${i.id}`,
+}));
+---
+
+<section class="sec cv" id="ideas" aria-labelledby="h-idx">
+  <div class="wrap">
+    <div class="idx-head">
+      <h2 id="h-idx">{t.title}</h2>
+      <p class="lead">
+        {t.lead} {t.prices}{' '}
+        <a class="lnk" href="/catalogo">
+          {t.openCatalog} →
+        </a>
+      </p>
+    </div>
+    <IdeasLinks client:visible items={items} />
+  </div>
+</section>
+
+<style is:global>
+  .sec {
+    padding-block: clamp(90px, 11vw, 160px);
+  }
+  .lnk {
+    color: var(--purple);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .lnk:hover {
+    text-decoration: underline;
+  }
+  /* A link inside a sentence is underlined so it is not told apart by color alone (axe link-in-text-block). */
+  .lead .lnk {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .idx-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px 60px;
+    flex-wrap: wrap;
+    margin-bottom: clamp(28px, 4vw, 52px);
+  }
+  .idx-head .lead {
+    max-width: 30ch;
+  }
+</style>

@@ -1,0 +1,41 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@/lib/cn';
+import {
+  arrowClass,
+  buttonVariants,
+  type ButtonVariantProps,
+} from '@/components/ui/button-variants';
+
+interface Props extends HTMLAttributes<'a'>, ButtonVariantProps {
+  /** Without href it renders a <button>. */
+  href?: string;
+  arrow?: boolean;
+  /** Only for the <button> form. */
+  disabled?: boolean;
+  class?: string;
+}
+
+const { href, variant, size, arrow = false, disabled, class: className, ...rest } = Astro.props;
+const classes = cn(buttonVariants({ variant, size }), className);
+---
+
+{href ? (
+  <a href={href} class={classes} {...rest}>
+    <slot />
+    {arrow && (
+      <span class={arrowClass} aria-hidden="true">
+        →
+      </span>
+    )}
+  </a>
+) : (
+  <button type="button" class={classes} disabled={disabled} {...(rest as HTMLAttributes<'button'>)}>
+    <slot />
+    {arrow && (
+      <span class={arrowClass} aria-hidden="true">
+        →
+      </span>
+    )}
+  </button>
+)}

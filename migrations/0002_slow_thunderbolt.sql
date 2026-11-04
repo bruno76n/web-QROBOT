@@ -1,0 +1,1 @@
+ALTER TABLE `products` ADD `ever_published` integer DEFAULT false NOT NULL;

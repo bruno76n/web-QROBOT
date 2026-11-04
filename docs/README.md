@@ -28,6 +28,7 @@ Muestrario con precios y página por producto; los pedidos van por WhatsApp. Con
 | [20 · Plan de construcción](20-plan-de-construccion.md) | **Las 5 fases** y la plantilla de informe |
 | [fases/](fases/) | **Un archivo por fase** con pasos, qué consultar y cuándo está listo |
 | [prompts](prompts.md) | Un prompt por fase, cómo integrar componentes después, qué hacer entre fases |
+| [continuar en local](continuar-en-local.md) | **Empieza aquí para seguir:** cómo arrancar, probar y dónde cambiar cada dato |
 | [decisiones](decisiones.md) · [progreso](progreso.md) | Los llena Claude Code mientras construye |
 
 `CLAUDE.md`, en la raíz, resume las reglas para quien programe.

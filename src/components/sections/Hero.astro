@@ -1,0 +1,131 @@
+---
+import Head from '../../../assets/logo-cabeza.svg';
+import { site } from '@/config/site';
+import { es } from '@/i18n/es';
+import type { HeroView } from '@/lib/admin-types';
+import { heroSlides } from '@/lib/hero';
+
+interface Props {
+  hero: HeroView;
+}
+const { hero } = Astro.props;
+const t = es.home.hero;
+
+const slides = heroSlides(hero, t.alt, t.slideAlt);
+const many = slides.length > 1;
+---
+
+<section
+  class="hero relative overflow-hidden"
+  aria-labelledby="h-hero"
+  data-hero-section
+  data-interval={hero.intervalSeconds}
+>
+  <div data-viewport class="overflow-hidden">
+    <div class="flex">
+      {slides.map((s, i) => (
+        <div class="min-w-0 flex-[0_0_100%]">
+          <picture>
+            <source
+              media="(max-width:760px)"
+              srcset={s.mobile?.srcset ?? s.desktop.srcset}
+              sizes="100vw"
+              width={s.mobile?.width ?? s.desktop.width}
+              height={s.mobile?.height ?? s.desktop.height}
+            />
+            <img
+              src={s.desktop.src}
+              srcset={s.desktop.srcset}
+              sizes="100vw"
+              width={s.desktop.width}
+              height={s.desktop.height}
+              alt={s.desktop.alt}
+              loading={i === 0 ? 'eager' : 'lazy'}
+              fetchpriority={i === 0 ? 'high' : 'auto'}
+              decoding="async"
+              class="hero-img block w-full object-cover"
+            />
+          </picture>
+        </div>
+      ))}
+    </div>
+  </div>
+  <div class="pointer-events-none absolute right-0 bottom-0 left-0 pb-[clamp(18px,2.6vw,44px)]">
+    <div class="hero-name px-[clamp(12px,1.6vw,26px)]">
+      <p class="vh">
+        {site.name} · {es.site.description}
+      </p>
+      <h1 id="h-hero" data-hero class="mega">
+        <span>Quick</span>{' '}
+        <span>
+          Robot
+          <Head aria-hidden="true" />
+        </span>
+      </h1>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-img {
+    height: max(520px, min(56.25vw, calc(100svh - var(--top))));
+    object-position: 50% 80%;
+  }
+  @media (max-width: 760px) {
+    .hero-img {
+      height: auto;
+      min-height: 0;
+    }
+  }
+  .hero-name {
+    container-type: inline-size;
+  }
+  /* The name spans the exact width: font-size in cqw from the measured width of "Quick Robot" + head. */
+  .mega {
+    display: block;
+    white-space: nowrap;
+    font-size: calc(100cqw / 6.2);
+    font-weight: 600;
+    line-height: 0.82;
+    letter-spacing: -0.068em;
+    margin: 0 0 0 -0.04em;
+  }
+  .mega :global(svg) {
+    display: inline-block;
+    height: 0.8em;
+    width: auto;
+    margin-left: 0.1em;
+    vertical-align: baseline;
+  }
+  @media (max-width: 760px) {
+    .mega {
+      line-height: 0.9;
+    }
+  }
+</style>
+
+{many && <script>
+  import EmblaCarousel, { type EmblaCarouselType } from 'embla-carousel';
+  import Fade from 'embla-carousel-fade';
+  import Autoplay from 'embla-carousel-autoplay';
+
+  // Several photos fade into each other every N seconds (the panel sets N). No autoplay with
+  // reduced motion. Starts on astro:page-load, cleans on astro:before-swap (rule 13).
+  let api: EmblaCarouselType | undefined;
+  function setup() {
+    const root = document.querySelector<HTMLElement>('[data-hero-section]');
+    const viewport = root?.querySelector<HTMLElement>('[data-viewport]');
+    if (!root || !viewport) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const delay = Number(root.dataset.interval ?? 6) * 1000;
+    api = EmblaCarousel(viewport, { loop: true, duration: 40, watchDrag: false }, [
+      Fade(),
+      ...(reduce ? [] : [Autoplay({ delay, stopOnInteraction: false })]),
+    ]);
+  }
+  document.addEventListener('astro:page-load', setup);
+  document.addEventListener('astro:before-swap', () => {
+    api?.destroy();
+    api = undefined;
+  });
+</script>}

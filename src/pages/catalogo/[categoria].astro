@@ -1,0 +1,37 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import CatalogPage from '@/components/catalog/CatalogPage.astro';
+import { categories, isCategoryId } from '@/config/categories';
+import { listPublishedProducts } from '@/server/queries/public';
+import { site } from '@/config/site';
+import { formatMoney } from '@/lib/money';
+import { breadcrumbJsonLd } from '@/lib/seo';
+
+export const prerender = false;
+const { categoria = '' } = Astro.params;
+// An unknown category is a 404 (docs/04 §1).
+if (!isCategoryId(categoria)) return Astro.rewrite('/404');
+const label = categories.find((c) => c.id === categoria)?.label ?? '';
+const products = await listPublishedProducts({ category: categoria });
+const cheapest = products.reduce<number | null>(
+  (min, p) =>
+    p.priceFromCents !== null && (min === null || p.priceFromCents < min) ? p.priceFromCents : min,
+  null,
+);
+const description =
+  products.length > 0
+    ? `${label}: ${products
+        .map((p) => p.name)
+        .slice(0, 4)
+        .join(
+          ', ',
+        )}${products.length > 4 ? ' y más' : ''}.${cheapest !== null ? ` Desde ${formatMoney(cheapest)}.` : ''}`
+    : `${label}. Impresión 3D en Guadalajara.`;
+const jsonLd = [
+  breadcrumbJsonLd(site.domain, [{ name: 'Catálogo', href: '/catalogo' }, { name: label }]),
+];
+---
+
+<BaseLayout title={`${label} · Quick Robot`} description={description} jsonLd={jsonLd}>
+  <CatalogPage products={products} category={categoria} />
+</BaseLayout>

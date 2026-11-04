@@ -1,0 +1,362 @@
+---
+import { q404Combos } from '@/config/q404';
+import { site } from '@/config/site';
+import { es } from '@/i18n/es';
+import { formatMoney } from '@/lib/money';
+import { q404Message, waLink } from '@/lib/whatsapp';
+import Picture from '@/components/site/Picture.astro';
+import Button from '@/components/site/Button.astro';
+
+interface Props {
+  /** "Price from" and size of the product `q-404` (null when it is not published). */
+  priceFromCents: number | null;
+  size: string;
+}
+const { priceFromCents, size } = Astro.props;
+const t = es.home.q404;
+const first = q404Combos[0];
+const href = first ? waLink(site.whatsapp, q404Message(first.label)) : '#';
+---
+
+<section class="r1x cv" id="q404" aria-labelledby="h-r1" data-q404 data-whatsapp={site.whatsapp}>
+  <div class="wrap">
+    <div class="r1-fig">
+      <h2 class="r1-big" id="h-r1" aria-label={t.title}>
+        <span aria-hidden="true">{t.title}</span>
+      </h2>
+      <div class="r1-imgs">
+        {q404Combos.map((c, i) => (
+          <div class="r1-img" data-render={i} style={i === 0 ? '' : 'opacity:0'}>
+            <Picture
+              base={`/brand/q404/${c.file}`}
+              widths={[265, 530]}
+              sizes="(max-width: 1000px) 60vw, 530px"
+              width={530}
+              height={840}
+              alt={t.imgAlt(c.label)}
+              priority={i === 0}
+              class="size-full"
+            />
+          </div>
+        ))}
+        <ul class="cos">
+          {t.notes.map((n) => (
+            <li class={`co ${n.side}`} style={`--x:${n.x}%;--y:${n.y}%`}>
+              <span>
+                <b>{n.title}</b>
+                {n.text}
+              </span>
+              <i></i>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <ul class="cos-m">
+        {t.notes.map((n) => (
+          <li>
+            <b>{n.title}</b>
+            {n.text}
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="r1-c">
+      <p class="r1-say">
+        {t.say[0]}
+        <em>{t.say[1]}</em>
+        {t.say[2]}
+      </p>
+      <div class="pick">
+        <fieldset>
+          <legend class="vh">{t.choose}</legend>
+          <div class="chips">
+            {q404Combos.map((c, i) => (
+              <label class="chip" title={c.label}>
+                <input type="radio" name="r1" value={i} checked={i === 0} data-combo={c.label} />
+                <span style={`--a:${c.a};--b:${c.b}`}></span>
+                <span class="vh">{c.label}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <p class="r1-name" data-name aria-live="polite">
+          {first?.label}
+        </p>
+      </div>
+      <div class="r1-act">
+        <Button
+          href={href}
+          class="!min-h-[54px] !px-7 !text-[17px]"
+          arrow
+          data-send
+          data-click="q404"
+          target="_blank"
+          rel="noopener"
+        >
+          {t.cta}
+        </Button>
+        {(priceFromCents !== null || size) && (
+          <p class="r1-note">
+            {priceFromCents !== null && `${t.from} ${formatMoney(priceFromCents)}`}
+            {priceFromCents !== null && size && ' · '}
+            {size && `mide ${size}`}
+          </p>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .r1x {
+    padding-block: clamp(70px, 9vw, 130px) clamp(80px, 10vw, 140px);
+    overflow: hidden;
+  }
+  .r1-fig {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .r1-big {
+    margin: 0 0 calc(clamp(84px, 15vw, 240px) * -0.42);
+    position: relative;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .r1-big span {
+    display: block;
+    white-space: nowrap;
+    font-size: clamp(84px, 15vw, 240px);
+    font-weight: 600;
+    line-height: 0.78;
+    letter-spacing: -0.075em;
+    color: var(--purple);
+  }
+  .r1-imgs {
+    position: relative;
+    height: clamp(420px, 62vw, 700px);
+    aspect-ratio: 530/840;
+    z-index: 1;
+  }
+  .r1-img {
+    position: absolute;
+    inset: 0;
+    transition: opacity 0.25s;
+  }
+  .cos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .co {
+    position: absolute;
+    top: var(--y);
+    display: flex;
+    align-items: center;
+    transform: translateY(-50%);
+    --gap: clamp(150px, 17vw, 250px);
+  }
+  .co span {
+    flex: 0 0 auto;
+    width: calc(var(--gap) - 40px);
+    font-size: 16px;
+    line-height: 1.35;
+    color: var(--ink-2);
+  }
+  .co span b {
+    display: block;
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 17px;
+  }
+  .co i {
+    flex: 1;
+    height: 1px;
+    background: var(--ink);
+    opacity: 0.35;
+    position: relative;
+    min-width: 20px;
+  }
+  .co i::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--ink);
+    transform: translateY(-50%);
+  }
+  .co.l {
+    right: calc(100% - var(--x));
+    width: calc(var(--x) + var(--gap));
+  }
+  .co.l span {
+    text-align: right;
+    padding-right: 14px;
+  }
+  .co.l i::after {
+    right: -4px;
+  }
+  .co.r {
+    left: var(--x);
+    width: calc(100% - var(--x) + var(--gap));
+    flex-direction: row-reverse;
+  }
+  .co.r span {
+    padding-left: 14px;
+  }
+  .co.r i::after {
+    left: -4px;
+  }
+  .r1-c {
+    max-width: 780px;
+    margin: clamp(30px, 4vw, 56px) auto 0;
+    text-align: center;
+  }
+  .r1-say {
+    font-size: clamp(26px, 3.2vw, 46px);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+  .r1-say em {
+    font-style: normal;
+    color: var(--purple);
+  }
+  .pick {
+    margin-top: 34px;
+  }
+  .pick fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+  .chip {
+    position: relative;
+    cursor: pointer;
+  }
+  .chip input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+  .chip span:not(.vh) {
+    display: block;
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, var(--a) 0 50%, var(--b) 50% 100%);
+    box-shadow: inset 0 0 0 1px rgba(18, 18, 20, 0.08);
+    transition:
+      transform 0.15s,
+      box-shadow 0.15s;
+  }
+  .chip:hover span:not(.vh) {
+    transform: translateY(-2px);
+  }
+  .chip input:checked + span {
+    box-shadow:
+      inset 0 0 0 1px rgba(18, 18, 20, 0.08),
+      0 0 0 2px #fff,
+      0 0 0 4px var(--ink);
+  }
+  .chip input:focus-visible + span {
+    outline: 2px solid var(--purple);
+    outline-offset: 6px;
+  }
+  .r1-name {
+    margin-top: 14px;
+    font-weight: 500;
+  }
+  .r1-act {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 26px;
+  }
+  .r1-note {
+    font-size: 15px;
+    color: var(--ink-2);
+  }
+  @media (max-width: 1000px) {
+    .r1-imgs {
+      height: clamp(380px, 100vw, 520px);
+    }
+    .cos {
+      display: none;
+    }
+  }
+  .cos-m {
+    display: none;
+    list-style: none;
+    margin: 26px 0 0;
+    padding: 0;
+    text-align: left;
+    border-top: 1px solid var(--line);
+    width: 100%;
+  }
+  .cos-m li {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 15px;
+    color: var(--ink-2);
+  }
+  .cos-m b {
+    color: var(--ink);
+    font-weight: 600;
+    margin-right: 8px;
+  }
+  @media (max-width: 1000px) {
+    .cos-m {
+      display: block;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .r1-img,
+    .chip span {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { q404Message, waLink } from '@/lib/whatsapp';
+
+  // Choosing a color pair swaps the render and the WhatsApp message. Rule 13 for the lifecycle.
+  let cleanup: (() => void) | undefined;
+  function setup() {
+    const root = document.querySelector<HTMLElement>('[data-q404]');
+    if (!root) return;
+    const renders = [...root.querySelectorAll<HTMLElement>('[data-render]')];
+    const name = root.querySelector<HTMLElement>('[data-name]');
+    const send = root.querySelector<HTMLAnchorElement>('[data-send]');
+    const radios = [...root.querySelectorAll<HTMLInputElement>('input[name="r1"]')];
+    const update = () => {
+      const sel = radios.find((r) => r.checked);
+      const k = sel ? Number(sel.value) : 0;
+      renders.forEach((el, i) => (el.style.opacity = i === k ? '1' : '0'));
+      const label = sel?.dataset.combo ?? '';
+      if (name) name.textContent = label;
+      if (send) send.href = waLink(root.dataset.whatsapp ?? '', q404Message(label));
+    };
+    radios.forEach((r) => r.addEventListener('change', update));
+    cleanup = () => radios.forEach((r) => r.removeEventListener('change', update));
+  }
+  document.addEventListener('astro:page-load', setup);
+  document.addEventListener('astro:before-swap', () => {
+    cleanup?.();
+    cleanup = undefined;
+  });
+</script>

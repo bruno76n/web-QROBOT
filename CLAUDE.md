@@ -2,7 +2,7 @@
 
 Web pública del taller de impresión 3D **Quick Robot** (Guadalajara): **muestrario con precio "desde"** y página por producto; todo pedido termina en **WhatsApp**. Incluye un **panel** (`/admin`) para subir productos, centrar sus fotos y cambiar la portada. No es tienda.
 
-Documentación en `docs/` (empieza por `docs/README.md`). Plan general en `docs/20-plan-de-construccion.md`; **detalle de cada fase en `docs/fases/fase-N.md`**. Prompts en `docs/prompts.md`.
+Documentación en `docs/` (empieza por `docs/README.md`; para arrancar y probar en local, `docs/continuar-en-local.md`). Plan general en `docs/20-plan-de-construccion.md`; **detalle de cada fase en `docs/fases/fase-N.md`**. Prompts en `docs/prompts.md`.
 
 **Dónde está cada cosa:** idea y alcance → `01` · referencias → `02` · diseño → `03` · páginas y flujos → `04` · textos → `05` · stack → `06` · arquitectura → `07` · carpetas → `08` · datos → `09` · servidor → `10` · interfaz → `11` · panel → `12` · seguridad → `13` · SEO → `14` · rendimiento e imágenes → `15` · convenciones y pruebas → `16` · despliegue → `17` · analítica → `18` · legal → `19`.
 
@@ -42,20 +42,23 @@ La construcción la hace Claude Code **sin pedir aprobación paso a paso**.
 **Antes de empezar una fase:** leer este archivo, el informe de la fase anterior y `docs/fases/fase-N.md`. Leer **solo** los documentos y secciones que cada paso indica en "Consultar". Crear la rama `fase-N`.
 
 **Mientras trabaja**
+
 1. Un paso a la vez, en el orden del archivo de la fase. Lógica pura con prueba → servidor con prueba → pantalla.
 2. **Un commit por paso**, mensaje en inglés (`feat(admin): photo cropper`).
 3. Un paso **no está terminado** hasta cumplir la definición de `docs/16 §6`: pruebas, lint, typecheck, `pnpm security` y, si hay pantalla, comparación con el mockup en **390, 820 y 1440** con capturas de Playwright.
 4. Un cambio de comportamiento actualiza su documento en el mismo commit.
 
 **Cuando algo no está claro, NO preguntar. Decidir así:**
+
 1. Lo que dicen los documentos.
 2. Lo que hace el mockup.
 3. Si nada lo cubre: la opción más simple que respete este archivo.
-Anotar siempre la decisión en `docs/decisiones.md`.
+   Anotar siempre la decisión en `docs/decisiones.md`.
 
 **Datos que faltan** (dominio, WhatsApp, precios reales, fecha límite, fotos reales, componentes externos): usar el valor provisional de `docs/01 › Pendientes del dueño`, anotarlo en `docs/progreso.md` y **seguir**. Nunca son motivo para detenerse.
 
 **Casos de parada (los únicos):**
+
 - Necesita algo que no puede obtener solo: cuenta o token de Cloudflare, dominio, correo del dueño para Access. **Se detiene solo ese paso**, anota exactamente qué falta y sigue con lo que no dependa de eso (todo funciona en local).
 - Va a borrar o modificar datos **de producción** de forma que no se pueda deshacer.
 - Dos documentos se contradicen y la contradicción cambia el comportamiento (si no lo cambia, decide y registra).

@@ -1,0 +1,20 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ErrorPage from '@/components/site/ErrorPage.astro';
+import { es } from '@/i18n/es';
+
+export const prerender = false;
+Astro.response.status = 500;
+const t = es.errorPage;
+---
+
+<BaseLayout title="Error · Quick Robot" noindex>
+  <ErrorPage
+    title={t.title}
+    imageAlt={es.notFound.imageAlt}
+    actions={[
+      { label: t.retry, reload: true },
+      { label: t.home, href: '/' },
+    ]}
+  />
+</BaseLayout>

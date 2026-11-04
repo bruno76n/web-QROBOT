@@ -1,0 +1,97 @@
+---
+import '@/styles/global.css';
+import Button from '@/components/site/Button.astro';
+import Logo from '@/components/site/Logo.astro';
+import Picture from '@/components/site/Picture.astro';
+
+// Component sampler: development only (docs/10 §9).
+if (!import.meta.env.DEV) return new Response(null, { status: 404 });
+
+const colors = [
+  ['ink', '#121214'],
+  ['ink-2', '#6a6a73'],
+  ['line', '#e7e7ec'],
+  ['soft', '#f6f6f8'],
+  ['purple', '#6b3fd4'],
+  ['green', '#00ae42'],
+  ['green-l', '#e3f5e9'],
+] as const;
+---
+
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>UI · Quick Robot (dev)</title>
+  </head>
+  <body>
+    <main class="wrap flex flex-col gap-16 py-16">
+      <section aria-labelledby="t-logo" class="flex flex-col gap-4">
+        <span class="dl"></span>
+        <h2 id="t-logo">Logo</h2>
+        <div class="flex items-center gap-10">
+          <Logo />
+          <Logo size={26} withName={false} />
+        </div>
+      </section>
+
+      <section aria-labelledby="t-btn" class="flex flex-col gap-4">
+        <span class="dl"></span>
+        <h2 id="t-btn">Botones</h2>
+        <div class="flex flex-wrap items-center gap-4">
+          <Button href="#" arrow>
+            Cotizar
+          </Button>
+          <Button href="#" variant="green" arrow>
+            Pedir por WhatsApp
+          </Button>
+          <Button href="#" size="sm">
+            Cotizar
+          </Button>
+          <Button variant="green" disabled>
+            Desactivado
+          </Button>
+        </div>
+      </section>
+
+      <section aria-labelledby="t-type" class="flex flex-col gap-4">
+        <span class="dl"></span>
+        <h2 id="t-type">Tipografía</h2>
+        <p>Cuerpo 18/1.55 · Ñandú, canción, ¿qué se te antoja? ¡Hola!</p>
+        <p class="lead">Texto de entrada (lead) en gris secundario.</p>
+        <p class="text-[15px] leading-[1.45] text-ink-2">Texto secundario 15 px.</p>
+        <p class="text-[19px] font-semibold tracking-[-0.015em]">Título de tarjeta 19 px</p>
+      </section>
+
+      <section aria-labelledby="t-col" class="flex flex-col gap-4">
+        <span class="dl"></span>
+        <h2 id="t-col">Colores</h2>
+        <ul class="m-0 flex list-none flex-wrap gap-4 p-0">
+          {colors.map(([name, hex]) => (
+            <li class="w-28">
+              <div class="h-16 rounded-btn border border-line" style={`background:${hex}`} />
+              <p class="mt-1 text-[13px]">{name}</p>
+              <p class="text-[13px] text-ink-2">{hex}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-labelledby="t-img" class="flex flex-col gap-4">
+        <span class="dl"></span>
+        <h2 id="t-img">Imagen</h2>
+        <div class="w-52 rounded-card bg-soft p-4">
+          <Picture
+            base="/brand/q404/q404-morado-verde"
+            widths={[265, 530]}
+            sizes="208px"
+            width={530}
+            height={840}
+            alt="Q-404, el robot de Quick Robot"
+          />
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

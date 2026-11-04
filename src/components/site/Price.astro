@@ -1,0 +1,35 @@
+---
+import { es } from '@/i18n/es';
+import { formatMoney } from '@/lib/money';
+
+interface Props {
+  cents: number | null;
+  /** Show "por pieza" after the price (product page). */
+  perPiece?: boolean;
+  size?: 'card' | 'page';
+  class?: string;
+}
+
+const { cents, perPiece = false, size = 'card', class: className } = Astro.props;
+---
+
+<p class:list={['flex items-baseline gap-1.5', size === 'card' ? 'mt-2.5' : '', className]}>
+  {cents === null ? (
+    <small class="text-sm text-ink-2">{es.catalog.noPrice}</small>
+  ) : (
+    <>
+      <small class="text-[15px] text-ink-2">{es.catalog.from}</small>
+      <b
+        class:list={[
+          'font-semibold tabular-nums',
+          size === 'card'
+            ? 'text-[22px] tracking-[-0.03em]'
+            : 'text-[clamp(36px,3.6vw,48px)] tracking-[-0.04em]',
+        ]}
+      >
+        {formatMoney(cents)}
+      </b>
+      {perPiece && <small class="text-[15px] text-ink-2">{es.product.perPiece}</small>}
+    </>
+  )}
+</p>

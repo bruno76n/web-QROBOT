@@ -1,0 +1,152 @@
+---
+import { es } from '@/i18n/es';
+
+const t = es.home.pit;
+---
+
+<section class="sec pitsec cv" id="alberca" aria-labelledby="h-pit" data-pit>
+  <div class="wrap">
+    <h2 id="h-pit">{t.title}</h2>
+    <p class="lead">{t.lead}</p>
+    <button
+      type="button"
+      class="pit-btn"
+      data-btn
+      hidden
+      aria-describedby="pit-live"
+      data-pressing={t.pressing}
+      data-again={t.again}
+      data-note-again={t.noteAgain}
+    >
+      {t.button}
+    </button>
+    <p class="small" data-note>
+      {t.note}
+    </p>
+  </div>
+</section>
+<button type="button" class="pit-stop" data-stop hidden>
+  {t.stop}
+</button>
+<p class="vh" id="pit-live" role="status" aria-live="polite" data-live></p>
+
+<style>
+  .pitsec {
+    text-align: center;
+    border-top: 1px solid var(--line);
+  }
+  .pitsec :global(.lead) {
+    margin: 18px auto 0;
+    max-width: 30ch;
+  }
+  .pit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 34px;
+    min-height: 60px;
+    padding: 0 34px;
+    font: 500 18px var(--font-sans);
+    border: 0;
+    border-radius: 8px;
+    background: var(--ink);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .pit-btn:hover {
+    background: #2c2c33;
+  }
+  .pit-btn:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+  .small {
+    margin-top: 14px;
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+  .pit-stop {
+    position: fixed;
+    left: 50%;
+    bottom: max(20px, env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    z-index: 60;
+    min-height: 48px;
+    padding: 0 22px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--ink);
+    color: #fff;
+    font: 500 15px var(--font-sans);
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(18, 18, 20, 0.25);
+  }
+</style>
+
+<script>
+  import { es } from '@/i18n/es';
+
+  // The pool needs JavaScript, so its button only appears when the script runs. matter-js is
+  // downloaded when the button is touched, not before. Rule 13 for the lifecycle.
+  let cleanup: (() => void) | undefined;
+
+  function setup() {
+    const root = document.querySelector<HTMLElement>('[data-pit]');
+    const btn = root?.querySelector<HTMLButtonElement>('[data-btn]');
+    const note = root?.querySelector<HTMLElement>('[data-note]');
+    const stop = document.querySelector<HTMLButtonElement>('[data-stop]');
+    const live = document.querySelector<HTMLElement>('[data-live]');
+    if (!root || !btn || !note || !stop || !live) return;
+    const t = es.home.pit;
+    btn.hidden = false;
+    let pit: { drain: () => void; destroy: () => void } | null = null;
+    let reduce = false;
+
+    const finish = () => {
+      pit = null;
+      stop.hidden = true;
+      btn.disabled = false;
+      btn.textContent = btn.dataset.again ?? t.again;
+      note.textContent = btn.dataset.noteAgain ?? t.noteAgain;
+      live.textContent = t.freed;
+      if (document.activeElement === document.body || document.activeElement === stop)
+        btn.focus({ preventScroll: true });
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') pit?.drain();
+    };
+    const start = async () => {
+      if (pit) return;
+      reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      btn.disabled = true;
+      btn.textContent = btn.dataset.pressing ?? t.pressing;
+      const { startPit } = await import('./pit');
+      pit = await startPit({
+        reduce,
+        onFinish: finish,
+        onDrain: () => (live.textContent = t.draining),
+      });
+      stop.hidden = false;
+      live.textContent = t.live;
+    };
+    const onStop = () => (reduce ? (pit?.destroy(), finish()) : pit?.drain());
+    btn.addEventListener('click', start);
+    stop.addEventListener('click', onStop);
+    window.addEventListener('keydown', onKey);
+    cleanup = () => {
+      btn.removeEventListener('click', start);
+      stop.removeEventListener('click', onStop);
+      window.removeEventListener('keydown', onKey);
+      pit?.destroy();
+      pit = null;
+      stop.hidden = true;
+    };
+  }
+
+  document.addEventListener('astro:page-load', setup);
+  document.addEventListener('astro:before-swap', () => {
+    cleanup?.();
+    cleanup = undefined;
+  });
+</script>

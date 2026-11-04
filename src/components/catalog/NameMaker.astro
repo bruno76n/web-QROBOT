@@ -1,0 +1,368 @@
+---
+import { site } from '@/config/site';
+import { es } from '@/i18n/es';
+import { colors } from '@/config/colors';
+import {
+  defaultMaker,
+  letterTone,
+  makerColorIds,
+  makerMessage,
+  makerShapes,
+} from '@/lib/customizer';
+import { waLink } from '@/lib/whatsapp';
+
+const t = es.maker;
+const swatches = colors
+  .filter((c) => makerColorIds.includes(c.id))
+  .sort((a, b) => makerColorIds.indexOf(a.id) - makerColorIds.indexOf(b.id));
+const first = makerMessage(defaultMaker);
+const href = first ? waLink(site.whatsapp, first) : '#';
+const color = swatches.find((c) => c.id === defaultMaker.color)?.hex ?? '#6b3fd4';
+---
+
+<section
+  id="pruebalo"
+  aria-labelledby="h-mk"
+  class="pb-[clamp(50px,6vw,90px)]"
+  data-maker
+  data-whatsapp={site.whatsapp}
+>
+  <div class="wrap grid items-center gap-[clamp(30px,6vw,90px)] min-[901px]:grid-cols-[minmax(0,1.05fr)_minmax(0,.95fr)]">
+    <div>
+      <!-- Static view: plain SVG, no JavaScript. Touching it loads the 3D view (three is not downloaded before). -->
+      <div
+        data-stage
+        role="group"
+        aria-label={t.previewLabel}
+        class="relative h-[clamp(340px,36vw,500px)] overflow-hidden rounded-[26px] bg-[radial-gradient(70%_60%_at_50%_45%,#fff,#eeeef2)]"
+      >
+        <button
+          type="button"
+          data-start3d
+          class="absolute inset-0 z-[1] size-full cursor-grab border-0 bg-transparent"
+          aria-label={t.start3d}
+        ></button>
+        <div
+          data-static
+          class="pointer-events-none absolute top-[46%] left-1/2 w-[min(300px,62%)] -translate-x-1/2 -translate-y-1/2"
+          style={`--c:${color}`}
+        >
+          <svg viewBox="0 0 200 220" class="block size-full overflow-visible" aria-hidden="true">
+            <g data-shape="llavero">
+              <circle
+                cx="100"
+                cy="28"
+                r="14"
+                fill="none"
+                stroke="#b8b8c2"
+                stroke-width="5"
+              ></circle>
+              <circle cx="100" cy="120" r="84" fill="var(--c)"></circle>
+              <circle cx="100" cy="52" r="5" fill="#fff" fill-opacity=".85"></circle>
+            </g>
+            <g data-shape="estrella" class="hidden">
+              <circle
+                cx="100"
+                cy="14"
+                r="10"
+                fill="none"
+                stroke="#b8b8c2"
+                stroke-width="4"
+              ></circle>
+              <polygon
+                points="100,24 124,88 192,92 138,134 158,200 100,162 42,200 62,134 8,92 76,88"
+                fill="var(--c)"
+              ></polygon>
+            </g>
+            <g data-shape="corazón" class="hidden">
+              <circle
+                cx="100"
+                cy="22"
+                r="10"
+                fill="none"
+                stroke="#b8b8c2"
+                stroke-width="4"
+              ></circle>
+              <path
+                d="M100 196 C20 140 6 98 24 66 C42 36 86 40 100 76 C114 40 158 36 176 66 C194 98 180 140 100 196 Z"
+                fill="var(--c)"
+              ></path>
+            </g>
+            <text
+              data-text
+              x="100"
+              y="132"
+              text-anchor="middle"
+              font-weight="700"
+              font-size="42"
+              fill={letterTone(defaultMaker.color) === 'dark' ? '#121214' : '#fff'}
+              style="letter-spacing:.02em"
+            >
+              {defaultMaker.name}
+            </text>
+          </svg>
+        </div>
+        <div data-canvas class="absolute inset-0" hidden></div>
+        <span
+          aria-hidden="true"
+          class="pointer-events-none absolute right-[30%] bottom-[9%] left-[30%] h-[22px] rounded-full bg-[radial-gradient(closest-side,rgba(18,18,20,.18),transparent)]"
+        ></span>
+        <p
+          data-hint
+          data-loading={t.loading3d}
+          data-ready={t.hint}
+          class="pointer-events-none absolute right-0 bottom-4 left-0 text-center text-[13px] text-ink-2"
+        >
+          {t.hint}
+        </p>
+        <div data-rotate class="absolute right-3 bottom-3 z-[2] flex gap-2" hidden>
+          <button
+            type="button"
+            data-turn="-1"
+            aria-label="←"
+            class="grid size-10 place-items-center rounded-[10px] bg-white/90 shadow-sm"
+          >
+            ←
+          </button>
+          <button
+            type="button"
+            data-turn="1"
+            aria-label="→"
+            class="grid size-10 place-items-center rounded-[10px] bg-white/90 shadow-sm"
+          >
+            →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h2 id="h-mk" class="text-[clamp(34px,4vw,58px)] leading-none">
+        {t.title}
+      </h2>
+      <p class="lead mt-4 max-w-[34ch] text-[17px]">{t.lead}</p>
+
+      <div class="mt-6">
+        <span id="l-shape" class="mb-2.5 block text-sm text-ink-2">
+          {t.shape}
+        </span>
+        <div
+          role="radiogroup"
+          aria-labelledby="l-shape"
+          class="inline-flex gap-0.5 rounded-[10px] bg-soft p-1"
+        >
+          {makerShapes.map((s) => (
+            <button
+              type="button"
+              role="radio"
+              data-shape-btn={s}
+              aria-checked={s === defaultMaker.shape ? 'true' : 'false'}
+              class="min-h-10 cursor-pointer rounded-[7px] border-0 bg-transparent px-4 text-[15px] font-medium text-ink-2 aria-checked:bg-white aria-checked:text-ink aria-checked:shadow-[0_1px_3px_rgba(18,18,20,.12)]"
+            >
+              {t.shapes[s]}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <label for="mk-name" class="mb-2.5 block text-sm text-ink-2">
+          {t.name}
+        </label>
+        <input
+          id="mk-name"
+          data-name
+          type="text"
+          maxlength="10"
+          value={defaultMaker.name}
+          autocomplete="off"
+          spellcheck="false"
+          class="min-h-14 w-full max-w-[360px] rounded-[10px] border border-line bg-white px-4 text-2xl font-semibold tracking-[.02em] uppercase focus:border-purple focus:shadow-[0_0_0_3px_#efe9fd] focus:outline-none"
+        />
+      </div>
+
+      <div class="mt-6">
+        <span id="l-col" class="mb-2.5 block text-sm text-ink-2">
+          {t.color}
+        </span>
+        <div role="radiogroup" aria-labelledby="l-col" class="flex flex-wrap gap-2.5">
+          {swatches.map((c) => (
+            <button
+              type="button"
+              role="radio"
+              data-color-btn={c.id}
+              aria-checked={c.id === defaultMaker.color ? 'true' : 'false'}
+              aria-label={c.label}
+              title={c.label}
+              style={`background:${c.hex}`}
+              class="size-[38px] cursor-pointer rounded-full border-0 shadow-[inset_0_0_0_1px_rgba(18,18,20,.12)] aria-checked:shadow-[inset_0_0_0_1px_rgba(18,18,20,.12),0_0_0_3px_#fff,0_0_0_5px_var(--ink)]"
+            />
+          ))}
+        </div>
+      </div>
+
+      <div class="mt-[30px] flex flex-wrap items-center gap-[18px]">
+        <a
+          data-order
+          data-click="customizer"
+          href={href}
+          target="_blank"
+          rel="noopener"
+          class="inline-flex min-h-[50px] items-center justify-center rounded-btn bg-green px-6 text-base font-medium text-ink no-underline transition-colors hover:bg-[#00c24b] aria-disabled:pointer-events-none aria-disabled:opacity-40"
+        >
+          {t.order}
+        </a>
+        <p class="text-[15px] text-ink-2">{t.from}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import {
+    colorHex,
+    defaultMaker,
+    letterTone,
+    makerMessage,
+    sanitizeName,
+    type MakerState,
+  } from '@/lib/customizer';
+  import { waLink } from '@/lib/whatsapp';
+  import type { CustomizerShape } from '@/lib/whatsapp';
+  import type { ColorId } from '@/config/colors';
+
+  // Starts on astro:page-load and cleans on astro:before-swap (CLAUDE.md rule 13).
+  let cleanup: (() => void) | undefined;
+
+  function setup() {
+    const root = document.querySelector<HTMLElement>('[data-maker]');
+    if (!root) return;
+    const q = <T extends Element>(s: string) => root.querySelector<T>(s) as T;
+    const whatsapp = root.dataset.whatsapp ?? '';
+    const state: MakerState = { ...defaultMaker };
+    const name = q<HTMLInputElement>('[data-name]');
+    const order = q<HTMLAnchorElement>('[data-order]');
+    const staticView = q<HTMLElement>('[data-static]');
+    const text = q<SVGTextElement>('[data-text]');
+    const canvasBox = q<HTMLElement>('[data-canvas]');
+    const hint = q<HTMLElement>('[data-hint]');
+    const rotate = q<HTMLElement>('[data-rotate]');
+    let scene: {
+      update: (s: MakerState) => void;
+      turn: (dir: number) => void;
+      destroy: () => void;
+    } | null = null;
+    let loading = false;
+
+    const paint = () => {
+      staticView.style.setProperty('--c', colorHex(state.color));
+      text.textContent = state.name;
+      text.setAttribute('fill', letterTone(state.color) === 'dark' ? '#121214' : '#fff');
+      text.setAttribute(
+        'font-size',
+        String(Math.max(22, 44 - Math.max(0, state.name.length - 4) * 3.5)),
+      );
+      root.querySelectorAll<SVGGElement>('[data-shape]').forEach((g) => {
+        g.classList.toggle('hidden', g.dataset.shape !== state.shape);
+      });
+      root
+        .querySelectorAll<HTMLElement>('[data-shape-btn]')
+        .forEach((b) => b.setAttribute('aria-checked', String(b.dataset.shapeBtn === state.shape)));
+      root
+        .querySelectorAll<HTMLElement>('[data-color-btn]')
+        .forEach((b) => b.setAttribute('aria-checked', String(b.dataset.colorBtn === state.color)));
+      const message = makerMessage(state);
+      if (message) {
+        order.href = waLink(whatsapp, message);
+        order.removeAttribute('aria-disabled');
+        order.removeAttribute('tabindex');
+      } else {
+        order.href = '#';
+        order.setAttribute('aria-disabled', 'true');
+        order.tabIndex = -1;
+      }
+      scene?.update(state);
+    };
+
+    const onName = () => {
+      name.value = sanitizeName(name.value);
+      state.name = name.value;
+      paint();
+    };
+    name.addEventListener('input', onName);
+
+    const buttons: [Element, string, () => void][] = [];
+    root.querySelectorAll<HTMLElement>('[data-shape-btn]').forEach((b) => {
+      const fn = () => {
+        state.shape = b.dataset.shapeBtn as CustomizerShape;
+        paint();
+      };
+      b.addEventListener('click', fn);
+      buttons.push([b, 'click', fn]);
+    });
+    root.querySelectorAll<HTMLElement>('[data-color-btn]').forEach((b) => {
+      const fn = () => {
+        state.color = b.dataset.colorBtn as ColorId;
+        paint();
+      };
+      b.addEventListener('click', fn);
+      buttons.push([b, 'click', fn]);
+    });
+    const onOrder = (e: Event) => {
+      if (order.getAttribute('aria-disabled') === 'true') e.preventDefault();
+    };
+    order.addEventListener('click', onOrder);
+
+    // The 3D view: three, R3F and the font are downloaded only when someone touches the static view.
+    const start3d = async () => {
+      if (scene || loading) return;
+      loading = true;
+      hint.textContent = hint.dataset.loading ?? '…';
+      try {
+        if (import.meta.env.DEV) {
+          // Dev only: this module is not loaded by a React island, so React's refresh preamble is missing.
+          const w = window as unknown as Record<string, unknown>;
+          w.$RefreshReg$ ??= () => {};
+          w.$RefreshSig$ ??= () => (type: unknown) => type;
+          w.__vite_plugin_react_preamble_installed__ = true;
+        }
+        const { mountMaker3D } = await import('./maker3d');
+        // The box must have a size while the canvas mounts, so it is shown (still under the static view).
+        canvasBox.hidden = false;
+        scene = await mountMaker3D(canvasBox, state);
+        staticView.hidden = true;
+        rotate.hidden = false;
+        q<HTMLElement>('[data-start3d]').hidden = true;
+        hint.textContent = hint.dataset.ready ?? '';
+      } catch (error) {
+        console.error('3D view failed to load', error);
+        canvasBox.hidden = true;
+        hint.textContent = '';
+      } finally {
+        loading = false;
+      }
+    };
+    const trigger = q<HTMLElement>('[data-start3d]');
+    trigger.addEventListener('click', start3d);
+    trigger.addEventListener('focus', start3d);
+    const turn = (e: Event) => scene?.turn(Number((e.currentTarget as HTMLElement).dataset.turn));
+    rotate.querySelectorAll('button').forEach((b) => b.addEventListener('click', turn));
+
+    paint();
+    cleanup = () => {
+      name.removeEventListener('input', onName);
+      buttons.forEach(([el, ev, fn]) => el.removeEventListener(ev, fn));
+      order.removeEventListener('click', onOrder);
+      trigger.removeEventListener('click', start3d);
+      trigger.removeEventListener('focus', start3d);
+      scene?.destroy();
+      scene = null;
+    };
+  }
+
+  document.addEventListener('astro:page-load', setup);
+  document.addEventListener('astro:before-swap', () => {
+    cleanup?.();
+    cleanup = undefined;
+  });
+</script>
