@@ -3,8 +3,9 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import { site } from '@/config/site';
 import { es } from '@/i18n/es';
 
-// Static page: no data, no island (docs/04 §1).
-export const prerender = true;
+// Static content (no data, no island), but answered by the Worker so it carries the same security
+// headers and CSP as every page: files served straight from assets bypass the middleware.
+export const prerender = false;
 const t = es.privacy;
 ---
 
