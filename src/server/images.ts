@@ -22,3 +22,22 @@ export async function serveDevImage(
   headers.set('ETag', object.httpEtag);
   return new Response(object.body, { headers });
 }
+
+/**
+ * Streams the ORIGINAL of a photo to the panel (same origin, so the browser can crop it without
+ * CORS problems on the image domain). Admin only: the route checks the session first.
+ */
+export async function serveOriginal(
+  originalKey: string | undefined,
+  bucket: R2Bucket,
+): Promise<Response> {
+  if (!originalKey) return new Response(null, { status: 404 });
+  const object = await bucket.get(originalKey);
+  if (!object) return new Response(null, { status: 404 });
+  return new Response(object.body, {
+    headers: {
+      'Content-Type': object.httpMetadata?.contentType ?? 'application/octet-stream',
+      'Cache-Control': 'private, no-store',
+    },
+  });
+}

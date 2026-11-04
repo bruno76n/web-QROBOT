@@ -1,5 +1,7 @@
 import type { PhotoView } from '@/lib/admin-types';
 import { r2Keys } from '@/lib/crop';
+import { eq } from 'drizzle-orm';
+import { getDb, schema, type Db } from '../db/client';
 import type { Photo } from '../db/schema';
 import { photoUrl } from '../storage';
 
@@ -29,4 +31,17 @@ export function toPhotoView(row: Photo, imgBase: string): PhotoView {
     urls,
     ogUrl: row.ownerType === 'product' ? photoUrl(r2Keys.og(row.id, row.version), imgBase) : null,
   };
+}
+
+/** R2 key of the original of a photo, or undefined when the photo does not exist. */
+export async function getOriginalKey(
+  id: string | undefined,
+  db: Db = getDb(),
+): Promise<string | undefined> {
+  if (!id) return undefined;
+  const [row] = await db
+    .select({ key: schema.photos.originalKey })
+    .from(schema.photos)
+    .where(eq(schema.photos.id, id));
+  return row?.key;
 }

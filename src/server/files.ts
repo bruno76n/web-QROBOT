@@ -17,6 +17,4 @@ export const extensionFor: Record<SniffedType, string> = {
   'image/webp': 'webp',
 };
 
-export const MB = 1024 * 1024;
-export const maxOriginalBytes = 25 * MB;
-export const maxVersionBytes = 2 * MB;
+export { MB, maxOriginalBytes, maxVersionBytes } from '@/lib/photo-limits';

@@ -1,0 +1,135 @@
+import { useEffect, useRef, useState } from 'react';
+import { cn } from '@/lib/cn';
+import Cropper, { type Area } from 'react-easy-crop';
+import { aspectRatio, isSmallCrop, usageAspect, type CropRect, type PhotoUsage } from '@/lib/crop';
+import { es } from '@/i18n/es';
+
+const t = es.admin.photo;
+
+interface Props {
+  /** Same-origin URL (or blob URL) of the original. */
+  src: string;
+  usage: PhotoUsage;
+  original: { width: number; height: number };
+  /** Crop to start from (the one saved); the centered one when missing. */
+  initial: CropRect | null;
+  onCancel: () => void;
+  onDone: (crop: CropRect) => void;
+}
+
+const round = (a: Area): CropRect => ({
+  x: Math.max(0, Math.round(a.x)),
+  y: Math.max(0, Math.round(a.y)),
+  width: Math.max(1, Math.round(a.width)),
+  height: Math.max(1, Math.round(a.height)),
+});
+
+/** Full-screen cropper (docs/12 §3 step 4): move, zoom 1×–4×, pinch, and a live preview (§4). */
+export function PhotoCropper({ src, usage, original, initial, onCancel, onDone }: Props) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [area, setArea] = useState<CropRect | null>(initial);
+  const aspect = aspectRatio(usageAspect[usage]);
+
+  useEffect(() => {
+    dialog.current?.showModal();
+  }, []);
+
+  const current = area ?? initial;
+  const small = current ? isSmallCrop(current.width, usage) : false;
+
+  // Preview: the crop painted with CSS from the original (no canvas needed while dragging).
+  const previewStyle = current
+    ? {
+        backgroundImage: `url(${src})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: `${(original.width / current.width) * 100}cqw auto`,
+        backgroundPosition: `${(-current.x / current.width) * 100}cqw ${(-current.y / current.width) * 100}cqw`,
+      }
+    : undefined;
+
+  return (
+    <dialog
+      ref={dialog}
+      className="dlg crop"
+      aria-label={t.cropTitle}
+      onCancel={(e) => {
+        e.preventDefault();
+        onCancel();
+      }}
+    >
+      <div className="crop-body">
+        <div className={cn('crop-stage', usage !== 'product' && 'guide-zone')}>
+          <Cropper
+            image={src}
+            crop={crop}
+            zoom={zoom}
+            minZoom={1}
+            maxZoom={4}
+            aspect={aspect}
+            objectFit="contain"
+            onCropChange={setCrop}
+            onZoomChange={setZoom}
+            onCropComplete={(_, pixels) => setArea(round(pixels))}
+            {...(initial ? { initialCroppedAreaPixels: initial } : {})}
+          />
+        </div>
+        <div className="crop-tools">
+          <p style={{ margin: 0 }}>{t.cropHelp}</p>
+          <label>
+            <span className="vh">{t.zoom}</span>
+            <input
+              type="range"
+              min={1}
+              max={4}
+              step={0.01}
+              value={zoom}
+              aria-label={t.zoom}
+              onChange={(e) => setZoom(Number(e.target.value))}
+            />
+          </label>
+          {small ? <p className="crop-warn">{t.small}</p> : null}
+          <div className="crop-prev">
+            {usage === 'product' ? (
+              <>
+                <h3>{t.previewCard}</h3>
+                <div className="card" style={{ containerType: 'inline-size' }}>
+                  <div style={{ width: '100%', height: '100%', ...previewStyle }} />
+                </div>
+                <p className="nm-card">
+                  {t.cardName}
+                  <small>{t.cardPrice}</small>
+                </p>
+              </>
+            ) : (
+              <>
+                <h3>{usage === 'hero_desktop' ? t.previewHero : t.previewHeroMobile}</h3>
+                <div className={cn('hero', usage === 'hero_mobile' && 'm')}>
+                  <div style={{ position: 'absolute', inset: 0, ...previewStyle }} />
+                  <span className="zone" aria-hidden="true" />
+                  <span className="nm" aria-hidden="true">
+                    Quick Robot
+                  </span>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="crop-foot">
+        <button type="button" className="b" onClick={onCancel}>
+          {t.cancel}
+        </button>
+        <button
+          type="button"
+          className="b pri"
+          disabled={!current}
+          onClick={() => current && onDone(current)}
+        >
+          {t.done}
+        </button>
+      </div>
+    </dialog>
+  );
+}
