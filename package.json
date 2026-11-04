@@ -25,7 +25,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "wrangler d1 migrations apply DB --local",
     "cf-typegen": "wrangler types --include-runtime=false --strict-vars=false",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "seed": "node scripts/setup-local.mjs && node scripts/seed.ts"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.4.4",
