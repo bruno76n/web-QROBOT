@@ -6,6 +6,7 @@ export const keys = {
   products: ['products'] as const,
   product: (id: string) => ['product', id] as const,
   hero: ['hero'] as const,
+  clicks: ['clicks'] as const,
 };
 
 export const useProducts = () =>
@@ -27,4 +28,11 @@ export const useHero = () =>
     queryFn: async () => unwrap(await api.getHero()),
     staleTime: Infinity,
     gcTime: 0,
+  });
+
+export const useClickStats = () =>
+  useQuery({
+    queryKey: keys.clicks,
+    queryFn: async () => unwrap(await api.clickStats(30)),
+    staleTime: 60_000,
   });

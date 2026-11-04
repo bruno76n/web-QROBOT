@@ -123,6 +123,7 @@ const jsonLd = [
           {product.priceNote && <p class="mt-1.5 text-[15px] text-ink-2">{product.priceNote}</p>}
         </div>
         <ProductOptions
+          productId={product.id}
           name={product.name}
           unitSingular={product.unitSingular}
           unitPlural={product.unitPlural}

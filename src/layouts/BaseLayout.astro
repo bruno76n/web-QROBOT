@@ -5,6 +5,7 @@ import { es } from '@/i18n/es';
 import { site } from '@/config/site';
 import { absoluteUrl, jsonLdString } from '@/lib/seo';
 import Header from '@/components/site/Header.astro';
+import ClickBeacon from '@/components/site/ClickBeacon.astro';
 import Footer from '@/components/site/Footer.astro';
 
 interface Props {
@@ -86,5 +87,6 @@ const image = absoluteUrl(site.domain, ogImage);
       <slot />
     </main>
     <Footer />
+    <ClickBeacon />
   </body>
 </html>

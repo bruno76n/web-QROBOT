@@ -25,5 +25,10 @@
     },
   ],
 
+  // 30 taps per minute per IP; the key is never stored (docs/13 §4).
+  "ratelimits": [
+    { "name": "CLICK_LIMITER", "namespace_id": "1001", "simple": { "limit": 30, "period": 60 } },
+  ],
+
   "r2_buckets": [{ "binding": "BUCKET", "bucket_name": "quick-robot-photos" }],
 }

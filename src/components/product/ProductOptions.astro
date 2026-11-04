@@ -4,6 +4,8 @@ import { es } from '@/i18n/es';
 import { productMessage, waLink } from '@/lib/whatsapp';
 
 interface Props {
+  /** Product id, counted with each tap on the order button (docs/18). */
+  productId: string;
   name: string;
   unitSingular: string;
   unitPlural: string;
@@ -113,6 +115,8 @@ const href = waLink(
   <div class="mt-7 grid gap-2.5">
     <a
       data-order
+      data-click="product"
+      data-click-product={p.productId}
       href={href}
       target="_blank"
       rel="noopener"

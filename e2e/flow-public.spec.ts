@@ -36,6 +36,26 @@ test('flujo A: del catálogo a un producto y pedirlo por WhatsApp con el mensaje
   await page.getByRole('button', { name: 'Más' }).click();
   await expect(qty).toHaveValue('2');
   expect(waText(await link.getAttribute('href'))).toContain('2 llaveros en verde');
+
+  // The tap is counted with the product id (docs/18 §4); the real WhatsApp page is not opened.
+  await page.context().route('https://wa.me/**', (route) => route.abort());
+  const beacon = page.waitForRequest((r) => r.url().endsWith('/api/click'));
+  await link.click();
+  const sent = (await beacon).postDataJSON() as { source: string; productId: string };
+  expect(sent.source).toBe('product');
+  expect(sent.productId).toMatch(/\S+/);
+});
+
+test('/api/click cuenta un toque, rechaza lo inválido y no guarda nada de la persona', async ({
+  request,
+}) => {
+  const post = (data: unknown) =>
+    request.post('/api/click', { data, headers: { 'content-type': 'application/json' } });
+  expect((await post({ source: 'order' })).status()).toBe(204);
+  expect((await post({ source: 'robar' })).status()).toBe(400);
+  expect((await post({ source: 'product', productId: 'no-existe' })).status()).toBe(400);
+  expect((await post({ source: 'product' })).status()).toBe(400);
+  expect((await request.post('/api/click', { data: 'no es json' })).status()).toBe(400);
 });
 
 test('un producto sin colores ni personalización no muestra esas opciones', async ({ page }) => {

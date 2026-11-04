@@ -8,5 +8,7 @@ declare namespace Cloudflare {
     ACCESS_AUD?: string;
     /** Comma-separated list of admin e-mails. */
     ADMIN_EMAILS?: string;
+    /** Workers Rate Limiting binding for `/api/click` (docs/13 §4). */
+    CLICK_LIMITER?: { limit(options: { key: string }): Promise<{ success: boolean }> };
   }
 }

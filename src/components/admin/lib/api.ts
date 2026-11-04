@@ -16,5 +16,6 @@ export const api = {
   saveHero: (input: HeroInput) => callAction(() => actions.admin.saveHero(input)),
   resetHero: () => callAction(() => actions.admin.resetHero()),
   exportBackup: () => callAction(() => actions.admin.exportBackup()),
+  clickStats: (days = 30) => callAction(() => actions.admin.clickStats({ days })),
   cleanupPending: () => callAction(() => actions.admin.cleanupPending()),
 };

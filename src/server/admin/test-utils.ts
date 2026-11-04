@@ -25,6 +25,7 @@ export async function resetAll() {
   await db.delete(schema.photos);
   await db.delete(schema.products);
   await db.delete(schema.settings);
+  await db.delete(schema.whatsappClicks);
   let cursor: string | undefined;
   do {
     const page = await env.BUCKET.list(cursor ? { cursor } : {});

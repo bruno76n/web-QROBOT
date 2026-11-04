@@ -124,6 +124,18 @@ export const heroSlides = sqliteTable('hero_slides', {
   mobilePhotoId: text('mobile_photo_id').references(() => photos.id),
 });
 
+/** Daily taps on the WhatsApp buttons (docs/09, docs/18). `product_id` is '' when not a product. */
+export const whatsappClicks = sqliteTable(
+  'whatsapp_clicks',
+  {
+    day: text('day').notNull(),
+    source: text('source').notNull(),
+    productId: text('product_id').notNull().default(''),
+    count: integer('count').notNull().default(0),
+  },
+  (t) => [primaryKey({ columns: [t.day, t.source, t.productId] })],
+);
+
 export type Setting = typeof settings.$inferSelect;
 export type Product = typeof products.$inferSelect;
 export type NewProduct = typeof products.$inferInsert;

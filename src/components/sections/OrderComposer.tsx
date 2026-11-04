@@ -191,7 +191,7 @@ export default function OrderComposer({ whatsapp }: Props) {
         </div>
       </div>
       <div className="send">
-        <a className="order-send" href={href} target="_blank" rel="noopener">
+        <a className="order-send" data-click="order" href={href} target="_blank" rel="noopener">
           {t.send}
           <span aria-hidden="true">→</span>
         </a>

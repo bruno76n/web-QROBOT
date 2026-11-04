@@ -98,3 +98,19 @@ export const uploadFieldsSchema = z.object({
     .pipe(z.array(z.number().int().min(1).max(4000)).min(1).max(6)),
 });
 export type UploadFields = z.infer<typeof uploadFieldsSchema>;
+
+/** Where a tap on a WhatsApp button came from (docs/18 §2). */
+export const clickSources = ['product', 'order', 'q404', 'customizer'] as const;
+export type ClickSource = (typeof clickSources)[number];
+
+/** Body of `POST /api/click`: a product id only makes sense for `product`. */
+export const clickInputSchema = z
+  .object({
+    source: z.enum(clickSources),
+    productId: z.string().min(1).max(64).optional(),
+  })
+  .refine((v) => (v.source === 'product') === (v.productId !== undefined));
+
+export const clickStatsInputSchema = z.object({
+  days: z.number().int().min(1).max(365).default(30),
+});

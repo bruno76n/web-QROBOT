@@ -1406,3 +1406,14 @@ textarea.in {
     justify-content: flex-start;
   }
 }
+.clicks {
+  display: grid;
+  gap: 2px;
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.clicks b {
+  font-size: 13px;
+  color: var(--ink);
+}

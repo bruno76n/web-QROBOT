@@ -64,3 +64,11 @@ export interface HeroView {
   slides: HeroSlideView[];
   intervalSeconds: 4 | 6 | 8 | 12;
 }
+
+/** Taps on the WhatsApp buttons in the last N days (docs/18 §3). */
+export interface ClickStats {
+  days: number;
+  total: number;
+  bySource: Record<'product' | 'order' | 'q404' | 'customizer', number>;
+  byProduct: Record<string, number>;
+}

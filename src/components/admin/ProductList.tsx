@@ -25,7 +25,7 @@ import type { ProductRow } from '@/lib/admin-types';
 import { es } from '@/i18n/es';
 import { api } from './lib/api';
 import { errorText } from './lib/error-text';
-import { keys, useProducts } from './lib/queries';
+import { keys, useClickStats, useProducts } from './lib/queries';
 
 const t = es.admin;
 type Filter = 'all' | 'pub' | 'hid';
@@ -37,6 +37,7 @@ interface Props {
 
 export function ProductList({ selectedId, onSelect }: Props) {
   const { data, isPending, error } = useProducts();
+  const stats = useClickStats().data;
   const qc = useQueryClient();
   const [q, setQ] = useState('');
   const [filter, setFilter] = useState<Filter>('all');
@@ -90,6 +91,20 @@ export function ProductList({ selectedId, onSelect }: Props) {
             {t.list.new}
           </button>
         </div>
+        {stats ? (
+          <p className="clicks" data-testid="click-stats">
+            <b>
+              {t.list.clicksTotal
+                .replace('{n}', String(stats.total))
+                .replace('{taps}', stats.total === 1 ? t.list.clicksOne : t.list.clicksMany)}
+            </b>
+            <span>
+              {(['product', 'order', 'q404', 'customizer'] as const)
+                .map((k) => `${t.list.clicksBySource[k]} ${stats.bySource[k]}`)
+                .join(' · ')}
+            </span>
+          </p>
+        ) : null}
         <div className="seg" role="group" aria-label={t.list.filterAria}>
           {(
             [
@@ -134,6 +149,7 @@ export function ProductList({ selectedId, onSelect }: Props) {
                   product={p}
                   selected={p.id === selectedId}
                   canDrag={canDrag}
+                  taps={stats?.byProduct[p.id] ?? 0}
                   onSelect={() => onSelect(p.id)}
                 />
               ))}
@@ -150,11 +166,13 @@ function Row({
   product: p,
   selected,
   canDrag,
+  taps,
   onSelect,
 }: {
   product: ProductRow;
   selected: boolean;
   canDrag: boolean;
+  taps: number;
   onSelect: () => void;
 }) {
   const s = useSortable({ id: p.id, disabled: !canDrag });
@@ -187,7 +205,10 @@ function Row({
         </span>
         <span className="nm">
           <b>{p.name}</b>
-          <span>{p.priceFromCents === null ? t.list.noPrice : formatMoney(p.priceFromCents)}</span>
+          <span>
+            {p.priceFromCents === null ? t.list.noPrice : formatMoney(p.priceFromCents)}
+            {taps > 0 ? ` · ${t.list.clicksRow.replace('{n}', String(taps))}` : ''}
+          </span>
         </span>
         <span className={cn('st', p.published && 'on')}>
           {p.published ? t.list.statusPublished : t.list.statusHidden}
