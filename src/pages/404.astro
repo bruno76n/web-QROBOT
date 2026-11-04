@@ -1,0 +1,21 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ErrorPage from '@/components/site/ErrorPage.astro';
+import { es } from '@/i18n/es';
+
+export const prerender = false;
+Astro.response.status = 404;
+const t = es.notFound;
+---
+
+<BaseLayout title="Error 404 · Quick Robot" noindex>
+  <ErrorPage
+    title={t.title}
+    text={t.text}
+    imageAlt={t.imageAlt}
+    actions={[
+      { label: t.home, href: '/' },
+      { label: t.catalog, href: '/catalogo' },
+    ]}
+  />
+</BaseLayout>
