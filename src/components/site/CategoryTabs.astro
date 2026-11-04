@@ -1,0 +1,29 @@
+---
+import { categories } from '@/config/categories';
+import { es } from '@/i18n/es';
+
+interface Props {
+  /** Current category id, or null for "Todos". */
+  current: string | null;
+}
+const { current } = Astro.props;
+const tabs = [
+  { id: null, label: es.catalog.all, href: '/catalogo' },
+  ...categories.map((c) => ({ id: c.id, label: c.label, href: `/catalogo/${c.id}` })),
+];
+---
+
+<nav
+  aria-label={es.catalog.tabsLabel}
+  class="flex gap-1.5 max-[760px]:-mx-[var(--gutter)] max-[760px]:overflow-x-auto max-[760px]:px-[var(--gutter)]"
+>
+  {tabs.map((t) => (
+    <a
+      href={t.href}
+      aria-current={t.id === current ? 'page' : undefined}
+      class="inline-flex min-h-10 items-center rounded-btn px-3.5 text-[15px] font-medium whitespace-nowrap text-ink-2 no-underline transition-colors hover:bg-soft hover:text-ink aria-[current]:bg-ink aria-[current]:text-white"
+    >
+      {t.label}
+    </a>
+  ))}
+</nav>

@@ -1,0 +1,22 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import CatalogPage from '@/components/catalog/CatalogPage.astro';
+import { listPublishedProducts } from '@/server/queries/public';
+import { site } from '@/config/site';
+import { formatMoney } from '@/lib/money';
+import { breadcrumbJsonLd } from '@/lib/seo';
+
+export const prerender = false;
+const products = await listPublishedProducts();
+const cheapest = products.reduce<number | null>(
+  (min, p) =>
+    p.priceFromCents !== null && (min === null || p.priceFromCents < min) ? p.priceFromCents : min,
+  null,
+);
+const description = `Llaveros, servilleteros, figuras y adornos impresos en 3D.${cheapest !== null ? ` Precios desde ${formatMoney(cheapest)}.` : ''}`;
+const jsonLd = [breadcrumbJsonLd(site.domain, [{ name: 'Catálogo' }])];
+---
+
+<BaseLayout title="Catálogo · Quick Robot" description={description} jsonLd={jsonLd}>
+  <CatalogPage products={products} category={null} showMaker />
+</BaseLayout>

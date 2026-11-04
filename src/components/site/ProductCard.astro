@@ -1,0 +1,46 @@
+---
+import { es } from '@/i18n/es';
+import { getEnv } from '@/server/env';
+import type { CardView } from '@/server/queries/public';
+import Picture from './Picture.astro';
+import Price from './Price.astro';
+
+interface Props {
+  product: CardView;
+  /** First cards of a page load eagerly; the rest are lazy. */
+  priority?: boolean;
+}
+
+const { product, priority = false } = Astro.props;
+const imgBase = getEnv().PUBLIC_IMG_BASE;
+---
+
+<a href={`/producto/${product.slug}`} class="group block no-underline">
+  <div class="relative flex aspect-[1/1.02] items-center justify-center overflow-hidden rounded-[18px] bg-soft">
+    {product.photo && (
+      <Picture
+        photo={product.photo}
+        imgBase={imgBase}
+        sizes="(max-width: 760px) 50vw, 300px"
+        priority={priority}
+        class="size-full object-cover transition-transform duration-[450ms] ease-[cubic-bezier(.2,.8,.2,1)] group-hover:scale-[1.04]"
+      />
+    )}
+    {product.featured && (
+      <span class="absolute top-3 left-3 rounded-md bg-white px-2 py-[3px] text-xs font-medium text-purple">
+        {es.catalog.hot}
+      </span>
+    )}
+  </div>
+  <h3 class="mt-4 flex justify-between gap-3 text-[19px] font-semibold tracking-[-0.015em]">
+    {product.name}
+    <span
+      aria-hidden="true"
+      class="font-normal text-ink-2 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-ink"
+    >
+      →
+    </span>
+  </h3>
+  {product.short && <p class="mt-1 text-[15px] leading-[1.45] text-ink-2">{product.short}</p>}
+  <Price cents={product.priceFromCents} />
+</a>
