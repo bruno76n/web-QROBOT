@@ -44,6 +44,10 @@ Lo actualiza Claude Code al terminar cada paso. Estados: **pendiente** · **en c
 |---|---|---|
 | Interactive Hover Links (Ideas) | **integrado** (fase 5, paso 5.6) | `src/components/external/InteractiveHoverLinks.tsx` con el cambio obligatorio aplicado |
 
+## Fase 5
+
+Terminada en local; ver `docs/informe-fase-5.md`. Solo falta publicar (credenciales de Cloudflare y dominio).
+
 ## Valores provisionales en uso (`01 › Pendientes del dueño`)
 
 | Dato | Valor provisional | Desde |
