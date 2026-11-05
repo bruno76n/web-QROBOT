@@ -103,6 +103,38 @@ export async function prepareOriginal(file: File): Promise<PreparedOriginal> {
   return result;
 }
 
+/**
+ * Paints `crop` of the bitmap into a square of `size` px at (dx, dy). A product crop may reach
+ * past the photo (empty margins): only the part inside the photo is drawn, mapped by hand,
+ * because Safari draws nothing when the source rectangle leaves the image.
+ */
+function drawCrop(
+  ctx: CanvasRenderingContext2D,
+  bitmap: ImageBitmap,
+  crop: CropRect,
+  dx: number,
+  dy: number,
+  size: number,
+): void {
+  const scale = size / crop.width;
+  const sx = Math.max(crop.x, 0);
+  const sy = Math.max(crop.y, 0);
+  const sw = Math.min(crop.x + crop.width, bitmap.width) - sx;
+  const sh = Math.min(crop.y + crop.height, bitmap.height) - sy;
+  if (sw <= 0 || sh <= 0) return;
+  ctx.drawImage(
+    bitmap,
+    sx,
+    sy,
+    sw,
+    sh,
+    dx + (sx - crop.x) * scale,
+    dy + (sy - crop.y) * scale,
+    sw * scale,
+    sh * scale,
+  );
+}
+
 export interface Versions {
   widths: number[];
   files: Record<number, Blob>;
@@ -127,17 +159,7 @@ export async function generateVersions(
       const ctx = canvas.getContext('2d');
       if (!ctx) throw new Error('no 2d context');
       ctx.imageSmoothingQuality = 'high';
-      ctx.drawImage(
-        bitmap,
-        crop.x,
-        crop.y,
-        crop.width,
-        crop.height,
-        0,
-        0,
-        canvas.width,
-        canvas.height,
-      );
+      drawCrop(ctx, bitmap, crop, 0, 0, canvas.width);
       files[width] = await canvasToBlob(canvas, 'image/webp', 0.82);
     }
     let og: Blob | null = null;
@@ -151,17 +173,7 @@ export async function generateVersions(
       ctx.fillStyle = '#f6f6f8';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.imageSmoothingQuality = 'high';
-      ctx.drawImage(
-        bitmap,
-        crop.x,
-        crop.y,
-        crop.width,
-        crop.height,
-        layout.x,
-        layout.y,
-        layout.size,
-        layout.size,
-      );
+      drawCrop(ctx, bitmap, crop, layout.x, layout.y, layout.size);
       og = await canvasToBlob(canvas, 'image/jpeg', 0.86);
     }
     return { widths, files, og };
