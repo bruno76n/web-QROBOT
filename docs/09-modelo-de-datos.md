@@ -26,6 +26,7 @@ Base **D1 (SQLite)** con **Drizzle**. Esquema en `src/server/db/schema.ts`; migr
 | `size` | text | Libre: "9 cm de diámetro" |
 | `material` | text | Por defecto "PLA" |
 | `lead_time` | text | "3 a 5 días" |
+| `custom_size` | text | "Tamaño a medida": qué decir de otros tamaños (se cotizan por WhatsApp); vacío = no se muestra. Migración `0005` |
 | `personalizable` | boolean | |
 | `personal_hint` | text | Pregunta al cliente, hasta 60 |
 | `featured` | boolean | Etiqueta "Más pedido"; también decide qué sale en Navidad |

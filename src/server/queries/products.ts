@@ -110,6 +110,7 @@ export async function getProductForAdmin(
     size: p.size,
     material: p.material,
     leadTime: p.leadTime,
+    customSize: p.customSize,
     personalizable: p.personalizable,
     personalHint: p.personalHint,
     featured: p.featured,

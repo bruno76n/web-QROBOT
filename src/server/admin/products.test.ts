@@ -36,6 +36,13 @@ async function create(overrides: Parameters<typeof productInput>[0] = {}) {
 }
 
 describe('saveProduct · create', () => {
+  it('stores the custom-size note and the admin reads it back', async () => {
+    const { id } = await create({ customSize: 'Lo hacemos del tamaño que necesites' });
+    expect((await getProductForAdmin(id, db(), 'https://img.test'))?.customSize).toBe(
+      'Lo hacemos del tamaño que necesites',
+    );
+  });
+
   it('saves an incomplete draft (no photo, no price) with a generated slug', async () => {
     const res = await saveProduct(t.deps, productInput({ priceFromCents: null, categories: [] }));
     expect(res).toMatchObject({ ok: true, data: { slug: 'llaveros-con-nombre' } });

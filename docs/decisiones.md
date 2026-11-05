@@ -237,3 +237,8 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 - Nunca se agranda el contenido: alejar solo reduce la foto dentro del cuadro.
 
 - **Safari y los márgenes:** Safari no dibuja nada con `drawImage` cuando el rectángulo de origen sale de la imagen (las versiones salían en blanco). `pipeline.ts` (`drawCrop`) recorta a los bordes de la foto y calcula el destino a mano, en versiones y `og.jpg`. Comprobado en Chrome y WebKit. Las fotos guardadas con la versión anterior en Safari quedaron en blanco: se arreglan con "Centrar" y guardar de nuevo.
+
+## 2026-11-05 · Sin campo de dirección y "Tamaño a medida"
+
+- **Dirección (slug) fuera del panel:** el campo no se podía usar de verdad (no dejaba cambiarla) y confundía. El panel siempre manda `slug: ''` y el servidor la genera del nombre; sigue las reglas de `docs/09 §3` (cambia con el nombre hasta la primera publicación y luego se queda fija). El servidor sigue aceptando un slug escrito (la API no cambia), pero ninguna pantalla lo usa.
+- **Tamaño a medida:** nueva columna `products.custom_size` (migración `0005`, texto de hasta 120 caracteres, vacío por defecto). Campo "Tamaño a medida (a cotizar)" en "Página del producto"; si tiene texto, la página del producto lo muestra como fila "A medida" en la ficha. No cambia el mensaje de WhatsApp.

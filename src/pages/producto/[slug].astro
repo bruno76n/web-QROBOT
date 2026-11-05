@@ -42,6 +42,7 @@ const paragraphs = product.description
   .filter(Boolean);
 const sheet = [
   [es.product.sheet.size, product.size],
+  [es.product.sheet.customSize, product.customSize],
   [es.product.sheet.material, product.material],
   [es.product.sheet.leadTime, product.leadTime],
 ].filter(([, value]) => value);

@@ -39,6 +39,8 @@ export const products = sqliteTable(
     size: text('size').notNull().default(''),
     material: text('material').notNull().default('PLA'),
     leadTime: text('lead_time').notNull().default(''),
+    /** "Tamaño a medida": what to tell the customer about other sizes, quoted on WhatsApp. */
+    customSize: text('custom_size').notNull().default(''),
     personalizable: integer('personalizable', { mode: 'boolean' }).notNull().default(false),
     personalHint: text('personal_hint').notNull().default(''),
     featured: integer('featured', { mode: 'boolean' }).notNull().default(false),

@@ -19,6 +19,7 @@ export interface ProductFormValues {
   size: string;
   material: string;
   leadTime: string;
+  customSize: string;
   colors: ColorId[];
   unitSingular: string;
   unitPlural: string;
@@ -43,6 +44,7 @@ export const productFormSchema = z.object({
   size: bounded(80),
   material: bounded(40),
   leadTime: bounded(60),
+  customSize: bounded(120),
   colors: z.array(z.enum(colorIds)).max(limits.maxColors),
   unitSingular: bounded(60),
   unitPlural: bounded(60),
@@ -64,6 +66,7 @@ export function emptyValues(): ProductFormValues {
     size: '',
     material: 'PLA',
     leadTime: '',
+    customSize: '',
     colors: [],
     unitSingular: '',
     unitPlural: '',
@@ -86,6 +89,7 @@ export function valuesFromDetail(d: ProductDetail): ProductFormValues {
     size: d.size,
     material: d.material,
     leadTime: d.leadTime,
+    customSize: d.customSize,
     colors: d.colors,
     unitSingular: d.unitSingular,
     unitPlural: d.unitPlural,
@@ -115,6 +119,7 @@ export function toProductInput(
     size: v.size.trim(),
     material: v.material.trim(),
     leadTime: v.leadTime.trim(),
+    customSize: v.customSize.trim(),
     personalizable: v.personalizable,
     personalHint: v.personalizable ? v.personalHint.trim() : '',
     featured: v.featured,

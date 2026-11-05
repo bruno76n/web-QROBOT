@@ -51,6 +51,7 @@ export const productInputSchema = z.object({
   size: text(80).default(''),
   material: text(40).default('PLA'),
   leadTime: text(60).default(''),
+  customSize: text(120).default(''),
   personalizable: z.boolean().default(false),
   personalHint: text(limits.personalHintMax).default(''),
   featured: z.boolean().default(false),

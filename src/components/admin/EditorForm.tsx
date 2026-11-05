@@ -43,7 +43,6 @@ export function EditorForm({ detail, onSelect, onSaved }: Props) {
   });
   const photos = usePhotos(photoItems(detail), 'product', 10);
   const [baseline, setBaseline] = useState(() => fingerprint(photoItems(detail)));
-  const [slugTouched, setSlugTouched] = useState(false);
   const [saving, setSaving] = useState(false);
 
   // react-hook-form's `watch` is not memoizable by the React Compiler; the form is small.
@@ -56,30 +55,20 @@ export function EditorForm({ detail, onSelect, onSaved }: Props) {
     return () => setDirty(false);
   }, [dirty]);
 
-  // While the product was never published, the address follows the name (docs/09 §3).
-  const followsName = !slugTouched && !detail?.everPublished;
-  const slugPreview = followsName ? slugFromName(values.name) : (detail?.slug ?? '');
-  useEffect(() => {
-    if (followsName) form.setValue('slug', '');
-  }, [followsName, form]);
+  // The address is never typed: it follows the name until the first publication, then it stays
+  // (docs/09 §3). Only used here to know whether the product could be published.
+  const slugPreview = detail?.everPublished ? detail.slug : slugFromName(values.name);
 
   const missing = useMemo(
     () =>
       missingToPublish({
         name: values.name,
-        slug: values.slug || slugPreview || 'x',
+        slug: slugPreview || 'x',
         photoCount: refsOf(photos.photos).length,
         categoryCount: values.categories.length,
         priceFromCents: parsePesos(values.priceText),
       }),
-    [
-      values.name,
-      values.slug,
-      values.categories.length,
-      values.priceText,
-      slugPreview,
-      photos.photos,
-    ],
+    [values.name, values.categories.length, values.priceText, slugPreview, photos.photos],
   );
 
   const reload = async (id: string) => {
@@ -89,17 +78,12 @@ export function EditorForm({ detail, onSelect, onSaved }: Props) {
     form.reset(valuesFromDetail(res.data));
     photos.setPhotos(photoItems(res.data));
     setBaseline(fingerprint(photoItems(res.data)));
-    setSlugTouched(false);
   };
 
   const onSubmit = form.handleSubmit(async (v) => {
     if (photos.busy) return void toast.error(t.actions.waitUploads);
     setSaving(true);
-    const input = toProductInput(
-      { ...v, slug: slugTouched ? v.slug : '' },
-      refsOf(photos.photos),
-      detail?.id,
-    );
+    const input = toProductInput({ ...v, slug: '' }, refsOf(photos.photos), detail?.id);
     const res = await api.saveProduct(input);
     setSaving(false);
     if (res.ok) {
@@ -112,7 +96,6 @@ export function EditorForm({ detail, onSelect, onSaved }: Props) {
       }
       return;
     }
-    if (res.code === 'SLUG_TAKEN') form.setError('slug', { message: errorText(res) });
     if (res.code === 'CANNOT_PUBLISH') form.setValue('published', false, { shouldDirty: true });
     if (res.code === 'VALIDATION') {
       const fields = (res.details?.fields ?? {}) as Record<string, string[]>;
@@ -186,13 +169,7 @@ export function EditorForm({ detail, onSelect, onSaved }: Props) {
             />
           </div>
 
-          <BasicsBox
-            slugPreview={slugPreview}
-            onSlugTouched={() => setSlugTouched(true)}
-            showSlugWarning={
-              Boolean(detail?.everPublished) && slugTouched && values.slug !== detail?.slug
-            }
-          />
+          <BasicsBox />
           <PageBox />
           <OptionsBox
             missingText={missing.length > 0 ? missingList(missing) : null}

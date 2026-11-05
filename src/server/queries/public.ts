@@ -25,6 +25,7 @@ export interface ProductPageView extends CardView {
   size: string;
   material: string;
   leadTime: string;
+  customSize: string;
   unitSingular: string;
   unitPlural: string;
   personalizable: boolean;
@@ -175,6 +176,7 @@ export async function getPublishedProduct(
     size: p.size,
     material: p.material,
     leadTime: p.leadTime,
+    customSize: p.customSize,
     unitSingular: p.unitSingular,
     unitPlural: p.unitPlural,
     personalizable: p.personalizable,

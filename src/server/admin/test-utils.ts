@@ -123,6 +123,7 @@ export function productInput(overrides: Partial<ProductInput> = {}): ProductInpu
     size: '5 cm',
     material: 'PLA',
     leadTime: '2 a 4 días',
+    customSize: '',
     personalizable: false,
     personalHint: '',
     featured: false,

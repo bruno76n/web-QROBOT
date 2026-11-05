@@ -79,6 +79,7 @@ export async function saveProduct(
     size: input.size,
     material: input.material,
     leadTime: input.leadTime,
+    customSize: input.customSize,
     personalizable: input.personalizable,
     personalHint: input.personalHint,
     featured: input.featured,
