@@ -5,8 +5,8 @@ import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import { site } from './src/config/site.ts';
 
-// Photos are served from img.<domain> in production (docs/13 §3); the CSP has to allow that host.
-const imgHost = `https://img.${new URL(site.domain).host}`;
+// Photos are served from their own host in production (docs/13 §3); the CSP has to allow it.
+const imgHost = site.imgBase;
 
 export default defineConfig({
   output: 'server',

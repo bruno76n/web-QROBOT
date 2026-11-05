@@ -5,7 +5,9 @@
 export const site = {
   name: 'Quick Robot',
   /** Provisional: the real domain is still pending. */
-  domain: 'https://quickrobot.example',
+  domain: 'https://quickrobot.centerdiv.mx',
+  /** Public photo host (R2 custom domain); must match `PUBLIC_IMG_BASE` in wrangler.jsonc and the CSP. */
+  imgBase: 'https://fotos-quickrobot.centerdiv.mx',
   /** Country code + number, no "+" or spaces. Provisional. */
   whatsapp: '52XXXXXXXXXX',
   /** Shown in the footer. Provisional until the real number exists. */

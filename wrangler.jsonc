@@ -6,12 +6,13 @@
   "compatibility_flags": ["nodejs_compat"],
   "assets": { "binding": "ASSETS", "directory": "./dist" },
   "observability": { "enabled": true },
+  "routes": [{ "pattern": "quickrobot.centerdiv.mx", "custom_domain": true }],
 
   // Defaults are the SAFE production ones. Local development overrides them in `.dev.vars.local`
   // (APP_ENV=development, PUBLIC_IMG_BASE=/img); see `.dev.vars.example`.
   "vars": {
     "APP_ENV": "production",
-    "PUBLIC_IMG_BASE": "https://img.quickrobot.example",
+    "PUBLIC_IMG_BASE": "https://fotos-quickrobot.centerdiv.mx",
     "ACCESS_TEAM_DOMAIN": "",
   },
 
@@ -20,7 +21,7 @@
       "binding": "DB",
       "database_name": "quick-robot-web",
       // Placeholder: `wrangler d1 create quick-robot-web` gives the real id (docs/17). Local work ignores it.
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "9030e709-2ce1-4876-9f82-71d2a73e8cbb",
       "migrations_dir": "migrations",
     },
   ],
