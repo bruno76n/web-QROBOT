@@ -55,9 +55,9 @@ export function EditorForm({ detail, onSelect, onSaved }: Props) {
     return () => setDirty(false);
   }, [dirty]);
 
-  // The address is never typed: it follows the name until the first publication, then it stays
-  // (docs/09 §3). Only used here to know whether the product could be published.
-  const slugPreview = detail?.everPublished ? detail.slug : slugFromName(values.name);
+  // The address is never typed: it follows the name (docs/09 §3). Only used here to know
+  // whether the product could be published.
+  const slugPreview = slugFromName(values.name) || detail?.slug || '';
 
   const missing = useMemo(
     () =>

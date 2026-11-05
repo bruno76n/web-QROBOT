@@ -45,6 +45,16 @@ Base **D1 (SQLite)** con **Drizzle**. Esquema en `src/server/db/schema.ts`; migr
 
 La migración `0004` crea la tabla con `negocio`, `casa` y `navidad`. **`navidad` no se puede borrar** (la temporada depende de ella). Borrar una categoría la quita también de `product_categories` (en un solo `db.batch`) y se rechaza si un producto publicado se quedaría sin categorías (`CATEGORY_IN_USE`). Guardar un producto con una categoría que no existe da `UNKNOWN_CATEGORY`.
 
+### `product_slugs`
+
+| Columna | Tipo |
+|---|---|
+| `slug` | text, clave primaria — una dirección que el producto tuvo |
+| `product_id` | text → `products.id`, se borra con el producto |
+| `created_at`, `updated_at` | unix ms |
+
+`/producto/<slug viejo>` responde `301` a la dirección actual mientras el producto esté publicado (migración `0006`).
+
 ### `product_categories`
 | `product_id` | text FK → products (borrado en cascada) |
 |---|---|
@@ -128,7 +138,7 @@ Para **publicar** un producto se necesita: nombre, slug válido, al menos **una 
 Otras reglas:
 - Hasta **10 fotos** por producto; hasta **6 portadas**.
 - Al menos 1 y como mucho 12 colores (o ninguno).
-- El slug no se cambia solo al cambiar el nombre si el producto **ya estuvo publicado** (para no romper links compartidos). Se puede cambiar a mano; el panel avisa que los links viejos dejarán de funcionar.
+- El slug **siempre sigue al nombre** al guardar. La dirección anterior se guarda en `product_slugs` y redirige (301) a la actual, así los links compartidos no se rompen. Ningún otro producto puede usar una dirección vieja; si el producto vuelve a un nombre anterior, esa dirección se libera. El panel ya no muestra el campo de dirección.
 - Al reordenar, `sort_order` se reescribe 0…N en un solo `batch`.
 - Un producto borrado se borra de verdad (con confirmación), junto con sus fotos.
 

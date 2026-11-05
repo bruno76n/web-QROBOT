@@ -3,6 +3,7 @@ import { env } from 'cloudflare:workers';
 import { eq } from 'drizzle-orm';
 import { getDb, schema } from '../db/client';
 import { getProductForAdmin, listAllProductsForAdmin } from '../queries/products';
+import { findCurrentSlug } from '../queries/public';
 import {
   deleteProduct,
   duplicateProduct,
@@ -139,25 +140,53 @@ describe('saveProduct · slugs', () => {
     expect(res).toMatchObject({ ok: true, data: { slug: 'mi-gato' } });
   });
 
-  it('follows the name while it was never published, and stops once it was', async () => {
+  it('follows the name every time, and keeps the old address as a redirect', async () => {
     const photo = await seedPhoto({ id: 'ph1' });
-    const draft = await create({ name: 'Nombre uno' });
-    const renamed = await saveProduct(t.deps, productInput({ id: draft.id, name: 'Nombre dos' }));
-    expect(renamed).toMatchObject({ ok: true, data: { slug: 'nombre-dos' } });
+    const { id } = await create({ name: 'Búho', photos: [photo], published: true });
+    const renamed = await saveProduct(
+      t.deps,
+      productInput({ id, name: 'Mono de nieve', photos: [photo], published: true }),
+    );
+    expect(renamed).toMatchObject({ ok: true, data: { slug: 'mono-de-nieve' } });
+    expect(await findCurrentSlug('buho', db())).toBe('mono-de-nieve');
+    const [old] = await db().select().from(schema.productSlugs);
+    expect(old).toMatchObject({ slug: 'buho', productId: id });
+  });
 
-    const published = await saveProduct(
-      t.deps,
-      productInput({ id: draft.id, name: 'Nombre dos', published: true, photos: [photo] }),
-    );
-    expect(published.ok).toBe(true);
-    const again = await saveProduct(
-      t.deps,
-      productInput({ id: draft.id, name: 'Nombre tres', published: false }),
-    );
-    expect(again).toMatchObject({ ok: true, data: { slug: 'nombre-dos' } }); // links already shared keep working
+  it('a new product cannot take an address another product used to have', async () => {
+    const { id } = await create({ name: 'Búho' });
+    await saveProduct(t.deps, productInput({ id, name: 'Mono de nieve' }));
+    const second = await create({ name: 'Búho' });
+    expect(second.slug).toBe('buho-2');
+    const typed = await saveProduct(t.deps, productInput({ name: 'Otro', slug: 'buho' }));
+    expect(typed).toEqual({ ok: false, code: 'SLUG_TAKEN' });
+  });
+
+  it('going back to an old name releases that old address', async () => {
+    const { id } = await create({ name: 'Búho' });
+    await saveProduct(t.deps, productInput({ id, name: 'Mono de nieve' }));
+    const back = await saveProduct(t.deps, productInput({ id, name: 'Búho' }));
+    expect(back).toMatchObject({ ok: true, data: { slug: 'buho' } });
+    expect(await findCurrentSlug('buho', db())).toBeNull();
+  });
+
+  it('the redirect only exists while the product is published', async () => {
+    const { id } = await create({ name: 'Búho' });
+    await saveProduct(t.deps, productInput({ id, name: 'Mono de nieve' }));
+    expect(await findCurrentSlug('buho', db())).toBeNull(); // still a draft
+  });
+
+  it('saving with the same name does not touch the address or the history', async () => {
+    const { id } = await create({ name: 'Gato' });
+    await saveProduct(t.deps, productInput({ id, name: 'Gato' }));
+    expect(await db().select().from(schema.productSlugs)).toEqual([]);
+  });
+
+  it('a slug typed by hand wins', async () => {
+    const { id } = await create({ name: 'Nombre tres' });
     const byHand = await saveProduct(
       t.deps,
-      productInput({ id: draft.id, name: 'Nombre tres', slug: 'nuevo-link' }),
+      productInput({ id, name: 'Nombre tres', slug: 'nuevo-link' }),
     );
     expect(byHand).toMatchObject({ ok: true, data: { slug: 'nuevo-link' } });
   });

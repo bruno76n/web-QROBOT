@@ -211,6 +211,16 @@ export async function listRelated(
   return toCards(db, published.filter((p) => sharing.has(p.id)).slice(0, limit));
 }
 
+/** Current address of a published product that used to be called `oldSlug`, or null. */
+export async function findCurrentSlug(oldSlug: string, db: Db = getDb()): Promise<string | null> {
+  const [row] = await db
+    .select({ slug: schema.products.slug })
+    .from(schema.productSlugs)
+    .innerJoin(schema.products, eq(schema.products.id, schema.productSlugs.productId))
+    .where(and(eq(schema.productSlugs.slug, oldSlug), eq(schema.products.published, true)));
+  return row?.slug ?? null;
+}
+
 /** Slug and last change of every published product, for the sitemap. */
 export async function listSitemapProducts(
   db: Db = getDb(),

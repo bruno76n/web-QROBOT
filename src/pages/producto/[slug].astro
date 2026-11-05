@@ -17,13 +17,18 @@ import {
   productTitle,
 } from '@/lib/seo';
 import { getEnv } from '@/server/env';
-import { getPublishedProduct, listRelated } from '@/server/queries/public';
+import { findCurrentSlug, getPublishedProduct, listRelated } from '@/server/queries/public';
 
 export const prerender = false;
 const { slug = '' } = Astro.params;
 // Hidden or missing products are a 404, never a page (docs/04 §1).
 const product = await getPublishedProduct(slug);
-if (!product) return Astro.rewrite('/404');
+if (!product) {
+  // An address the product used to have: send people to the current one.
+  const current = await findCurrentSlug(slug);
+  if (current) return Astro.redirect(`/producto/${current}`, 301);
+  return Astro.rewrite('/404');
+}
 
 const imgBase = getEnv().PUBLIC_IMG_BASE;
 const related = await listRelated(product);

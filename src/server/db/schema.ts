@@ -69,6 +69,22 @@ export const categories = sqliteTable(
   (t) => [index('categories_position_idx').on(t.position)],
 );
 
+/**
+ * Addresses a product used to have. They keep working: the page redirects (301) to the current
+ * one, and no other product can take them (docs/09 › product_slugs).
+ */
+export const productSlugs = sqliteTable(
+  'product_slugs',
+  {
+    slug: text('slug').primaryKey(),
+    productId: text('product_id')
+      .notNull()
+      .references(() => products.id, { onDelete: 'cascade' }),
+    ...timestamps,
+  },
+  (t) => [index('product_slugs_product_idx').on(t.productId)],
+);
+
 export const productCategories = sqliteTable(
   'product_categories',
   {

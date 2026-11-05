@@ -14,12 +14,16 @@ const maxSortOrder = async ({ db }: AdminDeps) => {
   return row?.max ?? -1;
 };
 
-const takenSlugs = async ({ db }: AdminDeps, exceptId?: string) =>
-  new Set(
-    (await db.select({ id: schema.products.id, slug: schema.products.slug }).from(schema.products))
-      .filter((p) => p.id !== exceptId)
-      .map((p) => p.slug),
-  );
+/** Addresses in use: every product's current one and the old ones kept as redirects. */
+const takenSlugs = async ({ db }: AdminDeps, exceptId?: string) => {
+  const [current, old] = await Promise.all([
+    db.select({ id: schema.products.id, slug: schema.products.slug }).from(schema.products),
+    db
+      .select({ id: schema.productSlugs.productId, slug: schema.productSlugs.slug })
+      .from(schema.productSlugs),
+  ]);
+  return new Set([...current, ...old].filter((p) => p.id !== exceptId).map((p) => p.slug));
+};
 
 /** `admin.saveProduct`: creates or updates a product with its photos in one `db.batch` (docs/10 §3). */
 export async function saveProduct(
@@ -47,7 +51,6 @@ export async function saveProduct(
     name: input.name,
     typedSlug: typed,
     currentSlug: existing?.slug,
-    wasPublished: existing?.everPublished ?? false,
   });
   const slug = typed ? wanted : uniqueSlug(wanted || 'producto', taken);
 
@@ -104,6 +107,16 @@ export async function saveProduct(
       : db
           .insert(schema.products)
           .values({ id, ...values, sortOrder: (await maxSortOrder(deps)) + 1, createdAt: now }),
+    // The address changed: the old one stays as a redirect; one it used before is released.
+    ...(existing && existing.slug !== slug
+      ? [
+          db.delete(schema.productSlugs).where(eq(schema.productSlugs.slug, slug)),
+          db
+            .insert(schema.productSlugs)
+            .values({ slug: existing.slug, productId: id, createdAt: now, updatedAt: now })
+            .onConflictDoNothing(),
+        ]
+      : []),
     db.delete(schema.productCategories).where(eq(schema.productCategories.productId, id)),
     ...input.categories.map((category) =>
       db.insert(schema.productCategories).values({ productId: id, category }),

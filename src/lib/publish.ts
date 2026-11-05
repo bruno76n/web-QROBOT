@@ -55,17 +55,16 @@ export function uniqueSlug(base: string, taken: ReadonlySet<string> | readonly s
 }
 
 /**
- * The slug does not follow the name once the product has been published, so shared links keep
- * working (docs/09 §3). A slug typed by hand always wins.
+ * The address follows the name every time it is saved. The old one is kept as a redirect
+ * (`product_slugs`), so shared links keep working. A slug typed by hand always wins.
  */
 export function slugForSave(args: {
   name: string;
   typedSlug: string | undefined;
   currentSlug: string | undefined;
-  wasPublished: boolean;
 }): string {
   const typed = args.typedSlug?.trim();
   if (typed) return typed;
-  if (args.currentSlug && args.wasPublished) return args.currentSlug;
-  return slugFromName(args.name);
+  // A name with nothing usable ("¡¡¡") keeps the address the product already has.
+  return slugFromName(args.name) || args.currentSlug || '';
 }

@@ -242,3 +242,9 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 
 - **Dirección (slug) fuera del panel:** el campo no se podía usar de verdad (no dejaba cambiarla) y confundía. El panel siempre manda `slug: ''` y el servidor la genera del nombre; sigue las reglas de `docs/09 §3` (cambia con el nombre hasta la primera publicación y luego se queda fija). El servidor sigue aceptando un slug escrito (la API no cambia), pero ninguna pantalla lo usa.
 - **Tamaño a medida:** nueva columna `products.custom_size` (migración `0005`, texto de hasta 120 caracteres, vacío por defecto). Campo "Tamaño a medida (a cotizar)" en "Página del producto"; si tiene texto, la página del producto lo muestra como fila "A medida" en la ficha. No cambia el mensaje de WhatsApp.
+
+## 2026-11-05 · La dirección siempre sigue al nombre, con redirección
+
+- **Antes:** la dirección se congelaba al publicar. Al reutilizar el producto "Búho" como "Mono de nieve", la dirección seguía siendo `/producto/buho`.
+- **Ahora:** `slugForSave` regenera la dirección del nombre en cada guardado (un nombre sin letras usables conserva la actual). La anterior pasa a `product_slugs` (migración `0006`) y `/producto/<vieja>` responde `301` a la nueva (`findCurrentSlug`, solo si el producto está publicado). `takenSlugs` incluye las viejas de otros productos: nadie las puede tomar; volver a un nombre anterior libera esa dirección.
+- Un slug escrito a mano por la API sigue ganando, pero el panel no lo ofrece. El respaldo `.json` agrega `slugHistory`.
