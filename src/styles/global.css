@@ -28,6 +28,11 @@
   --radius-card: 20px;
   color-scheme: light;
 }
+@media (max-width: 760px) {
+  :root {
+    --top: 56px; /* slimmer header on phones */
+  }
+}
 
 @theme inline {
   /* Names the external 21st.dev components expect, mapped to the brand tokens (docs/11 §4). */

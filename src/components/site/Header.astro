@@ -13,8 +13,8 @@ const isCurrent = (href: string) => !href.includes('#') && current.startsWith(hr
   class="group/top sticky top-0 z-50 bg-white shadow-[0_1px_0_var(--line)] transition-shadow duration-300 data-[over-hero]:shadow-none"
 >
   <div class="wrap grid min-h-[var(--top)] max-w-none grid-cols-[1fr_auto_auto] items-center gap-x-1 min-[901px]:grid-cols-[1fr_auto_1fr] min-[901px]:gap-x-0">
-    <div class="col-start-1 grid items-center *:[grid-area:1/1]">
-      <span class="pointer-events-none invisible text-[14px] text-ink-2 opacity-0 transition-[opacity,visibility] duration-300 group-data-[over-hero]/top:pointer-events-auto group-data-[over-hero]/top:visible group-data-[over-hero]/top:opacity-100">
+    <div class="col-start-1 grid min-w-0 items-center *:[grid-area:1/1]">
+      <span class="pointer-events-none invisible text-[12px] leading-[1.2] text-balance text-ink-2 min-[901px]:text-[14px] min-[901px]:leading-normal opacity-0 transition-[opacity,visibility] duration-300 group-data-[over-hero]/top:pointer-events-auto group-data-[over-hero]/top:visible group-data-[over-hero]/top:opacity-100">
         {es.site.tagline}
       </span>
       <a
@@ -34,14 +34,14 @@ const isCurrent = (href: string) => !href.includes('#') && current.startsWith(hr
         <a
           href={item.href}
           aria-current={isCurrent(item.href) ? 'page' : undefined}
-          class="inline-flex min-h-11 items-center px-3.5 text-[15px] text-ink no-underline transition-colors duration-200 min-[901px]:text-[#c3c3cc] min-[901px]:hover:text-white aria-[current]:font-semibold min-[901px]:aria-[current]:text-white"
+          class="inline-flex min-h-11 items-center px-2.5 text-[15px] text-ink min-[901px]:px-3.5 no-underline transition-colors duration-200 min-[901px]:text-[#c3c3cc] min-[901px]:hover:text-white aria-[current]:font-semibold min-[901px]:aria-[current]:text-white"
         >
           {item.label}
         </a>
       ))}
     </nav>
 
-    <Button href={es.header.quoteHref} size="sm" class="col-start-3 justify-self-end">
+    <Button href={es.header.quoteHref} size="sm" class="col-start-3 justify-self-end max-[760px]:!px-3.5 max-[760px]:!text-[14px]">
       {es.header.quote}
     </Button>
   </div>
