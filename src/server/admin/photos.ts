@@ -58,7 +58,11 @@ export async function checkPhotoRefs(
     const recentered = ref.version !== row.version;
     // Unchanged photos keep their stored crop; only a re-centered one is checked and applied.
     if (recentered) {
-      if (!isValidCrop(ref.crop, row.originalWidth, row.originalHeight)) {
+      if (
+        !isValidCrop(ref.crop, row.originalWidth, row.originalHeight, {
+          allowPadding: usage === 'product',
+        })
+      ) {
         return fail('VALIDATION', { fields: { photos: ['crop outside the original'] } });
       }
       const expected = widthsToGenerate(ref.crop.width, wantedWidths[usage]);

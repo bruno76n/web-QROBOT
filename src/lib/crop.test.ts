@@ -87,6 +87,16 @@ describe('crop helpers', () => {
     expect(isValidCrop({ x: 0, y: 0, width: 0, height: 10 }, 100, 100)).toBe(false);
     expect(isValidCrop({ x: 0, y: 0, width: 10.5, height: 10 }, 100, 100)).toBe(false);
   });
+
+  it('with padding (products) the crop may reach past the edges, but not be absurd', () => {
+    const pad = { allowPadding: true };
+    // A tall 1000×1250 photo shown whole in a square: 1250 wide, centered.
+    expect(isValidCrop({ x: -125, y: 0, width: 1250, height: 1250 }, 1000, 1250, pad)).toBe(true);
+    expect(isValidCrop({ x: -125, y: 0, width: 1250, height: 1250 }, 1000, 1250)).toBe(false);
+    expect(isValidCrop({ x: -2000, y: 0, width: 1000, height: 1000 }, 1000, 1000, pad)).toBe(false);
+    expect(isValidCrop({ x: 0, y: 0, width: 5000, height: 5000 }, 1000, 1000, pad)).toBe(false);
+    expect(isValidCrop({ x: 10.5, y: 0, width: 100, height: 100 }, 1000, 1000, pad)).toBe(false);
+  });
   it('version changes when the crop or the nonce changes', () => {
     const crop = { x: 1, y: 2, width: 3, height: 4 };
     expect(cropVersion(crop, 'a')).toMatch(/^[0-9a-f]{8}$/);

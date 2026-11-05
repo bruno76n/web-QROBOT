@@ -41,7 +41,11 @@ const isCurrent = (href: string) => !href.includes('#') && current.startsWith(hr
       ))}
     </nav>
 
-    <Button href={es.header.quoteHref} size="sm" class="col-start-3 justify-self-end max-[760px]:!px-3.5 max-[760px]:!text-[14px]">
+    <Button
+      href={es.header.quoteHref}
+      size="sm"
+      class="col-start-3 justify-self-end max-[760px]:!px-3.5 max-[760px]:!text-[14px]"
+    >
       {es.header.quote}
     </Button>
   </div>

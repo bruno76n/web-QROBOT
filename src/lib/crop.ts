@@ -94,13 +94,34 @@ export function ogLayout(cropWidth: number): {
   };
 }
 
-/** Keeps a crop inside the original and at least 1 px. Defensive: the server re-checks it. */
+/** How far a padded crop (product photos) may grow past the longest side of the original. */
+export const maxPaddingFactor = 3;
+
+/**
+ * Keeps a crop inside the original and at least 1 px. Defensive: the server re-checks it.
+ * With `allowPadding` (product photos) the crop may reach past the edges, to show a tall or wide
+ * product whole with empty margins; it must still cover part of the photo and not be huge.
+ */
 export function isValidCrop(
   crop: CropRect,
   originalWidth: number,
   originalHeight: number,
+  opts: { allowPadding?: boolean } = {},
 ): boolean {
   const ints = [crop.x, crop.y, crop.width, crop.height].every(Number.isInteger);
+  if (opts.allowPadding) {
+    return (
+      ints &&
+      crop.width >= 1 &&
+      crop.height >= 1 &&
+      crop.width <= maxPaddingFactor * Math.max(originalWidth, originalHeight) &&
+      crop.height <= maxPaddingFactor * Math.max(originalWidth, originalHeight) &&
+      crop.x < originalWidth &&
+      crop.y < originalHeight &&
+      crop.x + crop.width > 0 &&
+      crop.y + crop.height > 0
+    );
+  }
   return (
     ints &&
     crop.x >= 0 &&

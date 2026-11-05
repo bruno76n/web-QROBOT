@@ -228,3 +228,10 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 - **Arreglo:** `canvasToBlob` (`photos/pipeline.ts`) detecta que el navegador no devolvió WebP y, solo entonces, carga `@jsquash/webp` (WASM) para codificarlo. En Chrome nada cambia. El servidor sigue exigiendo WebP real (se valida por los bytes).
 - **Librería nueva:** `@jsquash/webp` (regla 2 de CLAUDE.md: no se escribe un codificador a mano).
 - **CSP:** se agrega `'wasm-unsafe-eval'` a `script-src` (solo permite compilar WebAssembly, no `eval` de texto). Actualizado `docs/13 §3`.
+
+## 2026-11-05 · Fotos de producto con márgenes (zoom hacia afuera)
+
+- **Problema:** el recorte de producto es 1:1 y debía quedar dentro del original; una foto vertical (el muñeco de nieve) no podía mostrarse entera.
+- **Decisión:** solo en productos, el recorte puede salir de la foto (`x`/`y` negativos, tamaño mayor al original). `isValidCrop(…, { allowPadding: true })` lo acepta si cubre parte de la foto y no pasa de 3× el lado largo; la portada sigue estricta. El original no se toca (regla 9); las versiones WebP salen con márgenes transparentes y `og.jpg` los rellena de `#f6f6f8`.
+- **Panel:** el recortador de producto baja su zoom mínimo a `lado corto ÷ lado largo × 0.85` (foto completa con aire); con `restrictPosition` apagado. Los esquemas Zod (`cropSchema`, `uploadFieldsSchema`) aceptan coordenadas negativas; el servidor es quien valida contra el original.
+- Nunca se agranda el contenido: alejar solo reduce la foto dentro del cuadro.

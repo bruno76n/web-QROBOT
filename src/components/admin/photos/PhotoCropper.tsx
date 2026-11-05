@@ -17,12 +17,20 @@ interface Props {
   onDone: (crop: CropRect) => void;
 }
 
-const round = (a: Area): CropRect => ({
-  x: Math.max(0, Math.round(a.x)),
-  y: Math.max(0, Math.round(a.y)),
+/** Product crops may reach past the photo (empty margins); the others stay inside it. */
+const round = (a: Area, pad: boolean): CropRect => ({
+  x: pad ? Math.round(a.x) : Math.max(0, Math.round(a.x)),
+  y: pad ? Math.round(a.y) : Math.max(0, Math.round(a.y)),
   width: Math.max(1, Math.round(a.width)),
   height: Math.max(1, Math.round(a.height)),
 });
+
+/**
+ * Smallest zoom of a product photo: the one where the whole photo fits in the square frame
+ * (short side ÷ long side), a little further so it keeps some air around it.
+ */
+const productMinZoom = (o: { width: number; height: number }) =>
+  Math.max(0.2, (Math.min(o.width, o.height) / Math.max(o.width, o.height)) * 0.85);
 
 /** Full-screen cropper (docs/12 §3 step 4): move, zoom 1×–4×, pinch, and a live preview (§4). */
 export function PhotoCropper({ src, usage, original, initial, onCancel, onDone }: Props) {
@@ -31,6 +39,8 @@ export function PhotoCropper({ src, usage, original, initial, onCancel, onDone }
   const [zoom, setZoom] = useState(1);
   const [area, setArea] = useState<CropRect | null>(initial);
   const aspect = aspectRatio(usageAspect[usage]);
+  const pad = usage === 'product';
+  const minZoom = pad ? productMinZoom(original) : 1;
 
   useEffect(() => {
     dialog.current?.showModal();
@@ -65,23 +75,24 @@ export function PhotoCropper({ src, usage, original, initial, onCancel, onDone }
             image={src}
             crop={crop}
             zoom={zoom}
-            minZoom={1}
+            minZoom={minZoom}
+            restrictPosition={!pad}
             maxZoom={4}
             aspect={aspect}
             objectFit="contain"
             onCropChange={setCrop}
             onZoomChange={setZoom}
-            onCropComplete={(_, pixels) => setArea(round(pixels))}
+            onCropComplete={(_, pixels) => setArea(round(pixels, pad))}
             {...(initial ? { initialCroppedAreaPixels: initial } : {})}
           />
         </div>
         <div className="crop-tools">
-          <p style={{ margin: 0 }}>{t.cropHelp}</p>
+          <p style={{ margin: 0 }}>{pad ? t.cropHelpProduct : t.cropHelp}</p>
           <label>
             <span className="vh">{t.zoom}</span>
             <input
               type="range"
-              min={1}
+              min={minZoom}
               max={4}
               step={0.01}
               value={zoom}

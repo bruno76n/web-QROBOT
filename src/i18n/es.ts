@@ -205,6 +205,8 @@ export const es = {
       done: 'Listo',
       cancel: 'Cancelar',
       cropHelp: 'Mueve la foto y acércala hasta que quede como quieres.',
+      cropHelpProduct:
+        'Mueve la foto y acércala o aléjala hasta que se vea el producto completo, como quieres.',
       zoom: 'Acercar',
       cropTitle: 'Centrar la foto',
       previewCard: 'Así se ve en el catálogo',

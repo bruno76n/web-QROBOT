@@ -250,7 +250,7 @@ describe('saveProduct · photos', () => {
     const a = await seedPhoto({ id: 'pha' });
     const { id } = await create({ photos: [a] });
     await putVersionFiles('pha', 'product', 'dddddddd', [400, 800]);
-    const outside = { ...a, version: 'dddddddd', crop: { x: 500, y: 0, width: 800, height: 800 } };
+    const outside = { ...a, version: 'dddddddd', crop: { x: 1200, y: 0, width: 800, height: 800 } };
     expect(await saveProduct(t.deps, productInput({ id, photos: [outside] }))).toMatchObject({
       ok: false,
       code: 'VALIDATION',

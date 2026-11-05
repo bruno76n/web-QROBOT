@@ -28,7 +28,9 @@ describe('productInputSchema', () => {
   });
   it('rejects bad slugs, malformed category ids and unknown colors, and too many items', () => {
     expect(productInputSchema.safeParse({ ...minimal, slug: 'Con Espacios' }).success).toBe(false);
-    expect(productInputSchema.safeParse({ ...minimal, categories: ['Otra Cosa'] }).success).toBe(false);
+    expect(productInputSchema.safeParse({ ...minimal, categories: ['Otra Cosa'] }).success).toBe(
+      false,
+    );
     expect(productInputSchema.safeParse({ ...minimal, colors: ['fucsia'] }).success).toBe(false);
     // The limit of 10 photos is a business rule: saveProduct answers TOO_MANY_PHOTOS.
     expect(

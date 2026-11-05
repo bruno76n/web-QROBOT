@@ -4,10 +4,12 @@ import { limits, slugPattern } from './publish';
 
 /** Shared Zod schemas: the panel forms and the server actions use the same ones (docs/06). */
 export const cropSchema = z.object({
-  x: z.number().int().min(0),
-  y: z.number().int().min(0),
-  width: z.number().int().min(1),
-  height: z.number().int().min(1),
+  // Negative `x`/`y` and sizes past the original only happen with padded product crops; the
+  // services check the real limits against the original (`isValidCrop`).
+  x: z.number().int().min(-40_000).max(40_000),
+  y: z.number().int().min(-40_000).max(40_000),
+  width: z.number().int().min(1).max(40_000),
+  height: z.number().int().min(1).max(40_000),
 });
 
 /** A photo attached to a product or slide, in the order shown. */
@@ -88,10 +90,11 @@ export const uploadFieldsSchema = z.object({
   /** Present only when re-centering an existing photo. */
   photoId: z.string().min(1).max(64).optional(),
   aspect: z.enum(['1:1', '16:9', '3:4']),
-  cropX: z.coerce.number().int().min(0),
-  cropY: z.coerce.number().int().min(0),
-  cropWidth: z.coerce.number().int().min(1),
-  cropHeight: z.coerce.number().int().min(1),
+  // Negative origin or sizes past the original only for padded product crops (`isValidCrop`).
+  cropX: z.coerce.number().int().min(-40_000).max(40_000),
+  cropY: z.coerce.number().int().min(-40_000).max(40_000),
+  cropWidth: z.coerce.number().int().min(1).max(40_000),
+  cropHeight: z.coerce.number().int().min(1).max(40_000),
   originalWidth: z.coerce.number().int().min(1).max(20000),
   originalHeight: z.coerce.number().int().min(1).max(20000),
   /** JSON array with the widths of the files sent, e.g. "[400,800]". */
