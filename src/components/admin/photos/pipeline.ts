@@ -29,7 +29,7 @@ export interface PreparedOriginal {
   height: number;
 }
 
-function canvasToBlob(canvas: HTMLCanvasElement, type: string, quality: number): Promise<Blob> {
+function nativeBlob(canvas: HTMLCanvasElement, type: string, quality: number): Promise<Blob> {
   return new Promise((resolve, reject) =>
     canvas.toBlob(
       (b) => (b ? resolve(b) : reject(new Error('canvas.toBlob failed'))),
@@ -37,6 +37,26 @@ function canvasToBlob(canvas: HTMLCanvasElement, type: string, quality: number):
       quality,
     ),
   );
+}
+
+/**
+ * Encodes the canvas. Safari cannot encode WebP and silently answers a PNG: then the WASM encoder
+ * (`@jsquash/webp`, loaded only in that case) makes the WebP the server expects.
+ */
+async function canvasToBlob(
+  canvas: HTMLCanvasElement,
+  type: string,
+  quality: number,
+): Promise<Blob> {
+  const blob = await nativeBlob(canvas, type, quality);
+  if (blob.type === type || type !== 'image/webp') return blob;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('no 2d context');
+  const { default: encode } = await import('@jsquash/webp/encode');
+  const data = await encode(ctx.getImageData(0, 0, canvas.width, canvas.height), {
+    quality: Math.round(quality * 100),
+  });
+  return new Blob([data], { type });
 }
 
 /**

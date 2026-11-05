@@ -221,3 +221,10 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 - Nuevos códigos de error: `UNKNOWN_CATEGORY`, `CATEGORY_PROTECTED`, `CATEGORY_IN_USE`, `TOO_MANY_CATEGORIES` (máximo 30).
 - El respaldo `.json` agrega `categoryList` (la tabla); `categories` sigue siendo los vínculos producto → categoría.
 - Sin librerías nuevas: usa dnd-kit para el orden, como la lista de productos.
+
+## 2026-11-05 · Subir fotos desde Safari: codificador WebP en WASM
+
+- **Bug:** en Safari, `canvas.toBlob('image/webp')` no codifica WebP y devuelve un PNG. El servidor (`/api/admin/upload`) exige WebP en las versiones y respondía `415 FILE_TYPE`: el panel mostraba "Esa foto no se puede usar…" con cualquier foto (reproducido con WebKit de Playwright y `hero5-escritorio.png`).
+- **Arreglo:** `canvasToBlob` (`photos/pipeline.ts`) detecta que el navegador no devolvió WebP y, solo entonces, carga `@jsquash/webp` (WASM) para codificarlo. En Chrome nada cambia. El servidor sigue exigiendo WebP real (se valida por los bytes).
+- **Librería nueva:** `@jsquash/webp` (regla 2 de CLAUDE.md: no se escribe un codificador a mano).
+- **CSP:** se agrega `'wasm-unsafe-eval'` a `script-src` (solo permite compilar WebAssembly, no `eval` de texto). Actualizado `docs/13 §3`.
