@@ -19,6 +19,10 @@ export function errorText(failure: Failure | { code: 'OFFLINE' }): string {
       return t.errors.CANNOT_PUBLISH(
         missingList((details?.missing as Missing[] | undefined) ?? []),
       );
+    case 'CATEGORY_IN_USE':
+      return t.errors.CATEGORY_IN_USE(
+        ((details?.products as string[] | undefined) ?? []).join(', '),
+      );
     case 'INTERNAL':
       return t.errors.INTERNAL(String(details?.errorId ?? '—'));
     case 'OFFLINE':
@@ -27,6 +31,9 @@ export function errorText(failure: Failure | { code: 'OFFLINE' }): string {
     case 'VALIDATION':
     case 'NOT_FOUND':
     case 'SLUG_TAKEN':
+    case 'UNKNOWN_CATEGORY':
+    case 'CATEGORY_PROTECTED':
+    case 'TOO_MANY_CATEGORIES':
     case 'TOO_MANY_PHOTOS':
     case 'TOO_MANY_SLIDES':
     case 'PHOTO_NOT_FOUND':

@@ -6,6 +6,7 @@ export const keys = {
   products: ['products'] as const,
   product: (id: string) => ['product', id] as const,
   hero: ['hero'] as const,
+  categories: ['categories'] as const,
   clicks: ['clicks'] as const,
 };
 
@@ -20,6 +21,13 @@ export const useProduct = (id: string | null) =>
     // The editor owns its copy while open; refetching under it would overwrite typing.
     staleTime: Infinity,
     gcTime: 0,
+  });
+
+export const useCategories = () =>
+  useQuery({
+    queryKey: keys.categories,
+    queryFn: async () => unwrap(await api.listCategories()),
+    staleTime: 30_000,
   });
 
 export const useHero = () =>

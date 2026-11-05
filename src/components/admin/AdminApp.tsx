@@ -5,9 +5,10 @@ import { AdminShell } from './AdminShell';
 import { ConfirmProvider } from './ConfirmDialog';
 import { ProductsView } from './ProductsView';
 import { HeroEditor } from './HeroEditor';
+import { CategoriesView } from './CategoriesView';
 
 interface Props {
-  view: 'products' | 'hero';
+  view: 'products' | 'categories' | 'hero';
 }
 
 /** Root of the panel: one island per page (`client:only`, docs/07 §3). */
@@ -22,7 +23,13 @@ export default function AdminApp({ view }: Props) {
     <QueryClientProvider client={client}>
       <ConfirmProvider>
         <AdminShell view={view}>
-          {view === 'products' ? <ProductsView /> : <HeroEditor />}
+          {view === 'products' ? (
+            <ProductsView />
+          ) : view === 'categories' ? (
+            <CategoriesView />
+          ) : (
+            <HeroEditor />
+          )}
         </AdminShell>
         <Toaster position="top-center" closeButton={false} />
       </ConfirmProvider>

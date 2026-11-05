@@ -197,8 +197,11 @@ describe('upload · validation (400)', () => {
     );
     expect(res).toMatchObject({ status: 400, body: { code: 'VALIDATION' } });
   });
+  it('a product crop may reach past the photo (empty margins)', async () => {
+    expect((await handleUpload(productForm({ cropX: '-100' }), deps())).status).toBe(200);
+  });
   it('crop outside the original, wrong shape for the usage, and wrong aspect of the crop', async () => {
-    expect((await handleUpload(productForm({ cropX: '10' }), deps())).status).toBe(400);
+    expect((await handleUpload(productForm({ cropX: '1000' }), deps())).status).toBe(400);
     expect((await handleUpload(productForm({ aspect: '16:9' }), deps())).status).toBe(400);
     expect(
       (await handleUpload(productForm({ cropHeight: '600', originalHeight: '1000' }), deps()))
@@ -295,11 +298,11 @@ describe('upload · re-centering an existing photo', () => {
     const form = productForm(
       {
         photoId: 'recenter2',
-        cropWidth: '1000',
-        cropHeight: '1000',
+        cropWidth: '4000',
+        cropHeight: '4000',
         originalWidth: '4000',
         originalHeight: '4000',
-        widths: '[400,800]',
+        widths: '[400,800,1200]',
       },
       { original: null },
     );

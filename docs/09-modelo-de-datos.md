@@ -7,7 +7,7 @@ Base **D1 (SQLite)** con **Drizzle**. Esquema en `src/server/db/schema.ts`; migr
 - Dinero: **centavos enteros** (`*_cents`). La web muestra pesos sin centavos (`$1,250`).
 - Fechas: `integer` con modo `timestamp_ms` de Drizzle.
 - Booleanos: `integer` con modo `boolean`.
-- Lo que es fijo (categorías, colores, ideas, combinaciones de Q-404) **no** va en la base: vive en `src/config/`. La base guarda solo sus ids.
+- Lo que es fijo (colores, ideas, combinaciones de Q-404) **no** va en la base: vive en `src/config/`. La base guarda solo sus ids. **Las categorías sí viven en la base** (tabla `categories`, editable desde el panel); `src/config/categories.ts` solo conserva la semilla inicial.
 
 ## 1. Tablas
 
@@ -26,6 +26,7 @@ Base **D1 (SQLite)** con **Drizzle**. Esquema en `src/server/db/schema.ts`; migr
 | `size` | text | Libre: "9 cm de diámetro" |
 | `material` | text | Por defecto "PLA" |
 | `lead_time` | text | "3 a 5 días" |
+| `custom_size` | text | "Tamaño a medida": qué decir de otros tamaños (se cotizan por WhatsApp); vacío = no se muestra. Migración `0005` |
 | `personalizable` | boolean | |
 | `personal_hint` | text | Pregunta al cliente, hasta 60 |
 | `featured` | boolean | Etiqueta "Más pedido"; también decide qué sale en Navidad |
@@ -33,10 +34,31 @@ Base **D1 (SQLite)** con **Drizzle**. Esquema en `src/server/db/schema.ts`; migr
 | `sort_order` | integer | Orden en el catálogo (0 = primero) |
 | `created_at`, `updated_at` | timestamp | |
 
+### `categories`
+
+| Columna | Tipo |
+|---|---|
+| `id` | text, clave primaria; también el tramo de la URL (`/catalogo/<id>`). Se genera del nombre y no cambia al renombrar |
+| `label` | text — nombre visible |
+| `position` | integer — orden; la categoría principal de un producto es la primera en este orden |
+| `created_at`, `updated_at` | unix ms |
+
+La migración `0004` crea la tabla con `negocio`, `casa` y `navidad`. **`navidad` no se puede borrar** (la temporada depende de ella). Borrar una categoría la quita también de `product_categories` (en un solo `db.batch`) y se rechaza si un producto publicado se quedaría sin categorías (`CATEGORY_IN_USE`). Guardar un producto con una categoría que no existe da `UNKNOWN_CATEGORY`.
+
+### `product_slugs`
+
+| Columna | Tipo |
+|---|---|
+| `slug` | text, clave primaria — una dirección que el producto tuvo |
+| `product_id` | text → `products.id`, se borra con el producto |
+| `created_at`, `updated_at` | unix ms |
+
+`/producto/<slug viejo>` responde `301` a la dirección actual mientras el producto esté publicado (migración `0006`).
+
 ### `product_categories`
 | `product_id` | text FK → products (borrado en cascada) |
 |---|---|
-| `category` | text — id de `src/config/categories.ts` |
+| `category` | text — id de `categories` (sin clave foránea: lo valida el servidor) |
 | PK | (`product_id`, `category`) |
 
 El orden de la lista no importa salvo la **categoría principal** (migas), que es la primera en el orden de `categories.ts`.
@@ -116,7 +138,7 @@ Para **publicar** un producto se necesita: nombre, slug válido, al menos **una 
 Otras reglas:
 - Hasta **10 fotos** por producto; hasta **6 portadas**.
 - Al menos 1 y como mucho 12 colores (o ninguno).
-- El slug no se cambia solo al cambiar el nombre si el producto **ya estuvo publicado** (para no romper links compartidos). Se puede cambiar a mano; el panel avisa que los links viejos dejarán de funcionar.
+- El slug **siempre sigue al nombre** al guardar. La dirección anterior se guarda en `product_slugs` y redirige (301) a la actual, así los links compartidos no se rompen. Ningún otro producto puede usar una dirección vieja; si el producto vuelve a un nombre anterior, esa dirección se libera. El panel ya no muestra el campo de dirección.
 - Al reordenar, `sort_order` se reescribe 0…N en un solo `batch`.
 - Un producto borrado se borra de verdad (con confirmación), junto con sus fotos.
 

@@ -105,7 +105,7 @@ export async function handleUpload(form: FormData, deps: UploadDeps): Promise<Up
   }
 
   const crop = { x: f.cropX, y: f.cropY, width: f.cropWidth, height: f.cropHeight };
-  if (!isValidCrop(crop, original.width, original.height)) {
+  if (!isValidCrop(crop, original.width, original.height, { allowPadding: f.kind === 'product' })) {
     return failure(400, 'VALIDATION', { fields: { crop: ['outside the original'] } });
   }
   if (Math.abs(crop.width / crop.height - aspectRatio(f.aspect)) > 0.02) {

@@ -32,7 +32,11 @@ export default defineConfig({
       ],
       // Components (motion, Embla, 21st.dev) use inline styles: no style hashes (docs/13 §3).
       // The only third-party script: Cloudflare Web Analytics, switched on from the dashboard (docs/13 §3, §7).
-      scriptDirective: { resources: ["'self'", 'https://static.cloudflareinsights.com'] },
+      // 'wasm-unsafe-eval' lets Safari run the WebP encoder (WASM) of the photo panel; it allows
+      // compiling WebAssembly only, not eval() of strings (docs/13 §3).
+      scriptDirective: {
+        resources: ["'self'", "'wasm-unsafe-eval'", 'https://static.cloudflareinsights.com'],
+      },
       styleDirective: { resources: ["'self'", "'unsafe-inline'"] },
     },
   },

@@ -1,5 +1,5 @@
 ---
-import { categories } from '@/config/categories';
+import { listCategories } from '@/server/queries/categories';
 import { es } from '@/i18n/es';
 import CategoryTabs from '@/components/site/CategoryTabs.astro';
 import ProductCard from '@/components/site/ProductCard.astro';
@@ -15,6 +15,7 @@ interface Props {
   showMaker?: boolean;
 }
 const { products, category, showMaker = false } = Astro.props;
+const categories = await listCategories();
 const label = categories.find((c) => c.id === category)?.label;
 const t = es.catalog;
 ---
@@ -38,7 +39,7 @@ const t = es.catalog;
 
 <div class="sticky top-[var(--top)] z-20 border-y border-line bg-white/90 backdrop-blur-md max-[760px]:static">
   <div class="wrap flex min-h-16 flex-wrap items-center justify-between gap-3">
-    <CategoryTabs current={category} />
+    <CategoryTabs current={category} categories={categories} />
     <p class="text-sm text-ink-2" aria-live="polite">
       <b class="text-ink">{label ?? t.all}</b> · {t.count(products.length)}
     </p>

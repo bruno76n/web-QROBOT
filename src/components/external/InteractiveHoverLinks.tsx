@@ -7,6 +7,9 @@
  *  - the heading wraps by whole words (letters were separate inline-blocks and broke mid-word);
  *  - the heading uses the site type (Geist 600, -0.04em tracking, like h1-h3) instead of `font-bold`;
  *  - the image is decorative (`alt=""`; the row text names it) and loads lazily;
+ *  - the image keeps its own proportions (`object-contain`, capped size) with a shadow that follows
+ *    its outline: the delivered fixed 256×192 box with `object-cover` cropped tall photos (the
+ *    hidden state is also `opacity: 0`, or the outline shadow of a scale-0 image shows as a dot);
  *  - MANDATORY CHANGE: on touch screens (`(hover: none)` or ≤ 760 px) the photo of the row nearest
  *    to the vertical middle of the screen is shown while scrolling; with a mouse nothing changes.
  */
@@ -187,14 +190,14 @@ function Link({ heading, imgSrc, subheading, href, touch, active, innerRef }: Li
           translateY: '-50%',
         }}
         variants={{
-          initial: { scale: 0, rotate: '-12.5deg' },
-          whileHover: { scale: 1, rotate: '12.5deg' },
+          initial: { scale: 0, rotate: '-12.5deg', opacity: 0 },
+          whileHover: { scale: 1, rotate: '12.5deg', opacity: 1 },
         }}
         transition={{ type: 'spring' }}
         src={imgSrc}
         loading="lazy"
         decoding="async"
-        className="pointer-events-none absolute z-0 h-24 w-32 rounded-lg object-cover shadow-lg md:h-48 md:w-64"
+        className="pointer-events-none absolute z-0 h-auto max-h-28 w-auto max-w-36 object-contain drop-shadow-xl md:max-h-64 md:max-w-72"
         alt=""
       />
       <div className="overflow-hidden">

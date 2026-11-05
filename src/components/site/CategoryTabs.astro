@@ -1,12 +1,14 @@
 ---
-import { categories } from '@/config/categories';
+import type { CategoryView } from '@/config/categories';
 import { es } from '@/i18n/es';
 
 interface Props {
   /** Current category id, or null for "Todos". */
   current: string | null;
+  /** The panel's categories, in order. */
+  categories: CategoryView[];
 }
-const { current } = Astro.props;
+const { current, categories } = Astro.props;
 const tabs = [
   { id: null, label: es.catalog.all, href: '/catalogo' },
   ...categories.map((c) => ({ id: c.id, label: c.label, href: `/catalogo/${c.id}` })),

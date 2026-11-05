@@ -57,15 +57,14 @@ describe('slugs', () => {
     expect(uniqueSlug('gato', ['gato'])).toBe('gato-2');
     expect(uniqueSlug('gato', new Set(['gato', 'gato-2', 'gato-3']))).toBe('gato-4');
   });
-  it('keeps the old slug once the product was published, unless a slug is typed', () => {
+  it('follows the name every time, unless a slug is typed', () => {
     const base = { name: 'Nombre nuevo', currentSlug: 'viejo' };
-    expect(slugForSave({ ...base, typedSlug: undefined, wasPublished: true })).toBe('viejo');
-    expect(slugForSave({ ...base, typedSlug: undefined, wasPublished: false })).toBe(
-      'nombre-nuevo',
-    );
-    expect(slugForSave({ ...base, typedSlug: 'a-mano', wasPublished: true })).toBe('a-mano');
-    expect(
-      slugForSave({ name: 'Nuevo', typedSlug: '', currentSlug: undefined, wasPublished: false }),
-    ).toBe('nuevo');
+    expect(slugForSave({ ...base, typedSlug: undefined })).toBe('nombre-nuevo');
+    expect(slugForSave({ ...base, typedSlug: '' })).toBe('nombre-nuevo');
+    expect(slugForSave({ ...base, typedSlug: 'a-mano' })).toBe('a-mano');
+    expect(slugForSave({ name: 'Nuevo', typedSlug: '', currentSlug: undefined })).toBe('nuevo');
+  });
+  it('keeps the current address when the name has nothing usable', () => {
+    expect(slugForSave({ name: '¡¡¡', typedSlug: '', currentSlug: 'buho' })).toBe('buho');
   });
 });

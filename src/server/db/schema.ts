@@ -39,6 +39,8 @@ export const products = sqliteTable(
     size: text('size').notNull().default(''),
     material: text('material').notNull().default('PLA'),
     leadTime: text('lead_time').notNull().default(''),
+    /** "Tamaño a medida": what to tell the customer about other sizes, quoted on WhatsApp. */
+    customSize: text('custom_size').notNull().default(''),
     personalizable: integer('personalizable', { mode: 'boolean' }).notNull().default(false),
     personalHint: text('personal_hint').notNull().default(''),
     featured: integer('featured', { mode: 'boolean' }).notNull().default(false),
@@ -52,6 +54,35 @@ export const products = sqliteTable(
     uniqueIndex('products_slug_unique').on(t.slug),
     index('products_published_sort_idx').on(t.published, t.sortOrder),
   ],
+);
+
+/** Catalog categories, editable from the panel. `id` is also the URL segment (`/catalogo/<id>`). */
+export const categories = sqliteTable(
+  'categories',
+  {
+    id: text('id').primaryKey(),
+    label: text('label').notNull(),
+    /** Display order; the first category of a product in this order is its main one. */
+    position: integer('position').notNull().default(0),
+    ...timestamps,
+  },
+  (t) => [index('categories_position_idx').on(t.position)],
+);
+
+/**
+ * Addresses a product used to have. They keep working: the page redirects (301) to the current
+ * one, and no other product can take them (docs/09 › product_slugs).
+ */
+export const productSlugs = sqliteTable(
+  'product_slugs',
+  {
+    slug: text('slug').primaryKey(),
+    productId: text('product_id')
+      .notNull()
+      .references(() => products.id, { onDelete: 'cascade' }),
+    ...timestamps,
+  },
+  (t) => [index('product_slugs_product_idx').on(t.productId)],
 );
 
 export const productCategories = sqliteTable(

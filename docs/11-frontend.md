@@ -26,7 +26,7 @@
 
 | Sección | Implementación |
 |---|---|
-| Hero | `Hero.astro`. Una portada: `<picture>` con `<source media="(max-width:760px)">` para la de celular. Varias: isla `HeroSlides.tsx` con Embla + `embla-carousel-fade` + `embla-carousel-autoplay` (se pausa con movimiento reducido). El nombre gigante es HTML encima, con la cabeza en SVG al final; una sola línea a cualquier ancho (tamaño en `vw` como el mockup) |
+| Hero | `Hero.astro`. Una portada: `<picture>` con `<source media="(max-width:760px)">` para la de celular. Varias: isla `HeroSlides.tsx` con Embla (desliza) + `embla-carousel-autoplay` (se pausa con movimiento reducido). El nombre gigante es HTML encima, con la cabeza en SVG al final; una sola línea a cualquier ancho (tamaño en `vw` como el mockup) |
 | Navidad | `Navidad.astro` + `<script>` con la lógica de `src/lib/season.ts` (contador cada segundo, posición de hoy y de la fecha límite en la línea). No se pinta fuera de temporada |
 | Ideas | `Ideas.astro` envuelve el componente externo (§4) y le pasa las 7 ideas de `src/config/ideas.ts` con `href = "#pedido=<id>"` |
 | Video | `Video.astro`. Si `site.video.src` no es `null`, al tocar el botón cambia la portada por el `<video>` y lo reproduce; si es `null`, el botón queda deshabilitado con su `aria-label`. Portada: la foto por defecto del hero desenfocada (`public/brand/`). (En Workers no se puede revisar si un archivo existe, por eso es un dato de `site.ts`) |

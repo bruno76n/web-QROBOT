@@ -77,6 +77,7 @@ describe('valuesFromDetail', () => {
       size: '',
       material: 'PLA',
       leadTime: '',
+      customSize: '',
       personalizable: true,
       personalHint: 'h',
       featured: true,

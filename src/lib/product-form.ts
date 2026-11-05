@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { categoryIds, type CategoryId } from '@/config/categories';
+import type { CategoryId } from '@/config/categories';
 import { colorIds, type ColorId } from '@/config/colors';
 import { es } from '@/i18n/es';
 import type { ProductDetail } from './admin-types';
@@ -19,6 +19,7 @@ export interface ProductFormValues {
   size: string;
   material: string;
   leadTime: string;
+  customSize: string;
   colors: ColorId[];
   unitSingular: string;
   unitPlural: string;
@@ -38,11 +39,12 @@ export const productFormSchema = z.object({
   short: bounded(limits.shortMax),
   priceText: z.string().refine((v) => v.trim() === '' || parsePesos(v) !== null, t.badPrice),
   priceNote: bounded(120),
-  categories: z.array(z.enum(categoryIds)),
+  categories: z.array(z.string().regex(slugPattern)),
   description: bounded(limits.descriptionMax),
   size: bounded(80),
   material: bounded(40),
   leadTime: bounded(60),
+  customSize: bounded(120),
   colors: z.array(z.enum(colorIds)).max(limits.maxColors),
   unitSingular: bounded(60),
   unitPlural: bounded(60),
@@ -64,6 +66,7 @@ export function emptyValues(): ProductFormValues {
     size: '',
     material: 'PLA',
     leadTime: '',
+    customSize: '',
     colors: [],
     unitSingular: '',
     unitPlural: '',
@@ -86,6 +89,7 @@ export function valuesFromDetail(d: ProductDetail): ProductFormValues {
     size: d.size,
     material: d.material,
     leadTime: d.leadTime,
+    customSize: d.customSize,
     colors: d.colors,
     unitSingular: d.unitSingular,
     unitPlural: d.unitPlural,
@@ -115,6 +119,7 @@ export function toProductInput(
     size: v.size.trim(),
     material: v.material.trim(),
     leadTime: v.leadTime.trim(),
+    customSize: v.customSize.trim(),
     personalizable: v.personalizable,
     personalHint: v.personalizable ? v.personalHint.trim() : '',
     featured: v.featured,

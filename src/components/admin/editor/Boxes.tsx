@@ -1,9 +1,9 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import { cn } from '@/lib/cn';
-import { categories } from '@/config/categories';
 import { colors } from '@/config/colors';
 import { es } from '@/i18n/es';
 import type { ProductFormValues } from '@/lib/product-form';
+import { useCategories } from '../lib/queries';
 
 const t = es.admin.editor;
 
@@ -64,17 +64,8 @@ function Chips<T extends string>({
   );
 }
 
-export function BasicsBox({
-  slugPreview,
-  onSlugTouched,
-  showSlugWarning,
-}: {
-  slugPreview: string;
-  onSlugTouched: () => void;
-  showSlugWarning: boolean;
-}) {
+export function BasicsBox() {
   const { register, watch, formState } = useFormContext<ProductFormValues>();
-  const slug = register('slug');
   return (
     <div className="box">
       <h2>{t.basics}</h2>
@@ -89,25 +80,6 @@ export function BasicsBox({
           {...register('name')}
         />
         <FieldError name="name" />
-      </div>
-      <div className="f">
-        <label htmlFor="f-slug">{t.slug}</label>
-        <div className="url">
-          <span>{t.slugPrefix}</span>
-          <input
-            className="in"
-            id="f-slug"
-            placeholder={t.slugPlaceholder}
-            {...slug}
-            value={watch('slug') || slugPreview}
-            onChange={(e) => {
-              onSlugTouched();
-              void slug.onChange(e);
-            }}
-          />
-        </div>
-        {showSlugWarning ? <small>{t.slugWarning}</small> : null}
-        <FieldError name="slug" />
       </div>
       <div className="f">
         <label htmlFor="f-short">{t.short}</label>
@@ -148,10 +120,17 @@ export function BasicsBox({
       </div>
       <div className="f">
         <span id="cats-label">{t.categories}</span>
-        <Chips name="categories" options={categories} />
+        <CategoryChips />
       </div>
     </div>
   );
+}
+
+/** Categories come from the panel's list (tab "Categorías"). */
+function CategoryChips() {
+  const { data } = useCategories();
+  if (data && data.length === 0) return <p className="hint">{t.noCategories}</p>;
+  return <Chips name="categories" options={data ?? []} />;
 }
 
 export function PageBox() {
@@ -190,6 +169,17 @@ export function PageBox() {
             {...register('leadTime')}
           />
         </div>
+      </div>
+      <div className="f">
+        <label htmlFor="f-custom">{t.customSize}</label>
+        <input
+          className="in"
+          id="f-custom"
+          maxLength={120}
+          placeholder={t.customSizePlaceholder}
+          {...register('customSize')}
+        />
+        <small>{t.customSizeHint}</small>
       </div>
       <div className="f">
         <span>{t.colors}</span>

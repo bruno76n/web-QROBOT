@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { existsSync } from 'node:fs';
-import { categoryIds } from '@/config/categories';
+import { seedCategories } from '@/config/categories';
 import { colorIds } from '@/config/colors';
 import { seedProducts } from '../scripts/seed-data';
 
@@ -26,7 +26,11 @@ describe('seed data', () => {
   });
   it('uses only known categories and colors, and slugs are unique', () => {
     for (const p of seedProducts) {
-      for (const c of p.categories) expect(categoryIds, p.slug).toContain(c);
+      for (const c of p.categories)
+        expect(
+          seedCategories.map((s) => s.id),
+          p.slug,
+        ).toContain(c);
       for (const c of p.colors) expect(colorIds, p.slug).toContain(c);
     }
     expect(new Set(seedProducts.map((p) => p.slug)).size).toBe(14);

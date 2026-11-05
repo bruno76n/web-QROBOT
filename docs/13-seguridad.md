@@ -25,7 +25,7 @@ Estándar: **OWASP Top 10:2025**. La web pública es de solo lectura y no recibe
 
 ```
 default-src 'self';
-script-src 'self' <hashes que agrega Astro> https://static.cloudflareinsights.com;
+script-src 'self' 'wasm-unsafe-eval' <hashes que agrega Astro> https://static.cloudflareinsights.com;
 style-src 'self' 'unsafe-inline';
 img-src 'self' https://img.[dominio] data: blob:;
 media-src 'self' https://img.[dominio];
@@ -37,6 +37,7 @@ form-action 'self'
 ```
 
 - `style-src` lleva `'unsafe-inline'` porque los componentes (motion, Embla, 21st.dev) usan estilos en línea. Se configura Astro para **no** agregar hashes de estilos (si hay hashes, el navegador ignora `'unsafe-inline'`).
+- `'wasm-unsafe-eval'` permite compilar WebAssembly (no evaluar texto como código). Lo usa el panel en Safari para codificar WebP (`@jsquash/webp`).
 - `worker-src blob:` lo necesitan heic2any y el recortador.
 - `frame-ancestors` no funciona en `<meta>`: va **aparte**, como cabecera.
 - Si la versión instalada de Astro no tiene CSP integrada estable: un script de build (`scripts/csp-hashes.mjs`) calcula los hashes de los scripts en línea de `dist/` y el middleware manda la misma política como cabecera. Se registra en `decisiones.md`.

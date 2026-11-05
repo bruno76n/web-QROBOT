@@ -4,7 +4,7 @@ Referencia visual y de comportamiento: `reference/mockups/admin.html`. Rutas `/a
 
 ## 1. Estructura
 
-- **Barra superior:** "Quick Robot", pestañas **Productos** y **Portada**, "Ver catálogo ↗" y menú **•••** (Descargar respaldo).
+- **Barra superior:** "Quick Robot", pestañas **Productos**, **Categorías** y **Portada**, "Ver catálogo ↗" y menú **•••** (Descargar respaldo).
 - Al abrir: se llama `admin.cleanupPending` en segundo plano.
 - Si hay cambios sin guardar y se intenta salir, cambiar de producto o de pestaña: "Tienes cambios sin guardar. ¿Salir sin guardar?" (Salir / Seguir editando).
 
@@ -23,7 +23,7 @@ Referencia visual y de comportamiento: `reference/mockups/admin.html`. Rutas `/a
 | Bloque | Campos |
 |---|---|
 | **Fotos** | Subir (§3), miniaturas ordenables (la primera es la portada de la tarjeta), por foto: "Centrar", "Texto alternativo", "Quitar" (se borra al guardar) |
-| **Lo básico** | Nombre · Dirección de la página (`/producto/` + slug, editable) · Frase corta · Precio desde (por pieza) · Nota del precio · Dónde aparece (categorías, casillas) |
+| **Lo básico** | Nombre · Frase corta · Precio desde (por pieza) · Nota del precio · Dónde aparece (categorías, casillas) |
 | **Página del producto** | Descripción · Tamaño · Material · Tiempo de entrega · Colores que ofreces (puntos de color, seleccionables y ordenables) · Cómo se dice uno · Cómo se dicen varios |
 | **Opciones** | Se personaliza (interruptor) → ¿Qué le preguntas al cliente? · Más pedido (interruptor) · Publicado (interruptor; desactivado con la lista de lo que falta si no se puede publicar, `09 §3`) |
 | **Acciones** | Guardar · Ver página ↗ (si está publicado) · Duplicar · Eliminar (con confirmación) |
@@ -44,7 +44,7 @@ Lo mismo para productos y portada; cambia la forma del recorte.
 1. **Elegir:** `react-dropzone` (arrastrar o tocar para elegir; en celular abre fotos o cámara). Acepta JPG, PNG, WEBP, HEIC/HEIF, hasta 25 MB cada una. Varias a la vez para productos (hasta completar 10).
 2. **Convertir si hace falta:** si es HEIC, `heic2any` → JPG (se carga solo en ese caso). Se respeta la orientación EXIF.
 3. **Preparar el original:** `browser-image-compression` lo deja en máximo 4000 px de lado largo, calidad 0.9. Es lo que se guarda para volver a centrar después.
-4. **Centrar:** diálogo con `react-easy-crop` en la forma de la tabla. Se arrastra para mover y se hace zoom (rueda, pellizco o deslizador, de 1× a 4×). Botones "Listo" y "Cancelar". Al subir varias fotos de producto, cada una entra **centrada automáticamente** (recorte centrado más grande posible) y se puede ajustar después con "Centrar".
+4. **Centrar:** diálogo con `react-easy-crop` en la forma de la tabla. Se arrastra para mover y se hace zoom (rueda, pellizco o deslizador, de 1× a 4×). **En fotos de producto el zoom también puede alejar** (hasta que la foto completa quepa en el cuadro, con aire alrededor): así un producto alto o ancho se ve entero y el recorte deja márgenes vacíos (transparentes en las versiones; la vista previa de redes los rellena de gris claro). La portada no admite márgenes. Botones "Listo" y "Cancelar". Al subir varias fotos de producto, cada una entra **centrada automáticamente** (recorte centrado más grande posible) y se puede ajustar después con "Centrar".
 5. **Generar versiones:** con `canvas`, a partir del original y el recorte, en los anchos de la tabla, WebP calidad 0.82 (`src/lib/crop.ts` calcula las medidas; prueba unitaria). **Nunca se agranda:**
    - Se generan los anchos de la tabla que sean menores o iguales al ancho del recorte.
    - Si el recorte es más angosto que el ancho más chico, se genera **una sola versión del ancho del recorte** (por ejemplo, `300`).
@@ -67,6 +67,13 @@ Como el mockup:
 - Botones: **Guardar portada** · Ver inicio ↗ · **Volver a la foto original** (confirma y llama `admin.resetHero`).
 - Indicador "Sin guardar" cuando hay cambios.
 
+## 5b. Categorías (`/admin/categorias`)
+
+- Lista de categorías con **Agregar** (el nombre genera la dirección `/catalogo/<id>`), **Renombrar** (la dirección no cambia), **Borrar** (confirma) y orden por arrastre (`admin.createCategory`, `renameCategory`, `reorderCategories`, `deleteCategory`).
+- **Navidad** no tiene "Borrar": la temporada depende de ella.
+- Borrar se rechaza si un producto publicado se quedaría sin categoría; el mensaje lista cuáles.
+- En la ficha del producto, "Dónde aparece" muestra estas categorías, en este orden. El orden decide la categoría principal (migas).
+
 ## 6. Clics a WhatsApp (fase 5)
 
 En la pestaña Productos, encima de la lista, una línea: "Últimos 30 días: N toques a WhatsApp". En cada fila, el número de toques de ese producto. En la portada no aplica. Detalle en `18`.
@@ -78,9 +85,9 @@ Van en `src/i18n/es.ts` bajo `admin`. Del mockup, más los nuevos:
 - Encabezados: "Productos", "Portada", "Ver catálogo ↗", "Descargar respaldo" ("Todos los productos en un archivo .json").
 - Lista: "Buscar", "+ Nuevo", "Todos", "Publicados", "Ocultos", "Arrastra ⋮⋮ para cambiar el orden en el catálogo.", "Para ordenar, quita la búsqueda y el filtro.", "Elige un producto", "o crea uno nuevo con “+ Nuevo”."
 - Fotos: "Fotos", "La primera es la portada. Arrástralas para cambiar el orden.", "Arrastra fotos aquí", "o haz clic para elegirlas", "JPG, PNG, WEBP o fotos del iPhone · hasta 10 fotos", "Centrar", "Texto alternativo", "Quitar", "Listo", "Cancelar", "Mueve la foto y acércala hasta que quede como quieres.", "La foto es chica; puede verse borrosa en pantallas grandes.", "No se subió · Reintentar".
-- Campos: "Lo básico", "Lo que se ve en la tarjeta del catálogo.", "Nombre", "Dirección de la página", "Frase corta", "Precio desde (por pieza)", "Nota del precio", "Dónde aparece", "Página del producto", "Lo que ve la gente al abrirlo.", "Descripción", "Tamaño", "Material", "Tiempo de entrega", "Colores que ofreces", "Si no eliges ninguno, la página no muestra selector de color.", "Cómo se dice uno", "Cómo se dicen varios", "Para el mensaje de WhatsApp: “Hola, me interesa: 10 llaveros en morado”.", "Se personaliza", "Muestra un campo para que escriban el nombre, el logo o lo que pida.", "¿Qué le preguntas al cliente?", "Más pedido", "Le pone la etiqueta “Más pedido” en el catálogo y lo puede mostrar en Navidad.", "Publicado", "Si está apagado, nadie lo ve en el catálogo."
+- Campos: "Lo básico", "Lo que se ve en la tarjeta del catálogo.", "Nombre", "Frase corta", "Precio desde (por pieza)", "Nota del precio", "Dónde aparece", "Página del producto", "Lo que ve la gente al abrirlo.", "Descripción", "Tamaño", "Material", "Tiempo de entrega", "Tamaño a medida (a cotizar)", "Colores que ofreces", "Si no eliges ninguno, la página no muestra selector de color.", "Cómo se dice uno", "Cómo se dicen varios", "Para el mensaje de WhatsApp: “Hola, me interesa: 10 llaveros en morado”.", "Se personaliza", "Muestra un campo para que escriban el nombre, el logo o lo que pida.", "¿Qué le preguntas al cliente?", "Más pedido", "Le pone la etiqueta “Más pedido” en el catálogo y lo puede mostrar en Navidad.", "Publicado", "Si está apagado, nadie lo ve en el catálogo."
 - Acciones: "Guardar", "Guardando…", "Guardado", "Sin guardar", "Ver página ↗", "Duplicar", "Eliminar", "¿Eliminar este producto?", "También se borran sus fotos. No se puede deshacer.", "Sí, eliminar", "No".
-- Slug: "Si cambias la dirección, los links que ya compartiste dejarán de funcionar."
+- La dirección del producto (`/producto/<slug>`) **no se edita en el panel**: se genera del nombre y se queda fija desde la primera publicación (`docs/09 §3`).
 - Para publicar falta: "Para publicarlo falta: {lista}" con: "una foto", "una categoría", "el precio desde", "el nombre".
 - Portada: los del mockup ("Portada del inicio", "Las fotos grandes de arriba de la página. Si subes varias, se van turnando solas.", "Así se ve", "El nombre gigante va abajo, encima de la foto: deja esa parte de la foto libre (la franja rayada).", "Para computadora: horizontal, 2400 × 1350 px. Para celular (opcional): vertical, 1200 × 1600 px. Si no subes la de celular, se usa la horizontal recortada.", "Cada foto que subas es una portada nueva · hasta 6", "Cambio entre fotos", "Cambiar cada", "4 segundos", "6 segundos", "8 segundos", "12 segundos", "Solo aplica si hay más de una foto.", "Guardar portada", "Ver inicio ↗", "Volver a la foto original").
 - Errores por código (`10 §5`):

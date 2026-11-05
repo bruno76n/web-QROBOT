@@ -44,6 +44,7 @@ export interface ProductDetail {
   size: string;
   material: string;
   leadTime: string;
+  customSize: string;
   personalizable: boolean;
   personalHint: string;
   featured: boolean;

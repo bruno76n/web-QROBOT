@@ -1,14 +1,15 @@
 import { z } from 'zod';
-import { categoryIds } from '@/config/categories';
 import { colorIds } from '@/config/colors';
 import { limits, slugPattern } from './publish';
 
 /** Shared Zod schemas: the panel forms and the server actions use the same ones (docs/06). */
 export const cropSchema = z.object({
-  x: z.number().int().min(0),
-  y: z.number().int().min(0),
-  width: z.number().int().min(1),
-  height: z.number().int().min(1),
+  // Negative `x`/`y` and sizes past the original only happen with padded product crops; the
+  // services check the real limits against the original (`isValidCrop`).
+  x: z.number().int().min(-40_000).max(40_000),
+  y: z.number().int().min(-40_000).max(40_000),
+  width: z.number().int().min(1).max(40_000),
+  height: z.number().int().min(1).max(40_000),
 });
 
 /** A photo attached to a product or slide, in the order shown. */
@@ -25,6 +26,16 @@ const isUnique = (items: readonly string[]) => new Set(items).size === items.len
 
 const text = (max: number) => z.string().trim().max(max);
 
+export const categoryIdSchema = z.string().max(40).regex(slugPattern);
+export const categoryLabelSchema = z.string().trim().min(1).max(limits.categoryLabelMax);
+
+export const categoryCreateSchema = z.object({ label: categoryLabelSchema });
+export const categoryRenameSchema = z.object({ id: categoryIdSchema, label: categoryLabelSchema });
+export const categoryDeleteSchema = z.object({ id: categoryIdSchema });
+export const categoryReorderSchema = z.object({
+  ids: z.array(categoryIdSchema).max(limits.maxCategories).refine(isUnique, 'duplicates'),
+});
+
 export const productInputSchema = z.object({
   /** Missing for a new product. */
   id: z.string().min(1).max(64).optional(),
@@ -40,11 +51,13 @@ export const productInputSchema = z.object({
   size: text(80).default(''),
   material: text(40).default('PLA'),
   leadTime: text(60).default(''),
+  customSize: text(120).default(''),
   personalizable: z.boolean().default(false),
   personalHint: text(limits.personalHintMax).default(''),
   featured: z.boolean().default(false),
   published: z.boolean().default(false),
-  categories: z.array(z.enum(categoryIds)).max(categoryIds.length).refine(isUnique, 'duplicates'),
+  /** Ids are checked against the `categories` table by the service (UNKNOWN_CATEGORY). */
+  categories: z.array(categoryIdSchema).max(limits.maxCategories).refine(isUnique, 'duplicates'),
   colors: z.array(z.enum(colorIds)).max(limits.maxColors).refine(isUnique, 'duplicates'),
   // Loose here on purpose: the 10-photo limit is a business rule that answers TOO_MANY_PHOTOS.
   photos: z.array(photoRefSchema).max(100),
@@ -78,10 +91,11 @@ export const uploadFieldsSchema = z.object({
   /** Present only when re-centering an existing photo. */
   photoId: z.string().min(1).max(64).optional(),
   aspect: z.enum(['1:1', '16:9', '3:4']),
-  cropX: z.coerce.number().int().min(0),
-  cropY: z.coerce.number().int().min(0),
-  cropWidth: z.coerce.number().int().min(1),
-  cropHeight: z.coerce.number().int().min(1),
+  // Negative origin or sizes past the original only for padded product crops (`isValidCrop`).
+  cropX: z.coerce.number().int().min(-40_000).max(40_000),
+  cropY: z.coerce.number().int().min(-40_000).max(40_000),
+  cropWidth: z.coerce.number().int().min(1).max(40_000),
+  cropHeight: z.coerce.number().int().min(1).max(40_000),
   originalWidth: z.coerce.number().int().min(1).max(20000),
   originalHeight: z.coerce.number().int().min(1).max(20000),
   /** JSON array with the widths of the files sent, e.g. "[400,800]". */

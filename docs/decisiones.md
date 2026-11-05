@@ -210,3 +210,48 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 - **Cambios permitidos (`11 §4` reglas 1 y 5), anotados también en el encabezado del archivo:** sin datos de demostración (textos en inglés e imágenes de otro dominio rompían los textos en `es.ts` y la CSP), sin padding propio en la sección, `aria-label` en cada link (las letras en `span` separados hacían que el nombre fuera "S e r v…"), el título se parte por palabras (se cortaba a media palabra en 390 px), foto decorativa (`alt=""`) con carga diferida.
 - **Colores:** el componente usa `background`, `foreground`, `muted` y `muted-foreground`; se mapean en `@theme` de `global.css` a los colores de la marca.
 - **Tipografía:** el título de cada fila usa la de la web (Geist 600, tracking −0.04 em, como los h1–h3) en lugar de `font-bold`; el componente no trae fuente propia, hereda Geist.
+
+## 2026-11-05 · Categorías editables desde el panel
+
+- **Cambio de alcance pedido por el dueño:** las categorías dejan de ser una lista fija en `src/config/categories.ts` y pasan a la tabla `categories` (migración `0004`, con `negocio`, `casa` y `navidad` como semilla, mismos ids, así que productos y URLs existentes no cambian). Actualizados `docs/09` y `docs/12`.
+- Lista plana, sin subcategorías. El `id` se genera del nombre (`categoryIdFromLabel`) y no cambia al renombrar, para no romper enlaces.
+- `product_categories.category` no lleva clave foránea (SQLite no la agrega sin recrear la tabla): la existencia se valida en `saveProduct` (`UNKNOWN_CATEGORY`) y el borrado limpia los vínculos en un solo `db.batch`.
+- **`navidad` es intocable** (`CHRISTMAS_CATEGORY`): la sección de temporada y su bloque en el home la consultan por id.
+- Borrar se rechaza (`CATEGORY_IN_USE`) si deja a un producto publicado sin categorías, porque `docs/09 §3` exige al menos una para publicar.
+- Nuevos códigos de error: `UNKNOWN_CATEGORY`, `CATEGORY_PROTECTED`, `CATEGORY_IN_USE`, `TOO_MANY_CATEGORIES` (máximo 30).
+- El respaldo `.json` agrega `categoryList` (la tabla); `categories` sigue siendo los vínculos producto → categoría.
+- Sin librerías nuevas: usa dnd-kit para el orden, como la lista de productos.
+
+## 2026-11-05 · Subir fotos desde Safari: codificador WebP en WASM
+
+- **Bug:** en Safari, `canvas.toBlob('image/webp')` no codifica WebP y devuelve un PNG. El servidor (`/api/admin/upload`) exige WebP en las versiones y respondía `415 FILE_TYPE`: el panel mostraba "Esa foto no se puede usar…" con cualquier foto (reproducido con WebKit de Playwright y `hero5-escritorio.png`).
+- **Arreglo:** `canvasToBlob` (`photos/pipeline.ts`) detecta que el navegador no devolvió WebP y, solo entonces, carga `@jsquash/webp` (WASM) para codificarlo. En Chrome nada cambia. El servidor sigue exigiendo WebP real (se valida por los bytes).
+- **Librería nueva:** `@jsquash/webp` (regla 2 de CLAUDE.md: no se escribe un codificador a mano).
+- **CSP:** se agrega `'wasm-unsafe-eval'` a `script-src` (solo permite compilar WebAssembly, no `eval` de texto). Actualizado `docs/13 §3`.
+
+## 2026-11-05 · Fotos de producto con márgenes (zoom hacia afuera)
+
+- **Problema:** el recorte de producto es 1:1 y debía quedar dentro del original; una foto vertical (el muñeco de nieve) no podía mostrarse entera.
+- **Decisión:** solo en productos, el recorte puede salir de la foto (`x`/`y` negativos, tamaño mayor al original). `isValidCrop(…, { allowPadding: true })` lo acepta si cubre parte de la foto y no pasa de 3× el lado largo; la portada sigue estricta. El original no se toca (regla 9); las versiones WebP salen con márgenes transparentes y `og.jpg` los rellena de `#f6f6f8`.
+- **Panel:** el recortador de producto baja su zoom mínimo a `lado corto ÷ lado largo × 0.85` (foto completa con aire); con `restrictPosition` apagado. Los esquemas Zod (`cropSchema`, `uploadFieldsSchema`) aceptan coordenadas negativas; el servidor es quien valida contra el original.
+- Nunca se agranda el contenido: alejar solo reduce la foto dentro del cuadro.
+
+- **Safari y los márgenes:** Safari no dibuja nada con `drawImage` cuando el rectángulo de origen sale de la imagen (las versiones salían en blanco). `pipeline.ts` (`drawCrop`) recorta a los bordes de la foto y calcula el destino a mano, en versiones y `og.jpg`. Comprobado en Chrome y WebKit. Las fotos guardadas con la versión anterior en Safari quedaron en blanco: se arreglan con "Centrar" y guardar de nuevo.
+
+## 2026-11-05 · Sin campo de dirección y "Tamaño a medida"
+
+- **Dirección (slug) fuera del panel:** el campo no se podía usar de verdad (no dejaba cambiarla) y confundía. El panel siempre manda `slug: ''` y el servidor la genera del nombre; sigue las reglas de `docs/09 §3` (cambia con el nombre hasta la primera publicación y luego se queda fija). El servidor sigue aceptando un slug escrito (la API no cambia), pero ninguna pantalla lo usa.
+- **Tamaño a medida:** nueva columna `products.custom_size` (migración `0005`, texto de hasta 120 caracteres, vacío por defecto). Campo "Tamaño a medida (a cotizar)" en "Página del producto"; si tiene texto, la página del producto lo muestra como fila "A medida" en la ficha. No cambia el mensaje de WhatsApp.
+
+## 2026-11-05 · La dirección siempre sigue al nombre, con redirección
+
+- **Antes:** la dirección se congelaba al publicar. Al reutilizar el producto "Búho" como "Mono de nieve", la dirección seguía siendo `/producto/buho`.
+- **Ahora:** `slugForSave` regenera la dirección del nombre en cada guardado (un nombre sin letras usables conserva la actual). La anterior pasa a `product_slugs` (migración `0006`) y `/producto/<vieja>` responde `301` a la nueva (`findCurrentSlug`, solo si el producto está publicado). `takenSlugs` incluye las viejas de otros productos: nadie las puede tomar; volver a un nombre anterior libera esa dirección.
+- Un slug escrito a mano por la API sigue ganando, pero el panel no lo ofrece. El respaldo `.json` agrega `slugHistory`.
+
+## 2026-11-05 · Imágenes nuevas de "¿Qué se te antoja?"
+
+- El dueño entregó fotos nuevas para las 7 ideas (asignadas por nombre: renos → Adornos de Navidad, monstruito naranja → Figuras, gato amarillo → Llaveros, vela 5 → Números de mesa, soporte QR R Motors → Porta QR, servilletero Oktoberfest → Servilleteros, Bulbasaur → Lo que se te ocurra). Reemplazan los archivos de `assets/ideas/` (pedido explícito del dueño; la regla de no tocar `assets/` es para el build autónomo).
+- Se optimizaron igual que las anteriores: WebP con transparencia, lado largo máximo de 480 px (nunca agrandadas), calidad 82; entre 7 y 39 KB cada una. `build-assets.mjs` genera las versiones de 240 px y la mayor; `src/config/ideas.ts` lleva las medidas nuevas.
+- La captura del monstruito traía fondo gris y sombra: se quitaron (gris poco saturado y claro → transparente) para que sea un recorte como los demás.
+- Después se intercambiaron a pedido del dueño: Figuras usa el monstruito naranja y "Lo que se te ocurra" usa el Bulbasaur (se renombraron los archivos de `assets/ideas/` y se ajustaron las medidas en `ideas.ts`).

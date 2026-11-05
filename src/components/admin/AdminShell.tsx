@@ -10,7 +10,7 @@ import { useConfirm } from './ConfirmDialog';
 const t = es.admin;
 
 interface Props {
-  view: 'products' | 'hero';
+  view: 'products' | 'categories' | 'hero';
   children: ReactNode;
 }
 
@@ -81,6 +81,14 @@ export function AdminShell({ view, children }: Props) {
             onClick={(e) => void go(e, '/admin')}
           >
             {t.tabs.products}
+          </a>
+          <a
+            className="vbtn"
+            href="/admin/categorias"
+            aria-current={view === 'categories' ? 'page' : undefined}
+            onClick={(e) => void go(e, '/admin/categorias')}
+          >
+            {t.tabs.categories}
           </a>
           <a
             className="vbtn"

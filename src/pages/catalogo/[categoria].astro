@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import CatalogPage from '@/components/catalog/CatalogPage.astro';
-import { categories, isCategoryId } from '@/config/categories';
+import { listCategories } from '@/server/queries/categories';
 import { listPublishedProducts } from '@/server/queries/public';
 import { site } from '@/config/site';
 import { formatMoney } from '@/lib/money';
@@ -10,8 +10,9 @@ import { breadcrumbJsonLd } from '@/lib/seo';
 export const prerender = false;
 const { categoria = '' } = Astro.params;
 // An unknown category is a 404 (docs/04 §1).
-if (!isCategoryId(categoria)) return Astro.rewrite('/404');
-const label = categories.find((c) => c.id === categoria)?.label ?? '';
+const found = (await listCategories()).find((c) => c.id === categoria);
+if (!found) return Astro.rewrite('/404');
+const label = found.label;
 const products = await listPublishedProducts({ category: categoria });
 const cheapest = products.reduce<number | null>(
   (min, p) =>
