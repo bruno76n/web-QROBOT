@@ -107,11 +107,10 @@ const many = slides.length > 1;
 
 {many && <script>
   import EmblaCarousel, { type EmblaCarouselType } from 'embla-carousel';
-  import Fade from 'embla-carousel-fade';
   import Autoplay from 'embla-carousel-autoplay';
 
-  // Several photos fade into each other every N seconds (the panel sets N). No autoplay with
-  // reduced motion. Starts on astro:page-load, cleans on astro:before-swap (rule 13).
+  // Several photos slide to the next one every N seconds (the panel sets N); they can also be
+  // swiped. No autoplay with reduced motion. Starts on astro:page-load, cleans on astro:before-swap (rule 13).
   let api: EmblaCarouselType | undefined;
   function setup() {
     const root = document.querySelector<HTMLElement>('[data-hero-section]');
@@ -119,8 +118,7 @@ const many = slides.length > 1;
     if (!root || !viewport) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const delay = Number(root.dataset.interval ?? 6) * 1000;
-    api = EmblaCarousel(viewport, { loop: true, duration: 40, watchDrag: false }, [
-      Fade(),
+    api = EmblaCarousel(viewport, { loop: true, duration: 30 }, [
       ...(reduce ? [] : [Autoplay({ delay, stopOnInteraction: false })]),
     ]);
   }

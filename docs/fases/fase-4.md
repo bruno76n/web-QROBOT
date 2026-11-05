@@ -13,7 +13,7 @@
 Para **cada** sección: primero su lógica pura (si tiene) con prueba, después la sección, después la comparación con el mockup en 390, 820 y 1440 y su fila en `progreso.md`.
 
 ### 4.1 Hero
-- **Hacer:** `Hero.astro` con `getHero()`; una portada en `<picture>`; varias con la isla `HeroSlides.tsx` (Embla fade + autoplay con el intervalo del panel; sin autoplay con movimiento reducido); foto por defecto si no hay portadas; nombre gigante en una línea con la cabeza al final; el header en modo `over-hero`.
+- **Hacer:** `Hero.astro` con `getHero()`; una portada en `<picture>`; varias con la isla `HeroSlides.tsx` (Embla (desliza) + autoplay con el intervalo del panel; sin autoplay con movimiento reducido); foto por defecto si no hay portadas; nombre gigante en una línea con la cabeza al final; el header en modo `over-hero`.
 - **Consultar:** `04 §2.1`, `03 §5`, `11 §3`, `15 §3` (precarga), `10 §2` (`getHero`).
 - **Listo cuando:** flujo E pasa (con el panel de la fase 2).
 

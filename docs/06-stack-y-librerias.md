@@ -31,7 +31,7 @@
 | Íconos | **lucide-react** (y `@lucide/astro` o SVG del paquete en páginas sin React) |
 | Animaciones de React (componentes de 21st.dev) | **motion** (antes framer-motion) |
 | Animaciones de scroll fuera de React (imprimiendo, aparecer al hacer scroll) | **motion** (`scroll()`, `inView()`) |
-| Carruseles: portada que se turna y galería de producto | **Embla Carousel** (`embla-carousel`, `embla-carousel-react`, plugins `fade` y `autoplay`) |
+| Carruseles: portada que se turna y galería de producto | **Embla Carousel** (`embla-carousel`, `embla-carousel-react`, plugin `autoplay`) |
 | 3D del personalizador | **three** + **@react-three/fiber** + **@react-three/drei** (`Text3D`, `Center`, `OrbitControls`) |
 | Física de la alberca | **matter-js** (se carga solo al tocar el botón) |
 | Clases condicionales | **clsx** + **tailwind-merge** (vienen con shadcn) |
