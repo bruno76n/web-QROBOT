@@ -72,9 +72,10 @@ const many = slides.length > 1;
     object-position: 50% 80%;
   }
   @media (max-width: 760px) {
+    /* The photo never grows past the screen, so the name stays in view; it crops, never squashes. */
     .hero-img {
-      height: auto;
-      min-height: 0;
+      height: min(calc(100svh - var(--top)), 125vw);
+      min-height: 420px;
     }
   }
   .hero-name {

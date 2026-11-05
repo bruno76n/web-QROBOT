@@ -13,12 +13,7 @@ export const es = {
     mainNav: 'Principal',
   },
   header: {
-    nav: [
-      { label: 'Navidad', href: '/#navidad' },
-      { label: 'Ideas', href: '/#ideas' },
-      { label: 'Catálogo', href: '/catalogo' },
-      { label: 'Q-404', href: '/#q404' },
-    ],
+    nav: [{ label: 'Catálogo', href: '/catalogo' }],
     quote: 'Cotizar',
     quoteHref: '/#pedido',
   },
