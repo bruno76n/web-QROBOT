@@ -42,7 +42,7 @@ export const ideas: readonly Idea[] = [
     id: 'figuras',
     name: 'Figuras',
     phrase: 'Tu hijo, tu perro o tú, en miniatura y a partir de una foto.',
-    image: { file: 'figuras', width: 442, height: 480 },
+    image: { file: 'figuras', width: 480, height: 328 },
     order: { quantity: 1, piece: 4, with: 2, when: 0 },
   },
   {
@@ -56,7 +56,7 @@ export const ideas: readonly Idea[] = [
     id: 'lo-que-se-te-ocurra',
     name: 'Lo que se te ocurra',
     phrase: 'Esa pieza que se rompió o la idea que traes en la cabeza.',
-    image: { file: 'lo-que-se-te-ocurra', width: 480, height: 328 },
+    image: { file: 'lo-que-se-te-ocurra', width: 442, height: 480 },
     order: { quantity: 1, piece: 6, with: 3, when: 0 },
   },
 ];

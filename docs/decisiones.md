@@ -251,6 +251,7 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 
 ## 2026-11-05 · Imágenes nuevas de "¿Qué se te antoja?"
 
-- El dueño entregó fotos nuevas para las 7 ideas (asignadas por nombre: renos → Adornos de Navidad, Bulbasaur → Figuras, gato amarillo → Llaveros, vela 5 → Números de mesa, soporte QR R Motors → Porta QR, servilletero Oktoberfest → Servilleteros, monstruito naranja → Lo que se te ocurra). Reemplazan los archivos de `assets/ideas/` (pedido explícito del dueño; la regla de no tocar `assets/` es para el build autónomo).
+- El dueño entregó fotos nuevas para las 7 ideas (asignadas por nombre: renos → Adornos de Navidad, monstruito naranja → Figuras, gato amarillo → Llaveros, vela 5 → Números de mesa, soporte QR R Motors → Porta QR, servilletero Oktoberfest → Servilleteros, Bulbasaur → Lo que se te ocurra). Reemplazan los archivos de `assets/ideas/` (pedido explícito del dueño; la regla de no tocar `assets/` es para el build autónomo).
 - Se optimizaron igual que las anteriores: WebP con transparencia, lado largo máximo de 480 px (nunca agrandadas), calidad 82; entre 7 y 39 KB cada una. `build-assets.mjs` genera las versiones de 240 px y la mayor; `src/config/ideas.ts` lleva las medidas nuevas.
 - La captura del monstruito traía fondo gris y sombra: se quitaron (gris poco saturado y claro → transparente) para que sea un recorte como los demás.
+- Después se intercambiaron a pedido del dueño: Figuras usa el monstruito naranja y "Lo que se te ocurra" usa el Bulbasaur (se renombraron los archivos de `assets/ideas/` y se ajustaron las medidas en `ideas.ts`).
