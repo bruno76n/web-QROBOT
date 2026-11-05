@@ -32,6 +32,12 @@ export async function saveProduct(
     : [];
   if (input.id && !existing) return fail('NOT_FOUND');
   if (input.photos.length > limits.maxPhotos) return fail('TOO_MANY_PHOTOS');
+  if (input.categories.length > 0) {
+    const known = new Set(
+      (await db.select({ id: schema.categories.id }).from(schema.categories)).map((c) => c.id),
+    );
+    if (input.categories.some((c) => !known.has(c))) return fail('UNKNOWN_CATEGORY');
+  }
 
   // Slug: typed by hand → must be free; generated → made unique (docs/09 §3).
   const taken = await takenSlugs(deps, existing?.id);

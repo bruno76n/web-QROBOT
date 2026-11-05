@@ -1,14 +1,14 @@
 import type { APIRoute } from 'astro';
-import { categories } from '@/config/categories';
 import { site } from '@/config/site';
 import { sitemapXml } from '@/lib/seo';
+import { listCategories } from '@/server/queries/categories';
 import { listSitemapProducts } from '@/server/queries/public';
 
 export const prerender = false;
 
 /** Fixed pages plus every published product with its `lastmod` (docs/14 §3). */
 export const GET: APIRoute = async () => {
-  const products = await listSitemapProducts();
+  const [products, categories] = await Promise.all([listSitemapProducts(), listCategories()]);
   const xml = sitemapXml(site.domain, [
     { path: '/' },
     { path: '/catalogo' },

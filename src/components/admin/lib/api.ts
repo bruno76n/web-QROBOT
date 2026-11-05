@@ -12,6 +12,12 @@ export const api = {
   reorderProducts: (ids: string[]) => callAction(() => actions.admin.reorderProducts({ ids })),
   duplicateProduct: (id: string) => callAction(() => actions.admin.duplicateProduct({ id })),
   deleteProduct: (id: string) => callAction(() => actions.admin.deleteProduct({ id })),
+  listCategories: () => callAction(() => actions.admin.listCategories()),
+  createCategory: (label: string) => callAction(() => actions.admin.createCategory({ label })),
+  renameCategory: (id: string, label: string) =>
+    callAction(() => actions.admin.renameCategory({ id, label })),
+  reorderCategories: (ids: string[]) => callAction(() => actions.admin.reorderCategories({ ids })),
+  deleteCategory: (id: string) => callAction(() => actions.admin.deleteCategory({ id })),
   getHero: () => callAction(() => actions.admin.getHero()),
   saveHero: (input: HeroInput) => callAction(() => actions.admin.saveHero(input)),
   resetHero: () => callAction(() => actions.admin.resetHero()),

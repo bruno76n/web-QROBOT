@@ -4,7 +4,7 @@ Referencia visual y de comportamiento: `reference/mockups/admin.html`. Rutas `/a
 
 ## 1. Estructura
 
-- **Barra superior:** "Quick Robot", pestañas **Productos** y **Portada**, "Ver catálogo ↗" y menú **•••** (Descargar respaldo).
+- **Barra superior:** "Quick Robot", pestañas **Productos**, **Categorías** y **Portada**, "Ver catálogo ↗" y menú **•••** (Descargar respaldo).
 - Al abrir: se llama `admin.cleanupPending` en segundo plano.
 - Si hay cambios sin guardar y se intenta salir, cambiar de producto o de pestaña: "Tienes cambios sin guardar. ¿Salir sin guardar?" (Salir / Seguir editando).
 
@@ -66,6 +66,13 @@ Como el mockup:
 - **Cambio entre fotos:** 4, 6, 8 o 12 segundos (solo aplica con más de una).
 - Botones: **Guardar portada** · Ver inicio ↗ · **Volver a la foto original** (confirma y llama `admin.resetHero`).
 - Indicador "Sin guardar" cuando hay cambios.
+
+## 5b. Categorías (`/admin/categorias`)
+
+- Lista de categorías con **Agregar** (el nombre genera la dirección `/catalogo/<id>`), **Renombrar** (la dirección no cambia), **Borrar** (confirma) y orden por arrastre (`admin.createCategory`, `renameCategory`, `reorderCategories`, `deleteCategory`).
+- **Navidad** no tiene "Borrar": la temporada depende de ella.
+- Borrar se rechaza si un producto publicado se quedaría sin categoría; el mensaje lista cuáles.
+- En la ficha del producto, "Dónde aparece" muestra estas categorías, en este orden. El orden decide la categoría principal (migas).
 
 ## 6. Clics a WhatsApp (fase 5)
 

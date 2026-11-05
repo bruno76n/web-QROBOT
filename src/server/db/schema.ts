@@ -54,6 +54,19 @@ export const products = sqliteTable(
   ],
 );
 
+/** Catalog categories, editable from the panel. `id` is also the URL segment (`/catalogo/<id>`). */
+export const categories = sqliteTable(
+  'categories',
+  {
+    id: text('id').primaryKey(),
+    label: text('label').notNull(),
+    /** Display order; the first category of a product in this order is its main one. */
+    position: integer('position').notNull().default(0),
+    ...timestamps,
+  },
+  (t) => [index('categories_position_idx').on(t.position)],
+);
+
 export const productCategories = sqliteTable(
   'product_categories',
   {

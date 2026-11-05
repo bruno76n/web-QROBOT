@@ -9,6 +9,8 @@ export const limits = {
   shortMax: 120,
   descriptionMax: 2000,
   personalHintMax: 60,
+  maxCategories: 30,
+  categoryLabelMax: 40,
 } as const;
 
 export type Missing = 'photo' | 'category' | 'price' | 'name';

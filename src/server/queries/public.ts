@@ -1,9 +1,10 @@
 import { and, asc, eq, inArray, ne } from 'drizzle-orm';
-import { categoryIds, type CategoryId } from '@/config/categories';
+import { CHRISTMAS_CATEGORY, type CategoryId } from '@/config/categories';
 import type { ColorId } from '@/config/colors';
 import type { PhotoSrc } from '@/lib/photos';
 import { getDb, schema, type Db } from '../db/client';
 import type { Photo } from '../db/schema';
+import { categoryOrder, listCategories } from './categories';
 
 /** Card of the catalog (docs/10 §2): only published products ever reach a public page. */
 export interface CardView {
@@ -13,7 +14,7 @@ export interface CardView {
   short: string;
   priceFromCents: number | null;
   featured: boolean;
-  /** Main category: the first one in `categories.ts` (breadcrumbs, labels). */
+  /** Main category: the first one in the panel's category order (breadcrumbs, labels). */
   category: CategoryId | null;
   photo: PhotoSrc | null;
 }
@@ -41,9 +42,6 @@ const toSrc = (p: Photo, fallbackAlt: string): PhotoSrc => ({
   widths: (JSON.parse(p.widths) as number[]).filter(Number.isInteger),
   aspect: p.aspect,
 });
-
-const byCategoryOrder = (a: string, b: string) =>
-  categoryIds.indexOf(a as CategoryId) - categoryIds.indexOf(b as CategoryId);
 
 const chunks = <T>(items: T[], size: number) =>
   Array.from({ length: Math.ceil(items.length / size) }, (_, i) =>
@@ -86,6 +84,7 @@ async function toCards(
       ),
     )
   ).flat();
+  const byCategoryOrder = categoryOrder(await listCategories(db));
   return products.map((p) => {
     const first = photos.find((ph) => ph.ownerId === p.id);
     const category = cats
@@ -159,6 +158,7 @@ export async function getPublishedProduct(
       )
       .orderBy(asc(schema.photos.sortOrder)),
   ]);
+  const byCategoryOrder = categoryOrder(await listCategories(db));
   const categories = cats.map((c) => c.category as CategoryId).sort(byCategoryOrder);
   const srcs = photos.map((ph) => toSrc(ph, p.name));
   return {
@@ -222,7 +222,7 @@ export async function listSitemapProducts(
 
 /** The first `limit` published Christmas products marked "Más pedido", in catalog order (docs/04 §2.2). */
 export async function listChristmasPicks(limit = 4, db: Db = getDb()): Promise<CardView[]> {
-  const all = await listPublishedProducts({ category: 'navidad' }, db);
+  const all = await listPublishedProducts({ category: CHRISTMAS_CATEGORY }, db);
   return all.filter((p) => p.featured).slice(0, limit);
 }
 

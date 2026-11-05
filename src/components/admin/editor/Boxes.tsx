@@ -1,9 +1,9 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import { cn } from '@/lib/cn';
-import { categories } from '@/config/categories';
 import { colors } from '@/config/colors';
 import { es } from '@/i18n/es';
 import type { ProductFormValues } from '@/lib/product-form';
+import { useCategories } from '../lib/queries';
 
 const t = es.admin.editor;
 
@@ -148,10 +148,17 @@ export function BasicsBox({
       </div>
       <div className="f">
         <span id="cats-label">{t.categories}</span>
-        <Chips name="categories" options={categories} />
+        <CategoryChips />
       </div>
     </div>
   );
+}
+
+/** Categories come from the panel's list (tab "Categorías"). */
+function CategoryChips() {
+  const { data } = useCategories();
+  if (data && data.length === 0) return <p className="hint">{t.noCategories}</p>;
+  return <Chips name="categories" options={data ?? []} />;
 }
 
 export function PageBox() {

@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { categoryIds } from '@/config/categories';
 import { colorIds } from '@/config/colors';
 import { limits, slugPattern } from './publish';
 
@@ -25,6 +24,16 @@ const isUnique = (items: readonly string[]) => new Set(items).size === items.len
 
 const text = (max: number) => z.string().trim().max(max);
 
+export const categoryIdSchema = z.string().max(40).regex(slugPattern);
+export const categoryLabelSchema = z.string().trim().min(1).max(limits.categoryLabelMax);
+
+export const categoryCreateSchema = z.object({ label: categoryLabelSchema });
+export const categoryRenameSchema = z.object({ id: categoryIdSchema, label: categoryLabelSchema });
+export const categoryDeleteSchema = z.object({ id: categoryIdSchema });
+export const categoryReorderSchema = z.object({
+  ids: z.array(categoryIdSchema).max(limits.maxCategories).refine(isUnique, 'duplicates'),
+});
+
 export const productInputSchema = z.object({
   /** Missing for a new product. */
   id: z.string().min(1).max(64).optional(),
@@ -44,7 +53,8 @@ export const productInputSchema = z.object({
   personalHint: text(limits.personalHintMax).default(''),
   featured: z.boolean().default(false),
   published: z.boolean().default(false),
-  categories: z.array(z.enum(categoryIds)).max(categoryIds.length).refine(isUnique, 'duplicates'),
+  /** Ids are checked against the `categories` table by the service (UNKNOWN_CATEGORY). */
+  categories: z.array(categoryIdSchema).max(limits.maxCategories).refine(isUnique, 'duplicates'),
   colors: z.array(z.enum(colorIds)).max(limits.maxColors).refine(isUnique, 'duplicates'),
   // Loose here on purpose: the 10-photo limit is a business rule that answers TOO_MANY_PHOTOS.
   photos: z.array(photoRefSchema).max(100),

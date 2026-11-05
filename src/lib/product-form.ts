@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { categoryIds, type CategoryId } from '@/config/categories';
+import type { CategoryId } from '@/config/categories';
 import { colorIds, type ColorId } from '@/config/colors';
 import { es } from '@/i18n/es';
 import type { ProductDetail } from './admin-types';
@@ -38,7 +38,7 @@ export const productFormSchema = z.object({
   short: bounded(limits.shortMax),
   priceText: z.string().refine((v) => v.trim() === '' || parsePesos(v) !== null, t.badPrice),
   priceNote: bounded(120),
-  categories: z.array(z.enum(categoryIds)),
+  categories: z.array(z.string().regex(slugPattern)),
   description: bounded(limits.descriptionMax),
   size: bounded(80),
   material: bounded(40),

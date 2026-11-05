@@ -1,13 +1,11 @@
 import { and, asc, eq, inArray } from 'drizzle-orm';
 import type { ProductDetail, ProductRow } from '@/lib/admin-types';
-import { categoryIds, type CategoryId } from '@/config/categories';
+import type { CategoryId } from '@/config/categories';
 import type { ColorId } from '@/config/colors';
 import { getDb, schema, type Db } from '../db/client';
 import { getEnv } from '../env';
+import { categoryOrder, listCategories } from './categories';
 import { toPhotoView } from './photos';
-
-const byCategoryOrder = (a: string, b: string) =>
-  categoryIds.indexOf(a as CategoryId) - categoryIds.indexOf(b as CategoryId);
 
 /** Every product for the panel list, with status and first photo, in catalog order. */
 export async function listAllProductsForAdmin(
@@ -46,6 +44,7 @@ export async function listAllProductsForAdmin(
     )
   ).flat();
 
+  const byCategoryOrder = categoryOrder(await listCategories(db));
   return products.map((p) => {
     const own = photos.filter((ph) => ph.ownerId === p.id && ph.status === 'attached');
     const first = own[0] ? toPhotoView(own[0], imgBase) : null;
@@ -97,6 +96,7 @@ export async function getProductForAdmin(
       )
       .orderBy(asc(schema.photos.sortOrder)),
   ]);
+  const byCategoryOrder = categoryOrder(await listCategories(db));
   return {
     id: p.id,
     slug: p.slug,

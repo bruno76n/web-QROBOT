@@ -210,3 +210,14 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 - **Cambios permitidos (`11 §4` reglas 1 y 5), anotados también en el encabezado del archivo:** sin datos de demostración (textos en inglés e imágenes de otro dominio rompían los textos en `es.ts` y la CSP), sin padding propio en la sección, `aria-label` en cada link (las letras en `span` separados hacían que el nombre fuera "S e r v…"), el título se parte por palabras (se cortaba a media palabra en 390 px), foto decorativa (`alt=""`) con carga diferida.
 - **Colores:** el componente usa `background`, `foreground`, `muted` y `muted-foreground`; se mapean en `@theme` de `global.css` a los colores de la marca.
 - **Tipografía:** el título de cada fila usa la de la web (Geist 600, tracking −0.04 em, como los h1–h3) en lugar de `font-bold`; el componente no trae fuente propia, hereda Geist.
+
+## 2026-11-05 · Categorías editables desde el panel
+
+- **Cambio de alcance pedido por el dueño:** las categorías dejan de ser una lista fija en `src/config/categories.ts` y pasan a la tabla `categories` (migración `0004`, con `negocio`, `casa` y `navidad` como semilla, mismos ids, así que productos y URLs existentes no cambian). Actualizados `docs/09` y `docs/12`.
+- Lista plana, sin subcategorías. El `id` se genera del nombre (`categoryIdFromLabel`) y no cambia al renombrar, para no romper enlaces.
+- `product_categories.category` no lleva clave foránea (SQLite no la agrega sin recrear la tabla): la existencia se valida en `saveProduct` (`UNKNOWN_CATEGORY`) y el borrado limpia los vínculos en un solo `db.batch`.
+- **`navidad` es intocable** (`CHRISTMAS_CATEGORY`): la sección de temporada y su bloque en el home la consultan por id.
+- Borrar se rechaza (`CATEGORY_IN_USE`) si deja a un producto publicado sin categorías, porque `docs/09 §3` exige al menos una para publicar.
+- Nuevos códigos de error: `UNKNOWN_CATEGORY`, `CATEGORY_PROTECTED`, `CATEGORY_IN_USE`, `TOO_MANY_CATEGORIES` (máximo 30).
+- El respaldo `.json` agrega `categoryList` (la tabla); `categories` sigue siendo los vínculos producto → categoría.
+- Sin librerías nuevas: usa dnd-kit para el orden, como la lista de productos.

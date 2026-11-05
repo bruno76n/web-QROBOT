@@ -5,7 +5,7 @@ import Price from '@/components/site/Price.astro';
 import ProductCard from '@/components/site/ProductCard.astro';
 import Gallery from '@/components/product/Gallery.astro';
 import ProductOptions from '@/components/product/ProductOptions.astro';
-import { categories } from '@/config/categories';
+import { listCategories } from '@/server/queries/categories';
 import { site } from '@/config/site';
 import { es } from '@/i18n/es';
 import { photoImg, photoOgUrl, photoVariantUrl } from '@/lib/photos';
@@ -27,6 +27,7 @@ if (!product) return Astro.rewrite('/404');
 
 const imgBase = getEnv().PUBLIC_IMG_BASE;
 const related = await listRelated(product);
+const categories = await listCategories();
 const label = (id: string) => categories.find((c) => c.id === id)?.label ?? id;
 const mainCategory = product.category;
 const crumbs = [

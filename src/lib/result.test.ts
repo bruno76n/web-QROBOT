@@ -14,6 +14,6 @@ describe('Result', () => {
     });
   });
   it('has the eleven codes of docs/10 §5', () => {
-    expect(errorCodes).toHaveLength(11);
+    expect(errorCodes).toHaveLength(15);
   });
 });

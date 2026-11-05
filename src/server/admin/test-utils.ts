@@ -1,3 +1,4 @@
+import { seedCategories } from '@/config/categories';
 import { env } from 'cloudflare:workers';
 import { getDb, schema } from '../db/client';
 import { r2Keys, usageAspect, widthsToGenerate, wantedWidths, type PhotoUsage } from '@/lib/crop';
@@ -25,6 +26,11 @@ export async function resetAll() {
   await db.delete(schema.photos);
   await db.delete(schema.products);
   await db.delete(schema.settings);
+  // Categories go back to the three the migration creates.
+  await db.delete(schema.categories);
+  await db
+    .insert(schema.categories)
+    .values(seedCategories.map((c, position) => ({ id: c.id, label: c.label, position })));
   await db.delete(schema.whatsappClicks);
   let cursor: string | undefined;
   do {
