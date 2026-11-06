@@ -259,3 +259,10 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 ## 2026-11-05 · Panel pages also need the admin session
 
 The middleware now answers `401` (plain text) for `/admin*` pages without a valid Access session, not only for the admin actions. Before, the empty panel shell was public (it could not read or write anything). Access still is the login screen; this is the second lock (docs/13 §2).
+
+## 2026-11-06 · Primera publicación
+
+- Sitio en `quickrobot.centerdiv.mx` (subdominio del dominio del dueño) y fotos en `fotos-quickrobot.centerdiv.mx`; motivo del host de fotos en `docs/17 §8`.
+- El hero (2 diapositivas y su intervalo) se copió del R2/D1 local al de producción; los productos de local no se subieron.
+- Acceso al panel con Cloudflare Access (código al correo). Desplegado a mano con `wrangler deploy`; el CI sigue pausado.
+- Un token de API de Cloudflare se pegó en el chat para leer la app de Access; debe borrarse (no se guardó en el repo).

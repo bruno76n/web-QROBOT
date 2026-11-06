@@ -46,7 +46,7 @@ Lo actualiza Claude Code al terminar cada paso. Estados: **pendiente** · **en c
 
 ## Fase 5
 
-Terminada en local; ver `docs/informe-fase-5.md`. Solo falta publicar (credenciales de Cloudflare y dominio).
+Terminada en local; ver `docs/informe-fase-5.md`. **Publicada el 2026-11-06 en https://quickrobot.centerdiv.mx** (ver `docs/17 §8`). Pendiente: productos reales en producción, datos reales del dueño, aviso de privacidad.
 
 ## Valores provisionales en uso (`01 › Pendientes del dueño`)
 

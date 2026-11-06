@@ -63,3 +63,21 @@ Pasos que dependen de Cloudflare: despliegue de la fase 1, aplicar Access, domin
 ## 7. Costos esperados
 
 Con el tráfico de un taller local, todo cabe en los planes gratis de Workers, D1, R2, Access (hasta 50 usuarios) y Web Analytics. Lo único que se paga es el dominio. Si algún día se pasa de los límites gratis de Workers, el plan de pago cuesta 5 USD al mes.
+
+## 8. Lo que se creó de verdad (2026-11-06)
+
+Cuenta de Cloudflare `bruno76n@gmail.com`; la zona `centerdiv.mx` ya estaba ahí (el dominio es de CenterDiv, esta web va en un subdominio).
+
+| Recurso | Valor |
+|---|---|
+| Web | `https://quickrobot.centerdiv.mx` (`routes` con `custom_domain: true` en `wrangler.jsonc`; Cloudflare crea el DNS y el certificado solo) |
+| Worker | `quick-robot-web` |
+| D1 | `quick-robot-web`, `database_id` en `wrangler.jsonc`; migraciones 0000–0006 aplicadas con `--remote` |
+| R2 | `quick-robot-photos`, dominio `fotos-quickrobot.centerdiv.mx` (lectura pública) |
+| Access | App "Panel Quick Robot" con destinos `quickrobot.centerdiv.mx/admin`, `/api/admin` y `/_actions/admin.*`; política `dueño` (Allow, correo del dueño); login con código al correo |
+| Variables | `PUBLIC_IMG_BASE` y `ACCESS_TEAM_DOMAIN` en `wrangler.jsonc`; secretos `ACCESS_AUD` y `ADMIN_EMAILS` con `wrangler secret put` |
+
+- El host de fotos no es `img.<dominio>` (`§1`): el certificado gratis de Cloudflare solo cubre un nivel (`*.centerdiv.mx`), así que es `fotos-quickrobot.centerdiv.mx`. Está en `site.imgBase` (`src/config/site.ts`), que lee el CSP de `astro.config.mjs`.
+- Al cambiar `database_id`, wrangler usa **otra base local** (el estado local va por id). Si `pnpm dev` aparece vacío, copiar el `.sqlite` viejo de `.wrangler/state/v3/d1/miniflare-D1DatabaseObject/` sobre el nuevo.
+- En la app de Access, cada destino lleva subdominio `quickrobot`, dominio `centerdiv.mx` y solo la ruta en Path. Un dominio repetido (`…centerdiv.mx.centerdiv.mx`) deja el panel sin proteger.
+- Desplegar a mano: `pnpm build && pnpm exec wrangler deploy`. El CI de GitHub sigue pausado por facturación (`progreso.md`).
