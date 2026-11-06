@@ -255,3 +255,7 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 - Se optimizaron igual que las anteriores: WebP con transparencia, lado largo máximo de 480 px (nunca agrandadas), calidad 82; entre 7 y 39 KB cada una. `build-assets.mjs` genera las versiones de 240 px y la mayor; `src/config/ideas.ts` lleva las medidas nuevas.
 - La captura del monstruito traía fondo gris y sombra: se quitaron (gris poco saturado y claro → transparente) para que sea un recorte como los demás.
 - Después se intercambiaron a pedido del dueño: Figuras usa el monstruito naranja y "Lo que se te ocurra" usa el Bulbasaur (se renombraron los archivos de `assets/ideas/` y se ajustaron las medidas en `ideas.ts`).
+
+## 2026-11-05 · Panel pages also need the admin session
+
+The middleware now answers `401` (plain text) for `/admin*` pages without a valid Access session, not only for the admin actions. Before, the empty panel shell was public (it could not read or write anything). Access still is the login screen; this is the second lock (docs/13 §2).

@@ -1,4 +1,5 @@
 import { defineMiddleware } from 'astro:middleware';
+import { es } from '@/i18n/es';
 import { isAdminRequest } from '@/server/auth';
 
 /**
@@ -34,10 +35,17 @@ export const onRequest = defineMiddleware(async (context, next) => {
       301,
     );
   }
-  const response =
-    isAdminApi(pathname) && !(await isAdminRequest(context.request))
-      ? Response.json({ ok: false, code: 'UNAUTHORIZED' }, { status: 401 })
-      : await next();
+  // The panel pages need the session too: without it not even the empty shell is served.
+  const denied =
+    (isAdminApi(pathname) || isPanel(pathname)) && !(await isAdminRequest(context.request));
+  const response = denied
+    ? isPanel(pathname)
+      ? new Response(es.admin.errors.UNAUTHORIZED, {
+          status: 401,
+          headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+        })
+      : Response.json({ ok: false, code: 'UNAUTHORIZED' }, { status: 401 })
+    : await next();
   // Responses from `fetch` can be immutable: rebuild the headers on a copy when needed.
   const headers = new Headers(response.headers);
   for (const [name, value] of Object.entries(staticHeaders)) headers.set(name, value);
