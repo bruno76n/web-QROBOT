@@ -37,8 +37,7 @@ Copiados del mockup. Lo que va entre corchetes es dato pendiente (`01`).
 **Video**
 - Título: "Así nace cada pieza."
 - Entrada: "Capa por capa, de abajo hacia arriba. Horas de impresión en unos segundos."
-- Botón: "Dale play" · "0:14"
-- Datos: "[3 h 40 min] de impresión" · "30 s de video" · "0.2 mm por capa"
+- Botón: solo el ícono de play; su texto para lectores de pantalla es "Reproducir el video".
 
 **Imprimiendo**
 - Título: "Mientras lees esto, algo se está imprimiendo."

@@ -409,15 +409,8 @@ export const es = {
     video: {
       title: 'Así nace cada pieza.',
       lead: 'Capa por capa, de abajo hacia arriba. Horas de impresión en unos segundos.',
-      tag: 'Timelapse',
-      play: 'Dale play',
       playLabel: 'Reproducir el video',
       noVideo: 'Reproducir el video (todavía no hay video)',
-      printTime: 'de impresión',
-      videoLength: '14 s',
-      videoLengthLabel: 'de video',
-      layer: '0.2 mm',
-      layerLabel: 'por capa',
     },
     printing: {
       title: 'Mientras lees esto, algo se está imprimiendo.',

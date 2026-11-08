@@ -53,7 +53,7 @@ Terminada en local; ver `docs/informe-fase-5.md`. **Publicada el 2026-11-06 en h
 Trabajo en local y en la nube (sesión de Claude Code en la web); se unió en `main` con un commit de fusión.
 
 - **Publicar:** la categoría ya es opcional (`796bf77`). Se probó quitar también foto y precio (`e06d6da`) y se **revirtió** (`2a32dcc`): para publicar siguen haciendo falta nombre, foto y precio desde. Detalle en `decisiones.md`.
-- **Video del timelapse:** puesto en `public/media/timelapse.mp4` y reproducido a 0.5× (`site.video`); la etiqueta pasa a `0:14`. Ya no está en los valores provisionales; solo queda provisional `site.video.printTime`.
+- **Video del timelapse:** puesto en `public/media/timelapse.mp4` y reproducido a 0.5× (`site.video`). Encima del video solo queda el ícono de play (sin etiqueta, textos ni datos).
 - **Despliegue:** a mano (`pnpm build && pnpm exec wrangler deploy`), sin migraciones nuevas (0000–0006). `pnpm security` en local falla en su paso de Playwright solo porque falta el Chromium (`pnpm exec playwright install chromium`).
 
 ## Valores provisionales en uso (`01 › Pendientes del dueño`)
@@ -65,7 +65,6 @@ Trabajo en local y en la nube (sesión de Claude Code en la web); se unió en `m
 | Facebook | `[tu página]` (texto, sin liga) | Fase 1 |
 | Instagram | `[@tu.usuario]` (texto, sin liga) | Fase 1 |
 | Fecha límite de Navidad | 12 de diciembre | Fase 1 |
-| Horas de impresión del video (`site.video.printTime`) | `[3 h 40 min]` | Fase 1 |
 
 ## Bloqueos
 

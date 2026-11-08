@@ -278,3 +278,8 @@ Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y pre
 - **Cámara lenta sin recodificar:** la velocidad es `site.video.speed = 0.5` y `Video.astro` la aplica con `playbackRate` (y `defaultPlaybackRate`, porque cargar el `src` reinicia la velocidad). No hay ffmpeg en el proyecto; el archivo no se modifica. Quien descargue el video lo ve a velocidad normal.
 - A 0.5× dura ~14 s: `durationLabel` pasa a `0:14` y "de video" a `14 s`. La entrada dice "en unos segundos" para no repetir el número.
 - `printTime` sigue siendo el provisional `[3 h 40 min]` hasta que el dueño diga cuánto tardó esa impresión.
+
+## 2026-11-08 · Video: solo el ícono de play
+- Pedido del dueño tras ver la web publicada: encima del video no va nada más que el ícono de play. Se quitan la etiqueta "Timelapse", el texto "Dale play 0:14" del botón y los tres datos de abajo ("[3 h 40 min] de impresión", "14 s de video", "0.2 mm por capa"). Es una diferencia respecto al mockup (`docs/02 §1`); se actualizaron `03`, `04`, `05` y `10`.
+- Se borran de `es.ts` los textos que ya nadie usa (`tag`, `play`, `printTime`, `videoLength*`, `layer*`) y de `site.ts` `durationLabel` y `printTime` (este último era el valor provisional `[3 h 40 min]`: ya no hay nada pendiente del dueño sobre el video). Quedan `playLabel` y `noVideo` como texto para lectores de pantalla.
+- El ícono es el cuadrado blanco de antes, solo, un poco más grande (72–104 px). Sigue la portada desenfocada hasta que se toca.

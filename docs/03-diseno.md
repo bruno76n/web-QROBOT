@@ -70,7 +70,7 @@ Detalle de comportamiento en `04 §2`. Lo visual:
 | Hero | Foto a todo el ancho (alto `max(520px, min(56.25vw, 100svh − header))`), y abajo, encima de la foto, **"Quick Robot" en una sola línea** a todo lo ancho, con la cabeza de Q-404 al final del texto. En celular se usa la foto vertical |
 | Navidad | Compacta: contador en mosaicos (días, horas, min, seg), línea de tiempo del 1 de octubre al 24 de diciembre con un Q-404 caminando y la marca de la fecha límite; 4 tarjetas de regalo |
 | ¿Qué se te antoja? | Lista grande de ideas; al pasar el mouse (o al hacer scroll en celular) aparece la foto inclinada (componente externo) |
-| Video | Espacio 16:9 ancho con la portada desenfocada, botón "Dale play 0:14" y tres datos (horas de impresión, segundos de video, 0.2 mm por capa) |
+| Video | Espacio 16:9 ancho con la portada desenfocada y solo el ícono de play al centro (sin etiqueta ni datos encima) |
 | Imprimiendo | Q-404 que se "imprime" capa por capa al hacer scroll, con contador de capas |
 | Q-404 | "Q-404" gigante en morado, el robot al centro y notas que señalan sus partes con líneas finas; chips de colores debajo |
 | Alberca | Texto centrado y el botón "No aprietes este botón" |

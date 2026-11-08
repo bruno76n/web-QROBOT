@@ -31,10 +31,6 @@ const hasVideo = site.video.src !== null;
           width="1200"
           height="675"
         />
-        <span class="vtag">
-          <i></i>
-          {t.tag}
-        </span>
         <button
           type="button"
           class="vplay"
@@ -42,30 +38,10 @@ const hasVideo = site.video.src !== null;
           disabled={!hasVideo}
           aria-label={hasVideo ? t.playLabel : t.noVideo}
         >
-          <span class="vp-ic">
-            <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">
-              <path d="M8 5v14l11-7z" fill="currentColor"></path>
-            </svg>
-          </span>
-          <span class="vp-t">
-            <b>{t.play}</b>
-            {site.video.durationLabel}
-          </span>
+          <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true">
+            <path d="M8 5v14l11-7z" fill="currentColor"></path>
+          </svg>
         </button>
-        <div class="vfacts" aria-hidden="true">
-          <span>
-            <b>{site.video.printTime}</b>
-            {t.printTime}
-          </span>
-          <span>
-            <b>{t.videoLength}</b>
-            {t.videoLengthLabel}
-          </span>
-          <span>
-            <b>{t.layer}</b>
-            {t.layerLabel}
-          </span>
-        </div>
       </div>
     </div>
   </div>
@@ -137,112 +113,36 @@ const hasVideo = site.video.src !== null;
     transform: scale(1.06);
     filter: blur(2px) brightness(0.5) saturate(1);
   }
-  .vtag {
-    position: absolute;
-    z-index: 1;
-    left: clamp(16px, 2.4vw, 32px);
-    top: clamp(16px, 2.4vw, 30px);
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    font-size: 14px;
-    color: #e4e4ea;
-  }
-  .vtag i {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #ff4d4d;
-    animation: rec 1.4s ease-in-out infinite;
-  }
-  @keyframes rec {
-    50% {
-      opacity: 0.25;
-    }
-  }
   .vplay {
     position: absolute;
     z-index: 1;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 10px 26px 10px 10px;
+    display: grid;
+    place-items: center;
+    width: clamp(72px, 8vw, 104px);
+    aspect-ratio: 1;
+    padding: 0 0 0 4px;
     border: 0;
     border-radius: 18px;
-    background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(14px);
-    color: #fff;
+    background: #fff;
+    color: var(--ink);
     cursor: pointer;
-    font: inherit;
-    text-align: left;
-    transition:
-      background 0.25s,
-      transform 0.25s;
+    transition: transform 0.25s;
   }
   .vplay:disabled {
     cursor: not-allowed;
   }
   .vplay:not(:disabled):hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translate(-50%, -50%) scale(1.04);
-  }
-  .vp-ic {
-    display: grid;
-    place-items: center;
-    width: clamp(58px, 6vw, 78px);
-    aspect-ratio: 1;
-    border-radius: 13px;
-    background: #fff;
-    color: var(--ink);
-    padding-left: 3px;
-  }
-  .vp-t {
-    font-size: 15px;
-    color: #c9c9d1;
-    line-height: 1.3;
-  }
-  .vp-t b {
-    display: block;
-    white-space: nowrap;
-    font-size: clamp(18px, 1.6vw, 22px);
-    font-weight: 600;
-    color: #fff;
-    letter-spacing: -0.01em;
-  }
-  .vfacts {
-    position: absolute;
-    z-index: 1;
-    left: clamp(16px, 2.4vw, 32px);
-    right: clamp(16px, 2.4vw, 32px);
-    bottom: clamp(16px, 2.4vw, 30px);
-    display: flex;
-    gap: clamp(20px, 4vw, 60px);
-    flex-wrap: wrap;
-    color: #b9b9c3;
-    font-size: 14px;
-  }
-  .vfacts b {
-    display: block;
-    color: #fff;
-    font-weight: 500;
-    font-size: clamp(20px, 2.2vw, 32px);
-    letter-spacing: -0.03em;
+    transform: translate(-50%, -50%) scale(1.06);
   }
   @media (max-width: 700px) {
     .vbox {
       aspect-ratio: 4/5;
     }
-    .vfacts {
-      gap: 18px;
-    }
   }
   @media (prefers-reduced-motion: reduce) {
-    .vtag i {
-      animation: none;
-    }
     .vbg {
       transition: none;
     }
