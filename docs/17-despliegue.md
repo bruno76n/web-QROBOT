@@ -81,3 +81,4 @@ Cuenta de Cloudflare `bruno76n@gmail.com`; la zona `centerdiv.mx` ya estaba ahí
 - Al cambiar `database_id`, wrangler usa **otra base local** (el estado local va por id). Si `pnpm dev` aparece vacío, copiar el `.sqlite` viejo de `.wrangler/state/v3/d1/miniflare-D1DatabaseObject/` sobre el nuevo.
 - En la app de Access, cada destino lleva subdominio `quickrobot`, dominio `centerdiv.mx` y solo la ruta en Path. Un dominio repetido (`…centerdiv.mx.centerdiv.mx`) deja el panel sin proteger.
 - Desplegar a mano: `pnpm build && pnpm exec wrangler deploy`. El CI de GitHub sigue pausado por facturación (`progreso.md`).
+- **2026-11-08:** segundo despliegue a mano (publicar con categoría opcional, video del timelapse a 0.5× en `/media/timelapse.mp4`). Sin migraciones nuevas.
