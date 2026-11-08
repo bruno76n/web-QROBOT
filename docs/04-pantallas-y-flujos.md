@@ -43,9 +43,9 @@ Orden fijo de secciones:
 - En escritorio la foto aparece al pasar el mouse; **en celular aparece la foto de la idea que está a la mitad de la pantalla mientras se hace scroll**.
 
 ### 2.4 Video (`#video`)
-- Título y entrada, espacio 16:9 a lo ancho con la portada desenfocada y solo el ícono de play al centro (sin etiqueta "Timelapse", sin texto en el botón y sin datos).
+- Título y entrada, espacio 16:9 a lo ancho con un cuadro real del video como portada y solo el ícono de play al centro (sin etiqueta "Timelapse", sin texto en el botón y sin datos).
 - Al tocar, se reproduce el timelapse en el mismo lugar (`<video>` con controles, `preload="none"`) a `site.video.speed` (0.5×, cámara lenta). Mientras `site.video.src` sea `null`, el botón está deshabilitado y dice (para lectores de pantalla) que todavía no hay video.
-- Portada del video: la foto por defecto del hero, desenfocada (se genera en `scripts/build-assets.mjs`).
+- Portada del video: el último cuadro del propio video, sin desenfoque (`public/media/timelapse-poster.webp`, 1280×720, 61 KB). Si se cambia el video hay que sacar otra portada.
 
 ### 2.5 Imprimiendo (`#imprimiendo`)
 - Q-404 aparece capa por capa de abajo hacia arriba **según el scroll**; el contador "Capa N de 640" avanza con él. Al completarse: "Listo. Salió un Q-404." con liga "Conócelo →" a `#q404`.

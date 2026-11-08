@@ -78,7 +78,7 @@ Datos que todavía no existen. Mientras falten, Claude Code usa el **valor provi
 | Precios reales | Los del mockup (`05 §4`) | Semilla |
 | Fotos reales de productos | Renders y fotos de `reference/seed-photos/` | Semilla |
 | Alto del Q-404 | `[alto] cm` | Producto Q-404 |
-| Video del timelapse | Entregado (`public/media/timelapse.mp4`, se reproduce a 0.5×); sin video (`src = null`) el botón queda deshabilitado sobre la portada desenfocada | Sección "Así nace cada pieza" |
+| Video del timelapse | Entregado (`public/media/timelapse.mp4`, se reproduce a 0.5×); sin video (`src = null`) el botón queda deshabilitado sobre la portada | Sección "Así nace cada pieza" |
 | Domicilio para el aviso de privacidad | `[domicilio]` | `19` |
 | Componentes de 21st.dev | Reemplazo sencillo | `11 §4` |
 

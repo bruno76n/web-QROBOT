@@ -283,3 +283,9 @@ Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y pre
 - Pedido del dueño tras ver la web publicada: encima del video no va nada más que el ícono de play. Se quitan la etiqueta "Timelapse", el texto "Dale play 0:14" del botón y los tres datos de abajo ("[3 h 40 min] de impresión", "14 s de video", "0.2 mm por capa"). Es una diferencia respecto al mockup (`docs/02 §1`); se actualizaron `03`, `04`, `05` y `10`.
 - Se borran de `es.ts` los textos que ya nadie usa (`tag`, `play`, `printTime`, `videoLength*`, `layer*`) y de `site.ts` `durationLabel` y `printTime` (este último era el valor provisional `[3 h 40 min]`: ya no hay nada pendiente del dueño sobre el video). Quedan `playLabel` y `noVideo` como texto para lectores de pantalla.
 - El ícono es el cuadrado blanco de antes, solo, un poco más grande (72–104 px). Sigue la portada desenfocada hasta que se toca.
+
+## 2026-11-08 · Video: la portada es un cuadro del video
+- El dueño vio la web publicada: al quitar los textos seguía la portada desenfocada y oscura de la foto del hero, que no tiene que ver con el video. Ahora la portada es el último cuadro del propio video (piezas terminadas), sin desenfoque, sin oscurecer y sin degradado: `public/media/timelapse-poster.webp` (1280×720, 61 KB; se sacó con `AVAssetImageGenerator`, no hay ffmpeg, y se pasó a WebP con `sharp`). También es el `poster` del `<video>`.
+- Se borra de `scripts/build-assets.mjs` la generación de `video-poster-1200.webp` (nadie la usa). Corrige la decisión de la fase 4 (portada desenfocada con CSS).
+- En celular (caja 4/5) el recorte se corre con `object-position: 55% 50%` para que las piezas queden a la vista.
+- **Si se cambia el video, hay que sacar otra portada** y reemplazar ese archivo.

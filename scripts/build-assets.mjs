@@ -84,17 +84,6 @@ await responsive(
 );
 await responsive(at('reference/hero/hero-celular.webp'), out.brand, 'hero-mobile', [600, 1200]);
 
-// Poster of the video section: the default hero, smaller
-{
-  const src = at('reference/hero/hero-escritorio.webp');
-  const dest = join(out.brand, 'video-poster-1200.webp');
-  if (!fresh(src, dest)) {
-    // Only resized: the blur and the dimming are done by CSS on the page (docs/05: portada desenfocada).
-    await sharp(src).resize({ width: 1200 }).webp({ quality: 70 }).toFile(dest);
-    made++;
-  }
-}
-
 // Share image 1200×630: Q-404 on the --soft background (never enlarged), and apple-touch-icon
 {
   const q = at('assets/q404/q404-morado-verde.webp');

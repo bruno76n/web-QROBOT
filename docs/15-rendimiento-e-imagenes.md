@@ -46,7 +46,7 @@ Lo verifica `pnpm size` (`scripts/size-check.mjs`) leyendo el build.
 - Siempre `width` y `height` (o `aspect-ratio`) para que no salte el diseño.
 - `loading="lazy"` en todo salvo la imagen principal de la página (hero en el inicio, primera foto en producto), que lleva `fetchpriority="high"` y **precarga** (`<link rel="preload" as="image" imagesrcset=…>`).
 - WebP calidad 0.82. Una foto de producto de 800 px debería pesar 40–90 KB.
-- Las fotos de marca de `assets/` (Q-404, ideas, portada por defecto, portada del video desenfocada, `og-default.jpg`, `apple-touch-icon.png`) se optimizan **antes del build** con `scripts/build-assets.mjs` (`sharp`, en Node) y quedan en `public/brand/` con varios anchos en WebP. No se usa `astro:assets` para optimizar: en Workers no hay `sharp` y las páginas que se arman en el servidor saldrían sin optimizar. El adaptador se configura con `imageService: 'passthrough'` (se registra). `pnpm build` corre `build-assets` primero.
+- Las fotos de marca de `assets/` (Q-404, ideas, portada por defecto, `og-default.jpg`, `apple-touch-icon.png`) se optimizan **antes del build** con `scripts/build-assets.mjs` (`sharp`, en Node) y quedan en `public/brand/` con varios anchos en WebP. No se usa `astro:assets` para optimizar: en Workers no hay `sharp` y las páginas que se arman en el servidor saldrían sin optimizar. El adaptador se configura con `imageService: 'passthrough'` (se registra). `pnpm build` corre `build-assets` primero.
 - Video: `preload="none"`, portada propia, MP4 H.264 ≤ 8 MB para 30 s.
 
 ## 4. Fuente

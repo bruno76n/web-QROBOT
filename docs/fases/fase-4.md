@@ -28,7 +28,7 @@ Para **cada** sección: primero su lógica pura (si tiene) con prueba, después 
 - **Listo cuando:** tocar una idea lleva a `#pedido=<id>` (el pedido se conecta en 4.8).
 
 ### 4.4 Video
-- **Hacer:** `Video.astro` con portada desenfocada (de `public/brand/`), botón y datos; reproduce `site.video.src` si no es `null`, si no queda deshabilitado.
+- **Hacer:** `Video.astro` con portada (hoy un cuadro del video, `public/media/`), botón y datos; reproduce `site.video.src` si no es `null`, si no queda deshabilitado.
 - **Consultar:** `04 §2.4`, `05 §2` (Video), `10 §6` (`site.video`), `15 §3` (video).
 
 ### 4.5 Imprimiendo
