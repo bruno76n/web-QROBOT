@@ -82,3 +82,4 @@ Cuenta de Cloudflare `bruno76n@gmail.com`; la zona `centerdiv.mx` ya estaba ahí
 - En la app de Access, cada destino lleva subdominio `quickrobot`, dominio `centerdiv.mx` y solo la ruta en Path. Un dominio repetido (`…centerdiv.mx.centerdiv.mx`) deja el panel sin proteger.
 - Desplegar a mano: `pnpm build && pnpm exec wrangler deploy`. El CI de GitHub sigue pausado por facturación (`progreso.md`).
 - **2026-11-08:** segundo despliegue a mano (publicar con categoría opcional, video del timelapse a 0.5× en `/media/timelapse.mp4`). Sin migraciones nuevas.
+- **2026-11-08 (tercer despliegue):** el video queda solo con el ícono de play (sin etiqueta, textos ni datos). Sin migraciones nuevas.

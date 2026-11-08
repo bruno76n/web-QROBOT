@@ -54,6 +54,7 @@ Trabajo en local y en la nube (sesión de Claude Code en la web); se unió en `m
 
 - **Publicar:** la categoría ya es opcional (`796bf77`). Se probó quitar también foto y precio (`e06d6da`) y se **revirtió** (`2a32dcc`): para publicar siguen haciendo falta nombre, foto y precio desde. Detalle en `decisiones.md`.
 - **Video del timelapse:** puesto en `public/media/timelapse.mp4` y reproducido a 0.5× (`site.video`). Encima del video solo queda el ícono de play (sin etiqueta, textos ni datos).
+- **Despliegues del día:** dos a mano (publicar con categoría opcional + video; luego video solo con el ícono de play). Todo en GitHub (`main`).
 - **Despliegue:** a mano (`pnpm build && pnpm exec wrangler deploy`), sin migraciones nuevas (0000–0006). `pnpm security` en local falla en su paso de Playwright solo porque falta el Chromium (`pnpm exec playwright install chromium`).
 
 ## Valores provisionales en uso (`01 › Pendientes del dueño`)
