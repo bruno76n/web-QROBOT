@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import type { ProductDetail } from '@/lib/admin-types';
-import { parsePesos } from '@/lib/money';
 import {
   emptyValues,
   productFormSchema,
@@ -12,14 +11,13 @@ import {
   valuesFromDetail,
   type ProductFormValues,
 } from '@/lib/product-form';
-import { missingToPublish, slugFromName } from '@/lib/publish';
 import { es } from '@/i18n/es';
 import { useConfirm } from './ConfirmDialog';
 import { BasicsBox, OptionsBox, PageBox } from './editor/Boxes';
 import { PhotoUploader } from './photos/PhotoUploader';
 import { fingerprint, itemFromView, refsOf, usePhotos } from './photos/usePhotos';
 import { api } from './lib/api';
-import { errorText, missingList } from './lib/error-text';
+import { errorText } from './lib/error-text';
 import { setDirty } from './lib/dirty';
 import { keys } from './lib/queries';
 
@@ -54,22 +52,6 @@ export function EditorForm({ detail, onSelect, onSaved }: Props) {
     setDirty(dirty);
     return () => setDirty(false);
   }, [dirty]);
-
-  // The address is never typed: it follows the name (docs/09 §3). Only used here to know
-  // whether the product could be published.
-  const slugPreview = slugFromName(values.name) || detail?.slug || '';
-
-  const missing = useMemo(
-    () =>
-      missingToPublish({
-        name: values.name,
-        slug: slugPreview || 'x',
-        photoCount: refsOf(photos.photos).length,
-        categoryCount: values.categories.length,
-        priceFromCents: parsePesos(values.priceText),
-      }),
-    [values.name, values.categories.length, values.priceText, slugPreview, photos.photos],
-  );
 
   const reload = async (id: string) => {
     const res = await api.getProduct(id);
@@ -171,10 +153,7 @@ export function EditorForm({ detail, onSelect, onSaved }: Props) {
 
           <BasicsBox />
           <PageBox />
-          <OptionsBox
-            missingText={missing.length > 0 ? missingList(missing) : null}
-            canPublish={missing.length === 0}
-          />
+          <OptionsBox />
         </div>
 
         <div className="save">

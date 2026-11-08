@@ -133,7 +133,7 @@ Pares clave–valor editables desde el panel.
 
 ## 3. Reglas de datos (en `src/lib/publish.ts`, con prueba)
 
-Para **publicar** un producto se necesita: nombre, slug válido, al menos **una foto**, al menos **una categoría** y **precio desde**. Si falta algo, el interruptor "Publicado" no se puede encender y el panel dice qué falta (`12 §7`). Un borrador puede guardarse incompleto.
+Para **publicar** no se exige nada: el interruptor "Publicado" siempre se puede encender y la decisión es del dueño. Un borrador puede guardarse incompleto.
 
 Otras reglas:
 - Hasta **10 fotos** por producto; hasta **6 portadas**.

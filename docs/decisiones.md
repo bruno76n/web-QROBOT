@@ -266,3 +266,9 @@ The middleware now answers `401` (plain text) for `/admin*` pages without a vali
 - El hero (2 diapositivas y su intervalo) se copió del R2/D1 local al de producción; los productos de local no se subieron.
 - Acceso al panel con Cloudflare Access (código al correo). Desplegado a mano con `wrangler deploy`; el CI sigue pausado.
 - Un token de API de Cloudflare se pegó en el chat para leer la app de Access; debe borrarse (no se guardó en el repo).
+
+## Publicar sin categoría
+La categoría ya no es requisito para publicar: el dueño decide. Solo se exigen nombre, foto y precio desde.
+
+## Publicar sin límites
+El interruptor "Publicado" ya no se bloquea ni en el panel ni en el servidor (antes exigía foto y precio). Decisión del dueño.

@@ -29,7 +29,10 @@ describe('missingToPublish', () => {
         categoryCount: 0,
         priceFromCents: null,
       }),
-    ).toEqual(['photo', 'category', 'price', 'name']);
+    ).toEqual(['photo', 'price', 'name']);
+  });
+  it('a product without categories can be published', () => {
+    expect(missingToPublish({ ...complete, categoryCount: 0 })).toEqual([]);
   });
   it('a price of $0 counts as a price; null does not', () => {
     expect(missingToPublish({ ...complete, priceFromCents: 0 })).toEqual([]);

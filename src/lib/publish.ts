@@ -33,7 +33,6 @@ export function isValidSlug(slug: string): boolean {
 export function missingToPublish(input: PublishInput): Missing[] {
   const missing: Missing[] = [];
   if (input.photoCount < 1) missing.push('photo');
-  if (input.categoryCount < 1) missing.push('category');
   if (input.priceFromCents === null || input.priceFromCents < 0) missing.push('price');
   if (input.name.trim() === '' || !isValidSlug(input.slug)) missing.push('name');
   return missing;
