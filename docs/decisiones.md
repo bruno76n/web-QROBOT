@@ -213,3 +213,6 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 
 ## Publicar sin categoría
 La categoría ya no es requisito para publicar: el dueño decide. Solo se exigen nombre, foto y precio desde.
+
+## Publicar sin límites
+El interruptor "Publicado" ya no se bloquea ni en el panel ni en el servidor (antes exigía foto y precio). Decisión del dueño.

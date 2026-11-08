@@ -82,34 +82,20 @@ describe('saveProduct · create', () => {
 });
 
 describe('saveProduct · publishing rules', () => {
-  it('cannot publish without photo, category, price or name — and writes nothing', async () => {
-    const res = await saveProduct(
-      t.deps,
-      productInput({ published: true, priceFromCents: null, categories: [], photos: [] }),
-    );
-    expect(res).toEqual({
-      ok: false,
-      code: 'CANNOT_PUBLISH',
-      details: { missing: ['photo', 'price'] },
+  it('publishes even without photo, category or price', async () => {
+    const { id } = await create({
+      published: true,
+      priceFromCents: null,
+      categories: [],
+      photos: [],
     });
-    expect(await db().select().from(schema.products)).toEqual([]);
+    expect(await row(id)).toMatchObject({ published: true, everPublished: true });
   });
 
   it('publishes when it has everything, and remembers it was published', async () => {
     const photo = await seedPhoto({ id: 'ph1' });
     const { id } = await create({ published: true, photos: [photo] });
     expect(await row(id)).toMatchObject({ published: true, everPublished: true });
-  });
-
-  it('a photo failure on a publish attempt leaves the photos pending', async () => {
-    const photo = await seedPhoto({ id: 'ph1' });
-    const res = await saveProduct(
-      t.deps,
-      productInput({ published: true, priceFromCents: null, photos: [photo] }),
-    );
-    expect(res.ok).toBe(false);
-    const [ph] = await db().select().from(schema.photos);
-    expect(ph?.status).toBe('pending');
   });
 });
 
@@ -305,14 +291,10 @@ describe('setPublished', () => {
       code: 'NOT_FOUND',
     });
   });
-  it('CANNOT_PUBLISH lists what is missing and leaves the product hidden', async () => {
+  it('publishes without photo, category or price', async () => {
     const { id } = await create({ priceFromCents: null, categories: [] });
-    expect(await setPublished(t.deps, { id, published: true })).toEqual({
-      ok: false,
-      code: 'CANNOT_PUBLISH',
-      details: { missing: ['photo', 'price'] },
-    });
-    expect((await row(id))?.published).toBe(false);
+    expect(await setPublished(t.deps, { id, published: true })).toMatchObject({ ok: true });
+    expect((await row(id))?.published).toBe(true);
   });
   it('publishes and hides again', async () => {
     const photo = await seedPhoto({ id: 'ph1' });
