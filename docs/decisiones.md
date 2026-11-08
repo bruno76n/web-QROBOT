@@ -210,3 +210,6 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 - **Cambios permitidos (`11 §4` reglas 1 y 5), anotados también en el encabezado del archivo:** sin datos de demostración (textos en inglés e imágenes de otro dominio rompían los textos en `es.ts` y la CSP), sin padding propio en la sección, `aria-label` en cada link (las letras en `span` separados hacían que el nombre fuera "S e r v…"), el título se parte por palabras (se cortaba a media palabra en 390 px), foto decorativa (`alt=""`) con carga diferida.
 - **Colores:** el componente usa `background`, `foreground`, `muted` y `muted-foreground`; se mapean en `@theme` de `global.css` a los colores de la marca.
 - **Tipografía:** el título de cada fila usa la de la web (Geist 600, tracking −0.04 em, como los h1–h3) en lugar de `font-bold`; el componente no trae fuente propia, hereda Geist.
+
+## Publicar sin categoría
+La categoría ya no es requisito para publicar: el dueño decide. Solo se exigen nombre, foto y precio desde.
