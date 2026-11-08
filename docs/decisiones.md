@@ -272,3 +272,9 @@ La categoría ya no es requisito para publicar: el dueño decide. Solo se exigen
 
 ## 2026-11-08 · Foto y precio siguen siendo requisito para publicar
 Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y precio dejaba publicar productos vacíos. Queda solo la excepción de la categoría (opcional). El interruptor "Publicado" vuelve a bloquearse en el panel y en el servidor (`CANNOT_PUBLISH`) si falta nombre, foto o precio desde.
+
+## 2026-11-08 · Video del timelapse puesto, a 0.5×
+- El dueño entregó el video (1280×720, H.264, 7.1 s, 1.6 MB). Vive en `public/media/timelapse.mp4` (`docs/08`); `site.video.src` apunta ahí. `media-src 'self'` de la CSP ya lo permite.
+- **Cámara lenta sin recodificar:** la velocidad es `site.video.speed = 0.5` y `Video.astro` la aplica con `playbackRate` (y `defaultPlaybackRate`, porque cargar el `src` reinicia la velocidad). No hay ffmpeg en el proyecto; el archivo no se modifica. Quien descargue el video lo ve a velocidad normal.
+- A 0.5× dura ~14 s: `durationLabel` pasa a `0:14` y "de video" a `14 s`. La entrada dice "en unos segundos" para no repetir el número.
+- `printTime` sigue siendo el provisional `[3 h 40 min]` hasta que el dueño diga cuánto tardó esa impresión.

@@ -43,8 +43,8 @@ Orden fijo de secciones:
 - En escritorio la foto aparece al pasar el mouse; **en celular aparece la foto de la idea que está a la mitad de la pantalla mientras se hace scroll**.
 
 ### 2.4 Video (`#video`)
-- Título y entrada, espacio 16:9 a lo ancho con la portada desenfocada y el botón "Dale play 0:30".
-- Al tocar, se reproduce el timelapse en el mismo lugar (`<video>` con controles, `preload="none"`). Mientras `site.video.src` sea `null`, el botón está deshabilitado y dice (para lectores de pantalla) que todavía no hay video.
+- Título y entrada, espacio 16:9 a lo ancho con la portada desenfocada y el botón "Dale play 0:14".
+- Al tocar, se reproduce el timelapse en el mismo lugar (`<video>` con controles, `preload="none"`) a `site.video.speed` (0.5×, cámara lenta). Mientras `site.video.src` sea `null`, el botón está deshabilitado y dice (para lectores de pantalla) que todavía no hay video.
 - Portada del video: la foto por defecto del hero, desenfocada (se genera en `scripts/build-assets.mjs`).
 - Tres datos debajo: horas de impresión, segundos de video, 0.2 mm por capa.
 

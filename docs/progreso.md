@@ -19,7 +19,7 @@ Lo actualiza Claude Code al terminar cada paso. Estados: **pendiente** · **en c
 | Inicio · Hero | 4 | igual al mockup | igual al mockup | igual al mockup | Nombre en una línea al ancho exacto (`cqw`); la frase de venta del mockup va como texto oculto (`04 §2.1`, `05 §2`); varias fotos con Embla fade + autoplay (sin React) |
 | Inicio · Navidad | 4 | igual al mockup | igual al mockup | igual al mockup | Las 4 tarjetas son productos reales (Navidad + "Más pedido") que abren su página (`02 §1`); solo del 1 de octubre al 24 de diciembre; el 24 dice "Hoy es Nochebuena." |
 | Inicio · ¿Qué se te antoja? | 4 | igual | igual | igual | Componente real de 21st.dev integrado en la fase 5 (fotos de las filas con hover en escritorio; en táctil, la fila de la mitad de la pantalla). Ver `decisiones.md` |
-| Inicio · Video | 4 | igual al mockup | igual al mockup | igual al mockup | `site.video.src = null`: botón deshabilitado con su `aria-label` |
+| Inicio · Video | 4 | igual al mockup | igual al mockup | igual al mockup | Video entregado y puesto a 0.5× (`site.video`); sin `src` el botón queda deshabilitado con su `aria-label` |
 | Inicio · Imprimiendo | 4 | igual al mockup | igual al mockup | igual al mockup | `scroll()` de `motion`; con movimiento reducido el robot sale completo |
 | Inicio · Q-404 | 4 | igual al mockup | igual al mockup | igual al mockup | Precio y alto salen del producto `q-404` de la base ("mide [alto] cm" mientras el dueño no lo llene) |
 | Inicio · Alberca | 4 | igual al mockup | igual al mockup | igual al mockup | Física con matter-js (el mockup tenía una a mano); se carga al tocar |

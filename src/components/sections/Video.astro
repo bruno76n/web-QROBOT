@@ -12,6 +12,7 @@ const hasVideo = site.video.src !== null;
   aria-labelledby="h-vid"
   data-video-section
   data-src={site.video.src ?? ''}
+  data-speed={site.video.speed}
 >
   <div class="wrap">
     <div class="vhead">
@@ -259,9 +260,13 @@ const hasVideo = site.video.src !== null;
     const box = root?.querySelector<HTMLElement>('[data-box]');
     const ph = root?.querySelector<HTMLElement>('[data-ph]');
     if (!root || !src || !play || !box || !ph) return;
+    const speed = Number(root.dataset.speed) || 1;
     const start = () => {
       const video = document.createElement('video');
       video.src = src;
+      // Set after `src`: loading resets the rate to the default one, so set both.
+      video.defaultPlaybackRate = speed;
+      video.playbackRate = speed;
       video.controls = true;
       video.playsInline = true;
       video.preload = 'none';

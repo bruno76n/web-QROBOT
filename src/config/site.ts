@@ -22,8 +22,16 @@ export const site = {
   /** Dates without year (MM-DD); the year comes from today in Guadalajara. */
   christmas: { orderDeadline: '12-12', eve: '12-24', seasonStart: '10-01' },
   timeZone: 'America/Mexico_City',
-  /** `src: '/media/timelapse.mp4'` once the video exists. */
-  video: { src: null as string | null, durationLabel: '0:30', printTime: '[3 h 40 min]' },
+  /**
+   * `src` is `null` when there is no video. `speed` is the playback rate (0.5 = half speed);
+   * `durationLabel` is the length at that speed (7.1 s of footage → 0:14).
+   */
+  video: {
+    src: '/media/timelapse.mp4' as string | null,
+    speed: 0.5,
+    durationLabel: '0:14',
+    printTime: '[3 h 40 min]',
+  },
 } as const;
 
 export type Site = typeof site;

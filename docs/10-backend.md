@@ -103,7 +103,7 @@ export const site = {
   facebook: '', instagram: '',               // pendientes
   christmas: { orderDeadline: '12-12', eve: '12-24', seasonStart: '10-01' },
   timeZone: 'America/Mexico_City',
-  video: { src: null as string | null, durationLabel: '0:30', printTime: '[3 h 40 min]' }, // src: '/media/timelapse.mp4' cuando exista
+  video: { src: '/media/timelapse.mp4' as string | null, speed: 0.5, durationLabel: '0:14', printTime: '[3 h 40 min]' }, // src null = sin video; speed = velocidad de reproducción
 };
 ```
 
