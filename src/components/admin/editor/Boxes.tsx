@@ -229,9 +229,16 @@ function Switch({
   );
 }
 
-export function OptionsBox() {
+export function OptionsBox({
+  missingText,
+  canPublish,
+}: {
+  missingText: string | null;
+  canPublish: boolean;
+}) {
   const { register, watch } = useFormContext<ProductFormValues>();
   const personalizable = watch('personalizable');
+  const published = watch('published');
   return (
     <div className="box">
       <Switch name="personalizable" label={t.personalizable} hint={t.personalizableHint} />
@@ -251,7 +258,8 @@ export function OptionsBox() {
       <Switch
         name="published"
         label={t.published}
-        hint={t.publishedHint}
+        hint={!published && missingText ? t.cannotPublish(missingText) : t.publishedHint}
+        disabled={!published && !canPublish}
       />
     </div>
   );

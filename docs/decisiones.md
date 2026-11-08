@@ -270,5 +270,5 @@ The middleware now answers `401` (plain text) for `/admin*` pages without a vali
 ## Publicar sin categoría
 La categoría ya no es requisito para publicar: el dueño decide. Solo se exigen nombre, foto y precio desde.
 
-## Publicar sin límites
-El interruptor "Publicado" ya no se bloquea ni en el panel ni en el servidor (antes exigía foto y precio). Decisión del dueño.
+## 2026-11-08 · Foto y precio siguen siendo requisito para publicar
+Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y precio dejaba publicar productos vacíos. Queda solo la excepción de la categoría (opcional). El interruptor "Publicado" vuelve a bloquearse en el panel y en el servidor (`CANNOT_PUBLISH`) si falta nombre, foto o precio desde.
