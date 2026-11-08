@@ -1,6 +1,6 @@
 import { and, asc, eq, inArray, sql } from 'drizzle-orm';
 import { r2Keys } from '@/lib/crop';
-import { limits, missingToPublish, slugForSave, slugFromName, uniqueSlug } from '@/lib/publish';
+import { limits, slugForSave, slugFromName, uniqueSlug } from '@/lib/publish';
 import { fail, ok, type Result } from '@/lib/result';
 import type { ProductInput } from '@/lib/schemas';
 import { schema } from '../db/client';
@@ -44,15 +44,6 @@ export async function saveProduct(
     wasPublished: existing?.everPublished ?? false,
   });
   const slug = typed ? wanted : uniqueSlug(wanted || 'producto', taken);
-
-  const missing = missingToPublish({
-    name: input.name,
-    slug,
-    photoCount: input.photos.length,
-    categoryCount: input.categories.length,
-    priceFromCents: input.priceFromCents,
-  });
-  if (input.published && missing.length > 0) return fail('CANNOT_PUBLISH', { missing });
 
   const id = existing?.id ?? deps.newId();
   const checked = await checkPhotoRefs(db, bucket, input.photos, 'product', {
@@ -158,32 +149,6 @@ export async function setPublished(
   const { db } = deps;
   const [p] = await db.select().from(schema.products).where(eq(schema.products.id, input.id));
   if (!p) return fail('NOT_FOUND');
-  if (input.published) {
-    const [photos, cats] = await Promise.all([
-      db
-        .select({ id: schema.photos.id })
-        .from(schema.photos)
-        .where(
-          and(
-            eq(schema.photos.ownerType, 'product'),
-            eq(schema.photos.ownerId, p.id),
-            eq(schema.photos.status, 'attached'),
-          ),
-        ),
-      db
-        .select()
-        .from(schema.productCategories)
-        .where(eq(schema.productCategories.productId, p.id)),
-    ]);
-    const missing = missingToPublish({
-      name: p.name,
-      slug: p.slug,
-      photoCount: photos.length,
-      categoryCount: cats.length,
-      priceFromCents: p.priceFromCents,
-    });
-    if (missing.length > 0) return fail('CANNOT_PUBLISH', { missing });
-  }
   await db
     .update(schema.products)
     .set({
