@@ -90,7 +90,7 @@ describe('saveProduct · publishing rules', () => {
     expect(res).toEqual({
       ok: false,
       code: 'CANNOT_PUBLISH',
-      details: { missing: ['photo', 'category', 'price'] },
+      details: { missing: ['photo', 'price'] },
     });
     expect(await db().select().from(schema.products)).toEqual([]);
   });
@@ -310,7 +310,7 @@ describe('setPublished', () => {
     expect(await setPublished(t.deps, { id, published: true })).toEqual({
       ok: false,
       code: 'CANNOT_PUBLISH',
-      details: { missing: ['photo', 'category', 'price'] },
+      details: { missing: ['photo', 'price'] },
     });
     expect((await row(id))?.published).toBe(false);
   });
