@@ -62,6 +62,7 @@ Trabajo en local y en la nube (sesión de Claude Code en la web); se unió en `m
 - **WhatsApp real:** `523481308678` (se muestra `+52 348 130 8678`) en `src/config/site.ts`.
 - **Sin personalizador:** el dueño pidió quitar del catálogo la sección para personalizar el llavero ("Escríbele su nombre."). Se borran la sección, su lógica, sus textos, la fuente 3D y three/R3F/drei.
 - Pruebas que seguían con valores viejos (dominio, host de fotos, `'wasm-unsafe-eval'`) leen ahora `site.ts`. Siguen en rojo en `pnpm e2e`, desde antes de este cambio: header de 56 px y menú (`layout.spec.ts`), video "sin archivo" (`flow-home.spec.ts`) y contraste de color en el inicio (`a11y.spec.ts`).
+- **Despliegue:** a mano (`pnpm build && pnpm exec wrangler deploy`), versión `b0b62a10`, sin migraciones. Revisado en vivo: número en el footer y en los links, catálogo sin personalizador.
 
 ## Valores provisionales en uso (`01 › Pendientes del dueño`)
 
