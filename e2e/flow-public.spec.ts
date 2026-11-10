@@ -85,40 +85,6 @@ test('sin JavaScript el link base de WhatsApp sigue funcionando', async ({ brows
   await context.close();
 });
 
-test('flujo C: el personalizador arma el mensaje y three solo se baja al tocarlo', async ({
-  page,
-}) => {
-  const heavy: string[] = [];
-  page.on('request', (r) => {
-    if (/three|maker3d|typeface|drei|fiber|geist-bold/i.test(r.url())) heavy.push(r.url());
-  });
-  await page.goto('/catalogo');
-  await page.waitForLoadState('networkidle');
-  expect(heavy, 'nothing 3D before touching').toEqual([]);
-
-  const order = page.locator('[data-order]');
-  await page.getByRole('radio', { name: 'Estrella' }).click();
-  await page.getByLabel('Nombre', { exact: true }).fill('sofi');
-  await page.getByRole('radio', { name: 'Verde' }).click();
-  expect(waText(await order.getAttribute('href'))).toBe(
-    'Hola, quiero una estrella verde que diga “SOFI”. ¿Cuánto cuesta y para cuándo lo tendrían?',
-  );
-
-  // letters outside the allowed set are dropped; the button turns off without a name
-  await page.getByLabel('Nombre', { exact: true }).fill('a<b>&c!');
-  await expect(page.getByLabel('Nombre', { exact: true })).toHaveValue('ABC');
-  await page.getByLabel('Nombre', { exact: true }).fill('');
-  await expect(order).toHaveAttribute('aria-disabled', 'true');
-  await page.getByLabel('Nombre', { exact: true }).fill('ñandú');
-  expect(waText(await order.getAttribute('href'))).toContain('“ÑANDÚ”');
-
-  // the 3D view loads only now
-  await page.getByRole('button', { name: 'Toca para verlo en 3D' }).click();
-  await expect(page.locator('[data-canvas] canvas')).toBeVisible({ timeout: 30_000 });
-  expect(heavy.length).toBeGreaterThan(0);
-  await expect(page.getByRole('button', { name: '→' })).toBeVisible();
-});
-
 test('flujo G: las etiquetas para compartir de un producto', async ({ page, request }) => {
   const res = await request.get('/producto/macetas');
   expect(res.status()).toBe(200);
@@ -202,7 +168,11 @@ test('navegar entre páginas con islas no rompe la CSP ni la consola', async ({ 
   await page.getByRole('radio', { name: 'Azul' }).click(); // the island works after navigating
   await page.getByRole('link', { name: 'Catálogo', exact: true }).first().click();
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Elige uno.');
-  await page.getByRole('radio', { name: 'Corazón' }).click(); // the catalog script restarts after the swap
+  await page
+    .getByRole('link', { name: /Llaveros con nombre/ })
+    .first()
+    .click();
+  await page.getByRole('radio', { name: 'Verde' }).click(); // the island mounts again after a second swap
   expect(problems, problems.join('\n')).toEqual([]);
 });
 

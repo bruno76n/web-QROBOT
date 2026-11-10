@@ -35,7 +35,6 @@
 | Alberca | `Alberca.astro` + `<script>`: al tocar, `import('matter-js')`, crea un canvas fijo encima (sin recibir clics), los cuerpos usan los renders de `assets/q404/`; botón "Vaciar", Escape y vaciado automático; mensaje para lectores de pantalla |
 | Pedido | `Pedido.astro` + isla `OrderComposer.tsx`: estado local, plurales con `src/lib/plural.ts`, mensaje con `src/lib/whatsapp.ts`; escucha `hashchange` para `#pedido=<idea>` y `#pedido=navidad` y llena los campos; los huecos crecen con el texto (`field-sizing: content` con respaldo de medir con un `span` oculto) |
 | Catálogo | Páginas `.astro`; pestañas son links (`CategoryTabs.astro`) |
-| Personalizador | `NameMaker.astro` con un `<script>` (sin React, para cumplir el presupuesto de `15 §2`): controles (forma, nombre, color), el link de WhatsApp (`src/lib/customizer.ts` y `src/lib/whatsapp.ts`) y una **vista fija** (SVG 2D de la forma con el nombre). Al tocar la vista o enfocarla, importa `maker3d.tsx`: R3F + drei `Text3D` con `public/fonts/geist-bold.typeface.json` (Geist Bold generada por `scripts/build-font.mjs`, con Ñ, Á, É, Í, Ó, Ú, Ü, A–Z, 0–9 y espacio), forma base (círculo con argolla, estrella, corazón) extruida, `OrbitControls` solo para girar (sin zoom ni desplazamiento), botones ← → para quien no puede arrastrar, y giro automático solo sin `prefers-reduced-motion`. Caracteres permitidos en el nombre: A–Z, Ñ, vocales con acento, Ü, 0–9 y espacio (lo demás se quita al escribir), hasta 10 |
 | Galería de producto | `Gallery.astro` con `embla-carousel` (sin React) en un `<script>`: flechas, contador, miniaturas sincronizadas; el HTML ya trae todas las fotos |
 | Opciones de producto | `ProductOptions.astro` + `<script>`: color, personalización, cantidad y link de WhatsApp. El HTML trae el link base (cantidad 1, primer color), así que funciona sin JavaScript |
 
@@ -65,7 +64,7 @@ Isla grande; detalle en `12`. Usa shadcn/ui, TanStack Query sobre las **acciones
 
 ## 6. Navegación y estados
 
-- `ClientRouter` de Astro para transiciones suaves entre páginas; las islas se vuelven a montar al navegar (probar que Embla y el personalizador limpian sus efectos al salir).
+- `ClientRouter` de Astro para transiciones suaves entre páginas; las islas se vuelven a montar al navegar (probar que Embla limpia sus efectos al salir).
 - Los `<script>` de las páginas arrancan en `astro:page-load` y limpian en `astro:before-swap` (`07 §1`); sin eso, el contador, el header, Imprimiendo, Q-404 y la alberca dejan de funcionar después de navegar.
 - Links al inicio con `#` hacen scroll suave (respeta movimiento reducido).
 - Error en una isla: se muestra el contenido base de esa sección (por ejemplo, la galería deja ver la primera foto), nunca la página en blanco. Cada isla va dentro de un `ErrorBoundary`.
@@ -73,6 +72,6 @@ Isla grande; detalle en `12`. Usa shadcn/ui, TanStack Query sobre las **acciones
 ## 7. Accesibilidad
 
 - Semántica: un `h1` por página (en el inicio, el nombre gigante), secciones con `aria-labelledby`.
-- Navegación por teclado completa (galería, chips de color, cantidad, pedido, personalizador sin depender del arrastre).
+- Navegación por teclado completa (galería, chips de color, cantidad, pedido).
 - `prefers-reduced-motion`: sin autoplay de portada, sin animación de scroll, alberca reducida, robot de Navidad quieto.
 - Pruebas con axe en las páginas públicas y en el panel (`16 §4`).

@@ -14,7 +14,7 @@ Tiene un **panel** (`/admin`) para que el dueño suba y edite productos, centre 
 |---|---|---|
 | Dueños de negocios (taquerías, restaurantes, cafés) | Servilleteros, números de mesa, porta QR, llaveros con su logo | Abre el producto, pide por WhatsApp |
 | Papás y mamás | Figuras, adornos, "el personaje que no encuentro en ninguna tienda" | Navega Navidad y "Para la casa" |
-| Quien busca un regalo | Algo con nombre, con una foto o único | Personalizador de nombre, "Tú en miniatura" |
+| Quien busca un regalo | Algo con nombre, con una foto o único | Productos con nombre, "Tú en miniatura" |
 
 Casi todos llegan desde el **celular**, por un link compartido en WhatsApp o en un grupo de Facebook. La web se diseña primero para el teléfono.
 
@@ -31,7 +31,6 @@ Casi todos llegan desde el **celular**, por un link compartido en WhatsApp o en 
 **Sí entra**
 - Inicio con sus secciones (ver `04 §2`).
 - Catálogo por categorías y página por producto.
-- Personalizador de nombre en 3D.
 - Panel: productos (fotos con recorte, datos, colores, publicar, ordenar) y portada (fotos del hero).
 - Página 404 con Q-404, aviso de privacidad.
 - Imagen y texto al compartir cada producto (WhatsApp, Facebook).
@@ -43,6 +42,7 @@ Casi todos llegan desde el **celular**, por un link compartido en WhatsApp o en 
 - Blog, reseñas, chat propio, API de WhatsApp.
 - Varios idiomas, modo oscuro.
 - Conexión con el sistema interno (ver "Después").
+- Personalizador de nombre en 3D (estuvo en el catálogo; el dueño lo quitó el 2026-11-10).
 
 ## Decisiones tomadas
 

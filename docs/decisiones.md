@@ -289,3 +289,9 @@ Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y pre
 - Se borra de `scripts/build-assets.mjs` la generación de `video-poster-1200.webp` (nadie la usa). Corrige la decisión de la fase 4 (portada desenfocada con CSS).
 - En celular (caja 4/5) el recorte se corre con `object-position: 55% 50%` para que las piezas queden a la vista.
 - **Si se cambia el video, hay que sacar otra portada** y reemplazar ese archivo.
+
+## 2026-11-10 · Sin personalizador de nombre en el catálogo
+- Pedido del dueño: quitar del catálogo la sección donde se personaliza el llavero ("Escríbele su nombre."). Es una diferencia más con el mockup (`02 §1`) y sale del alcance (`01`).
+- Se borran `NameMaker.astro`, `maker3d.tsx`, `src/lib/customizer.ts`, `customizerMessage`/`colorFor` de `whatsapp.ts`, los textos `es.maker`, `scripts/build-font.mjs` (fuente 3D) y las dependencias three, @react-three/fiber, @react-three/drei, three-stdlib, @types/three, geist y opentype.js. El flujo C de `04 §6` deja de existir.
+- Se conserva el origen de clics `customizer` (esquema, `/api/click` y desglose del panel) porque puede haber toques guardados en D1; cambiarlo pediría migración.
+- Si se quiere de vuelta, está en la historia de git antes de este commit.

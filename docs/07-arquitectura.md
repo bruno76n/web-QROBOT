@@ -9,7 +9,7 @@ Las **islas** son los pedazos interactivos dentro de la página. Son componentes
 | Directiva | Cuándo carga | Se usa para |
 |---|---|---|
 | `client:load` | Al abrir la página | Lo que se ve arriba y se usa de inmediato |
-| `client:visible` | Cuando la sección entra a la pantalla | Casi todas las islas del inicio y el personalizador |
+| `client:visible` | Cuando la sección entra a la pantalla | Casi todas las islas del inicio |
 | `client:idle` | Cuando el navegador queda libre | Cosas secundarias |
 | `client:only="react"` | Solo en el navegador, nunca en el servidor | El panel |
 
@@ -65,7 +65,6 @@ Para comportamientos pequeños que no necesitan React (cambiar el header al pasa
 | Q-404 (cambiar colores) | `<script>` | Al abrir |
 | Alberca | `<script>` que importa `matter-js` al tocar el botón | Al tocar |
 | Pedido | Isla React | `client:visible` |
-| Personalizador 3D | Isla React (three + R3F) | `client:visible` |
 | Galería del producto | Isla React con Embla | `client:visible` |
 | Opciones del producto (color, cantidad, personalización → link) | Isla React | `client:load` |
 | Panel | Isla React grande | `client:only="react"` |

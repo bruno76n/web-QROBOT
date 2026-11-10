@@ -79,7 +79,6 @@ Copiados del mockup. Lo que va entre corchetes es dato pendiente (`01`).
 - Título: "Elige uno. O cincuenta."
 - Entrada: "Abre cualquiera para ver fotos, colores y detalles, y pídelo por WhatsApp."
 - Aviso: "Mientras más pidas, menos pagas por pieza." / "Los precios son por pieza. Si pides varias, te mandamos el mejor precio por WhatsApp."
-- Personalizador: "Escríbele su nombre." / "Así se vería impreso. Cámbiale la forma y el color, y si te gusta, pídelo así como lo ves." / "Arrástralo para girarlo" / Forma: Llavero · Estrella · Corazón / Nombre / Color / "Pedir por WhatsApp" / "Desde $45 c/u"
 - Pestañas: Todos · Para tu negocio · Para la casa · Navidad
 - Etiqueta: "Más pedido"
 - Final: "¿No ves lo que buscas? Mándanos una foto o una idea y te decimos cuánto cuesta." · "Cotizar algo distinto"
@@ -159,7 +158,6 @@ Todos se arman con funciones puras en `src/lib/whatsapp.ts` (con prueba) y se ab
 | Producto | `Hola, me interesa: {cantidad} {unidad en singular o plural}[ en {color}][ ({pregunta de personalización}: {respuesta})]. ¿Cuánto me sale y para cuándo lo tendrían?\n{link del producto}` |
 | Pedido del inicio | Con nombre: `Hola, soy {nombre} y necesito {cantidad} {pieza} con {con}. Lo necesito {cuándo}.` · Sin nombre: `Hola, necesito {cantidad} {pieza} con {con}. Lo necesito {cuándo}.` · Si hay detalles se agrega `\nDetalles: {detalles}` · Siempre termina con `\n(Lo vi en su página.)` |
 | Q-404 | `Hola, quiero un Q-404 en {combinación en minúsculas}. ¿Cuánto cuesta y cuándo lo tendrían?` |
-| Personalizador | `Hola, quiero {un llavero | una estrella | un corazón} {color} que diga “{NOMBRE}”. ¿Cuánto cuesta y para cuándo lo tendrían?` — sin nombre: "SIN NOMBRE" no se usa; el botón se desactiva hasta que haya al menos una letra |
 | Cotizar (header) | Lleva a `#pedido`, no abre WhatsApp directo |
 
 Ejemplo de producto: `Hola, me interesa: 3 llaveros en verde (Nombre (hasta 10 letras): SOFI). ¿Cuánto me sale y para cuándo lo tendrían?\nhttps://quickrobot.example/producto/llaveros-con-nombre`

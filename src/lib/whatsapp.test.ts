@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import {
-  colorFor,
-  customizerMessage,
   orderMessage,
   productMessage,
   q404Message,
@@ -74,25 +72,6 @@ describe('q404Message', () => {
   it('5. "Rosa y menta" → lowercase', () => {
     expect(q404Message('Rosa y menta')).toBe(
       'Hola, quiero un Q-404 en rosa y menta. ¿Cuánto cuesta y cuándo lo tendrían?',
-    );
-  });
-});
-
-describe('customizerMessage', () => {
-  it('6. green star "sofi"', () => {
-    expect(customizerMessage({ shape: 'estrella', color: 'verde', name: 'sofi' })).toBe(
-      'Hola, quiero una estrella verde que diga “SOFI”. ¿Cuánto cuesta y para cuándo lo tendrían?',
-    );
-  });
-  it('is null without a name (the button stays disabled)', () => {
-    expect(customizerMessage({ shape: 'llavero', color: 'morado', name: '   ' })).toBeNull();
-  });
-  it('color agrees with the shape', () => {
-    expect(colorFor('negro', 'estrella')).toBe('negra');
-    expect(colorFor('Negro', 'llavero')).toBe('negro');
-    expect(colorFor('azul', 'estrella')).toBe('azul');
-    expect(customizerMessage({ shape: 'corazón', color: 'rojo', name: 'a' })).toContain(
-      'un corazón rojo',
     );
   });
 });

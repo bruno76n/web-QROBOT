@@ -58,8 +58,7 @@
 3. Pedido sin nombre y sin detalles → "Hola, necesito 1 figura con una foto. Lo necesito lo antes posible.\n(Lo vi en su página.)"
 4. Pedido con nombre y detalles.
 5. Q-404 "Rosa y menta" → "…un Q-404 en rosa y menta…".
-6. Personalizador estrella verde "sofi" → "…una estrella verde que diga “SOFI”…".
-7. Caracteres especiales (`&`, `#`, emojis, saltos de línea) bien codificados en el link.
+6. Caracteres especiales (`&`, `#`, emojis, saltos de línea) bien codificados en el link.
 
 **Casos obligatorios de `src/lib/season.ts`** (hora de Guadalajara):
 - 30 de septiembre 23:59 → fuera de temporada; 1 de octubre 00:00 → dentro.

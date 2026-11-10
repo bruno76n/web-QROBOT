@@ -13,7 +13,7 @@ Lo actualiza Claude Code al terminar cada paso. Estados: **pendiente** · **en c
 | Panel · Fotos y recorte | 2 | igual al mockup | igual al mockup | igual al mockup | El recortador (react-easy-crop, zoom 1×–4×, pellizco, vista previa) es nuevo respecto al mockup (`12 §3–4`). Las fotos de ejemplo se ven chicas y con la insignia "Foto chica": es lo esperado (`09 §4`) |
 | Panel · Portada | 2 | igual al mockup | igual al mockup | igual al mockup | En pantallas de menos de 860 px la miniatura de celular se queda visible (el mockup la ocultaba) para poder ver y cambiar esa foto desde el teléfono |
 | Catálogo | 3 | igual al mockup | igual al mockup | igual al mockup | Diferencias aceptadas: pestañas son links reales (`/catalogo/negocio`…), sin contadores; las tarjetas no llevan "c/u" ni cantidad (`02 §1`) |
-| Personalizador 3D | 3 | igual al mockup | igual al mockup | igual al mockup | La vista fija es SVG y la 3D (three + R3F) carga solo al tocarla; el mockup giraba capas CSS. Se agregaron botones ← → para girar sin arrastrar |
+| ~~Personalizador 3D~~ | 3 | — | — | — | Quitado a pedido del dueño (2026-11-10) |
 | Producto | 3 | igual al mockup | igual al mockup | igual al mockup | Migas con el nombre del producto al final; nota de precio sin la frase extra del mockup (el texto sale del campo del panel) |
 | 404 y error | 3 | igual (sin mockup) | igual (sin mockup) | igual (sin mockup) | Q-404 de cuerpo completo, textos de `05 §2`, botones de `04 §5`; `/500` con "Intentar de nuevo". No hay mockup de estas páginas |
 | Inicio · Hero | 4 | igual al mockup | igual al mockup | igual al mockup | Nombre en una línea al ancho exacto (`cqw`); la frase de venta del mockup va como texto oculto (`04 §2.1`, `05 §2`); varias fotos con Embla fade + autoplay (sin React) |
@@ -32,7 +32,7 @@ Lo actualiza Claude Code al terminar cada paso. Estados: **pendiente** · **en c
 |---|---|---|
 | A · Pedir un producto | 3 | pasa en Playwright (`e2e/flow-public.spec.ts`); falta el tramo Inicio → Catálogo (fase 4) |
 | B · Pedir desde una idea | 4 | pasa en Playwright |
-| C · Nombre en 3D | 3 | pasa en Playwright (mensaje exacto; three no se descarga hasta tocar la vista) |
+| ~~C · Nombre en 3D~~ | 3 | quitado con el personalizador (2026-11-10) |
 | D · Subir un producto | 2–3 | pasa completo en Playwright: el producto subido aparece en el catálogo y en su página con la foto elegida |
 | E · Cambiar la portada | 4 | pasa en Playwright (portada de escritorio en 1440 y de celular en 390) |
 | F · Ocultar y reordenar | 2–3 | pasa completo en Playwright: el oculto da 404 y no sale en el catálogo; el orden se refleja en el catálogo |
@@ -56,6 +56,12 @@ Trabajo en local y en la nube (sesión de Claude Code en la web); se unió en `m
 - **Video del timelapse:** puesto en `public/media/timelapse.mp4` y reproducido a 0.5× (`site.video`). Encima del video solo queda el ícono de play (sin etiqueta, textos ni datos).
 - **Despliegues del día:** dos a mano (publicar con categoría opcional + video; luego video solo con el ícono de play). Todo en GitHub (`main`).
 - **Despliegue:** a mano (`pnpm build && pnpm exec wrangler deploy`), sin migraciones nuevas (0000–0006). `pnpm security` en local falla en su paso de Playwright solo porque falta el Chromium (`pnpm exec playwright install chromium`).
+
+## 2026-11-10
+
+- **WhatsApp real:** `523481308678` (se muestra `+52 348 130 8678`) en `src/config/site.ts`.
+- **Sin personalizador:** el dueño pidió quitar del catálogo la sección para personalizar el llavero ("Escríbele su nombre."). Se borran la sección, su lógica, sus textos, la fuente 3D y three/R3F/drei.
+- Pruebas que seguían con valores viejos (dominio, host de fotos, `'wasm-unsafe-eval'`) leen ahora `site.ts`. Siguen en rojo en `pnpm e2e`, desde antes de este cambio: header de 56 px y menú (`layout.spec.ts`), video "sin archivo" (`flow-home.spec.ts`) y contraste de color en el inicio (`a11y.spec.ts`).
 
 ## Valores provisionales en uso (`01 › Pendientes del dueño`)
 

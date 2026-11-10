@@ -9,7 +9,6 @@ import {
   readdirSync,
   readFileSync,
   statSync,
-  writeFileSync,
 } from 'node:fs';
 import { basename, extname, join } from 'node:path';
 
@@ -108,17 +107,6 @@ await responsive(at('reference/hero/hero-celular.webp'), out.brand, 'hero-mobile
       .toFile(icon);
     made++;
   }
-}
-
-// 3D font for the name customizer (loaded only when someone touches the 3D view)
-const { buildTypeface } = await import('./build-font.mjs');
-const fontOut = join(out.fonts, 'geist-bold.typeface.json');
-if (
-  !fresh(at('node_modules/geist/dist/fonts/geist-sans/Geist-Bold.ttf'), fontOut) ||
-  !fresh(at('scripts/build-font.mjs'), fontOut)
-) {
-  writeFileSync(fontOut, JSON.stringify(buildTypeface()));
-  made++;
 }
 
 console.log(`build-assets: ${made} file(s) written`);

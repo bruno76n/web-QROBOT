@@ -75,11 +75,10 @@ Orden fijo de secciones:
 
 1. Título "Elige uno. O cincuenta." y entrada.
 2. Aviso "Mientras más pidas, menos pagas por pieza." (sin tabla de descuentos).
-3. **Personalizador "Escríbele su nombre."**: forma (llavero, estrella, corazón), nombre (hasta 10 letras, en mayúsculas), color (7: morado, verde, negro, lila, rojo, azul, blanco — los de `src/config/colors.ts`); primero una vista fija y, al tocarla, la vista 3D que se gira arrastrando (`11 §3`); precio "Desde $45 c/u" y botón "Pedir por WhatsApp" con el mensaje de `05 §5` (desactivado mientras no haya nombre).
-4. Pestañas: Todos · Para tu negocio · Para la casa · Navidad. Cada una es una ruta real (`/catalogo/negocio`…), no un filtro con JavaScript.
-5. Cuadrícula de tarjetas (productos publicados de esa categoría, por orden del catálogo). Etiqueta "Más pedido" si está marcado.
-6. "¿No ves lo que buscas?…" con botón "Cotizar algo distinto" → `/#pedido`.
-7. Nota al pie: "Precios de referencia; el final te lo confirmamos por WhatsApp."
+3. Pestañas: Todos · Para tu negocio · Para la casa · Navidad. Cada una es una ruta real (`/catalogo/negocio`…), no un filtro con JavaScript.
+4. Cuadrícula de tarjetas (productos publicados de esa categoría, por orden del catálogo). Etiqueta "Más pedido" si está marcado.
+5. "¿No ves lo que buscas?…" con botón "Cotizar algo distinto" → `/#pedido`.
+6. Nota al pie: "Precios de referencia; el final te lo confirmamos por WhatsApp."
 
 Catálogo vacío (nada publicado en esa categoría): mensaje corto y liga a "Todos".
 
@@ -111,7 +110,7 @@ Se prueban con Playwright (`16 §4`).
 |---|---|---|
 | **A · Pedir un producto** | Inicio → Catálogo → tarjeta → elegir color, escribir personalización, cantidad 3 → Pedir por WhatsApp | El link abre `wa.me/<número>` con el mensaje exacto de `05 §5`, con color, personalización, cantidad en plural y el link del producto |
 | **B · Pedir desde una idea** | Inicio → tocar "Servilleteros" en ¿Qué se te antoja? | La página baja al pedido; cantidad 20, pieza "servilleteros", con "mi logo"; el link de WhatsApp lleva ese mensaje |
-| **C · Nombre en 3D** | Catálogo → personalizador → estrella, "SOFI", verde | El link dice "una estrella verde que diga “SOFI”" |
+| ~~C · Nombre en 3D~~ | Ya no existe: el dueño quitó el personalizador (2026-11-10) | — |
 | **D · Subir un producto** | Panel → Nuevo → subir 2 fotos, centrar la primera, llenar datos, publicar | Aparece en el catálogo y en su página con la foto recortada como se eligió |
 | **E · Cambiar la portada** | Panel → Portada → subir foto de escritorio y de celular, centrar, guardar | El inicio muestra la nueva foto en 1440 y la de celular en 390 |
 | **F · Ocultar y reordenar** | Panel → ocultar un producto y arrastrar otro al primer lugar | El oculto da 404 en su página y no sale en el catálogo; el otro sale primero |

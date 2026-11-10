@@ -9,7 +9,7 @@ Cuatro páginas HTML que se abren directo en el navegador (guardan los productos
 | Archivo | Qué es | Qué se toma |
 |---|---|---|
 | `index.html` | Inicio | Orden de secciones, textos, tamaños, el hero con el nombre gigante, Navidad, el video, la impresión al hacer scroll, Q-404, la alberca, el pedido por WhatsApp, header y footer |
-| `catalogo.html` | Catálogo | Título, aviso de precios por cantidad, personalizador de nombre en 3D, pestañas por categoría, tarjetas, "¿No ves lo que buscas?" |
+| `catalogo.html` | Catálogo | Título, aviso de precios por cantidad, pestañas por categoría, tarjetas, "¿No ves lo que buscas?" |
 | `producto.html` | Página de producto | Galería, precio desde, colores, personalización, cantidad, botón de WhatsApp, ficha, descripción, relacionados. **Contiene los 14 productos de ejemplo** (`window.QR_SEED`) |
 | `admin.html` | Panel | Pestañas Productos y Portada, lista con búsqueda y filtros, editor con todos los campos, subir y ordenar fotos, portada con vista previa |
 
@@ -30,6 +30,7 @@ Cuatro páginas HTML que se abren directo en el navegador (guardan los productos
 | Sin página 404 | Página 404 con Q-404 | `04 §5` |
 | Las 4 tarjetas de Navidad llenaban el pedido | Son productos reales (Navidad + "Más pedido") y abren su página | Precios reales y una página que se puede compartir (`04 §2.2`) |
 | Navidad siempre visible | Solo del 1 de octubre al 24 de diciembre | `04 §2.2` |
+| Personalizador de nombre en 3D en el catálogo | No existe | El dueño lo quitó (2026-11-10, `decisiones.md`) |
 
 ## 2. Marca y mascota (`assets/`)
 

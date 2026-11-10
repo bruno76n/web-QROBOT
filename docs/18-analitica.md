@@ -18,7 +18,7 @@ Web Analytics no cuenta clics. Por eso la web suma sus propios toques (tabla `wh
 | `product` (con `productId`) | "Pedir por WhatsApp" en la página de producto |
 | `order` | "Mandar por WhatsApp" en el pedido del inicio (también cuando se llegó desde una idea) |
 | `q404` | "Quiero este Q-404" |
-| `customizer` | "Pedir por WhatsApp" del personalizador |
+| `customizer` | "Pedir por WhatsApp" del personalizador. Ya no existe (2026-11-10); queda para los toques guardados |
 
 - Se manda con `navigator.sendBeacon` al tocar el link (no retrasa la apertura de WhatsApp).
 - Cuenta **toques al botón**, no pedidos reales: el dueño lo sabe (el texto del panel dice "toques", no "ventas").
