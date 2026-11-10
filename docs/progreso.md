@@ -62,7 +62,6 @@ Trabajo en local y en la nube (sesión de Claude Code en la web); se unió en `m
 | Dato | Valor provisional | Desde |
 |---|---|---|
 | Dominio | `https://quickrobot.example` | Fase 1 (`src/config/site.ts`) |
-| Número de WhatsApp | `52XXXXXXXXXX` (se muestra `+52 [tu número]`) | Fase 1 |
 | Facebook | `[tu página]` (texto, sin liga) | Fase 1 |
 | Instagram | `[@tu.usuario]` (texto, sin liga) | Fase 1 |
 | Fecha límite de Navidad | 12 de diciembre | Fase 1 |

@@ -72,7 +72,6 @@ Datos que todavía no existen. Mientras falten, Claude Code usa el **valor provi
 | Dato | Valor provisional | Dónde se usa |
 |---|---|---|
 | Dominio | `quickrobot.example` | `17`, `14` |
-| Número de WhatsApp | `52XXXXXXXXXX` | `src/config/site.ts` |
 | Facebook e Instagram | `[tu página]`, `[@tu.usuario]` | Footer |
 | Fecha límite de Navidad | 12 de diciembre | Sección Navidad |
 | Precios reales | Los del mockup (`05 §4`) | Semilla |

@@ -1,10 +1,11 @@
 import { test, expect } from '@playwright/test';
 import { stubPhotoHost } from './stub-images';
+import { site } from '../src/config/site';
 
 // The home page (docs/fases/fase-4.md): flow B, the header over the hero, printing, Q-404, the pool.
 test.beforeEach(({ context }) => stubPhotoHost(context));
 
-const WA = '52XXXXXXXXXX';
+const WA = site.whatsapp;
 
 /** The order island hydrates when it scrolls into view: wait for it before typing. */
 const orderReady = (page: import('@playwright/test').Page) =>

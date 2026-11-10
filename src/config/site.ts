@@ -8,10 +8,10 @@ export const site = {
   domain: 'https://quickrobot.centerdiv.mx',
   /** Public photo host (R2 custom domain); must match `PUBLIC_IMG_BASE` in wrangler.jsonc and the CSP. */
   imgBase: 'https://fotos-quickrobot.centerdiv.mx',
-  /** Country code + number, no "+" or spaces. Provisional. */
-  whatsapp: '52XXXXXXXXXX',
-  /** Shown in the footer. Provisional until the real number exists. */
-  whatsappLabel: '+52 [tu número]',
+  /** Country code + number, no "+" or spaces. */
+  whatsapp: '523481308678',
+  /** Shown in the footer. */
+  whatsappLabel: '+52 348 130 8678',
   /** `url: null` renders plain text until the real page exists. Provisional. */
   facebook: { label: '[tu página]', url: null as string | null },
   instagram: { label: '[@tu.usuario]', url: null as string | null },

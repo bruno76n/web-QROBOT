@@ -1,11 +1,12 @@
 import { test, expect } from '@playwright/test';
 import { stubPhotoHost } from './stub-images';
+import { site } from '../src/config/site';
 
 test.beforeEach(({ context }) => stubPhotoHost(context));
 
 // Flows A, C and G of docs/04 §6, plus the "no JavaScript" state of docs/04 §7.
 // They run on the production build with the seed (the web server command reloads it).
-const WA = '52XXXXXXXXXX';
+const WA = site.whatsapp;
 const waText = (href: string | null) => {
   expect(href, 'whatsapp link').toMatch(new RegExp(`^https://wa\\.me/${WA}\\?text=`));
   return decodeURIComponent((href ?? '').split('?text=')[1] ?? '');
@@ -28,7 +29,7 @@ test('flujo A: del catálogo a un producto y pedirlo por WhatsApp con el mensaje
   await qty.fill('3');
   const link = page.getByRole('link', { name: /Pedir por WhatsApp/ });
   expect(waText(await link.getAttribute('href'))).toBe(
-    'Hola, me interesa: 3 llaveros en verde (Nombre (hasta 10 letras): SOFI). ¿Cuánto me sale y para cuándo lo tendrían?\nhttps://quickrobot.example/producto/llaveros-con-nombre',
+    `Hola, me interesa: 3 llaveros en verde (Nombre (hasta 10 letras): SOFI). ¿Cuánto me sale y para cuándo lo tendrían?\n${site.domain}/producto/llaveros-con-nombre`,
   );
   // singular for 1, and the +/- buttons
   await qty.fill('1');
@@ -64,7 +65,7 @@ test('un producto sin colores ni personalización no muestra esas opciones', asy
   await expect(page.getByLabel(/Nombre/)).toHaveCount(0);
   const link = page.getByRole('link', { name: /Pedir por WhatsApp/ });
   expect(waText(await link.getAttribute('href'))).toBe(
-    'Hola, me interesa: 1 Q-404. ¿Cuánto me sale y para cuándo lo tendrían?\nhttps://quickrobot.example/producto/q-404',
+    `Hola, me interesa: 1 Q-404. ¿Cuánto me sale y para cuándo lo tendrían?\n${site.domain}/producto/q-404`,
   );
   // six photos: counter, thumbnails and arrows
   await expect(page.getByText('1 / 6')).toBeVisible();
@@ -136,10 +137,10 @@ test('flujo G: las etiquetas para compartir de un producto', async ({ page, requ
   expect(await meta('meta[name="twitter:card"]')).toBe('summary_large_image');
   const image = await meta('meta[property="og:image"]');
   expect(image).toMatch(
-    /^https:\/\/img\.quickrobot\.example\/ph\/seed-macetas-1\/[0-9a-f]{8}\/og\.jpg$/,
+    new RegExp(`^${site.imgBase.replace(/\./g, '\\.')}/ph/seed-macetas-1/[0-9a-f]{8}/og\\.jpg$`),
   );
   expect(await page.locator('link[rel="canonical"]').getAttribute('href')).toBe(
-    'https://quickrobot.example/producto/macetas',
+    `${site.domain}/producto/macetas`,
   );
   expect(await page.locator('html').getAttribute('lang')).toBe('es-MX');
   await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute(
@@ -161,12 +162,12 @@ test('flujo G: las etiquetas para compartir de un producto', async ({ page, requ
 
 test('sitemap, robots y URLs sin barra final', async ({ request }) => {
   const sitemap = await (await request.get('/sitemap.xml')).text();
-  expect(sitemap).toContain('<loc>https://quickrobot.example/catalogo/navidad</loc>');
-  expect(sitemap).toContain('<loc>https://quickrobot.example/producto/macetas</loc>');
+  expect(sitemap).toContain(`<loc>${site.domain}/catalogo/navidad</loc>`);
+  expect(sitemap).toContain(`<loc>${site.domain}/producto/macetas</loc>`);
   expect((sitemap.match(/<url>/g) ?? []).length).toBeGreaterThanOrEqual(20);
   const robots = await (await request.get('/robots.txt')).text();
   expect(robots).toContain('Disallow: /admin');
-  expect(robots).toContain('Sitemap: https://quickrobot.example/sitemap.xml');
+  expect(robots).toContain(`Sitemap: ${site.domain}/sitemap.xml`);
   const slash = await request.get('/catalogo/', { maxRedirects: 0 });
   expect(slash.status()).toBe(301);
   expect(slash.headers()['location']).toMatch(/\/catalogo$/);

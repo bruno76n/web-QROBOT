@@ -99,7 +99,7 @@ El endpoint de subida responde `{ ok: false, code, details? }` con su HTTP.
 ```ts
 export const site = {
   domain: 'https://quickrobot.example',     // pendiente (01)
-  whatsapp: '52XXXXXXXXXX',                  // pendiente
+  whatsapp: '523481308678',                  // +52 348 130 8678
   facebook: '', instagram: '',               // pendientes
   christmas: { orderDeadline: '12-12', eve: '12-24', seasonStart: '10-01' },
   timeZone: 'America/Mexico_City',
