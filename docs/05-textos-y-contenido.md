@@ -73,7 +73,7 @@ Copiados del mockup. Lo que va entre corchetes es dato pendiente (`01`).
 - Botón: "Mandar por WhatsApp →"
 - Nota: "Se abre WhatsApp con el mensaje listo. No se envía nada hasta que tú le das enviar."
 
-**Footer:** Quick Robot · WhatsApp +52 348 130 8678 · Facebook Quick Robot · Instagram @quick_robot3d · "© {año} Quick Robot · Impresión 3D en Guadalajara" · Aviso de privacidad (la liga se agrega en la fase 5, cuando existe la página)
+**Footer:** Quick Robot · WhatsApp +52 348 130 8678 · Facebook Quick Robot · Instagram @quick_robot3d · "© {año} Quick Robot · Impresión 3D" · Aviso de privacidad (la liga se agrega en la fase 5, cuando existe la página)
 
 **Catálogo**
 - Título: "Elige uno. O cincuenta."

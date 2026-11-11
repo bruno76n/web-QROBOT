@@ -32,7 +32,7 @@ for (const url of publicUrls) {
       await expect(footer).toContainText('WhatsApp');
       await expect(footer).toContainText('Facebook');
       await expect(footer).toContainText('Instagram');
-      await expect(footer).toContainText('Impresión 3D en Guadalajara');
+      await expect(footer).toContainText('Impresión 3D');
       const box = await footer.locator('.footer-name').boundingBox();
       const textWidth = await footer.locator('.footer-name span').evaluate((el) => {
         const r = document.createRange();

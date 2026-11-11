@@ -23,7 +23,7 @@ export const es = {
     facebook: 'Facebook',
     instagram: 'Instagram',
     privacy: 'Aviso de privacidad',
-    legal: (year: number) => `© ${year} Quick Robot · Impresión 3D en Guadalajara`,
+    legal: (year: number) => `© ${year} Quick Robot · Impresión 3D`,
   },
   /** Aviso de privacidad (docs/19 §2): plain words, no personal data is asked on the site. */
   privacy: {

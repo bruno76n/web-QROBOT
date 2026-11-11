@@ -301,4 +301,5 @@ Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y pre
 - La imagen al compartir (`og-default.jpg`) pasa a ser solo el logo (cabeza de Q-404, sin nombre) centrado sobre blanco, hecha del SVG en `scripts/build-assets.mjs`. Sin el nombre porque el texto SVG depende de fuentes del sistema (ver decisión de assets); el nombre ya sale en el título del link. Las páginas de producto siguen compartiendo la foto de su primer producto.
 - **No se tocó:** el © del footer ("Impresión 3D en Guadalajara", no se pidió) ni el JSON-LD (`areaServed` y `addressLocality` "Guadalajara": no se ve y sirve a Google para búsquedas locales).
 - WhatsApp y Facebook guardan la vista previa de cada link: para ver la nueva hay que pedirle al depurador de Facebook que vuelva a leerlo.
+- **Footer (mismo día):** el dueño pidió quitarlo también del © del footer: "© {año} Quick Robot · Impresión 3D". Ya no queda "Guadalajara" en nada visible; solo en el JSON-LD (`areaServed`, `addressLocality`) y en la zona horaria de la temporada.
 
