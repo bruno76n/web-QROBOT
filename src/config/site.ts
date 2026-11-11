@@ -12,9 +12,15 @@ export const site = {
   whatsapp: '523481308678',
   /** Shown in the footer. */
   whatsappLabel: '+52 348 130 8678',
-  /** `url: null` renders plain text until the real page exists. Provisional. */
-  facebook: { label: '[tu página]', url: null as string | null },
-  instagram: { label: '[@tu.usuario]', url: null as string | null },
+  /** `url: null` renders plain text; the label is what the footer shows. */
+  facebook: {
+    label: 'Quick Robot',
+    url: 'https://www.facebook.com/profile.php?id=61596536243175' as string | null,
+  },
+  instagram: {
+    label: '@quick_robot3d',
+    url: 'https://www.instagram.com/quick_robot3d/' as string | null,
+  },
   /** Responsible party of the privacy notice (docs/19 §2). Address and e-mail are provisional. */
   owner: { name: 'Bruno Ortiz', address: '[domicilio]', email: '[correo]' },
   /** Date shown on the privacy notice (`YYYY-MM-DD`); change it every time the text changes. */

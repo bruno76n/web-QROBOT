@@ -20,7 +20,7 @@ const contacts = [
       {contacts.map((c) => (
         <p class="text-[15px]">
           <span class="block text-[13px] text-ink-2">{c.label}</span>
-          {c.url ? <a href={c.url}>{c.value}</a> : c.value}
+          {c.url ? <a href={c.url} target="_blank" rel="noopener">{c.value}</a> : c.value}
         </p>
       ))}
     </div>
