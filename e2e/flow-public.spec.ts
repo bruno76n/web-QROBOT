@@ -93,7 +93,7 @@ test('flujo G: las etiquetas para compartir de un producto', async ({ page, requ
   expect(await page.title()).toBe('Macetas desde $150 · Quick Robot');
   expect(await meta('meta[property="og:title"]')).toBe('Macetas desde $150 · Quick Robot');
   expect(await meta('meta[property="og:description"]')).toBe(
-    'Para tu cactus o tus suculentas, del color que quieras. Impresión 3D en Guadalajara.',
+    'Para tu cactus o tus suculentas, del color que quieras. Impresión 3D.',
   );
   expect(await meta('meta[property="og:type"]')).toBe('product');
   expect(await meta('meta[property="og:locale"]')).toBe('es_MX');

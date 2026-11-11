@@ -17,9 +17,9 @@ Todos los textos de la web salen de aquí. En el código viven en **un solo arch
 
 Copiados del mockup. Lo que va entre corchetes es dato pendiente (`01`).
 
-**Header:** Impresión 3D · Guadalajara · Quick Robot · Navidad · Ideas · Catálogo · Q-404 · Cotizar
+**Header:** "Visita nuestras redes:" + botón "Instagram" (sobre el hero, en lugar del logo) · Quick Robot · Navidad · Ideas · Catálogo · Q-404 · Cotizar
 
-**Hero:** "Quick Robot" (sin otra frase visible). Texto para lectores de pantalla y SEO: "Impresión 3D en Guadalajara. Piezas con el logo de tu negocio, figuras de los que quieres y regalos que no hay en ninguna tienda."
+**Hero:** "Quick Robot" (sin otra frase visible). Texto para lectores de pantalla y SEO: "Impresión 3D. Piezas con el logo de tu negocio, figuras de los que quieres y regalos que no hay en ninguna tienda."
 
 **Navidad**
 - Título: "Regala algo que no hay en ninguna tienda."

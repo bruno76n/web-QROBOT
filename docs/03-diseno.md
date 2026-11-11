@@ -55,7 +55,7 @@ Se declaran como variables CSS y en el tema de Tailwind (`src/styles/global.css`
 ## 4. Componentes visuales
 
 - **Botón principal:** rectángulo negro, esquinas de 8 px, alto mínimo 50 px, flecha `→` que se mueve 4 px al pasar el mouse. Variante verde para WhatsApp. **Nunca** completamente redondo.
-- **Header:** blanco y fijo arriba. A la izquierda el logo (cabeza de Q-404 + "Quick Robot"); mientras se ve el hero, en su lugar aparece "Impresión 3D · Guadalajara" y el logo entra al pasar el hero. Al centro, una **pestaña negra** colgando del borde superior (esquinas inferiores de 16 px) con Navidad, Ideas, Catálogo y Q-404. A la derecha, el botón **Cotizar**. En pantallas de menos de 900 px la pestaña se oculta y quedan logo y Cotizar.
+- **Header:** blanco y fijo arriba. A la izquierda el logo (cabeza de Q-404 + "Quick Robot"); mientras se ve el hero, en su lugar aparece "Visita nuestras redes:" con un botón blanco de borde fino "Instagram" (liga al Instagram, otra pestaña) y el logo entra al pasar el hero. Al centro, una **pestaña negra** colgando del borde superior (esquinas inferiores de 16 px) con Navidad, Ideas, Catálogo y Q-404. A la derecha, el botón **Cotizar**. En pantallas de menos de 900 px la pestaña se oculta y quedan logo y Cotizar.
 - **Doble filete:** dos líneas de 2 px, morada arriba y verde abajo, de 44 px de ancho. Marca los inicios de sección.
 - **Tarjeta de producto:** foto cuadrada sobre `--soft` con esquinas de 20 px, nombre, frase corta y "Desde $X".
 - **Campos para llenar** (pedido y personalización): texto morado con subrayado morado de 1.5 px, sin caja.

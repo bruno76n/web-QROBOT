@@ -2,10 +2,9 @@
 export const es = {
   site: {
     name: 'Quick Robot',
-    tagline: 'Impresión 3D · Guadalajara',
-    title: 'Quick Robot | Impresión 3D en Guadalajara',
+    title: 'Quick Robot | Impresión 3D',
     description:
-      'Impresión 3D en Guadalajara. Piezas con el logo de tu negocio, figuras de los que quieres y regalos que no hay en ninguna tienda.',
+      'Impresión 3D. Piezas con el logo de tu negocio, figuras de los que quieres y regalos que no hay en ninguna tienda.',
   },
   a11y: {
     skipToContent: 'Ir al contenido',
@@ -15,6 +14,8 @@ export const es = {
   header: {
     nav: [{ label: 'Catálogo', href: '/catalogo' }],
     quote: 'Cotizar',
+    /** Over the hero the header shows this instead of the logo (docs/03 §5). */
+    social: { lead: 'Visita nuestras redes:', button: 'Instagram' },
     quoteHref: '/#pedido',
   },
   footer: {

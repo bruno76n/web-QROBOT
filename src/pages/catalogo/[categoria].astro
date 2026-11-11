@@ -27,7 +27,7 @@ const description =
         .join(
           ', ',
         )}${products.length > 4 ? ' y más' : ''}.${cheapest !== null ? ` Desde ${formatMoney(cheapest)}.` : ''}`
-    : `${label}. Impresión 3D en Guadalajara.`;
+    : `${label}. Impresión 3D.`;
 const jsonLd = [
   breadcrumbJsonLd(site.domain, [{ name: 'Catálogo', href: '/catalogo' }, { name: label }]),
 ];

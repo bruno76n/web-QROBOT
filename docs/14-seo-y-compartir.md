@@ -8,10 +8,10 @@ Se generan en `BaseLayout.astro` con lo que mande cada página.
 
 | Página | `<title>` | `description` | `og:image` |
 |---|---|---|---|
-| Inicio | Quick Robot · Impresión 3D en Guadalajara | Piezas con el logo de tu negocio, figuras de los que quieres y regalos que no hay en ninguna tienda. Pide por WhatsApp. | Imagen de marca 1200 × 630 (`public/brand/og-default.jpg`: Q-404 + "Quick Robot" sobre blanco) |
+| Inicio | Quick Robot · Impresión 3D | Piezas con el logo de tu negocio, figuras de los que quieres y regalos que no hay en ninguna tienda. Pide por WhatsApp. | Imagen de marca 1200 × 630 (`public/brand/og-default.jpg`: solo el logo, la cabeza de Q-404, centrado sobre blanco) |
 | Catálogo | Catálogo · Quick Robot | Llaveros, servilleteros, figuras y adornos impresos en 3D. Precios desde $X. | La de marca |
 | Categoría | {Categoría} · Quick Robot | Lista de lo que hay en esa categoría, con precio desde | La de marca |
-| Producto | {Nombre} desde ${precio} · Quick Robot | {Frase corta} Impresión 3D en Guadalajara. | `og.jpg` de su primera foto |
+| Producto | {Nombre} desde ${precio} · Quick Robot | {Frase corta} Impresión 3D. | `og.jpg` de su primera foto |
 | Privacidad | Aviso de privacidad · Quick Robot | — | La de marca |
 | 404 | Error 404 · Quick Robot | — (`noindex`) | La de marca |
 | Panel | Panel · Quick Robot | — (`noindex, nofollow`) | — |

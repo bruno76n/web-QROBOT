@@ -96,7 +96,7 @@ export function productTitle(name: string, priceFromCents: number | null): strin
 
 export function productDescription(short: string): string {
   const base = short.trim();
-  return base ? `${base} Impresión 3D en Guadalajara.` : 'Impresión 3D en Guadalajara.';
+  return base ? `${base} Impresión 3D.` : 'Impresión 3D.';
 }
 
 export interface SitemapEntry {

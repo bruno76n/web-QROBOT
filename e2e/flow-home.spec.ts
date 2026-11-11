@@ -53,12 +53,17 @@ test('"Apartar un regalo" llena el pedido de Navidad', async ({ page }) => {
   );
 });
 
-test('el header muestra "Impresión 3D · Guadalajara" sobre el hero y el logo al pasarlo', async ({
+test('el header muestra "Visita nuestras redes:" con botón a Instagram sobre el hero y el logo al pasarlo', async ({
   page,
 }) => {
   await page.goto('/');
   const header = page.locator('header[data-top]');
   await expect(header).toHaveAttribute('data-over-hero', '');
+  await expect(header).toContainText('Visita nuestras redes:');
+  await expect(header.getByRole('link', { name: 'Instagram' })).toHaveAttribute(
+    'href',
+    'https://www.instagram.com/quick_robot3d/',
+  );
   await page.locator('#ideas').scrollIntoViewIfNeeded();
   await page.evaluate(() => window.scrollBy(0, 400));
   await expect(header).not.toHaveAttribute('data-over-hero', '');

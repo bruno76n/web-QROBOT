@@ -52,7 +52,7 @@ Ver `01-idea-y-decisiones.md` (W1–W16). Resumen: muestrario sin tienda; proyec
 ## 2026-11-03 · Fase 1 · Paso 1.4 · Layout, header y footer
 - **Footer con nombre gigante aunque el mockup no lo tiene:** `03 §5`, `04 §2.9` y `11 §2` lo piden y `02 §1` dice que cuando documento y mockup no coinciden manda el documento. No cambia ningún comportamiento (solo se suma un bloque).
 - **Ancho exacto sin JavaScript:** el contenedor `.footer-name` es `container-type: inline-size` y el `<span>` interior usa `font-size: calc(100cqw / 5.168)`. 5.168 es el ancho de "Quick Robot" a 1 em con Geist 600 e interletrado −0.068em, medido en el navegador. La prueba e2e verifica que el texto mide el ancho del contenedor (±2 px) en 390, 820 y 1440. Si cambia la fuente o el peso, hay que remedir. (`cqw` en el propio contenedor no funciona: toma el contenedor del ancestro; por eso hay dos elementos.)
-- **Header sin hero todavía:** el `<script>` busca `[data-hero]` y, mientras esté visible, pone `data-over-hero` en el header (muestra "Impresión 3D · Guadalajara" en lugar del logo). Sin `data-hero` el logo siempre se ve. Arranca en `astro:page-load` y se limpia en `astro:before-swap` (regla 13).
+- **Header sin hero todavía:** el `<script>` busca `[data-hero]` y, mientras esté visible, pone `data-over-hero` en el header (muestra "Visita nuestras redes:" y el botón a Instagram en lugar del logo). Sin `data-hero` el logo siempre se ve. Arranca en `astro:page-load` y se limpia en `astro:before-swap` (regla 13).
 - **Enlaces:** Navidad, Ideas, Q-404 y Cotizar apuntan a `/#navidad`, `/#ideas`, `/#q404`, `/#pedido` (`04 §1`); el logo, a `/`. `aria-current="page"` solo para rutas sin ancla (Catálogo).
 - **Enlace "Ir al contenido":** se agregó (accesibilidad, `03 §7`); texto en `es.ts`. No está en el mockup.
 - **`<html lang="es-MX">`** (pide la fase), aunque el mockup dice `es`.
@@ -295,3 +295,10 @@ Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y pre
 - Se borran `NameMaker.astro`, `maker3d.tsx`, `src/lib/customizer.ts`, `customizerMessage`/`colorFor` de `whatsapp.ts`, los textos `es.maker`, `scripts/build-font.mjs` (fuente 3D) y las dependencias three, @react-three/fiber, @react-three/drei, three-stdlib, @types/three, geist y opentype.js. El flujo C de `04 §6` deja de existir.
 - Se conserva el origen de clics `customizer` (esquema, `/api/click` y desglose del panel) porque puede haber toques guardados en D1; cambiarlo pediría migración.
 - Si se quiere de vuelta, está en la historia de git antes de este commit.
+
+## 2026-11-10 · Sin "Guadalajara" arriba ni al compartir
+- Pedido del dueño: el texto del header sobre el hero pasa de "Impresión 3D · Guadalajara" a **"Visita nuestras redes:" + botón "Instagram"** (liga a `site.instagram.url`, otra pestaña; botón blanco con borde para no competir con "Cotizar"; en celular el texto queda arriba y el botón abajo). El título y la descripción al compartir el link (`<title>`, `og:title`, `og:description`, descripción de producto y de categoría) también quitan "Guadalajara". Es una diferencia más con el mockup (`02 §1`).
+- La imagen al compartir (`og-default.jpg`) pasa a ser solo el logo (cabeza de Q-404, sin nombre) centrado sobre blanco, hecha del SVG en `scripts/build-assets.mjs`. Sin el nombre porque el texto SVG depende de fuentes del sistema (ver decisión de assets); el nombre ya sale en el título del link. Las páginas de producto siguen compartiendo la foto de su primer producto.
+- **No se tocó:** el © del footer ("Impresión 3D en Guadalajara", no se pidió) ni el JSON-LD (`areaServed` y `addressLocality` "Guadalajara": no se ve y sirve a Google para búsquedas locales).
+- WhatsApp y Facebook guardan la vista previa de cada link: para ver la nueva hay que pedirle al depurador de Facebook que vuelva a leerlo.
+

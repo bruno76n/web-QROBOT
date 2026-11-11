@@ -83,14 +83,17 @@ await responsive(
 );
 await responsive(at('reference/hero/hero-celular.webp'), out.brand, 'hero-mobile', [600, 1200]);
 
-// Share image 1200×630: Q-404 on the --soft background (never enlarged), and apple-touch-icon
+// Share image 1200×630: only the logo (head) centred on white (vector, so it is never enlarged
+// from pixels), and apple-touch-icon
 {
-  const q = at('assets/q404/q404-morado-verde.webp');
   const dest = join(out.brand, 'og-default.jpg');
-  if (!fresh(q, dest)) {
-    const robot = await sharp(q).resize({ height: 570, withoutEnlargement: true }).toBuffer();
-    await sharp({ create: { width: 1200, height: 630, channels: 3, background: '#f6f6f8' } })
-      .composite([{ input: robot, gravity: 'centre' }])
+  if (!fresh(logo, dest)) {
+    const head = await sharp(readFileSync(logo), { density: 600 })
+      .resize({ height: 360 })
+      .png()
+      .toBuffer();
+    await sharp({ create: { width: 1200, height: 630, channels: 3, background: '#ffffff' } })
+      .composite([{ input: head, gravity: 'centre' }])
       .jpeg({ quality: 86 })
       .toFile(dest);
     made++;

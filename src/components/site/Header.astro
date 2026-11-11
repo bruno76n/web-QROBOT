@@ -1,5 +1,6 @@
 ---
 import { es } from '@/i18n/es';
+import { site } from '@/config/site';
 import Logo from './Logo.astro';
 import Button from './Button.astro';
 
@@ -15,7 +16,20 @@ const isCurrent = (href: string) => !href.includes('#') && current.startsWith(hr
   <div class="wrap grid min-h-[var(--top)] max-w-none grid-cols-[1fr_auto_auto] items-center gap-x-1 min-[901px]:grid-cols-[1fr_auto_1fr] min-[901px]:gap-x-0">
     <div class="col-start-1 grid min-w-0 items-center *:[grid-area:1/1]">
       <span class="pointer-events-none invisible text-[12px] leading-[1.2] text-balance text-ink-2 min-[901px]:text-[14px] min-[901px]:leading-normal opacity-0 transition-[opacity,visibility] duration-300 group-data-[over-hero]/top:pointer-events-auto group-data-[over-hero]/top:visible group-data-[over-hero]/top:opacity-100">
-        {es.site.tagline}
+        <span class="flex flex-wrap items-center gap-x-3 gap-y-1">
+          {es.header.social.lead}
+          {site.instagram.url && (
+            <Button
+              href={site.instagram.url}
+              size="sm"
+              target="_blank"
+              rel="noopener"
+              class="min-h-8 !px-3 !text-[13px] border border-line bg-white text-ink hover:bg-soft min-[901px]:min-h-10 min-[901px]:!px-[18px] min-[901px]:!text-[15px]"
+            >
+              {es.header.social.button}
+            </Button>
+          )}
+        </span>
       </span>
       <a
         href="/"
@@ -53,7 +67,7 @@ const isCurrent = (href: string) => !href.includes('#') && current.startsWith(hr
 
 <script>
   // Phase 4 puts an element with `data-hero` at the top of the home page. While it is on
-  // screen the header shows the tagline instead of the logo (class `data-over-hero`).
+  // screen the header shows the social-links invitation instead of the logo (class `data-over-hero`).
   // Page scripts start on `astro:page-load` and clean up on `astro:before-swap` (CLAUDE.md §13).
   let observer: IntersectionObserver | undefined;
 

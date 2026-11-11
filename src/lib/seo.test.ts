@@ -20,9 +20,9 @@ describe('titles and URLs', () => {
     );
     expect(productTitle('Algo', null)).toBe('Algo · Quick Robot');
     expect(productDescription('Con tu nombre.')).toBe(
-      'Con tu nombre. Impresión 3D en Guadalajara.',
+      'Con tu nombre. Impresión 3D.',
     );
-    expect(productDescription('')).toBe('Impresión 3D en Guadalajara.');
+    expect(productDescription('')).toBe('Impresión 3D.');
   });
   it('builds absolute URLs without double slashes', () => {
     expect(absoluteUrl(domain + '/', '/producto/a')).toBe('https://quickrobot.example/producto/a');
@@ -37,7 +37,7 @@ describe('JSON-LD (docs/14 §2) against the expected output', () => {
         domain,
         slug: 'llaveros-con-nombre',
         name: 'Llaveros con nombre',
-        description: 'Con tu nombre. Impresión 3D en Guadalajara.',
+        description: 'Con tu nombre. Impresión 3D.',
         priceFromCents: 5000,
         images: ['https://img.quickrobot.example/ph/a/v/1200.webp'],
       }),
@@ -45,7 +45,7 @@ describe('JSON-LD (docs/14 §2) against the expected output', () => {
       '@context': 'https://schema.org',
       '@type': 'Product',
       name: 'Llaveros con nombre',
-      description: 'Con tu nombre. Impresión 3D en Guadalajara.',
+      description: 'Con tu nombre. Impresión 3D.',
       url: 'https://quickrobot.example/producto/llaveros-con-nombre',
       image: ['https://img.quickrobot.example/ph/a/v/1200.webp'],
       brand: { '@type': 'Brand', name: 'Quick Robot' },
