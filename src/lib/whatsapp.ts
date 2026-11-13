@@ -57,3 +57,13 @@ export function orderMessage(i: OrderMessageInput): string {
 export function q404Message(combo: string): string {
   return `Hola, quiero un Q-404 en ${combo.toLowerCase()}. ¿Cuánto cuesta y cuándo lo tendrían?`;
 }
+
+/** From a page of Aprende: "Cotizar por WhatsApp" (docs/21 §4.6). */
+export function learnQuoteMessage(title: string): string {
+  return `Hola, vi «${title}» en su página y quiero cotizar una pieza.`;
+}
+
+/** From the search of Aprende without results (docs/22 §9). */
+export function learnMissMessage(query: string): string {
+  return `Hola, busqué «${query.trim()}» en Aprende y no encontré la respuesta.`;
+}

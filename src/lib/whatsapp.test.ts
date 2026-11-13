@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  learnMissMessage,
+  learnQuoteMessage,
   orderMessage,
   productMessage,
   q404Message,
@@ -87,5 +89,18 @@ describe('waLink', () => {
     expect(encoded).toContain('%26');
     expect(encoded).toContain('%23');
     expect(decodeURIComponent(encoded)).toBe(msg);
+  });
+});
+
+describe('Aprende messages', () => {
+  it('quote from a page', () => {
+    expect(learnQuoteMessage('PETG')).toBe(
+      'Hola, vi «PETG» en su página y quiero cotizar una pieza.',
+    );
+  });
+  it('a search with no answer', () => {
+    expect(learnMissMessage('  boquilla rara ')).toBe(
+      'Hola, busqué «boquilla rara» en Aprende y no encontré la respuesta.',
+    );
   });
 });
