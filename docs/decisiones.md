@@ -325,3 +325,11 @@ Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y pre
 - Ids estables: cada página guarda `learn-<slug con guiones>` (`learn-home` la portada) y cada pregunta `<id>-q<n>`; así local y producción comparten ids.
 - `search_text` guarda tres líneas normalizadas (título · etiquetas · resto: subtítulo, resumen y preguntas) para ordenar la búsqueda en D1 sin otra columna.
 - Las preguntas empiezan en `position = 1` (es el número de `#pregunta-N`).
+
+## 2026-11-13 · Maquetas de todas las pantallas de Aprende y reglas de dispositivos
+- 12 maquetas en `reference/mockups/aprende/`, generadas con el contenido de `content/aprende/` (reemplazan las 3 anteriores: `aprende.html`, `aprende-filamentos.html`, `aprende-pieza.html`).
+- Reglas de celular, tableta, escritorio y navegadores en `docs/24`.
+- **Safari:** el dueño pidió que los filtros funcionen en Chrome y en Safari, incluido Safari 14. Tailwind CSS 4 (toda la web) pide Safari 16.4 o más nuevo, así que el soporte completo es desde 16.4; los scripts de Aprende se escriben y compilan para que funcionen desde Safari 14 (`24 §4–5`). Nada de `requestIdleCallback` directo (Safari no lo tiene).
+- Tabla de filamentos: el PETG pasa de «cerrada recomendada» a «mejor cerrada» (`enclosed-better`); el interruptor «Mi impresora es abierta» ya no lo oculta, porque Bambu Lab lo recomienda cerrado pero no desaconseja la impresora abierta (a diferencia de ABS, ASA, PC y nylon).
+
+- `CLAUDE.md`: la regla de Safari entra como **17** (la 16 ya es la de código documentado).

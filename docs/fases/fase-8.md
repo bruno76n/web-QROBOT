@@ -42,7 +42,7 @@
   3. `wrangler d1 migrations apply quick-robot-web --remote` (migración `0007`).
   4. `pnpm learn:import --remote --yes --sync` (solo agrega páginas; no borra nada).
   5. `pnpm build && pnpm exec wrangler deploy`.
-  6. Revisar en vivo: `/aprende`, un tema, una ficha, el glosario, una búsqueda con resultado y una sin resultado, `/admin/aprende` pide entrar (Access ya cubre `/admin*`; comprobarlo), el sitemap.
+  6. Revisar en vivo: `/aprende`, un tema, una ficha, el glosario, una búsqueda con resultado y una sin resultado, `/admin/aprende` pide entrar (Access ya cubre `/admin*`; comprobarlo), el sitemap. Lista de `24 §6` punto 3 en iPhone y en Safari de Mac (o dejarla en el informe para el dueño).
   7. `17 §8` con lo que se creó y la fecha.
 - **Consultar:** `17`, `22 §2–3, §6`.
 

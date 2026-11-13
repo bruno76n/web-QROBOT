@@ -132,7 +132,7 @@
       "waterPct": 0.32,
       "drying": "70 °C · 8 h",
       "maxSpeedMmS": 200,
-      "printer": "enclosed",
+      "printer": "enclosed-better",
       "hardenedNozzle": "no",
       "ams": "yes",
       "filters": [
@@ -154,7 +154,7 @@
       "waterPct": 0.3,
       "drying": "70 °C · 8 h",
       "maxSpeedMmS": 200,
-      "printer": "enclosed",
+      "printer": "enclosed-better",
       "hardenedNozzle": "yes",
       "ams": "yes",
       "filters": [

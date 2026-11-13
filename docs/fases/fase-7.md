@@ -17,17 +17,17 @@
 
 ### 7.2 Páginas de tema y de respuesta
 - **Hacer:** `src/pages/aprende/[...slug].astro` con: migas, encabezado (título, subtítulo, revisado, «En corto»), cuerpo, «En esta página», «También te puede servir», preguntas con anclas, fuentes y llamado según `cta` (con `site.system.enabled`). Página de tema con la lista de sus páginas y chips que la filtran (`<script>`). 404 para lo que no existe o está oculto.
-- **Consultar:** `21 §2, §4.1, §4.3–4.4, §4.6`, `reference/mockups/aprende/aprende-filamentos.html` y `aprende-pieza.html`, `04 §7` (estados), `07 §1` (scripts y View Transitions).
+- **Consultar:** `21 §2, §4.1, §4.3–4.4, §4.6`, `reference/mockups/aprende/` (`tema.html`, `tema-con-tabla.html`, `ficha.html`, `problema.html`, `articulo-clientes.html`), `24 §1–3`, `04 §7` (estados), `07 §1` (scripts y View Transitions).
 - **Listo cuando:** comparado con las maquetas en 390, 820 y 1440; filas en `progreso.md` (las páginas sin maqueta: «igual (sin maqueta)» como la 404).
 
 ### 7.3 Portada y glosario
 - **Hacer:** `src/pages/aprende/index.astro` (`21 §4.2`; el buscador todavía como formulario que lleva a `/aprende/buscar`) y el glosario (`21 §4.5`).
-- **Consultar:** `21 §4.2, §4.5`, `reference/mockups/aprende/aprende.html`.
+- **Consultar:** `21 §4.2, §4.5`, `reference/mockups/aprende/portada.html` y `glosario.html`, `24 §3`.
 
 ### 7.4 Datos interactivos
 - **Hacer:** `FilamentTable.astro`, `PrinterTable.astro` con ¿Cabe mi pieza? (`fit.ts`), `MaintenanceCalendar.astro` y `CostCalculator.astro` (`cost.ts`), cada uno con su `<script>`; conectarlos a las marcas `[[…]]` de 7.1.
-- **Consultar:** `21 §6`, `content/aprende/datos/*.json`, `reference/mockups/aprende/aprende-filamentos.html` (filtros y tarjetas en celular), `15 §2`.
-- **Prueba (Playwright):** flujos I, J y K de `21 §15`.
+- **Consultar:** `21 §6`, `content/aprende/datos/*.json`, `reference/mockups/aprende/tema-con-tabla.html`, `impresoras.html`, `mantenimiento.html` y `calculadora.html`, `24 §3, §5`, `15 §2`.
+- **Prueba (Playwright):** flujos I, J y K de `21 §15`, también en 360 px.
 
 ### 7.5 Buscador · servidor
 - **Hacer:** `src/server/search.ts` (Meilisearch con el SDK `meilisearch`, tiempo máximo, respaldo en D1, `syncLearnIndex()`), `src/pages/api/aprende/buscar.ts`, `SEARCH_LIMITER` en `wrangler.jsonc` y `env.d.ts`, `MEILI_HOST` en `wrangler.jsonc` (vacío), líneas comentadas en `.dev.vars.example`, conteo de búsquedas sin resultado, `src/pages/aprende/buscar.astro` (sin JavaScript, `noindex`). `pnpm learn:sync` y la opción `--sync` del importador.
@@ -37,7 +37,7 @@
 
 ### 7.6 Buscador · interfaz
 - **Hacer:** `src/components/learn/Search.astro` y su `<script>` (`22 §9`): combobox accesible, espera entre teclas, cancelación, ⌘K y «/», chips de tema, resaltado con nodos de texto, estados (buscando, sin resultados con Q-404 y WhatsApp, error). En la portada, grande; en las demás páginas de Aprende, compacto arriba.
-- **Consultar:** `22 §9`, `reference/mockups/aprende/aprende.html` (panel de resultados y estado 404), `03 §7`.
+- **Consultar:** `22 §9`, `reference/mockups/aprende/portada.html` y `buscar.html` (panel de resultados, hoja en celular y estado 404), `24 §3, §5`, `03 §7`.
 - **Prueba (Playwright):** flujos H y L de `21 §15`; teclado completo (abrir con ⌘K, bajar con ↓, abrir con Enter).
 
 ### 7.7 Índice de Meilisearch
@@ -46,9 +46,9 @@
 - **Si no hay Meilisearch todavía:** no es parada. Todo funciona con D1; anotar en `progreso.md` «Buscador en D1 hasta que el dueño elija dónde corre Meilisearch (`22 §2`)».
 
 ### 7.8 Menú, SEO, privacidad y revisión
-- **Hacer:** «Aprende» en `es.header.nav` (y en el footer); etiquetas y JSON-LD de `21 §12`; sitemap; línea de privacidad de `22 §11` con `site.privacyUpdated` nuevo; `18` (búsquedas sin resultado como métrica) y `19` al día; `04 §1` (rutas nuevas); `15 §2` (presupuesto de Aprende) y `lighthouserc.json` con las 3 URLs de `21 §13`.
+- **Hacer:** `vite.build.target` de `24 §4` en `astro.config.mjs` y proyecto `webkit` en `playwright.config.ts` (`24 §6`); «Aprende» en `es.header.nav` (y en el footer; logo sin nombre a ≤ 480 px, `24 §3`); etiquetas y JSON-LD de `21 §12`; sitemap; línea de privacidad de `22 §11` con `site.privacyUpdated` nuevo; `18` (búsquedas sin resultado como métrica) y `19` al día; `04 §1` (rutas nuevas); `15 §2` (presupuesto de Aprende) y `lighthouserc.json` con las 3 URLs de `21 §13`.
 - **Consultar:** `21 §12–13`, `14`, `19 §2`, `22 §11`.
-- **Listo cuando:** flujos H–L pasan; axe sin errores serios en portada, tema, ficha, glosario y resultados; `pnpm size` y Lighthouse cumplen; navegar inicio → Aprende → ficha → catálogo → Aprende sin errores de scripts (View Transitions).
+- **Listo cuando:** flujos H–L pasan en Chromium y en WebKit; axe sin errores serios en portada, tema, ficha, glosario y resultados; `pnpm size` y Lighthouse cumplen; navegar inicio → Aprende → ficha → catálogo → Aprende sin errores de scripts (View Transitions).
 
 ---
 

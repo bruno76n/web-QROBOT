@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Costo de una pieza · Aprende</title>
+<!-- MAQUETA · Quick Robot web · Aprende. Generada de content/aprende/ (no editar a mano). Reglas de dispositivos: docs/24. -->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_base.css">
+<link rel="stylesheet" href="_aprende.css">
+</head>
+<body>
+<header class="site-h" id="siteH">
+  <div class="wrap">
+    <a class="brand" href="#" aria-label="Quick Robot, ir al inicio"><img src="../../../assets/logo-cabeza.svg" alt="" width="34" height="30"><span>Quick Robot</span></a>
+    <nav class="tab" aria-label="Principal"><a href="#">Catálogo</a><a href="portada.html" aria-current="page">Aprende</a></nav>
+    <div class="h-right"><a class="btn sm" href="#">Cotizar <span class="ar">→</span></a></div>
+  </div>
+</header>
+<main id="inicio">
+<div class="ap-bar"><div class="wrap"><form class="sf" data-search action="buscar.html" role="search">
+  <div class="sf-field"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5" stroke-linecap="round"/></svg>
+    <input type="search" name="q" value="" placeholder="Busca un material, un problema o una pregunta" autocomplete="off" autocapitalize="off" spellcheck="false"
+      role="combobox" aria-expanded="false" aria-controls="s-top-list" aria-autocomplete="list" aria-label="Buscar en Aprende" enterkeyhint="search">
+    <span class="sf-kbd" aria-hidden="true"><kbd>⌘</kbd><kbd>K</kbd></span>
+    <button class="sf-close" type="button">Cerrar</button>
+  </div>
+  <div class="sp" hidden>
+    <div class="sp-top"><span class="sp-n" aria-live="polite"></span><div class="sp-chips"></div></div>
+    <ul class="sp-list" id="s-top-list" role="listbox" aria-label="Resultados"></ul>
+  </div>
+</form></div></div>
+<div class="ap-head"><div class="wrap">
+  <nav class="crumbs" aria-label="Migas"><ol><li><a href="portada.html">Aprende</a></li><li><a href="#sin-maqueta-negocio">Negocio</a></li><li aria-current="page">Costo de una pieza</li></ol></nav>
+  <h1 class="ap-h1">Costo de una pieza</h1>
+  <p class="ap-sub">Fórmula completa, con ejemplo.</p><p class="ap-rev">Revisado en noviembre de 2026</p>
+  <div class="ap-sum"><b>En corto</b><p>Material (con purga) + electricidad + desgaste de la impresora + mantenimiento + extras, y todo eso dividido entre la proporción de piezas que salen bien.</p></div>
+</div></div>
+<div class="wrap ap-main">
+  <div class="prose">
+    <details class="ap-toc-m"><summary>En esta página</summary><nav class="toc" aria-label="En esta página"><a href="#formula">Fórmula</a><a href="#ejemplo-valores-de-muestra">Ejemplo (valores de muestra)</a></nav></details>
+    
+    <h2 id="formula">Fórmula</h2>
+<div class="tbl-wrap wide" role="region" aria-label="Tabla" tabindex="0"><table>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Cálculo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Material (M)</td>
+<td>gramos × costo por gramo × (1 + % de purga)</td>
+</tr>
+<tr>
+<td>Electricidad (L)</td>
+<td>horas × kW de la impresora × precio del kWh</td>
+</tr>
+<tr>
+<td>Máquina (Q)</td>
+<td>horas × (costo de la impresora ÷ horas de vida + mantenimiento por hora)</td>
+</tr>
+<tr>
+<td>Extras (E)</td>
+<td>imanes, tornillos, insertos, pintura, empaque</td>
+</tr>
+<tr>
+<td>Subtotal</td>
+<td>M + L + Q + E</td>
+</tr>
+<tr>
+<td>Costo</td>
+<td>Subtotal ÷ (1 − % de fallos ÷ 100)</td>
+</tr>
+</tbody>
+</table></div>
+<section class="calc" aria-labelledby="calc-h">
+<form class="calc-f" id="calc-f" onsubmit="return false">
+  <h2 id="calc-h" style="grid-column:1/-1;margin:0">Calculadora de costo</h2>
+  <fieldset><legend>Material</legend><label for="c-g">Gramos de la pieza<span class="ig"><input id="c-g" inputmode="decimal" value="25" autocomplete="off"><span>g</span></span></label><label for="c-purge">Purga<span class="ig"><input id="c-purge" inputmode="decimal" value="5" autocomplete="off"><span>%</span></span></label><label for="c-roll">Precio del rollo<span class="ig"><span>$</span><input id="c-roll" inputmode="decimal" value="450" autocomplete="off"></span></label><label for="c-rollg">Peso del rollo<span class="ig"><input id="c-rollg" inputmode="decimal" value="1000" autocomplete="off"><span>g</span></span></label></fieldset>
+  <fieldset><legend>Máquina</legend><label for="c-h">Horas de impresión<span class="ig"><input id="c-h" inputmode="decimal" value="1.5" autocomplete="off"><span>h</span></span></label><label for="c-w">Consumo de la impresora<span class="ig"><input id="c-w" inputmode="decimal" value="150" autocomplete="off"><span>W</span></span></label><label for="c-kwh">Precio del kWh<span class="ig"><span>$</span><input id="c-kwh" inputmode="decimal" value="3.00" autocomplete="off"></span></label><label for="c-printer">Precio de la impresora<span class="ig"><span>$</span><input id="c-printer" inputmode="decimal" value="20000" autocomplete="off"></span></label><label for="c-life">Horas de vida<span class="ig"><input id="c-life" inputmode="decimal" value="5000" autocomplete="off"><span>h</span></span></label><label for="c-maint">Mantenimiento por hora<span class="ig"><span>$</span><input id="c-maint" inputmode="decimal" value="1.00" autocomplete="off"></span></label></fieldset>
+  <fieldset><legend>Otros</legend><label for="c-extra">Extras<span class="ig"><span>$</span><input id="c-extra" inputmode="decimal" value="0" autocomplete="off"></span></label><label for="c-fail">Piezas que salen mal<span class="ig"><input id="c-fail" inputmode="decimal" value="5" autocomplete="off"><span>%</span></span></label></fieldset>
+</form>
+<div class="calc-r" id="calc-r" aria-live="polite">
+  <dl><div><dt>Material</dt><dd id="r-m"></dd></div><div><dt>Electricidad</dt><dd id="r-l"></dd></div><div><dt>Máquina</dt><dd id="r-q"></dd></div><div><dt>Extras</dt><dd id="r-e"></dd></div><div><dt>Subtotal</dt><dd id="r-s"></dd></div></dl>
+  <div class="tot"><span>Costo</span><b id="r-t"></b></div>
+  <p class="tiny" style="color:#c9c9d1">Valores de ejemplo. No se guarda nada.</p>
+</div>
+<div class="calc-bar" aria-hidden="true"><span>Costo <b id="r-tb"></b></span><a href="#calc-r">Ver detalle</a></div>
+</section>
+<h2 id="ejemplo-valores-de-muestra">Ejemplo (valores de muestra)</h2>
+<div class="tbl-wrap wide" role="region" aria-label="Tabla" tabindex="0"><table>
+<thead>
+<tr>
+<th>Dato</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PETG</td>
+<td>25 g a $0.45 por gramo, 5 % de purga</td>
+</tr>
+<tr>
+<td>Tiempo</td>
+<td>1.5 h</td>
+</tr>
+<tr>
+<td>Consumo</td>
+<td>0.15 kW, $3.00 por kWh</td>
+</tr>
+<tr>
+<td>Impresora</td>
+<td>$20,000, 5,000 h de vida</td>
+</tr>
+<tr>
+<td>Mantenimiento</td>
+<td>$1.00 por hora</td>
+</tr>
+<tr>
+<td>Fallos</td>
+<td>5 %</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tbl-wrap wide" role="region" aria-label="Tabla" tabindex="0"><table>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Cálculo</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Material</td>
+<td>25 × 0.45 × 1.05</td>
+<td>$11.81</td>
+</tr>
+<tr>
+<td>Electricidad</td>
+<td>1.5 × 0.15 × 3.00</td>
+<td>$0.68</td>
+</tr>
+<tr>
+<td>Máquina</td>
+<td>1.5 × (20,000 ÷ 5,000 + 1.00)</td>
+<td>$7.50</td>
+</tr>
+<tr>
+<td>Extras</td>
+<td></td>
+<td>$0.00</td>
+</tr>
+<tr>
+<td>Subtotal</td>
+<td></td>
+<td>$19.99</td>
+</tr>
+<tr>
+<td>Costo</td>
+<td>19.99 ÷ 0.95</td>
+<td>$21.04</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="callout "><img src="../../../assets/q404/q404-morado-verde.webp" alt="" width="72" height="114" loading="lazy"><div><b>Dato curioso</b><p>En el ejemplo, la máquina pesa casi tanto como el plástico. En piezas grandes y lentas, las horas de máquina suelen pesar más que el material.</p></div></aside>
+    
+    
+    <div class="ap-rel-m"><h2>También te puede servir</h2><div class="rel"><a href="#sin-maqueta-negocio-precio"><span>Negocio</span><b>Precio</b></a><a href="#sin-maqueta-negocio-fallos"><span>Negocio</span><b>Reserva por fallos</b></a><a href="#sin-maqueta-maquinas-consumo-electrico"><span>Máquinas</span><b>Consumo eléctrico</b></a><a href="#sin-maqueta-filamentos-rendimiento-del-rollo"><span>Filamentos</span><b>Rendimiento del rollo</b></a></div></div>
+    <div class="src"><h2>Fuentes</h2><ul><li>Quick Robot · Fórmula de costo del taller</li></ul></div>
+  </div>
+  <aside class="ap-aside" aria-label="En esta página"><h2>En esta página</h2><nav class="toc" aria-label="En esta página"><a href="#formula">Fórmula</a><a href="#ejemplo-valores-de-muestra">Ejemplo (valores de muestra)</a></nav><h2>También te puede servir</h2><div class="rel"><a href="#sin-maqueta-negocio-precio"><span>Negocio</span><b>Precio</b></a><a href="#sin-maqueta-negocio-fallos"><span>Negocio</span><b>Reserva por fallos</b></a><a href="#sin-maqueta-maquinas-consumo-electrico"><span>Máquinas</span><b>Consumo eléctrico</b></a><a href="#sin-maqueta-filamentos-rendimiento-del-rollo"><span>Filamentos</span><b>Rendimiento del rollo</b></a></div></aside>
+</div>
+
+</main>
+<footer class="site-f">
+  <div class="wrap">
+    <div class="big">Quick Robot</div>
+    <div class="f-row"><a href="#">Catálogo</a><a href="portada.html">Aprende</a><a href="#">WhatsApp +52 348 130 8678</a><a href="#">Facebook</a><a href="#">Instagram</a></div>
+    <div class="f-bottom"><span>© 2026 Quick Robot · Impresión 3D</span><a class="link" href="#">Aviso de privacidad</a></div>
+  </div>
+</footer>
+<div class="mk-note"><button type="button" aria-label="Cerrar nota">×</button><b>Maqueta · Costo de una pieza · Aprende.</b> Calculadora de costo con la fórmula del documento. <ul><li>Escritorio: resultado fijo a la derecha.</li><li>Celular: campos en una columna y barra fija abajo con el costo.</li></ul></div>
+<script src="_datos.js"></script>
+<script src="_aprende.js"></script>
+</body>
+</html>

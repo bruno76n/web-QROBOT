@@ -116,7 +116,8 @@ después del lanzamiento, y actualiza docs/progreso.md.
    docs/21-aprende.md, docs/22-buscador.md, docs/23-aprende-contenido.md
    docs/fases/fase-6.md, fase-7.md, fase-8.md
    content/aprende/          (118 páginas, datos, fuentes, buscador)
-   reference/mockups/aprende/ (3 maquetas)
+   docs/24-aprende-dispositivos.md
+   reference/mockups/aprende/ (12 maquetas: una por tipo de pantalla)
    ```
 2. Commit en `main` (`docs: plan and content for Aprende`).
 3. Meilisearch no hace falta para empezar: sin él, el buscador usa la base de datos (`docs/22 §2`).

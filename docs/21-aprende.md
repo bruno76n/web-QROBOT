@@ -44,7 +44,7 @@ Fijos, en `src/config/learn.ts` (`09`: lo fijo no va en la base). El orden es el
 
 ## 4. Pantallas
 
-Referencia visual: `reference/mockups/aprende/` (`aprende.html` = portada, `aprende-filamentos.html` = tema con tabla, `aprende-pieza.html` = artículo para clientes). Las demás pantallas siguen esos patrones y los tokens de `03`. Diferencias ya decididas con las maquetas en §11.
+Referencia visual: `reference/mockups/aprende/`, una maqueta por tipo de pantalla con el contenido real (lista en `24 §7`). Cómo se adapta cada parte a celular, tableta y escritorio, y qué cuidar en Safari: `24`. Diferencias ya decididas con las maquetas en §11.
 
 ### 4.1 Partes comunes
 
@@ -126,8 +126,8 @@ El cuerpo de cada página es Markdown con tablas (GFM). **No se usa `set:html`**
 Viven en `learn_datasets` (JSON) y se pintan en HTML; los filtros son un `<script>` por componente (arranca en `astro:page-load`, limpia en `astro:before-swap`). Sin React.
 
 ### 6.1 Tabla de filamentos (`filamentos`)
-- Chips de una elección (Todos · Decoración · Uso diario · Exterior y sol · Calor · Flexible · Piezas mecánicas · Soportes) y tres interruptores (Mi impresora es abierta · Uso AMS · Solo boquilla de latón), según `chips` y `toggles` del JSON.
-- Columnas en escritorio: Material (liga a su ficha) · Usos · Boquilla · Cama · Calor que aguanta (con su nivel de `heatLevels`) · Golpes · Secado · Impresora · Endurecida · AMS. En celular, cada fila es una tarjeta.
+- Chips de una elección (Todos · Decoración · Uso diario · Exterior y sol · Calor · Flexible · Piezas mecánicas · Soportes) y tres interruptores, según `chips` y `toggles` del JSON: «Mi impresora es abierta» oculta los de `printer = enclosed` (ABS, ASA, PC, nylon, PET-CF: Bambu Lab no recomienda imprimirlos en abierta; el PETG es `enclosed-better` y sí se queda), «Uso AMS» oculta los que no entran al AMS y «Solo boquilla de latón» oculta los que piden endurecida.
+- Columnas en escritorio: Material (liga a su ficha) · Usos · Boquilla · Cama · Calor que aguanta (con su nivel de `heatLevels`) · Golpes · Secado · Impresora (Abierta o cerrada · Mejor cerrada · Cerrada) · Endurecida · AMS. En tableta, tarjetas en 2 columnas; en celular, una tarjeta por material (`24 §3`).
 - Sin resultados: «Ningún filamento cumple todo eso. Quita un filtro.»
 
 ### 6.2 Tabla de impresoras y ¿Cabe mi pieza? (`impresoras`)
@@ -226,17 +226,18 @@ Van en `src/i18n/es.ts › learn`. Los de las páginas, en la base. Reglas de re
 
 ## 11. Diferencias con las maquetas
 
+Las maquetas (`reference/mockups/aprende/`) ya tienen el header de la web (Catálogo · Aprende), Q-404 real, los 11 temas y el contenido de `content/aprende/`. Lo que cambia en la web:
+
 | Maqueta | Web |
 |---|---|
-| Pestaña con Catálogo, Ideas, Aprende y Para talleres | Pestaña con **Catálogo y Aprende** (`es.header.nav`). Sin «Para talleres» ni columna de footer para el sistema |
-| Q-404 dibujado en SVG | Renders reales de `public/brand/q404/` |
-| Buscador con lista fija | Buscador real (`22`) |
-| Textos y datos de las maquetas | Mandan `23` y `content/aprende/` (el secado ya se corrigió en las maquetas, pero si algo difiere, gana el contenido) |
-| «¿Tienes taller?» → calculadora del sistema | Oculto hasta que salga el sistema (`site.system.enabled`) |
-| Portada: titular «¿Se despegó? ¿Se tapó? ¿Salieron hilos?» y su frase | Se conserva el titular como `h1` visible (`es.ts › learn.home.headline`); la frase de abajo es el `summary` de la página `index`. «Aprende» va en las migas y en `<title>` |
-| Tema de filamentos: `h1` «Filamentos: cuál usar y a qué temperatura», filtro «¿Para qué es tu pieza?» con 5 chips | `h1` = `title` («Filamentos»); filtro «Uso» con los chips y los 3 interruptores de `datos/filamentos.json` |
-| Portada con 7 temas | Los 11 temas de §3 |
-| Recuadros amarillos de notas | Son notas de la maqueta, no se construyen |
+| El buscador busca en una lista dentro del navegador (`_datos.js`) | Busca en `/api/aprende/buscar` (`22`); el aspecto y el comportamiento son los mismos |
+| `buscar.html` arma los resultados con JavaScript leyendo `?q=` | `/aprende/buscar` los arma en el servidor (funciona sin JavaScript) |
+| El dato curioso de la portada es siempre el primero | Uno por día (§4.2) |
+| Header fijo (`position: fixed`) | El header de la web (`sticky`), como ya está |
+| Footer resumido | El footer real de la web |
+| Ligas a páginas sin maqueta llevan a `#sin-maqueta-…` | Ligas reales |
+| Recuadros amarillos | Notas de la maqueta; no se construyen |
+| «¿Tienes taller?» y llamados a Quick Cerebro | No aparecen en las maquetas; en la web quedan ocultos hasta que salga el sistema (`site.system.enabled`) |
 
 ## 12. SEO
 

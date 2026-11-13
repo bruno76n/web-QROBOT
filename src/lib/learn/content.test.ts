@@ -3,6 +3,7 @@ import {
   expandSynonyms,
   learnUrl,
   normalizeQuery,
+  filamentRow,
   pageFrontmatter,
   printersData,
   sourcesFile,
@@ -44,6 +45,34 @@ describe('pageFrontmatter', () => {
     expect(pageFrontmatter.safeParse({ ...page, slug: 'Con Espacios' }).success).toBe(false);
     expect(pageFrontmatter.safeParse({ ...page, reviewed: 'noviembre' }).success).toBe(false);
     expect(pageFrontmatter.safeParse({ ...page, title: undefined }).success).toBe(false);
+  });
+});
+
+describe('filamentRow', () => {
+  const row = {
+    material: 'PETG',
+    slug: 'filamentos/petg',
+    uses: 'Piezas que se usan.',
+    nozzleC: '230–260',
+    bedC: '60–80',
+    hdtC: 69,
+    impactKjM2: null,
+    stiffnessMpa: null,
+    waterPct: null,
+    drying: '65 °C · 8 h',
+    maxSpeedMmS: null,
+    printer: 'enclosed-better',
+    hardenedNozzle: 'no',
+    ams: 'yes',
+    filters: [],
+  };
+  it.each(['any', 'enclosed-better', 'enclosed'])('accepts printer “%s”', (printer) => {
+    expect(filamentRow.safeParse({ ...row, printer }).success).toBe(true);
+  });
+  it('rejects an unknown printer', () => {
+    const r = filamentRow.safeParse({ ...row, printer: 'open' });
+    expect(r.success).toBe(false);
+    expect(r.error?.issues[0]?.path).toEqual(['printer']);
   });
 });
 

@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Volumen de impresión · Aprende</title>
+<!-- MAQUETA · Quick Robot web · Aprende. Generada de content/aprende/ (no editar a mano). Reglas de dispositivos: docs/24. -->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_base.css">
+<link rel="stylesheet" href="_aprende.css">
+</head>
+<body>
+<header class="site-h" id="siteH">
+  <div class="wrap">
+    <a class="brand" href="#" aria-label="Quick Robot, ir al inicio"><img src="../../../assets/logo-cabeza.svg" alt="" width="34" height="30"><span>Quick Robot</span></a>
+    <nav class="tab" aria-label="Principal"><a href="#">Catálogo</a><a href="portada.html" aria-current="page">Aprende</a></nav>
+    <div class="h-right"><a class="btn sm" href="#">Cotizar <span class="ar">→</span></a></div>
+  </div>
+</header>
+<main id="inicio">
+<div class="ap-bar"><div class="wrap"><form class="sf" data-search action="buscar.html" role="search">
+  <div class="sf-field"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5" stroke-linecap="round"/></svg>
+    <input type="search" name="q" value="" placeholder="Busca un material, un problema o una pregunta" autocomplete="off" autocapitalize="off" spellcheck="false"
+      role="combobox" aria-expanded="false" aria-controls="s-top-list" aria-autocomplete="list" aria-label="Buscar en Aprende" enterkeyhint="search">
+    <span class="sf-kbd" aria-hidden="true"><kbd>⌘</kbd><kbd>K</kbd></span>
+    <button class="sf-close" type="button">Cerrar</button>
+  </div>
+  <div class="sp" hidden>
+    <div class="sp-top"><span class="sp-n" aria-live="polite"></span><div class="sp-chips"></div></div>
+    <ul class="sp-list" id="s-top-list" role="listbox" aria-label="Resultados"></ul>
+  </div>
+</form></div></div>
+<div class="ap-head"><div class="wrap">
+  <nav class="crumbs" aria-label="Migas"><ol><li><a href="portada.html">Aprende</a></li><li><a href="#sin-maqueta-maquinas">Máquinas</a></li><li aria-current="page">Volumen de impresión</li></ol></nav>
+  <h1 class="ap-h1">Volumen de impresión</h1>
+  <p class="ap-sub">Medida máxima de pieza en cada impresora.</p><p class="ap-rev">Revisado en noviembre de 2026</p>
+  <div class="ap-sum"><b>En corto</b><p>Es la pieza más grande que sale en una sola impresión: ancho × fondo × alto. Muchas impresoras de tamaño medio dan 256 × 256 × 256 mm. Una pieza más grande se divide en partes y se une.</p></div>
+</div></div>
+<div class="wrap ap-main">
+  <div class="prose">
+    
+    
+    
+<section class="fit" aria-labelledby="fit-h2">
+  <h2 id="fit-h2">¿Cabe mi pieza?</h2>
+  <div class="fit-in">
+    <label>Ancho<input id="fit-w" inputmode="decimal" autocomplete="off" placeholder="0"></label>
+    <label>Fondo<input id="fit-d" inputmode="decimal" autocomplete="off" placeholder="0"></label>
+    <label>Alto<input id="fit-h" inputmode="decimal" autocomplete="off" placeholder="0"></label>
+    <div class="seg2" id="fit-unit" role="group" aria-label="Unidad"><button type="button" data-u="cm" aria-pressed="true">cm</button><button type="button" data-u="mm" aria-pressed="false">mm</button></div>
+  </div>
+  <p class="fit-out" id="fit-out" aria-live="polite"></p>
+  <p class="tiny mute">Se dejan 5 mm de margen en cada orilla de la cama. «Acostada» quiere decir que otra medida queda como alto.</p>
+</section>
+<div class="dt">
+<div class="flt"><span class="flt-l" id="pt-l">Tamaño</span><div class="chips" id="pt-chips" role="group" aria-labelledby="pt-l"><button type="button" data-id="todas" aria-pressed="true">Todas</button><button type="button" data-id="chica" aria-pressed="false">Chica (hasta 180 mm)</button><button type="button" data-id="mediana" aria-pressed="false">Mediana (210–270 mm)</button><button type="button" data-id="grande" aria-pressed="false">Grande (300–350 mm)</button><button type="button" data-id="muy-grande" aria-pressed="false">Muy grande (más de 350 mm)</button></div>
+<div class="tgls" style="align-items:center"><select class="sel" id="pt-brand" aria-label="Marca"><option value="">Todas las marcas</option><option value="Bambu Lab">Bambu Lab</option><option value="Prusa">Prusa</option><option value="Creality">Creality</option><option value="Elegoo">Elegoo</option><option value="Anycubic">Anycubic</option><option value="Qidi">Qidi</option><option value="Flashforge">Flashforge</option><option value="Sovol">Sovol</option></select>
+<label class="sw"><input type="checkbox" id="pt-enc"><i></i>Solo cerradas</label><button class="btn ghost sm" type="button" id="pt-sort">Ordenar por tamaño</button></div></div>
+<p class="cnt" id="pt-n" aria-live="polite"></p>
+<div class="tbl-wrap" role="region" aria-label="Volumen de impresión por impresora" tabindex="0"><table id="pt" role="table" data-margin="5">
+<thead role="rowgroup"><tr role="row"><th role="columnheader">Impresora</th><th role="columnheader" class="n">Ancho × fondo × alto</th><th role="columnheader" class="n lo">Volumen</th><th role="columnheader">Tipo</th><th role="columnheader">¿Cabe?</th><th role="columnheader" class="lo">Notas</th></tr></thead>
+<tbody role="rowgroup"><tr role="row" id="bambu-lab-a1-mini" data-i="0" data-size="chica" data-brand="Bambu Lab" data-enclosed="0" data-w="180" data-d="180" data-h="180" data-l="5.8">
+<td role="cell" class="k" data-label="Impresora"><a href="#">A1 mini</a><small>Bambu Lab</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">180 × 180 × 180 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">5.8 L</td>
+<td role="cell" data-label="Tipo">Abierta, cama móvil</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">—</td>
+</tr><tr role="row" id="bambu-lab-a1" data-i="1" data-size="mediana" data-brand="Bambu Lab" data-enclosed="0" data-w="256" data-d="256" data-h="256" data-l="16.8">
+<td role="cell" class="k" data-label="Impresora"><a href="#">A1</a><small>Bambu Lab</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">256 × 256 × 256 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">16.8 L</td>
+<td role="cell" data-label="Tipo">Abierta, cama móvil</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">—</td>
+</tr><tr role="row" id="bambu-lab-a2l" data-i="2" data-size="grande" data-brand="Bambu Lab" data-enclosed="0" data-w="330" data-d="320" data-h="325" data-l="34.3">
+<td role="cell" class="k" data-label="Impresora"><a href="#">A2L</a><small>Bambu Lab</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">330 × 320 × 325 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">34.3 L</td>
+<td role="cell" data-label="Tipo">Abierta, cama móvil</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">Salió en junio de 2026.</td>
+</tr><tr role="row" id="bambu-lab-p1s" data-i="3" data-size="mediana" data-brand="Bambu Lab" data-enclosed="1" data-w="256" data-d="256" data-h="256" data-l="16.8">
+<td role="cell" class="k" data-label="Impresora"><a href="#">P1S</a><small>Bambu Lab</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">256 × 256 × 256 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">16.8 L</td>
+<td role="cell" data-label="Tipo">Cerrada, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">—</td>
+</tr><tr role="row" id="bambu-lab-p2s" data-i="4" data-size="mediana" data-brand="Bambu Lab" data-enclosed="1" data-w="256" data-d="256" data-h="256" data-l="16.8">
+<td role="cell" class="k" data-label="Impresora"><a href="#">P2S</a><small>Bambu Lab</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">256 × 256 × 256 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">16.8 L</td>
+<td role="cell" data-label="Tipo">Cerrada, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">—</td>
+</tr><tr role="row" id="bambu-lab-x1-carbon" data-i="5" data-size="mediana" data-brand="Bambu Lab" data-enclosed="1" data-w="256" data-d="256" data-h="256" data-l="16.8">
+<td role="cell" class="k" data-label="Impresora"><a href="#">X1 Carbon</a><small>Bambu Lab</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">256 × 256 × 256 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">16.8 L</td>
+<td role="cell" data-label="Tipo">Cerrada, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">—</td>
+</tr><tr role="row" id="bambu-lab-x2d" data-i="6" data-size="mediana" data-brand="Bambu Lab" data-enclosed="1" data-w="256" data-d="256" data-h="260" data-l="17.0">
+<td role="cell" class="k" data-label="Impresora"><a href="#">X2D</a><small>Bambu Lab</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">256 × 256 × 260 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">17 L</td>
+<td role="cell" data-label="Tipo">Cerrada, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">Con las dos boquillas: 235.5 × 256 × 256 mm.</td>
+</tr><tr role="row" id="bambu-lab-h2s" data-i="7" data-size="grande" data-brand="Bambu Lab" data-enclosed="1" data-w="340" data-d="320" data-h="340" data-l="37.0">
+<td role="cell" class="k" data-label="Impresora"><a href="#">H2S</a><small>Bambu Lab</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">340 × 320 × 340 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">37 L</td>
+<td role="cell" data-label="Tipo">Cerrada, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">—</td>
+</tr><tr role="row" id="bambu-lab-h2d" data-i="8" data-size="grande" data-brand="Bambu Lab" data-enclosed="1" data-w="325" data-d="320" data-h="325" data-l="33.8">
+<td role="cell" class="k" data-label="Impresora"><a href="#">H2D</a><small>Bambu Lab</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">325 × 320 × 325 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">33.8 L</td>
+<td role="cell" data-label="Tipo">Cerrada, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">Con las dos boquillas: 300 × 320 × 325 mm. Entre las dos alcanzan 350 × 320 × 325 mm.</td>
+</tr><tr role="row" id="bambu-lab-h2c" data-i="9" data-size="grande" data-brand="Bambu Lab" data-enclosed="1" data-w="305" data-d="320" data-h="325" data-l="31.7">
+<td role="cell" class="k" data-label="Impresora"><a href="#">H2C</a><small>Bambu Lab</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">305 × 320 × 325 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">31.7 L</td>
+<td role="cell" data-label="Tipo">Cerrada, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">Con las dos boquillas: 300 × 320 × 325 mm. Entre las dos alcanzan 330 × 320 × 325 mm.</td>
+</tr><tr role="row" id="prusa-mini" data-i="10" data-size="chica" data-brand="Prusa" data-enclosed="0" data-w="180" data-d="180" data-h="180" data-l="5.8">
+<td role="cell" class="k" data-label="Impresora"><a href="#">MINI+</a><small>Prusa</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">180 × 180 × 180 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">5.8 L</td>
+<td role="cell" data-label="Tipo">Abierta, cama móvil</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">—</td>
+</tr><tr role="row" id="prusa-mk4s" data-i="11" data-size="mediana" data-brand="Prusa" data-enclosed="0" data-w="250" data-d="210" data-h="220" data-l="11.6">
+<td role="cell" class="k" data-label="Impresora"><a href="#">MK4S</a><small>Prusa</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">250 × 210 × 220 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">11.6 L</td>
+<td role="cell" data-label="Tipo">Abierta, cama móvil</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">—</td>
+</tr><tr role="row" id="prusa-core-one" data-i="12" data-size="mediana" data-brand="Prusa" data-enclosed="1" data-w="250" data-d="220" data-h="270" data-l="14.8">
+<td role="cell" class="k" data-label="Impresora"><a href="#">CORE One+</a><small>Prusa</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">250 × 220 × 270 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">14.8 L</td>
+<td role="cell" data-label="Tipo">Cerrada, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">—</td>
+</tr><tr role="row" id="prusa-core-one-l" data-i="13" data-size="grande" data-brand="Prusa" data-enclosed="1" data-w="300" data-d="300" data-h="330" data-l="29.7">
+<td role="cell" class="k" data-label="Impresora"><a href="#">CORE One L</a><small>Prusa</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">300 × 300 × 330 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">29.7 L</td>
+<td role="cell" data-label="Tipo">Cerrada, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">—</td>
+</tr><tr role="row" id="prusa-xl" data-i="14" data-size="muy-grande" data-brand="Prusa" data-enclosed="0" data-w="360" data-d="360" data-h="360" data-l="46.7">
+<td role="cell" class="k" data-label="Impresora"><a href="#">XL</a><small>Prusa</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">360 × 360 × 360 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">46.7 L</td>
+<td role="cell" data-label="Tipo">Abierta, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">Hasta 5 cabezales. Gabinete opcional.</td>
+</tr><tr role="row" id="creality-ender-3-v3-se" data-i="15" data-size="mediana" data-brand="Creality" data-enclosed="0" data-w="220" data-d="220" data-h="250" data-l="12.1">
+<td role="cell" class="k" data-label="Impresora"><a href="#">Ender-3 V3 SE</a><small>Creality</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">220 × 220 × 250 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">12.1 L</td>
+<td role="cell" data-label="Tipo">Abierta, cama móvil</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">—</td>
+</tr><tr role="row" id="creality-k1c" data-i="16" data-size="mediana" data-brand="Creality" data-enclosed="1" data-w="220" data-d="220" data-h="250" data-l="12.1">
+<td role="cell" class="k" data-label="Impresora"><a href="#">K1C</a><small>Creality</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">220 × 220 × 250 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">12.1 L</td>
+<td role="cell" data-label="Tipo">Cerrada, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">—</td>
+</tr><tr role="row" id="creality-k2" data-i="17" data-size="mediana" data-brand="Creality" data-enclosed="1" data-w="260" data-d="260" data-h="260" data-l="17.6">
+<td role="cell" class="k" data-label="Impresora"><a href="#">K2</a><small>Creality</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">260 × 260 × 260 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">17.6 L</td>
+<td role="cell" data-label="Tipo">Cerrada, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">—</td>
+</tr><tr role="row" id="creality-k2-pro" data-i="18" data-size="grande" data-brand="Creality" data-enclosed="1" data-w="300" data-d="300" data-h="300" data-l="27.0">
+<td role="cell" class="k" data-label="Impresora"><a href="#">K2 Pro</a><small>Creality</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">300 × 300 × 300 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">27 L</td>
+<td role="cell" data-label="Tipo">Cerrada, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">—</td>
+</tr><tr role="row" id="creality-k2-plus" data-i="19" data-size="grande" data-brand="Creality" data-enclosed="1" data-w="350" data-d="350" data-h="350" data-l="42.9">
+<td role="cell" class="k" data-label="Impresora"><a href="#">K2 Plus</a><small>Creality</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">350 × 350 × 350 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">42.9 L</td>
+<td role="cell" data-label="Tipo">Cerrada, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">—</td>
+</tr><tr role="row" id="elegoo-neptune-4-pro" data-i="20" data-size="mediana" data-brand="Elegoo" data-enclosed="0" data-w="225" data-d="225" data-h="265" data-l="13.4">
+<td role="cell" class="k" data-label="Impresora"><a href="#">Neptune 4 Pro</a><small>Elegoo</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">225 × 225 × 265 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">13.4 L</td>
+<td role="cell" data-label="Tipo">Abierta, cama móvil</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">—</td>
+</tr><tr role="row" id="elegoo-neptune-4-max" data-i="21" data-size="muy-grande" data-brand="Elegoo" data-enclosed="0" data-w="420" data-d="420" data-h="480" data-l="84.7">
+<td role="cell" class="k" data-label="Impresora"><a href="#">Neptune 4 Max</a><small>Elegoo</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">420 × 420 × 480 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">84.7 L</td>
+<td role="cell" data-label="Tipo">Abierta, cama móvil</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">—</td>
+</tr><tr role="row" id="elegoo-centauri-carbon" data-i="22" data-size="mediana" data-brand="Elegoo" data-enclosed="1" data-w="256" data-d="256" data-h="256" data-l="16.8">
+<td role="cell" class="k" data-label="Impresora"><a href="#">Centauri Carbon</a><small>Elegoo</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">256 × 256 × 256 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">16.8 L</td>
+<td role="cell" data-label="Tipo">Cerrada, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">—</td>
+</tr><tr role="row" id="anycubic-kobra-s1" data-i="23" data-size="mediana" data-brand="Anycubic" data-enclosed="1" data-w="250" data-d="250" data-h="250" data-l="15.6">
+<td role="cell" class="k" data-label="Impresora"><a href="#">Kobra S1</a><small>Anycubic</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">250 × 250 × 250 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">15.6 L</td>
+<td role="cell" data-label="Tipo">Cerrada, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">—</td>
+</tr><tr role="row" id="qidi-q2" data-i="24" data-size="mediana" data-brand="Qidi" data-enclosed="1" data-w="270" data-d="270" data-h="256" data-l="18.7">
+<td role="cell" class="k" data-label="Impresora"><a href="#">Q2</a><small>Qidi</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">270 × 270 × 256 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">18.7 L</td>
+<td role="cell" data-label="Tipo">Cerrada, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">Cámara calentada a 65 °C.</td>
+</tr><tr role="row" id="qidi-plus-5" data-i="25" data-size="grande" data-brand="Qidi" data-enclosed="1" data-w="320" data-d="320" data-h="300" data-l="30.7">
+<td role="cell" class="k" data-label="Impresora"><a href="#">Plus 5</a><small>Qidi</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">320 × 320 × 300 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">30.7 L</td>
+<td role="cell" data-label="Tipo">Cerrada, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">Cámara calentada a 65 °C.</td>
+</tr><tr role="row" id="qidi-plus4" data-i="26" data-size="grande" data-brand="Qidi" data-enclosed="1" data-w="305" data-d="305" data-h="280" data-l="26.0">
+<td role="cell" class="k" data-label="Impresora"><a href="#">Plus4</a><small>Qidi</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">305 × 305 × 280 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">26 L</td>
+<td role="cell" data-label="Tipo">Cerrada, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">Ya no se fabrica.</td>
+</tr><tr role="row" id="qidi-max4" data-i="27" data-size="muy-grande" data-brand="Qidi" data-enclosed="1" data-w="390" data-d="390" data-h="340" data-l="51.7">
+<td role="cell" class="k" data-label="Impresora"><a href="#">Max4</a><small>Qidi</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">390 × 390 × 340 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">51.7 L</td>
+<td role="cell" data-label="Tipo">Cerrada, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">Cámara calentada a 65 °C.</td>
+</tr><tr role="row" id="flashforge-ad5x" data-i="28" data-size="mediana" data-brand="Flashforge" data-enclosed="0" data-w="220" data-d="220" data-h="220" data-l="10.6">
+<td role="cell" class="k" data-label="Impresora"><a href="#">AD5X</a><small>Flashforge</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">220 × 220 × 220 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">10.6 L</td>
+<td role="cell" data-label="Tipo">Abierta, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">Hasta 4 colores.</td>
+</tr><tr role="row" id="sovol-sv08" data-i="29" data-size="grande" data-brand="Sovol" data-enclosed="0" data-w="350" data-d="350" data-h="345" data-l="42.3">
+<td role="cell" class="k" data-label="Impresora"><a href="#">SV08</a><small>Sovol</small></td>
+<td role="cell" class="n" data-label="Ancho × fondo × alto">350 × 350 × 345 mm</td>
+<td role="cell" class="n lo" data-label="Volumen">42.3 L</td>
+<td role="cell" data-label="Tipo">Abierta, CoreXY</td>
+<td role="cell" class="fitcell" data-label="¿Cabe?">—</td>
+<td role="cell" class="w lo" data-label="Notas">Con gabinete: 350 × 350 × 330 mm.</td>
+</tr></tbody></table></div>
+</div>
+<p>Medidas de la ficha de cada fabricante (noviembre de 2026). La zona útil real es unos milímetros menor por la línea de purga, los clips de la placa y las orillas. En impresoras de dos boquillas, la pieza que usa las dos tiene menos ancho que la de una sola boquilla.</p>
+<aside class="callout "><img src="../../../assets/q404/q404-morado-verde.webp" alt="" width="72" height="114" loading="lazy"><div><b>Dato curioso</b><p>En una cama de 256 × 256 mm, una pieza delgada acostada en diagonal puede medir casi 36 cm. En la práctica, un poco menos por los márgenes.</p>
+<p><strong>Dato curioso.</strong> La Elegoo Neptune 4 Max tiene unos 85 litros de volumen de impresión; una Bambu Lab A1 mini o una Prusa MINI+, 5.8 litros. Es casi 15 veces más espacio.</p></div></aside>
+    
+    <section aria-labelledby="faq-h"><h2 class="blk-h" id="faq-h">Preguntas</h2><div class="faq"><details id="pregunta-1"><summary>¿Qué pasa si mi pieza no cabe?</summary><p>Se divide en partes que se unen con clavijas, cola de milano o tornillos, y se pegan. Ver Dividir piezas.</p></details><details id="pregunta-2"><summary>¿Puedo usar toda la cama?</summary><p>Casi toda. La línea de purga, los clips de la placa y la orilla le quitan unos milímetros. El laminador marca la zona útil.</p></details><details id="pregunta-3"><summary>¿Por qué con dos boquillas la medida es menor?</summary><p>Cada boquilla está a un lado del cabezal. Para que las dos lleguen a todos los puntos de la pieza, se pierde un poco de ancho.</p></details><details id="pregunta-4"><summary>¿Cómo sé la medida de mi impresora?</summary><p>En la ficha del fabricante, en el perfil de la impresora dentro del laminador o en esta tabla.</p></details><details id="pregunta-5"><summary>¿Conviene una impresora más grande?</summary><p>Solo si vas a imprimir piezas grandes seguido. Una cama grande tarda más en calentar y gasta más electricidad. Para muchas piezas medianas, dos impresoras medianas sacan más trabajo que una grande.</p></details><details id="pregunta-6"><summary>¿La altura cuenta igual?</summary><p>Sí. Una pieza alta y delgada a veces cabe mejor acostada; cambia la resistencia y los soportes. Ver Orientación de la pieza.</p></details></div></section>
+    <div class="ap-rel-m"><h2>También te puede servir</h2><div class="rel"><a href="#sin-maqueta-modelos-dividir-piezas"><span>Modelos y diseño</span><b>Dividir piezas</b></a><a href="#sin-maqueta-maquinas-elegir-impresora"><span>Máquinas</span><b>Elegir impresora</b></a><a href="#sin-maqueta-encargar-tamano"><span>Si vas a encargar una pieza</span><b>Tamaño máximo</b></a><a href="#sin-maqueta-maquinas-cinematica"><span>Máquinas</span><b>Cartesiana o CoreXY</b></a></div></div>
+    <div class="src"><h2>Fuentes</h2><ul><li><a href="https://www.innoaddi.com/blogs/news/the-full-bambu-lab-printer-lineup-in-2026-every-model-side-by-side" target="_blank" rel="noopener">Innoaddi · Línea de impresoras Bambu Lab 2026 (A1 mini, P1S, X1 Carbon)</a></li><li><a href="https://eu.store.bambulab.com/products/a1" target="_blank" rel="noopener">Bambu Lab · A1</a></li><li><a href="https://blog.bambulab.com/bambu-lab-a2l-creative-playground-extra-large" target="_blank" rel="noopener">Bambu Lab · A2L (lanzamiento)</a></li><li><a href="https://eu.store.bambulab.com/products/p2s" target="_blank" rel="noopener">Bambu Lab · P2S</a></li><li><a href="https://en.prnasia.com/releases/global/xcellence-made-simple-bambu-lab-launches-x2d-next-gen-flagship-3d-printer-featuring-dual-extrusion-system-529576.shtml" target="_blank" rel="noopener">Bambu Lab · X2D (comunicado)</a></li><li><a href="https://us.store.bambulab.com/products/h2s" target="_blank" rel="noopener">Bambu Lab · H2S</a></li><li><a href="https://3dprintingindustry.com/news/bambu-labs-new-h2d-3d-printer-technical-specifications-and-pricing-237763/" target="_blank" rel="noopener">3D Printing Industry · Ficha de la H2D</a></li><li><a href="https://blog.bambulab.com/bambu-lab-h2c-where-multi-material-vortek-system-meets-engineering-precision" target="_blank" rel="noopener">Bambu Lab · H2C (lanzamiento)</a></li><li><a href="https://www.prusa3d.com/product/original-prusa-mk4s-3d-printer-5/" target="_blank" rel="noopener">Prusa · MK4S</a></li><li><a href="https://www.prusa3d.com/p/core-one-l/" target="_blank" rel="noopener">Prusa · CORE One L</a></li><li><a href="https://eolasprints.com/en-us/blogs/advanced-3d-printing/prusa-printer-buyers-guide" target="_blank" rel="noopener">Eolas Prints · Guía de impresoras Prusa</a></li><li><a href="https://wiki.polymaker.com/the-basics/3d-printers/popular-printers/creality" target="_blank" rel="noopener">Polymaker Wiki · Impresoras Creality</a></li><li><a href="https://www.tomshardware.com/3d-printing/creality-unveils-new-flagship-k1c-3d-printer-and-latest-ender-3-v3-model" target="_blank" rel="noopener">Tom&#x27;s Hardware · K1C y Ender-3 V3</a></li><li><a href="https://www.creality.com/blog/which-to-buy-k2-series-3d-printers" target="_blank" rel="noopener">Creality · Serie K2</a></li><li><a href="https://www.elegoo.com/en-ca/products/elegoo-neptune-4-pro-fdm-3d-printer" target="_blank" rel="noopener">Elegoo · Neptune 4 Pro</a></li><li><a href="https://www.elegoo.com/collections/fdm-printers/products/neptune-4-max-fdm-3d-printer" target="_blank" rel="noopener">Elegoo · Neptune 4 Max</a></li><li><a href="https://www.elegoo.com/products/centauri-carbon" target="_blank" rel="noopener">Elegoo · Centauri Carbon</a></li><li><a href="https://www.voxelmatters.com/anycubic-kobra-s1-review-no-fuss-corexy-for-speed-and-reliability/" target="_blank" rel="noopener">VoxelMatters · Reseña de la Kobra S1</a></li><li><a href="https://kr.qidi3d.com/blogs/news/qidi-3d-printer-comparison" target="_blank" rel="noopener">Qidi · Comparativa de impresoras 2026</a></li><li><a href="https://printer-hub.com/printers/flashforge-ad5x" target="_blank" rel="noopener">Printer Hub · Flashforge AD5X</a></li><li><a href="https://sovol3d.com/products/sovol-sv08-3d-printer" target="_blank" rel="noopener">Sovol · SV08</a></li></ul></div>
+  </div>
+  <aside class="ap-aside" aria-label="En esta página"><h2>También te puede servir</h2><div class="rel"><a href="#sin-maqueta-modelos-dividir-piezas"><span>Modelos y diseño</span><b>Dividir piezas</b></a><a href="#sin-maqueta-maquinas-elegir-impresora"><span>Máquinas</span><b>Elegir impresora</b></a><a href="#sin-maqueta-encargar-tamano"><span>Si vas a encargar una pieza</span><b>Tamaño máximo</b></a><a href="#sin-maqueta-maquinas-cinematica"><span>Máquinas</span><b>Cartesiana o CoreXY</b></a></div></aside>
+</div>
+<div class="ap-cta"><div class="wrap"><p>¿Necesitas una pieza? Dinos qué necesitas y te decimos material, precio y fecha.</p><a class="btn wa" href="https://wa.me/523481308678?text=Hola, vi «Volumen de impresión» en su página y quiero cotizar una pieza." target="_blank" rel="noopener">Cotizar por WhatsApp <span class="ar">→</span></a></div></div>
+</main>
+<footer class="site-f">
+  <div class="wrap">
+    <div class="big">Quick Robot</div>
+    <div class="f-row"><a href="#">Catálogo</a><a href="portada.html">Aprende</a><a href="#">WhatsApp +52 348 130 8678</a><a href="#">Facebook</a><a href="#">Instagram</a></div>
+    <div class="f-bottom"><span>© 2026 Quick Robot · Impresión 3D</span><a class="link" href="#">Aviso de privacidad</a></div>
+  </div>
+</footer>
+<div class="mk-note"><button type="button" aria-label="Cerrar nota">×</button><b>Maqueta · Volumen de impresión · Aprende.</b> Volumen de impresión con ¿Cabe mi pieza? (prueba 30 × 30 × 30 cm o 26 × 10 × 5). <ul><li>Celular: medidas en una fila de 3, la unidad abajo; cada impresora es una tarjeta.</li><li>Tableta: tabla sin Volumen ni Notas.</li></ul></div>
+<script src="_datos.js"></script>
+<script src="_aprende.js"></script>
+</body>
+</html>

@@ -29,6 +29,7 @@ Muestrario con precios y página por producto; los pedidos van por WhatsApp. Con
 | [21 · Aprende](21-aprende.md) | Sección de respuestas: rutas, temas, pantallas, Markdown seguro, datos interactivos, tablas, importador |
 | [22 · Buscador](22-buscador.md) | Meilisearch detrás del Worker, índice, sincronización, respaldo en D1, interfaz |
 | [23 · Aprende · Contenido](23-aprende-contenido.md) | Investigación y texto de cada página, reglas de redacción, datos curiosos, sinónimos, fuentes |
+| [24 · Aprende · Dispositivos y navegadores](24-aprende-dispositivos.md) | Celular, tableta y escritorio por componente; Safari y Chrome; reglas para que los filtros funcionen en Safari |
 | [fases/](fases/) | **Un archivo por fase** con pasos, qué consultar y cuándo está listo |
 | [prompts](prompts.md) | Un prompt por fase, cómo integrar componentes después, qué hacer entre fases |
 | [continuar en local](continuar-en-local.md) | **Empieza aquí para seguir:** cómo arrancar, probar y dónde cambiar cada dato |
@@ -43,7 +44,7 @@ Muestrario con precios y página por producto; los pedidos van por WhatsApp. Con
 | `reference/mockups/` | Las 4 páginas HTML del mockup (inicio, catálogo, producto, panel) |
 | `reference/seed-photos/` | Fotos de ejemplo de los 14 productos (para la semilla) |
 | `reference/hero/` | Portada por defecto (escritorio y celular) |
-| `reference/mockups/aprende/` | Maquetas de Aprende: portada, tema con tabla y artículo para clientes |
+| `reference/mockups/aprende/` | Maquetas de Aprende: una por tipo de pantalla (`index.html`) |
 | `content/aprende/` | Contenido de Aprende para importar (`21 §8`) |
 | `assets/` | Logo (cabeza de Q-404), renders finales de Q-404, fotos de las ideas |
 

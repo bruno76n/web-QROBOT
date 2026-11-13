@@ -88,7 +88,11 @@ export const filamentRow = z.object({
   waterPct: z.number().nullable(),
   drying: z.string(),
   maxSpeedMmS: z.number().nullable(),
-  printer: z.enum(['any', 'enclosed']),
+  /**
+   * Printer it needs: `any` (open or enclosed), `enclosed-better` (prints in an open one, enclosed
+   * gives better results) or `enclosed` (not recommended in an open printer).
+   */
+  printer: z.enum(['any', 'enclosed-better', 'enclosed']),
   hardenedNozzle: z.enum(['yes', 'no']),
   /** `dry`: only with a dry spool (PVA / BVOH). */
   ams: z.enum(['yes', 'no', 'dry']),
