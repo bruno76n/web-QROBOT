@@ -68,6 +68,18 @@ Trabajo en local y en la nube (sesión de Claude Code en la web); se unió en `m
 
 - **Pruebas e2e al día:** `pnpm e2e` pasa completo (154 públicas + 42 del panel). Solo se actualizaron pruebas, ningún código de la web: las fotos se simulan desde `site.imgBase`, header de 56 px en celular y solo el link Catálogo, video con archivo, publicar sin categoría y dirección que sigue al nombre.
 
+## Aprende
+
+Plan y contenido aplicados el 2026-11-13 (`docs/21`–`23`, `content/aprende/`, fases 6–8).
+
+| Fase | Estado |
+|---|---|
+| 6 · Base de Aprende | **Terminada en local** (rama `fase-6`); ver `docs/informe-fase-6.md`. `pnpm learn:import` carga las 118 páginas en D1 local (116 publicadas, 2 ocultas a la espera del dueño), 66 preguntas, 4 tablas, 48 fuentes y la configuración del buscador. Migración `0007` (todavía no aplicada en producción) |
+| 7 · Páginas y buscador | Pendiente |
+| 8 · Panel y publicación | Pendiente |
+
+Pendientes del dueño para Aprende: dónde corre Meilisearch (mientras no exista, el buscador usa D1); anticipo y formas de pago, envíos, urgentes y personajes con licencia (`encargar/pago` y `encargar/personajes` siguen ocultas); fotos de fallas.
+
 ## Valores provisionales en uso (`01 › Pendientes del dueño`)
 
 | Dato | Valor provisional | Desde |

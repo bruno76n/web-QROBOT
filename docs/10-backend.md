@@ -25,6 +25,7 @@ Las usan las páginas `.astro` en el servidor. El panel **no** las llama directo
 | `listAllProductsForAdmin()` | Todos, con estado y primera foto | Panel |
 | `getProductForAdmin(id)` | Todo, incluidas fotos con recorte, versión, anchos y alt | Panel |
 | `clickStats(days = 30)` | Toques por producto y por origen (`18`) | Panel |
+| `getLearnHome()` · `getLearnTopic(tema)` · `getLearnPage(slug)` · `listLearnSitemap()` · `searchLearnD1(q, tema?)` | Aprende (`21 §9`, `src/server/queries/learn.ts`): una página hace 2 viajes a D1 (la página y un `batch` con preguntas, relacionadas, fuentes y tablas) | Aprende |
 
 Las URL de fotos se arman con `photoUrl(photo, width)`, que solo usa anchos de `photos.widths`.
 

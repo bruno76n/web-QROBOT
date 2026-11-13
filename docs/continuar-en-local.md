@@ -7,6 +7,7 @@ Estado: **las 5 fases están construidas** (`docs/informe-fase-1.md` … `inform
 pnpm install
 pnpm dev          # http://localhost:4321/  · panel: /admin (sesión de desarrollo, solo con pnpm dev)
 pnpm seed         # recarga la base local con los productos de ejemplo
+pnpm learn:import # carga content/aprende/ (118 páginas) en la base local; pnpm dev lo hace solo si está vacía
 ```
 `pnpm dev` crea solo `.dev.vars.local` (de `.dev.vars.example`) con `APP_ENV=development` y fotos en `/img`. D1 y R2 son simulados por wrangler; no se toca producción.
 

@@ -59,6 +59,11 @@ const recordKeys = [
   'reviewed',
 ] as const satisfies readonly (keyof PageRecord)[];
 
+/** The columns of a page that the files decide (everything but id and slug). */
+function contentOf(page: PageRecord): Omit<PageRecord, 'id' | 'slug'> {
+  return Object.fromEntries(recordKeys.map((k) => [k, page[k]])) as Omit<PageRecord, 'id' | 'slug'>;
+}
+
 function sameContent(a: PageRecord, b: PageRecord): boolean {
   return recordKeys.every((k) => a[k] === b[k]);
 }
@@ -136,7 +141,6 @@ export async function applyImport(
 
   const statements: Parameters<Db['batch']>[0][number][] = [];
   for (const { page, id, isNew } of verdict.writes) {
-    const { id: _id, slug: _slug, ...fields } = page;
     if (isNew) {
       statements.push(
         db.insert(schema.learnPages).values({ ...page, createdAt: when, updatedAt: when }),
@@ -145,7 +149,7 @@ export async function applyImport(
       statements.push(
         db
           .update(schema.learnPages)
-          .set({ ...fields, editedInPanel: false, updatedAt: when })
+          .set({ ...contentOf(page), editedInPanel: false, updatedAt: when })
           .where(eq(schema.learnPages.id, id)),
       );
     }
