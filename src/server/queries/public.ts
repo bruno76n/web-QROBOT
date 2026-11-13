@@ -1,3 +1,5 @@
+/** Public read queries of the catalog: only published products are ever returned (docs/10 §2). */
+
 import { and, asc, eq, inArray, ne } from 'drizzle-orm';
 import { CHRISTMAS_CATEGORY, type CategoryId } from '@/config/categories';
 import type { ColorId } from '@/config/colors';
@@ -12,13 +14,17 @@ export interface CardView {
   slug: string;
   name: string;
   short: string;
+  /** "From" price in cents of a peso; null when there is none. */
   priceFromCents: number | null;
+  /** Marked "Más pedido". */
   featured: boolean;
   /** Main category: the first one in the panel's category order (breadcrumbs, labels). */
   category: CategoryId | null;
+  /** First photo of the product; null when it has none. */
   photo: PhotoSrc | null;
 }
 
+/** Everything the product page shows: the card data plus details, all categories, colors and photos. */
 export interface ProductPageView extends CardView {
   description: string;
   priceNote: string;
@@ -30,12 +36,16 @@ export interface ProductPageView extends CardView {
   unitPlural: string;
   personalizable: boolean;
   personalHint: string;
+  /** All categories, in the panel's category order. */
   categories: CategoryId[];
+  /** Colors in display order. */
   colors: ColorId[];
+  /** Photos in display order. */
   photos: PhotoSrc[];
   updatedAt: Date;
 }
 
+/** A photo row → what the page needs to build its `srcset`; empty alt text falls back to the product name. */
 const toSrc = (p: Photo, fallbackAlt: string): PhotoSrc => ({
   id: p.id,
   alt: p.alt.trim() || fallbackAlt,
@@ -44,11 +54,13 @@ const toSrc = (p: Photo, fallbackAlt: string): PhotoSrc => ({
   aspect: p.aspect,
 });
 
+/** Splits a list into groups of at most `size` (keeps `IN (...)` lists short for D1). */
 const chunks = <T>(items: T[], size: number) =>
   Array.from({ length: Math.ceil(items.length / size) }, (_, i) =>
     items.slice(i * size, i * size + size),
   );
 
+/** Turns product rows into cards, loading their photos and categories together. */
 async function toCards(
   db: Db,
   products: (typeof schema.products.$inferSelect)[],
@@ -105,7 +117,7 @@ async function toCards(
   });
 }
 
-/** Published products in catalog order, optionally of one category. */
+/** Published products in catalog order (`sort_order`, then creation), optionally of one category. */
 export async function listPublishedProducts(
   opts: { category?: CategoryId } = {},
   db: Db = getDb(),
@@ -211,7 +223,7 @@ export async function listRelated(
   return toCards(db, published.filter((p) => sharing.has(p.id)).slice(0, limit));
 }
 
-/** Current address of a published product that used to be called `oldSlug`, or null. */
+/** Current address of the published product whose former address is `oldSlug`, or null (for the 301 redirect). */
 export async function findCurrentSlug(oldSlug: string, db: Db = getDb()): Promise<string | null> {
   const [row] = await db
     .select({ slug: schema.products.slug })

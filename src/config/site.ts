@@ -30,6 +30,9 @@ export const site = {
   timeZone: 'America/Mexico_City',
   /** `src` is `null` when there is no video. `speed` is the playback rate (0.5 = half speed). */
   video: { src: '/media/timelapse.mp4' as string | null, speed: 0.5 },
+  /** Quick Cerebro (the system) is not out yet: its calls in Aprende stay hidden (docs/21 §4.6). */
+  system: { enabled: false },
 } as const;
 
+/** Type of the business data. */
 export type Site = typeof site;

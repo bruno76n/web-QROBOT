@@ -14,11 +14,11 @@ tags:
 - capa
 - resolucion
 - calidad
-- 0.2
-- 0.1
-- 0.12
-- 0.16
-- 0.28
+- '0.2'
+- '0.1'
+- '0.12'
+- '0.16'
+- '0.28'
 related:
 - maquinas/boquillas
 - laminado/velocidad

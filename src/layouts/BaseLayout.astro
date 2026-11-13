@@ -1,4 +1,7 @@
 ---
+// Layout of every public page: full head (title, description, canonical, Open Graph, Twitter,
+// JSON-LD, font preload), the View Transitions router, skip link, header, `<main>` and footer,
+// plus the click beacon. A page can add head tags (such as an image preload) through the `head` slot.
 import { ClientRouter } from 'astro:transitions';
 import '@/styles/global.css';
 import { es } from '@/i18n/es';
@@ -32,6 +35,7 @@ const {
   priceFromCents = null,
   jsonLd = [],
 } = Astro.props;
+// Canonical URL and share image are absolute, built from the site domain.
 const canonical = absoluteUrl(site.domain, Astro.url.pathname);
 const image = absoluteUrl(site.domain, ogImage);
 ---

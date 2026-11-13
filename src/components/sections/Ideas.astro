@@ -1,10 +1,13 @@
 ---
+// Home "ideas" section: heading with a link to the catalog and the list of ideas from
+// `config/ideas`, each a link to `#pedido=<id>` that fills the order composer.
+// The list is the `IdeasLinks` island; the section styles that other sections reuse are global.
 import { ideas } from '@/config/ideas';
 import { es } from '@/i18n/es';
 import IdeasLinks from './IdeasLinks';
 
 const t = es.home.ideas;
-// The wrapper only adapts the data: the 7 ideas, each a link to `#pedido=<id>` (docs/11 §3).
+// The island only adapts the data: one item per idea, each a link to `#pedido=<id>` (docs/11 §3).
 const items = ideas.map((i) => ({
   title: i.name,
   description: i.phrase,
@@ -33,9 +36,11 @@ const items = ideas.map((i) => ({
 </section>
 
 <style is:global>
+  /* Vertical rhythm shared by the home sections. */
   .sec {
     padding-block: clamp(90px, 11vw, 160px);
   }
+  /* Purple text link (shared with other sections). */
   .lnk {
     color: var(--purple);
     text-decoration: none;

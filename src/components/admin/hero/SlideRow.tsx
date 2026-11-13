@@ -1,3 +1,5 @@
+/** One sortable slide row of the hero editor. */
+
 /* eslint-disable react-hooks/refs -- dnd-kit's `useSortable` returns ref callbacks that the React Compiler lint flags wrongly */
 import { useRef } from 'react';
 import { cn } from '@/lib/cn';
@@ -9,6 +11,10 @@ import type { SlideItem, Slot } from './slides';
 
 const t = es.admin.hero;
 
+/**
+ * `slide` is the slide shown; `index` its position; `active` marks the one in the preview. Callbacks:
+ * select the slide, pick a file for a slot, open the cropper for a slot, and remove the phone photo or the whole slide.
+ */
 interface Props {
   slide: SlideItem;
   index: number;
@@ -20,6 +26,7 @@ interface Props {
   onRemove: () => void;
 }
 
+/** Thumbnail of one photo with its label, an error or "preparing" text, and a progress bar while it is working. */
 const Thumb = ({ item, label }: { item: PhotoItem; label: string }) => (
   <>
     {item.status === 'error' ? (
@@ -47,7 +54,10 @@ const Thumb = ({ item, label }: { item: PhotoItem; label: string }) => (
   </>
 );
 
-/** One row of the hero list: grip, desktop photo, phone photo and its actions (docs/12 §5). */
+/**
+ * One row of the hero list: grip, desktop photo, phone photo and its actions (docs/12 §5).
+ * Photo actions are disabled until the photo is ready. The phone photo is optional.
+ */
 export function SlideRow({
   slide,
   index,
@@ -63,6 +73,7 @@ export function SlideRow({
   const mobileInput = useRef<HTMLInputElement>(null);
   const ready = slide.desktop.status === 'ready';
 
+  /** Hidden file input for a slot; the action buttons click it. Its value is cleared so the same file can be chosen again. */
   const picker = (slot: Slot, ref: React.RefObject<HTMLInputElement | null>) => (
     <input
       ref={ref}

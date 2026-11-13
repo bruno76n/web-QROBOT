@@ -42,7 +42,7 @@ test('editar el nombre y guardar se conserva al recargar', async ({ page }) => {
   await expect(page.getByText('Sin guardar')).toHaveCount(0);
   await page.reload();
   await expect(page.getByLabel('Nombre', { exact: true })).toHaveValue('Gato editado');
-  // the address field was removed: the address always follows the name (docs/09 §3)
+  // there is no address field: the address always follows the name (docs/09 §3)
   await expect(page.getByLabel('Dirección de la página')).toHaveCount(0);
 });
 

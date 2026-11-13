@@ -22,10 +22,12 @@ import {
 import * as schema from '../src/server/db/schema.ts';
 import { seedProducts } from './seed-data.ts';
 
+// Project root, background color of the example photos and the command-line flags.
 const root = new URL('..', import.meta.url).pathname;
 const SOFT = '#f6f6f8';
 const args = new Set(process.argv.slice(2));
 
+/** Exits with an error when the flags, the environment or the wrangler config point at a remote database. */
 function refuseRemote() {
   const remoteFlags = ['--remote', '--prod', '--production'].filter((f) => args.has(f));
   const env = process.env.CLOUDFLARE_ENV;
@@ -39,16 +41,23 @@ function refuseRemote() {
   }
 }
 
+/** A processed photo: the stored original plus every file to put in R2. */
 interface Stored {
   originalKey: string;
   originalWidth: number;
   originalHeight: number;
+  /** Widths of the generated versions (never above the photo's own width). */
   widths: number[];
   version: string;
+  /** Original, versions and, for products, the social image; `key` is the R2 key. */
   files: { key: string; body: Buffer; type: string }[];
 }
 
-/** The example photos are small and not square: they go centered on a square of --soft, uncropped. */
+/**
+ * Prepares one photo: product photos are small and not square, so they go centered on a square of
+ * `SOFT`, uncropped; hero photos are used as they are. Produces the original, the versions and, for
+ * products, the 1200 × 630 social image.
+ */
 async function processPhoto(file: string, photoId: string, usage: PhotoUsage): Promise<Stored> {
   const img = sharp(file);
   const meta = await img.metadata();
@@ -120,6 +129,7 @@ async function processPhoto(file: string, photoId: string, usage: PhotoUsage): P
   };
 }
 
+/** Loads the example products, their photos in R2 and the default hero into the local D1 and R2. */
 async function main() {
   refuseRemote();
   const proxy = await getPlatformProxy<{ DB: D1Database; BUCKET: R2Bucket }>({
@@ -151,6 +161,7 @@ async function main() {
       cursor = page.truncated ? page.cursor : undefined;
     } while (cursor);
 
+    // `--many` repeats the examples up to 200 products for the performance test.
     const many = args.has('--many');
     const list = many
       ? Array.from({ length: 200 }, (_, i) => {
@@ -165,11 +176,13 @@ async function main() {
         })
       : seedProducts;
 
+    // Rows are collected first and inserted together at the end.
     const now = Date.now();
     const photoRows: (typeof schema.photos.$inferInsert)[] = [];
     const productRows: (typeof schema.products.$inferInsert)[] = [];
     const categoryRows: (typeof schema.productCategories.$inferInsert)[] = [];
     const colorRows: (typeof schema.productColors.$inferInsert)[] = [];
+    // Processed photos by source file, so repeated examples read each file once.
     const cache = new Map<string, Stored>();
 
     for (const [index, p] of list.entries()) {
@@ -244,6 +257,7 @@ async function main() {
     }
 
     // Hero: one slide with the default photos (docs/09 §4).
+    // Both hero photos belong to the single slide `seed-hero-1`.
     const heroPhotos: { usage: PhotoUsage; file: string; id: string }[] = [
       { usage: 'hero_desktop', file: 'hero-escritorio.webp', id: 'seed-hero-desktop' },
       { usage: 'hero_mobile', file: 'hero-celular.webp', id: 'seed-hero-mobile' },
@@ -283,6 +297,7 @@ async function main() {
       Array.from({ length: Math.ceil(items.length / size) }, (_, i) =>
         items.slice(i * size, i * size + size),
       );
+    // Row-count limits per statement keep each insert under the bound-parameter limit.
     const statements = [
       ...chunk(productRows, 4).map((c) => db.insert(schema.products).values(c)),
       ...chunk(categoryRows, 40).map((c) => db.insert(schema.productCategories).values(c)),

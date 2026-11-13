@@ -1,3 +1,7 @@
+/**
+ * `/sitemap.xml`: fixed pages, every category and every published product (read from D1).
+ * Cached for an hour; the panel and the API are not listed.
+ */
 import type { APIRoute } from 'astro';
 import { site } from '@/config/site';
 import { sitemapXml } from '@/lib/seo';

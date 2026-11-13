@@ -1,8 +1,11 @@
 ---
+// Layout of the panel pages: a bare document (`noindex, nofollow`, panel stylesheet, font preload)
+// with no site header, footer or View Transitions. The page content goes in `#admin-root`.
 import '@/styles/admin.css';
 import { es } from '@/i18n/es';
 
 interface Props {
+  /** Document title; the panel's default one when omitted. */
   title?: string;
 }
 const { title = es.admin.pageTitle } = Astro.props;

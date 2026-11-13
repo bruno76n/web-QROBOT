@@ -1,3 +1,5 @@
+/** Turns Astro action outcomes and network failures into the panel's `Result` type. */
+
 import { fail, ok, type Failure, type Result } from '@/lib/result';
 
 /** Shape of what `actions.admin.x()` returns (structural, so it can be tested without Astro). */
@@ -23,7 +25,7 @@ export function normalizeOutcome<T>(outcome: ActionOutcome<T>): Result<T> {
 }
 
 /**
- * A network failure with the browser online is almost always an expired Access session: Access
+ * Runs one action call and always returns a `Result` (never throws). A network failure with the browser online is almost always an expired Access session: Access
  * answers with a redirect the browser blocks (docs/13 §2 point 5). Offline is its own case.
  */
 export async function callAction<T>(
@@ -37,6 +39,7 @@ export async function callAction<T>(
   }
 }
 
+/** Error thrown by `unwrap` carrying the failed `Result`, so the UI can show `errorText(failure)`. */
 export class ApiError extends Error {
   constructor(public failure: Failure) {
     super(failure.code);
@@ -49,4 +52,5 @@ export function unwrap<T>(result: Result<T>): T {
   throw new ApiError(result);
 }
 
+/** Re-exported so callers can build successful results next to `callAction`. */
 export { ok };

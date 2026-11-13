@@ -1,9 +1,13 @@
+/** Spanish user-facing text for every failure the panel can show. */
+
 import { es } from '@/i18n/es';
 import type { Failure } from '@/lib/result';
 import type { Missing } from '@/lib/publish';
 
+/** Panel texts. */
 const t = es.admin;
 
+/** Joins the missing publishing requirements as "a, b y c". */
 export function missingList(missing: readonly Missing[]): string {
   const words = missing.map((m) => t.editor.missing[m]);
   if (words.length <= 1) return words.join('');

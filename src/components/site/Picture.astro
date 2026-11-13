@@ -1,4 +1,7 @@
 ---
+// Responsive `<img>` for two kinds of source: a stored photo (srcset from the widths that really
+// exist) or a brand image in `public/brand` with pre-built `-<width>.webp` files. The `priority`
+// image loads eagerly with high fetch priority; every other one is lazy.
 import { photoImg, type PhotoSrc } from '@/lib/photos';
 
 type Props = {
@@ -26,6 +29,7 @@ type Props = {
 const props = Astro.props;
 const { sizes, priority = false, class: className } = props;
 
+// Both branches produce the same `src`, `srcset` and size attributes plus the alt text.
 let attrs: { src: string; srcset: string; width: number; height: number };
 let alt: string;
 if ('photo' in props) {

@@ -17,18 +17,21 @@ import type { ErrorCode } from '@/lib/result';
 import { isHeic, isSupportedPhoto } from '@/lib/photo-files';
 import { maxOriginalBytes } from '@/lib/photo-limits';
 
+/** A failed photo step, carrying the error code the panel shows as text. */
 export class PhotoError extends Error {
   constructor(public code: ErrorCode) {
     super(code);
   }
 }
 
+/** The original after preparation: re-encoded image and its size in pixels. */
 export interface PreparedOriginal {
   blob: Blob;
   width: number;
   height: number;
 }
 
+/** `canvas.toBlob` as a promise. */
 function nativeBlob(canvas: HTMLCanvasElement, type: string, quality: number): Promise<Blob> {
   return new Promise((resolve, reject) =>
     canvas.toBlob(
@@ -60,7 +63,7 @@ async function canvasToBlob(
 }
 
 /**
- * Steps 2–3 of docs/12 §3: HEIC → JPG (loaded only then), resize to at most 4000 px on the long
+ * Prepares the original (docs/12 §3): HEIC → JPG (loaded only then), resize to at most 4000 px on the long
  * side, and a final re-encode on a canvas, which applies the EXIF orientation and drops every
  * metadata block, GPS included (docs/13 §5).
  */
@@ -135,13 +138,17 @@ function drawCrop(
   );
 }
 
+/** The generated files: one WebP per width, plus the JPG for social previews (products only). */
 export interface Versions {
   widths: number[];
   files: Record<number, Blob>;
   og: Blob | null;
 }
 
-/** Step 5 of docs/12 §3: cuts the crop into every width that fits, and `og.jpg` for products. */
+/**
+ * Cuts the crop into every width that fits (docs/12 §3), never enlarging, and `og.jpg` for products.
+ * The crop is in the original's pixels.
+ */
 export async function generateVersions(
   original: Blob,
   crop: CropRect,
@@ -182,6 +189,7 @@ export async function generateVersions(
   }
 }
 
+/** What the upload sends: the usage, the crop, the versions and the original (only when it is new). */
 export interface UploadParams {
   usage: PhotoUsage;
   /** Present when re-centering a photo that already exists. */
@@ -191,6 +199,7 @@ export interface UploadParams {
   versions: Versions;
 }
 
+/** What the server answers: the photo id, its version and widths, and the URL of each width. */
 export interface UploadResult {
   photoId: string;
   version: string;
@@ -246,4 +255,5 @@ export async function fetchOriginal(photoId: string): Promise<Blob> {
   return res.blob();
 }
 
+/** Re-exported from the crop module for callers that already import this pipeline. */
 export { aspectRatio };

@@ -4,7 +4,10 @@ import { gzipSync } from 'node:zlib';
 import { withPreview } from './_server.mjs';
 
 const KB = 1024;
-/** path (sample URL) → budget in KB of compressed JS loaded on open. null = no strict limit. */
+/**
+ * Pages to check: `url` is a sample address, `limitKb` the budget of gzip JS loaded on open,
+ * `skipVisible` leaves out `client:visible` islands (below the fold), `status` the expected HTTP status.
+ */
 const budgets = [
   { label: 'Inicio', url: '/', limitKb: 90, skipVisible: true },
   { label: 'Catálogo', url: '/catalogo', limitKb: 25 },
@@ -14,6 +17,10 @@ const budgets = [
   { label: '404', url: '/no-existe', limitKb: 8, status: 404 },
 ];
 
+/**
+ * Gzip size of the JavaScript a page loads on open: its scripts, preloaded modules, island
+ * components, and every file those import. Returns the total bytes and the number of files.
+ */
 async function jsOnOpen(base, html, { skipVisible = false } = {}) {
   const srcs = new Set();
   for (const m of html.matchAll(/<script\b[^>]*\bsrc="([^"]+)"/g)) srcs.add(m[1]);
@@ -53,6 +60,7 @@ async function jsOnOpen(base, html, { skipVisible = false } = {}) {
   return { total, files: srcs.size };
 }
 
+/** Checks every budget against the server at `base`; returns the exit code (0 = all within budget). */
 async function run(base) {
   let failed = 0;
   let checked = 0;
@@ -78,6 +86,7 @@ async function run(base) {
   return failed ? 1 : 0;
 }
 
+// Uses `BASE_URL` when set; otherwise starts a preview server of the build (port `PORT`).
 const code = process.env.BASE_URL
   ? await run(process.env.BASE_URL)
   : await withPreview(Number(process.env.PORT ?? 4399), run);

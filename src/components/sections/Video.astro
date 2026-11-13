@@ -1,8 +1,11 @@
 ---
+// Home video section: heading plus a 16:9 box with a cover image and a play button. Touching the
+// button swaps the cover for the `<video>` (`site.video`); with no video the button is disabled.
 import { site } from '@/config/site';
 import { es } from '@/i18n/es';
 
 const t = es.home.video;
+// The button is only enabled when `site.video.src` is set.
 const hasVideo = site.video.src !== null;
 ---
 
@@ -127,7 +130,9 @@ const hasVideo = site.video.src !== null;
 
 <script>
   // When there is a video, touching the button swaps the cover for the <video> and plays it.
-  // Without one (`site.video.src` is null) the button stays disabled. Rule 13 for the lifecycle.
+  // Without one (`site.video.src` is null) the button stays disabled. The `<video>` is only
+  // created on that touch, so nothing is downloaded before. Starts on astro:page-load and
+  // cleans on astro:before-swap (rule 13).
   let cleanup: (() => void) | undefined;
   function setup() {
     const root = document.querySelector<HTMLElement>('[data-video-section]');
@@ -137,6 +142,7 @@ const hasVideo = site.video.src !== null;
     const ph = root?.querySelector<HTMLElement>('[data-ph]');
     if (!root || !src || !play || !box || !ph) return;
     const speed = Number(root.dataset.speed) || 1;
+    // Builds the video with controls and the configured speed, hides the cover and plays.
     const start = () => {
       const video = document.createElement('video');
       video.src = src;

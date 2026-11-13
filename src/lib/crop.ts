@@ -2,9 +2,13 @@
  * Pure maths of photo crops and variants (docs/12 §3, docs/15 §3). The browser turns these
  * numbers into pixels with a canvas; the server only stores them.
  */
+
+/** Shape of a photo: square, wide (hero desktop) or tall (hero phone). */
 export type Aspect = '1:1' | '16:9' | '3:4';
+/** Where a photo is used. */
 export type PhotoUsage = 'product' | 'hero_desktop' | 'hero_mobile';
 
+/** A crop rectangle in pixels of the original photo. */
 export interface CropRect {
   x: number;
   y: number;
@@ -12,6 +16,7 @@ export interface CropRect {
   height: number;
 }
 
+/** Shape each usage requires. */
 export const usageAspect: Record<PhotoUsage, Aspect> = {
   product: '1:1',
   hero_desktop: '16:9',
@@ -25,15 +30,17 @@ export const wantedWidths: Record<PhotoUsage, readonly number[]> = {
   hero_mobile: [600, 1200],
 };
 
-/** Below this crop width the panel warns "La foto es chica…" (docs/12 §3 step 5). */
+/** Below this crop width the panel warns "La foto es chica…" (docs/12 §3). */
 export const smallThreshold: Record<PhotoUsage, number> = {
   product: 800,
   hero_desktop: 1600,
   hero_mobile: 900,
 };
 
+/** Size of the social-sharing image. */
 export const og = { width: 1200, height: 630 } as const;
 
+/** Width divided by height of an aspect. */
 export function aspectRatio(aspect: Aspect): number {
   switch (aspect) {
     case '1:1':
@@ -67,10 +74,12 @@ export function widthsToGenerate(cropWidth: number, wanted: readonly number[]): 
   return fits.length > 0 ? fits : [Math.max(1, Math.round(cropWidth))];
 }
 
+/** Height of a version of the given width and aspect. */
 export function variantHeight(width: number, aspect: Aspect): number {
   return Math.round(width / aspectRatio(aspect));
 }
 
+/** True when a crop is narrower than the usage's quality threshold. */
 export function isSmallCrop(cropWidth: number, usage: PhotoUsage): boolean {
   return cropWidth < smallThreshold[usage];
 }
@@ -143,6 +152,7 @@ export function hashVersion(input: string): string {
   return h.toString(16).padStart(8, '0');
 }
 
+/** Version id of a crop: changes whenever the rectangle or the nonce changes. */
 export function cropVersion(crop: CropRect, nonce: string): string {
   return hashVersion(`${crop.x},${crop.y},${crop.width},${crop.height},${nonce}`);
 }

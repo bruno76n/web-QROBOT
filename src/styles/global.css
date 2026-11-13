@@ -21,6 +21,7 @@
   --purple: #6b3fd4;
   --green: #00ae42;
   --green-l: #e3f5e9;
+  --lilac: #f1ecfd;
   --top: 68px;
   --gutter: clamp(20px, 4.5vw, 64px);
   --wrap-max: 1360px;
@@ -46,6 +47,7 @@
   --color-soft: var(--soft);
   --color-purple: var(--purple);
   --color-green: var(--green);
+  --color-lilac: var(--lilac);
   --color-green-l: var(--green-l);
   --font-sans: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --radius-btn: var(--radius-btn);

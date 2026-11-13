@@ -1,3 +1,7 @@
+/**
+ * Helpers shared by the panel flow specs: make test photos, reseed the database, open the panel
+ * and wait for uploads to finish.
+ */
 import { expect, type Page } from '@playwright/test';
 import { spawnSync } from 'node:child_process';
 import sharp from 'sharp';

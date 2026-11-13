@@ -1,4 +1,6 @@
 ---
+// Catalog page `/catalogo`: every published product in the grid.
+// Reads the published products from D1 and builds its meta description and breadcrumb JSON-LD.
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import CatalogPage from '@/components/catalog/CatalogPage.astro';
 import { listPublishedProducts } from '@/server/queries/public';
@@ -8,6 +10,7 @@ import { breadcrumbJsonLd } from '@/lib/seo';
 
 export const prerender = false;
 const products = await listPublishedProducts();
+// Lowest "price from" among the products that have one, or null.
 const cheapest = products.reduce<number | null>(
   (min, p) =>
     p.priceFromCents !== null && (min === null || p.priceFromCents < min) ? p.priceFromCents : min,

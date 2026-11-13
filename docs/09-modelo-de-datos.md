@@ -123,6 +123,18 @@ Pares clave–valor editables desde el panel.
 | `count` | integer | |
 | PK | (`day`, `source`, `product_id`) — se suma con `INSERT … ON CONFLICT DO UPDATE` |
 
+### Aprende (fase 6, migración `0007`; detalle en `21 §7`)
+
+| Tabla | Columnas principales |
+|---|---|
+| `learn_pages` | `id` (`learn-<slug con guiones>`, `learn-home` la portada), `slug` único (`''` = portada), `kind`, `topic`, `title`, `subtitle`, `summary`, `body_md`, `body_ast` (JSON), `toc` (JSON), `search_text` (tres líneas normalizadas: título · etiquetas · resto), `filters`, `chips`, `tags`, `related`, `sources`, `extra` (JSON: `featured`, `suggestions`, `terms`), `audience`, `cta`, `cta_text`, `published`, `sort_order`, `reviewed` (`AAAA-MM`), `edited_in_panel`, `created_at`, `updated_at` |
+| `learn_faqs` | `id`, `page_id` FK → `learn_pages` (en cascada), `position` (desde 1: el número de `#pregunta-N`), `question`, `answer` |
+| `learn_datasets` | `key` PK (`filamentos`, `impresoras`, `mantenimiento`, `datos-curiosos`, `buscador`), `data` (JSON), `updated_at` |
+| `learn_sources` | `id` PK, `name`, `url` (nulo si no tiene liga) |
+| `learn_search_misses` | `day`, `query`, `count`; PK (`day`, `query`); se suma con `ON CONFLICT` |
+
+`settings` suma `learn_index_synced_at` y `learn_index_docs` (`22 §6`, fase 7).
+
 ## 2. Índices
 
 - `products(published, sort_order)`
@@ -130,6 +142,7 @@ Pares clave–valor editables desde el panel.
 - `product_categories(category, product_id)`
 - `photos(owner_type, owner_id, sort_order)`
 - `photos(status, created_at)` (barrido de `pending`)
+- `learn_pages(slug)` único · `learn_pages(topic, published, sort_order)` · `learn_faqs(page_id, position)` · `learn_search_misses(day)`
 
 ## 3. Reglas de datos (en `src/lib/publish.ts`, con prueba)
 

@@ -1,4 +1,7 @@
 ---
+// Home order section (`#pedido`): heading and explanation on the left, the `OrderComposer` island
+// on the right. Its script handles the `#pedido=<idea>` links from other sections. The chat
+// styles are global because the island renders its markup on the client.
 import { site } from '@/config/site';
 import { es } from '@/i18n/es';
 import OrderComposer from './OrderComposer';
@@ -19,6 +22,7 @@ const t = es.home.order;
 </section>
 
 <style is:global>
+  /* Two columns: text (sticky on wide screens) and the composer. */
   .ask {
     display: grid;
     grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
@@ -38,6 +42,7 @@ const t = es.home.order;
     font-size: 15px;
     color: var(--ink-2);
   }
+  /* Chat-style composer (`OrderComposer` markup): bubbles, fill-in blanks and send button. */
   .chat {
     background: var(--soft);
     border-radius: 22px;
@@ -93,6 +98,7 @@ const t = es.home.order;
     line-height: 1.75;
     letter-spacing: -0.015em;
   }
+  /* Fill-in blank inside the sentence: inherits the text and is underlined with the brand pair. */
   .f {
     font: inherit;
     letter-spacing: inherit;
@@ -204,11 +210,14 @@ const t = es.home.order;
 <script>
   // `#pedido=<idea>` is not an element id and, with the view-transitions router, a link click does
   // not fire `hashchange`. So these links are handled here: set the hash, tell the composer
-  // (`hashchange`) and scroll to the section (smooth unless motion is reduced). Rule 13.
+  // (`hashchange`) and scroll to the section (smooth unless motion is reduced). Starts on
+  // astro:page-load and cleans on astro:before-swap (rule 13).
+  // Scrolls to the section.
   function toOrder() {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     document.getElementById('pedido')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
   }
+  // Capturing click handler for `#pedido=` links; modified clicks are left to the browser.
   const onClick = (event: MouseEvent) => {
     const link = (event.target as Element | null)?.closest<HTMLAnchorElement>(
       'a[href^="#pedido="]',
@@ -221,6 +230,7 @@ const t = es.home.order;
     window.dispatchEvent(new HashChangeEvent('hashchange'));
     toOrder();
   };
+  // Also scrolls on arrival when the address already carries `#pedido=...`.
   const onLoad = () => {
     // Registered on every page load (the same function twice is a no-op), removed before a swap.
     document.addEventListener('click', onClick, true);

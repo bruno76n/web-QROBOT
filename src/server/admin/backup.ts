@@ -1,7 +1,9 @@
+/** Full export of the catalog data for the panel's backup download. */
+
 import { schema } from '../db/client';
 import type { AdminDeps } from './context';
 
-/** `admin.exportBackup`: everything except the files, which stay in R2 (docs/09 §5). */
+/** `admin.exportBackup`: every table except the files, which stay in R2 (docs/09 §5). `version` is the format version. */
 export async function exportBackup(deps: AdminDeps) {
   const { db } = deps;
   const [products, slugHistory, categories, categoryList, colors, photos, heroSlides, settings] =

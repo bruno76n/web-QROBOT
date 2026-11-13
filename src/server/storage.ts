@@ -1,3 +1,5 @@
+/** Access to the R2 bucket that holds the photos: write, delete by prefix and public URLs. */
+
 import { getEnv } from './env';
 
 /** The R2 bucket with the photos. Only src/server/ may use it (docs/07 §6). */
@@ -6,6 +8,7 @@ export function getBucket(): R2Bucket {
 }
 
 /** Writes an object. Keys are made by the server (`ph/<uuid>/…`), never from a file name. */
+/** Writes an object with its content type and, optionally, a cache policy. */
 export async function putObject(
   key: string,
   body: ArrayBuffer | ReadableStream | Uint8Array | string,
@@ -25,6 +28,7 @@ export async function deleteByPrefix(
   bucket: R2Bucket = getBucket(),
 ): Promise<number> {
   let removed = 0;
+  // R2 lists at most 1000 keys per call, so page until nothing is left.
   let cursor: string | undefined;
   do {
     const page = await bucket.list(

@@ -1,3 +1,5 @@
+/** Typed client for the admin actions: one function per action, each answering a `Result`. */
+
 import { actions } from 'astro:actions';
 import type { HeroInput, ProductInput } from '@/lib/schemas';
 import { callAction } from './call';

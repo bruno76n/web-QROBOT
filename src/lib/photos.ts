@@ -1,3 +1,5 @@
+/** Public URLs and `<img>` attributes for stored photos, built only from the widths they have. Pure. */
+
 import { r2Keys, variantHeight, type Aspect } from './crop';
 
 /** What a public page needs to draw a stored photo (docs/10 §2, docs/15 §3). */
@@ -10,15 +12,19 @@ export interface PhotoSrc {
   aspect: Aspect;
 }
 
+/** Joins a base URL and a key with exactly one slash. */
 const join = (base: string, key: string) =>
   `${base.replace(/\/+$/, '')}/${key.replace(/^\/+/, '')}`;
 
+/** URL of one width of a photo. */
 export const photoVariantUrl = (p: Pick<PhotoSrc, 'id' | 'version'>, width: number, base: string) =>
   join(base, r2Keys.variant(p.id, p.version, width));
 
+/** URL of the social-sharing image (`og.jpg`) of a photo. */
 export const photoOgUrl = (p: Pick<PhotoSrc, 'id' | 'version'>, base: string) =>
   join(base, r2Keys.og(p.id, p.version));
 
+/** Attributes to render a photo as an `<img>`. */
 export interface ImgAttrs {
   src: string;
   srcset: string;

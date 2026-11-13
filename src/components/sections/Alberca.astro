@@ -1,4 +1,7 @@
 ---
+// Home "ball pit" section: heading and a button that rains Q-404 robots over the whole screen
+// (`pit.ts`). The button is hidden until the script runs, because the pit needs JavaScript; the
+// "Vaciar" button and the live region sit outside the section.
 import { es } from '@/i18n/es';
 
 const t = es.home.pit;
@@ -66,6 +69,7 @@ const t = es.home.pit;
     font-size: 14px;
     color: var(--ink-2);
   }
+  /* "Vaciar" button, fixed at the bottom of the screen while a pool is running. */
   .pit-stop {
     position: fixed;
     left: 50%;
@@ -88,7 +92,8 @@ const t = es.home.pit;
   import { es } from '@/i18n/es';
 
   // The pool needs JavaScript, so its button only appears when the script runs. matter-js is
-  // downloaded when the button is touched, not before. Rule 13 for the lifecycle.
+  // downloaded when the button is touched, not before. Starts on astro:page-load and cleans on
+  // astro:before-swap (rule 13), which also removes any pool still running.
   let cleanup: (() => void) | undefined;
 
   function setup() {
@@ -103,6 +108,7 @@ const t = es.home.pit;
     let pit: { drain: () => void; destroy: () => void } | null = null;
     let reduce = false;
 
+    // Back to the initial state once the pool ends: button re-enabled with the "again" texts.
     const finish = () => {
       pit = null;
       stop.hidden = true;
@@ -113,9 +119,11 @@ const t = es.home.pit;
       if (document.activeElement === document.body || document.activeElement === stop)
         btn.focus({ preventScroll: true });
     };
+    // Escape empties the pool early.
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') pit?.drain();
     };
+    // Loads the physics module on demand and starts the pool; ignored while one is running.
     const start = async () => {
       if (pit) return;
       reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -130,6 +138,7 @@ const t = es.home.pit;
       stop.hidden = false;
       live.textContent = t.live;
     };
+    // "Vaciar": with reduced motion the pool just disappears; otherwise it drains.
     const onStop = () => (reduce ? (pit?.destroy(), finish()) : pit?.drain());
     btn.addEventListener('click', start);
     stop.addEventListener('click', onStop);

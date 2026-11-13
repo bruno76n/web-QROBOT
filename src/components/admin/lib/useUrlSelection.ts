@@ -1,11 +1,18 @@
+/** Hook that keeps the selected product id in the URL query (`?p=`). */
+
 import { useCallback, useEffect, useState } from 'react';
 
+/** The `p` query parameter of the current URL, or null. */
 const read = () => new URLSearchParams(window.location.search).get('p');
 
-/** The selected product lives in the URL (`/admin?p=<id>`, `?p=new`) so it survives a reload (docs/12 §2). */
+/**
+ * The selected product lives in the URL (`/admin?p=<id>`, `?p=new`) so it survives a reload (docs/12 §2).
+ * Returns the current value and a setter that pushes a history entry (null clears it).
+ */
 export function useUrlSelection(): [string | null, (next: string | null) => void] {
   const [selected, setSelected] = useState<string | null>(read);
 
+  // Back/forward buttons change the URL without going through `select`.
   useEffect(() => {
     const onPop = () => setSelected(read());
     window.addEventListener('popstate', onPop);

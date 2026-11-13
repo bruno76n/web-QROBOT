@@ -1,7 +1,10 @@
 ---
+// Breadcrumb trail as a `<nav>` with an ordered list. Items with `href` are links; the item
+// without one (the last) is the current page.
 import { es } from '@/i18n/es';
 
 interface Props {
+  /** Trail in order, from the first level to the current page. */
   items: { label: string; href?: string }[];
 }
 const { items } = Astro.props;

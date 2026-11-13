@@ -1,3 +1,5 @@
+/** Admin actions on catalog categories: create, rename, reorder and delete. */
+
 import { asc, eq, inArray } from 'drizzle-orm';
 import {
   categoryIdFromLabel,
@@ -10,6 +12,7 @@ import { fail, ok, type Result } from '@/lib/result';
 import { schema } from '../db/client';
 import { runBatch, type AdminDeps } from './context';
 
+/** Category ids in display order. */
 const currentIds = async ({ db }: AdminDeps) =>
   (
     await db
@@ -18,7 +21,7 @@ const currentIds = async ({ db }: AdminDeps) =>
       .orderBy(asc(schema.categories.position), asc(schema.categories.createdAt))
   ).map((r) => r.id);
 
-/** `admin.createCategory`: adds a category at the end of the list. */
+/** `admin.createCategory`: adds a category at the end of the list, with an id made from its name. */
 export async function createCategory(
   deps: AdminDeps,
   input: { label: string },
@@ -89,6 +92,7 @@ export async function deleteCategory(
     .where(eq(schema.productCategories.category, input.id));
   const productIds = linked.map((l) => l.productId);
   if (productIds.length > 0) {
+    // Every product in this category with all its categories, read in chunks to keep the queries small.
     const products: { id: string; name: string; published: boolean; categories: string[] }[] = [];
     for (let i = 0; i < productIds.length; i += 80) {
       const chunk = productIds.slice(i, i + 80);
@@ -111,6 +115,7 @@ export async function deleteCategory(
     if (stuck.length > 0) return fail('CATEGORY_IN_USE', { products: stuck.map((p) => p.name) });
   }
 
+  // The remaining categories are renumbered so positions stay contiguous.
   const rest = (await currentIds(deps)).filter((id) => id !== input.id);
   const now = new Date(deps.now());
   await runBatch(db, [

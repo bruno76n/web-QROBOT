@@ -1,4 +1,7 @@
 ---
+// Body shared by `/catalogo` and `/catalogo/<categoria>`: title block, volume-order note, sticky
+// category tabs with the product count, the product grid (or the empty state) and a prompt for
+// what is not listed. Reads the category list from D1. The first four cards load eagerly.
 import { listCategories } from '@/server/queries/categories';
 import { es } from '@/i18n/es';
 import CategoryTabs from '@/components/site/CategoryTabs.astro';
@@ -13,6 +16,7 @@ interface Props {
 }
 const { products, category } = Astro.props;
 const categories = await listCategories();
+// Name of the current category; undefined for "Todos".
 const label = categories.find((c) => c.id === category)?.label;
 const t = es.catalog;
 ---

@@ -1,8 +1,11 @@
-// pnpm security — docs/13 §10. Every step runs on what already exists.
+// pnpm security — docs/13 §10. Runs each check that applies to the files present and exits
+// non-zero if any step fails.
 import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync } from 'node:fs';
 
+// Result of every step: `{ label, ok }`.
 const steps = [];
+// Runs a command with inherited output and records whether it passed.
 const run = (label, cmd, args, opts = {}) => {
   console.log(`\n▶ ${label}`);
   const r = spawnSync(cmd, args, { stdio: 'inherit', ...opts });
@@ -11,6 +14,7 @@ const run = (label, cmd, args, opts = {}) => {
   if (!ok) console.error(`✗ ${label}`);
   return ok;
 };
+// True when `dir` exists and has a file matching `re`.
 const has = (dir, re) => existsSync(dir) && readdirSync(dir).some((f) => re.test(f));
 
 // 1. Dependencies
@@ -31,7 +35,7 @@ if (gl.status === 0) {
 run('eslint (security rules and frontiers)', 'pnpm', ['exec', 'eslint', '.', '--max-warnings=0']);
 run('negative lint fixtures must fail', 'node', ['scripts/lint-negative.mjs']);
 
-// 4. Security tests that exist so far
+// 4. Security tests present in tests/security (Vitest ones and Playwright ones)
 if (has('tests/security', /\.test\.ts$/)) {
   run('vitest security', 'pnpm', ['exec', 'vitest', 'run', 'tests/security']);
 }

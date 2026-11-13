@@ -48,7 +48,7 @@ for (const url of publicUrls) {
 }
 
 test('the panel may use the camera, the public site may not', async ({ request }) => {
-  // /admin does not exist until phase 2; the middleware rule is checked on any path under it.
+  // The middleware rule applies to any path under /admin, so a probe path is enough.
   const res = await request.get('/admin/probe');
   expect(res.headers()['permissions-policy']).toBe('camera=(self), microphone=(), geolocation=()');
 });

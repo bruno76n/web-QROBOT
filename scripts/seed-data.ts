@@ -2,10 +2,14 @@
 export interface SeedProduct {
   slug: string;
   name: string;
+  /** Singular and plural name of one unit, used in the WhatsApp message. */
   unit: [singular: string, plural: string];
+  /** Category ids. */
   categories: string[];
+  /** "From" price in pesos. */
   from: number;
   short: string;
+  /** Color ids. */
   colors: string[];
   size: string;
   leadTime: string;
@@ -19,6 +23,7 @@ export interface SeedProduct {
   photoPrefix?: string;
 }
 
+/** The example catalog loaded by `pnpm seed`. */
 export const seedProducts: SeedProduct[] = [
   {
     slug: 'llaveros-con-nombre',

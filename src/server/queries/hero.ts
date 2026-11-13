@@ -1,3 +1,5 @@
+/** Read query of the home carousel. */
+
 import { asc, eq, inArray } from 'drizzle-orm';
 import type { HeroView } from '@/lib/admin-types';
 import { heroIntervals } from '@/lib/schemas';
@@ -5,9 +7,13 @@ import { getDb, schema, type Db } from '../db/client';
 import { getEnv } from '../env';
 import { toPhotoView } from './photos';
 
+/** `settings` key that stores the seconds between slides. */
 export const HERO_INTERVAL_KEY = 'hero_interval_seconds';
 
-/** The hero slides in order with their photos, and the interval between them (default 6 s). */
+/**
+ * The hero slides in order with their photos, and the interval between them. A stored interval that
+ * is not one of the allowed values gives 6 s; slides whose desktop photo is missing are skipped.
+ */
 export async function getHero(
   db: Db = getDb(),
   imgBase: string = getEnv().PUBLIC_IMG_BASE,

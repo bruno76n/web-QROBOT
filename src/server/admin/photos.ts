@@ -1,3 +1,5 @@
+/** Validation of the photo references that a product or hero save carries (docs/10 §3). */
+
 import { and, eq, inArray } from 'drizzle-orm';
 import {
   isValidCrop,
@@ -12,10 +14,11 @@ import { fail, type Failure } from '@/lib/result';
 import { schema, type Db } from '../db/client';
 import type { Photo } from '../db/schema';
 
+/** A photo reference that passed the checks, with its stored row. */
 export interface CheckedPhoto {
   ref: PhotoRef;
   row: Photo;
-  /** The version in the database differs: the photo was re-centered and the old files go away. */
+  /** The version differs from the stored one: the photo was re-centered and the old versions are replaced. */
   recentered: boolean;
 }
 
@@ -29,6 +32,7 @@ export async function checkPhotoRefs(
   bucket: R2Bucket,
   refs: PhotoRef[],
   usage: PhotoUsage,
+  /** `id`: the product that owns the photos (null for the hero); `attachedIds`: photos already part of the hero. */
   owner: { id: string | null; attachedIds?: ReadonlySet<string> },
 ): Promise<CheckedPhoto[] | Failure> {
   if (refs.length === 0) return [];

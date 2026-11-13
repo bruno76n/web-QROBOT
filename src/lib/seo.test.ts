@@ -19,9 +19,7 @@ describe('titles and URLs', () => {
       'Llaveros con nombre desde $50 · Quick Robot',
     );
     expect(productTitle('Algo', null)).toBe('Algo · Quick Robot');
-    expect(productDescription('Con tu nombre.')).toBe(
-      'Con tu nombre. Impresión 3D.',
-    );
+    expect(productDescription('Con tu nombre.')).toBe('Con tu nombre. Impresión 3D.');
     expect(productDescription('')).toBe('Impresión 3D.');
   });
   it('builds absolute URLs without double slashes', () => {

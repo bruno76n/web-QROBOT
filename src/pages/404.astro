@@ -1,9 +1,12 @@
 ---
+// Not-found page. Renders `ErrorPage` with links to the home and the catalog. Also served for
+// unknown products and categories, which `Astro.rewrite('/404')` to this page.
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ErrorPage from '@/components/site/ErrorPage.astro';
 import { es } from '@/i18n/es';
 
 export const prerender = false;
+// A real 404 response, also when reached through a rewrite.
 Astro.response.status = 404;
 const t = es.notFound;
 ---

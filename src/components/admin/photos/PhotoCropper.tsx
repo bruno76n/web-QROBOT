@@ -1,3 +1,5 @@
+/** Full-screen crop dialog: lets the owner move and zoom a photo inside the frame of its usage. */
+
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
 import Cropper, { type Area } from 'react-easy-crop';
@@ -6,6 +8,10 @@ import { es } from '@/i18n/es';
 
 const t = es.admin.photo;
 
+/**
+ * `src` is what the cropper shows; `usage` sets the frame shape; `original` is the real size of the
+ * photo (crop values are in its pixels); `onDone` receives the chosen crop.
+ */
 interface Props {
   /** Same-origin URL (or blob URL) of the original. */
   src: string;
@@ -32,20 +38,28 @@ const round = (a: Area, pad: boolean): CropRect => ({
 const productMinZoom = (o: { width: number; height: number }) =>
   Math.max(0.2, (Math.min(o.width, o.height) / Math.max(o.width, o.height)) * 0.85);
 
-/** Full-screen cropper (docs/12 §3 step 4): move, zoom 1×–4×, pinch, and a live preview (§4). */
+/**
+ * Full-screen cropper (docs/12 §3): move, zoom up to 4×, pinch, and a live preview of how the
+ * photo will look (docs/12 §4). Product photos may be zoomed out past the photo's edges.
+ */
 export function PhotoCropper({ src, usage, original, initial, onCancel, onDone }: Props) {
   const dialog = useRef<HTMLDialogElement>(null);
+  /** Position of the image under the frame (react-easy-crop's own coordinates). */
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
+  /** Crop rectangle in original-photo pixels; starts from the saved crop. */
   const [area, setArea] = useState<CropRect | null>(initial);
+  /** Frame shape for the usage, and whether it may reach past the photo. */
   const aspect = aspectRatio(usageAspect[usage]);
   const pad = usage === 'product';
   const minZoom = pad ? productMinZoom(original) : 1;
 
+  // Opens as a modal as soon as it is mounted.
   useEffect(() => {
     dialog.current?.showModal();
   }, []);
 
+  /** The crop being shown (the user's, or the saved one until they move), and whether it is low-resolution. */
   const current = area ?? initial;
   const small = current ? isSmallCrop(current.width, usage) : false;
 

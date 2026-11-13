@@ -310,3 +310,18 @@ Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y pre
 - **Meilisearch detrás del Worker:** el navegador busca en `/api/aprende/buscar`; la CSP no cambia, las llaves no salen al navegador y se cuentan las búsquedas sin resultado. Respaldo en D1 para local y para cuando Meilisearch falle (`22`).
 - **Sin llamados al sistema (Quick Cerebro):** el sistema todavía no sale; sus llamados se guardan con `cta: system` y quedan ocultos con `site.system.enabled = false`.
 - **Fases 6–8** con el mismo formato de las anteriores (`20`).
+
+## 2026-11-13 · Fase 6: librerías de Aprende
+- **mdast-util-from-markdown, micromark-extension-gfm, mdast-util-gfm:** convierten el Markdown a un árbol que se filtra con lista blanca (`21 §5`). Resuelven el Markdown y las tablas GFM sin escribir un analizador a mano (regla 2). Alternativas descartadas: `marked` y `markdown-it` producen HTML (obligaría a `set:html`).
+- **@types/mdast:** solo tipos del árbol.
+- **yaml:** lee el frontmatter de los archivos de `content/aprende/` (el importador, solo en Node).
+- **meilisearch:** SDK oficial para el buscador (`22`); se usa desde la fase 7. Se instala ahora para dejar `package.json` completo.
+- `pnpm audit --prod`: una vulnerabilidad moderada en `astro` que ya existía; ninguna alta ni crítica.
+- `--lilac: #f1ecfd` agregado a los tokens (`03 §2`, `global.css`).
+
+## 2026-11-13 · Fase 6: ajustes mínimos para que el contenido pase la validación
+- `content/aprende/paginas/{filamentos/diametro,laminado/altura-de-capa,maquinas/boquillas}.md`: las etiquetas numéricas (`1.75`, `0.2`…) se entrecomillaron (`'1.75'`). YAML las leía como número y el esquema pide texto. El texto de las páginas no cambia.
+- `datos/filamentos.json` no se tocó: el esquema (`src/lib/learn/content.ts`) acepta `null` en `hdtC`, `impactKjM2`, `stiffnessMpa`, `waterPct` y `maxSpeedMmS` (la fuente no da el dato; la tabla mostrará un guion) y `ams: 'dry'` (PVA/BVOH: solo con rollo seco).
+- Ids estables: cada página guarda `learn-<slug con guiones>` (`learn-home` la portada) y cada pregunta `<id>-q<n>`; así local y producción comparten ids.
+- `search_text` guarda tres líneas normalizadas (título · etiquetas · resto: subtítulo, resumen y preguntas) para ordenar la búsqueda en D1 sin otra columna.
+- Las preguntas empiezan en `position = 1` (es el número de `#pregunta-N`).

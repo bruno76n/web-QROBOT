@@ -50,6 +50,13 @@
       "when": 1793870816504,
       "tag": "0006_amusing_romulus",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1794605862854,
+      "tag": "0007_petite_triathlon",
+      "breakpoints": true
     }
   ]
 }

@@ -1,4 +1,6 @@
 ---
+// Row of links to "Todos" and to each category; the current one carries `aria-current`.
+// On phones the row scrolls horizontally and bleeds to the screen edges.
 import type { CategoryView } from '@/config/categories';
 import { es } from '@/i18n/es';
 
@@ -9,6 +11,7 @@ interface Props {
   categories: CategoryView[];
 }
 const { current, categories } = Astro.props;
+// "Todos" first (id null), then one tab per category.
 const tabs = [
   { id: null, label: es.catalog.all, href: '/catalogo' },
   ...categories.map((c) => ({ id: c.id, label: c.label, href: `/catalogo/${c.id}` })),

@@ -1,7 +1,10 @@
+/** TanStack Query hooks and cache keys for the panel's read-only data. */
+
 import { useQuery } from '@tanstack/react-query';
 import { api } from './api';
 import { unwrap } from './call';
 
+/** Cache keys; mutations use them to update or invalidate what a screen shows. */
 export const keys = {
   products: ['products'] as const,
   product: (id: string) => ['product', id] as const,
@@ -10,9 +13,11 @@ export const keys = {
   clicks: ['clicks'] as const,
 };
 
+/** Product rows for the list. */
 export const useProducts = () =>
   useQuery({ queryKey: keys.products, queryFn: async () => unwrap(await api.listProducts()) });
 
+/** One product for the editor; disabled while `id` is null (a new product). */
 export const useProduct = (id: string | null) =>
   useQuery({
     queryKey: keys.product(id ?? 'none'),
@@ -23,6 +28,7 @@ export const useProduct = (id: string | null) =>
     gcTime: 0,
   });
 
+/** Categories in display order (cached for 30 s). */
 export const useCategories = () =>
   useQuery({
     queryKey: keys.categories,
@@ -30,6 +36,7 @@ export const useCategories = () =>
     staleTime: 30_000,
   });
 
+/** The hero for its editor. Like the product editor, the screen keeps its own copy while open, so it is not refetched or kept in cache. */
 export const useHero = () =>
   useQuery({
     queryKey: keys.hero,
@@ -38,6 +45,7 @@ export const useHero = () =>
     gcTime: 0,
   });
 
+/** WhatsApp tap totals for the last 30 days (cached for 60 s). */
 export const useClickStats = () =>
   useQuery({
     queryKey: keys.clicks,

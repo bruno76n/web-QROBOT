@@ -1,3 +1,5 @@
+/** The result shape of admin actions: business success or a coded failure. Pure. */
+
 /** Error codes shared by server and panel (docs/10 §5). */
 export const errorCodes = [
   'UNAUTHORIZED',
@@ -17,8 +19,10 @@ export const errorCodes = [
   'INTERNAL',
 ] as const;
 
+/** One of the codes in `errorCodes`. */
 export type ErrorCode = (typeof errorCodes)[number];
 
+/** A business failure with its code. */
 export interface Failure {
   ok: false;
   code: ErrorCode;
@@ -29,10 +33,12 @@ export interface Failure {
 /** What every admin action returns for business results (docs/10 §3). */
 export type Result<T> = { ok: true; data: T } | Failure;
 
+/** Wraps a successful value. */
 export function ok<T>(data: T): Result<T> {
   return { ok: true, data };
 }
 
+/** Builds a failure; `details` is left out when not given. */
 export function fail(code: ErrorCode, details?: Record<string, unknown>): Failure {
   return details ? { ok: false, code, details } : { ok: false, code };
 }

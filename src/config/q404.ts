@@ -9,6 +9,7 @@ export interface Q404Combo {
   file: string;
 }
 
+/** The combinations in display order. */
 export const q404Combos: readonly Q404Combo[] = [
   {
     id: 'morado-verde',

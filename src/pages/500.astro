@@ -1,9 +1,12 @@
 ---
+// Server-error page. Renders `ErrorPage` with a "try again" (reload) button and a link home.
+// It is kept out of search engines and answers with status 500. Reads only texts from `es`.
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ErrorPage from '@/components/site/ErrorPage.astro';
 import { es } from '@/i18n/es';
 
 export const prerender = false;
+// A real 500 response, not a 200 that shows an error message.
 Astro.response.status = 500;
 const t = es.errorPage;
 ---

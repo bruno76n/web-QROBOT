@@ -1,3 +1,5 @@
+/** Browser-side flows that turn a chosen file, or a new crop, into uploaded photo versions. */
+
 import { centerCrop, usageAspect, type CropRect, type PhotoUsage } from '@/lib/crop';
 import {
   fetchOriginal,
@@ -7,6 +9,7 @@ import {
   type UploadResult,
 } from './pipeline';
 
+/** Result of processing a new file: the upload result plus what the editor keeps for later re-crops and previews. */
 export interface IngestedPhoto extends UploadResult {
   crop: CropRect;
   original: { width: number; height: number };
@@ -15,7 +18,7 @@ export interface IngestedPhoto extends UploadResult {
   previewUrl: string;
 }
 
-/** The URL of the smallest generated width: enough for a thumbnail. */
+/** The URL of the smallest generated width (the `og` image is ignored): enough for a thumbnail. */
 export function smallestUrl(urls: Record<string, string>): string {
   const widths = Object.keys(urls)
     .filter((k) => k !== 'og')
@@ -26,7 +29,7 @@ export function smallestUrl(urls: Record<string, string>): string {
 
 /**
  * A new file, end to end: prepare the original, center it automatically, cut the versions and
- * upload them (docs/12 §3 steps 2–6). `onStage` reports what is happening for the thumbnail.
+ * upload them (docs/12 §3). `onStage` reports what is happening for the thumbnail.
  */
 export async function ingestFile(
   file: File,
@@ -56,7 +59,10 @@ export async function ingestFile(
   };
 }
 
-/** "Centrar": new versions from the stored original with the chosen crop (docs/12 §3 step 7). */
+/**
+ * "Centrar": new versions from the original with the chosen crop (docs/12 §3). Uses the original
+ * in memory when there is one, otherwise downloads it from storage.
+ */
 export async function recropPhoto(
   args: {
     photoId: string;

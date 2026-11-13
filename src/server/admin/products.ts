@@ -1,3 +1,5 @@
+/** Admin actions on products: save, publish, reorder, duplicate and delete. */
+
 import { and, asc, eq, inArray, sql } from 'drizzle-orm';
 import { r2Keys } from '@/lib/crop';
 import { limits, missingToPublish, slugForSave, slugFromName, uniqueSlug } from '@/lib/publish';
@@ -7,6 +9,7 @@ import { schema } from '../db/client';
 import { checkPhotoRefs } from './photos';
 import { removePrefixes, runBatch, type AdminDeps } from './context';
 
+/** Highest `sort_order` in use, or -1 when there are no products. */
 const maxSortOrder = async ({ db }: AdminDeps) => {
   const [row] = await db
     .select({ max: sql<number | null>`max(${schema.products.sortOrder})` })
@@ -25,7 +28,11 @@ const takenSlugs = async ({ db }: AdminDeps, exceptId?: string) => {
   return new Set([...current, ...old].filter((p) => p.id !== exceptId).map((p) => p.slug));
 };
 
-/** `admin.saveProduct`: creates or updates a product with its photos in one `db.batch` (docs/10 §3). */
+/**
+ * `admin.saveProduct`: creates or updates a product with its photos in one `db.batch` (docs/10 §3).
+ * Validates category ids, the slug and the publish rules first; a new product goes to the end of the
+ * list. R2 files of removed photos and replaced versions are deleted after the database write.
+ */
 export async function saveProduct(
   deps: AdminDeps,
   input: ProductInput,
@@ -69,6 +76,7 @@ export async function saveProduct(
   });
   if (!Array.isArray(checked)) return checked;
 
+  // Columns written on both insert and update.
   const now = new Date(deps.now());
   const values = {
     slug,
@@ -91,7 +99,7 @@ export async function saveProduct(
     updatedAt: now,
   };
 
-  // Photos of this product that are no longer in the list.
+  // Photos of this product that are missing from the submitted list; they are deleted.
   const keptIds = new Set(input.photos.map((p) => p.id));
   const previous = existing
     ? await db
@@ -107,7 +115,8 @@ export async function saveProduct(
       : db
           .insert(schema.products)
           .values({ id, ...values, sortOrder: (await maxSortOrder(deps)) + 1, createdAt: now }),
-    // The address changed: the old one stays as a redirect; one it used before is released.
+    // When the address changes, the old one stays as a redirect; if the new one was an old address of
+    // this same product, it stops being a redirect.
     ...(existing && existing.slug !== slug
       ? [
           db.delete(schema.productSlugs).where(eq(schema.productSlugs.slug, slug)),
@@ -117,6 +126,7 @@ export async function saveProduct(
             .onConflictDoNothing(),
         ]
       : []),
+    // Categories and colors are replaced as a whole.
     db.delete(schema.productCategories).where(eq(schema.productCategories.productId, id)),
     ...input.categories.map((category) =>
       db.insert(schema.productCategories).values({ productId: id, category }),
@@ -125,6 +135,7 @@ export async function saveProduct(
     ...input.colors.map((color, i) =>
       db.insert(schema.productColors).values({ productId: id, color, sortOrder: i }),
     ),
+    // Photos in the order received; a re-centered one also gets its new crop and version.
     ...checked.map(({ ref, recentered }, i) =>
       db
         .update(schema.photos)
@@ -170,7 +181,7 @@ export async function saveProduct(
   return ok({ id, slug });
 }
 
-/** `admin.setPublished`: the quick switch of the list. */
+/** `admin.setPublished`: the quick switch of the list; publishing re-checks the rules to publish. */
 export async function setPublished(
   deps: AdminDeps,
   input: { id: string; published: boolean },
@@ -259,6 +270,7 @@ export async function duplicateProduct(
   const name = `${p.name.slice(0, limits.nameMax - ' (copia)'.length)} (copia)`;
   const slug = uniqueSlug(slugFromName(name) || 'producto-copia', await takenSlugs(deps));
   const now = new Date(deps.now());
+  // The copy keeps every other field; the unused names are discarded on purpose.
   const {
     id: _id,
     slug: _slug,

@@ -1,5 +1,10 @@
+/**
+ * Island for the "ideas" list: wraps the external `InteractiveHoverLinks` component, which needs the
+ * browser for its hover effect.
+ */
 import { InteractiveHoverLinks, type InteractiveLink } from '@/components/external';
 
+/** One idea as the section passes it: texts, image and the link it opens. */
 export interface IdeaItem {
   title: string;
   description: string;

@@ -1,3 +1,5 @@
+/** Form sections of the product editor (basics, page, options), all bound to the shared react-hook-form context. */
+
 import { Controller, useFormContext } from 'react-hook-form';
 import { cn } from '@/lib/cn';
 import { colors } from '@/config/colors';
@@ -7,6 +9,7 @@ import { useCategories } from '../lib/queries';
 
 const t = es.admin.editor;
 
+/** Validation message of one form field, announced to screen readers; renders nothing without an error. */
 function FieldError({ name }: { name: keyof ProductFormValues }) {
   const { formState } = useFormContext<ProductFormValues>();
   const error = formState.errors[name];
@@ -17,13 +20,17 @@ function FieldError({ name }: { name: keyof ProductFormValues }) {
   ) : null;
 }
 
+/** Character counter ("used/max") shown under a text field. */
 const Count = ({ value, max }: { value: string; max: number }) => (
   <span className="count">
     {value.length}/{max}
   </span>
 );
 
-/** A set of check-style chips: the order of the picks is kept (it is the display order). */
+/**
+ * A set of check-style chips bound to the `categories` or `colors` field: the order of the picks is
+ * kept (it is the display order). Each option may carry a color swatch (`hex`).
+ */
 function Chips<T extends string>({
   name,
   options,
@@ -64,6 +71,7 @@ function Chips<T extends string>({
   );
 }
 
+/** "Basics" box: name, short text, "desde" price with its note, and categories. */
 export function BasicsBox() {
   const { register, watch, formState } = useFormContext<ProductFormValues>();
   return (
@@ -126,13 +134,14 @@ export function BasicsBox() {
   );
 }
 
-/** Categories come from the panel's list (tab "Categorías"). */
+/** Category chips from the panel's list (tab "Categorías"); a hint when there are none yet. */
 function CategoryChips() {
   const { data } = useCategories();
   if (data && data.length === 0) return <p className="hint">{t.noCategories}</p>;
   return <Chips name="categories" options={data ?? []} />;
 }
 
+/** "Product page" box: description, size, material, lead time, custom size, colors and unit names. */
 export function PageBox() {
   const { register, watch, formState } = useFormContext<ProductFormValues>();
   return (
@@ -203,6 +212,7 @@ export function PageBox() {
   );
 }
 
+/** Labeled on/off switch bound to a boolean field of the form; `hint` is the explanation under the label. */
 function Switch({
   name,
   label,
@@ -229,6 +239,11 @@ function Switch({
   );
 }
 
+/**
+ * "Options" box: personalizable (with its hint field), featured and published switches.
+ * `missingText` lists what is still needed to publish; while something is missing, a hidden product
+ * cannot be switched to published (`canPublish` false).
+ */
 export function OptionsBox({
   missingText,
   canPublish,

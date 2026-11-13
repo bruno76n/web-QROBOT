@@ -1,10 +1,13 @@
 ---
+// Sticky site header: logo, main navigation and quote button. On the home page, while the hero
+// is on screen, the logo gives way to an invitation to follow on Instagram (see the script).
 import { es } from '@/i18n/es';
 import { site } from '@/config/site';
 import Logo from './Logo.astro';
 import Button from './Button.astro';
 
 const current = Astro.url.pathname;
+// A nav item is current when the path starts with its `href`; links with a hash never are.
 const isCurrent = (href: string) => !href.includes('#') && current.startsWith(href);
 ---
 
@@ -66,7 +69,7 @@ const isCurrent = (href: string) => !href.includes('#') && current.startsWith(hr
 </header>
 
 <script>
-  // Phase 4 puts an element with `data-hero` at the top of the home page. While it is on
+  // The home page has an element with `data-hero` at the top. While it is on
   // screen the header shows the social-links invitation instead of the logo (class `data-over-hero`).
   // Page scripts start on `astro:page-load` and clean up on `astro:before-swap` (CLAUDE.md §13).
   let observer: IntersectionObserver | undefined;

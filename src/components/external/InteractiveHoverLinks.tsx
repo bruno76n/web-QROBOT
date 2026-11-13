@@ -1,17 +1,16 @@
 /**
- * "Interactive Hover Links" from 21st.dev, delivered by the owner (docs/11 §4).
- * Changes from the delivered file, all allowed by docs/11 §4 rules 1 and 5 (see docs/decisiones.md):
- *  - the demo data (English texts, images from another domain) is gone: `links` is required;
- *  - the section no longer adds its own padding (the page section already spaces it);
- *  - the link has an `aria-label` (the per-letter spans made its name "S e r v…");
- *  - the heading wraps by whole words (letters were separate inline-blocks and broke mid-word);
- *  - the heading uses the site type (Geist 600, -0.04em tracking, like h1-h3) instead of `font-bold`;
- *  - the image is decorative (`alt=""`; the row text names it) and loads lazily;
- *  - the image keeps its own proportions (`object-contain`, capped size) with a shadow that follows
- *    its outline: the delivered fixed 256×192 box with `object-cover` cropped tall photos (the
- *    hidden state is also `opacity: 0`, or the outline shadow of a scale-0 image shows as a dot);
- *  - MANDATORY CHANGE: on touch screens (`(hover: none)` or ≤ 760 px) the photo of the row nearest
- *    to the vertical middle of the screen is shown while scrolling; with a mouse nothing changes.
+ * "Interactive Hover Links" from 21st.dev, delivered by the owner (docs/11 §4). A list of big rows;
+ * hovering (or, on touch screens, scrolling) shows the photo that belongs to the row.
+ * How it differs from the delivered file is listed in docs/decisiones.md; what it does here:
+ *  - `links` is required (no demo data) and the section adds no padding of its own: the page
+ *    section spaces it;
+ *  - each link has an `aria-label` (the per-letter spans would otherwise spell out "S e r v…");
+ *  - the heading wraps by whole words and uses the site type (Geist 600, -0.04em tracking);
+ *  - the image is decorative (`alt=""`; the row text names it), loads lazily and keeps its own
+ *    proportions (`object-contain`, capped size) with a shadow that follows its outline; its
+ *    hidden state is also `opacity: 0`, or the outline shadow of a scale-0 image would show as a dot;
+ *  - on touch screens (`(hover: none)` or ≤ 760 px) the photo of the row nearest to the vertical
+ *    middle of the screen is shown while scrolling; with a mouse only hover matters.
  */
 import { useMotionValue, motion, useSpring, useTransform } from 'motion/react';
 import React, { useEffect, useRef, useState } from 'react';

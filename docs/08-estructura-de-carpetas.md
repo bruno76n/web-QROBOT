@@ -21,6 +21,7 @@ quick-robot-web/
 ├─ migrations/                    SQL generado por drizzle-kit
 ├─ scripts/
 │  ├─ seed.ts                     carga la semilla en D1 local (y sube fotos a R2 local)
+│  ├─ learn-import.ts             pnpm learn:import: content/aprende/ → D1 (`21 §8`); learn-files.ts lee los archivos
 │  ├─ build-assets.mjs            versiones optimizadas de assets/ en public/brand/ (`15 §3`)
 │  ├─ r2-orphans.ts               pnpm r2:orphans (`17 §5`)
 │  ├─ security.mjs                pnpm security
@@ -30,6 +31,8 @@ quick-robot-web/
 │  ├─ brand/                      generado por build-assets.mjs: Q-404, ideas, portada por defecto,
 │  │                              portada del video, og-default.jpg, apple-touch-icon.png (no se edita a mano)
 │  └─ media/                      timelapse.mp4 (cuando exista)
+├─ content/aprende/               contenido de Aprende (páginas .md, datos, fuentes, buscador; `content/aprende/README.md`)
+├─ tests/fixtures/learn/          archivos chicos de prueba del importador
 ├─ e2e/                           pruebas de Playwright (flujos A–G de `04 §6`)
 └─ src/
    ├─ pages/
@@ -48,7 +51,9 @@ quick-robot-web/
    │  └─ img/[...key].ts          SOLO en desarrollo: sirve fotos desde R2 local
    ├─ layouts/
    │  └─ BaseLayout.astro         <head> (SEO, `14`), header, footer, ClientRouter
+   ├─ lib/learn/                  lógica pura de Aprende: markdown, content, import, fit, cost, heat, search-docs (`21`, `22`)
    ├─ components/
+   │  ├─ learn/                   Aprende (fase 7): Content, Node, Search, tablas, herramientas
    │  ├─ site/                    Header, Footer, Logo, ProductCard, Price, Breadcrumbs (Astro)
    │  ├─ sections/                una por sección del inicio: Hero, Navidad, Ideas, Video,
    │  │                           Imprimiendo, Q404, Alberca, Pedido (Astro + su isla si hace falta)
@@ -65,7 +70,8 @@ quick-robot-web/
    │  ├─ db/
    │  │  ├─ schema.ts             tablas (`09`)
    │  │  └─ client.ts             getDb(env)
-   │  ├─ queries/                 lecturas: products.ts, hero.ts, clicks.ts
+   │  ├─ queries/                 lecturas: products.ts, hero.ts, clicks.ts, learn.ts
+   │  ├─ learn-import.ts          escribe el plan del importador en D1 (y arma el SQL de --remote)
    │  ├─ storage.ts               R2: getBucket, putObject, deleteByPrefix, photoUrl
 │  ├─ clock.ts                 now() (con x-test-now fuera de producción, `10 §8`)
 │  ├─ env.ts                   variables y secretos

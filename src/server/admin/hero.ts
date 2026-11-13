@@ -1,3 +1,5 @@
+/** Admin actions on the home carousel: replace all slides, or reset to the default photo. */
+
 import { eq, inArray } from 'drizzle-orm';
 import { r2Keys } from '@/lib/crop';
 import { limits } from '@/lib/publish';
@@ -8,7 +10,11 @@ import { HERO_INTERVAL_KEY } from '../queries/hero';
 import { checkPhotoRefs, type CheckedPhoto } from './photos';
 import { removePrefixes, runBatch, type AdminDeps } from './context';
 
-/** `admin.saveHero`: replaces the whole hero (slides, photos and interval) in one batch. */
+/**
+ * `admin.saveHero`: replaces the whole hero (slides, photos and interval) in one batch. Photos that
+ * leave the hero are deleted; re-centered ones get their new crop and version. R2 files of removed
+ * or replaced versions are deleted after the database write.
+ */
 export async function saveHero(
   deps: AdminDeps,
   input: HeroInput,
@@ -40,12 +46,14 @@ export async function saveHero(
   const removed = [...currentIds].filter((id) => !keep.has(id));
   const now = new Date(deps.now());
 
+  // Checked mobile photo of each slide that has one, by slide index.
   const mobileOf = new Map<number, CheckedPhoto>();
   let mi = 0;
   input.slides.forEach((s, i) => {
     if (s.mobile) mobileOf.set(i, checkedMobile[mi++] as CheckedPhoto);
   });
 
+  // Attaches a photo to its slide and, when re-centered, stores the new crop and version.
   const photoUpdate = (c: CheckedPhoto, ownerId: string, sortOrder: number) =>
     db
       .update(schema.photos)

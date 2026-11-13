@@ -38,6 +38,8 @@
 - Componentes chicos: si un `.astro` o `.tsx` pasa de ~200 líneas, se divide.
 - Funciones de `src/lib/` puras: reciben todo lo que necesitan (incluida la fecha de "hoy"), no leen el reloj ni el entorno.
 - Alias de importación `@/` → `src/`.
+- **Código documentado.** Todo archivo abre con un comentario que dice para qué sirve, y cada sección de código (función, componente, tipo, constante o bloque con una idea propia) lleva arriba un comentario corto de qué hace y, si no es obvio, por qué. Lo obvio no se comenta (`i++`); lo que importa es el propósito, las reglas y los límites (por ejemplo «nunca se agranda» o «solo corre en el navegador»).
+- **El comentario describe lo que el código hace hoy, no su historia.** No es una bitácora: no dice «antes hacía X», «ahora hace Y», «se quitó Z» ni «se agregó por…». Si el comportamiento cambia, se **reescribe** el comentario para que describa el comportamiento nuevo. Los cambios y sus motivos van a `docs/decisiones.md`, `docs/progreso.md`, los informes de fase y los mensajes de commit. Por la misma razón, un comentario no cita fases, pasos ni fechas.
 - Clases de Tailwind; CSS propio solo en `global.css` (tokens) o en `<style>` del componente para lo que Tailwind no cubre (por ejemplo el nombre gigante).
 
 ## 3. Git
@@ -89,7 +91,7 @@
 
 Un paso está terminado cuando:
 1. Hace lo que dice su fase y los documentos que cita.
-2. Pasan `pnpm test`, `pnpm lint`, `pnpm typecheck` y `pnpm security`.
+2. Pasan `pnpm test`, `pnpm lint`, `pnpm typecheck` y `pnpm security`, y el código nuevo o cambiado está documentado como pide `§2` (su comentario describe cómo funciona ahora).
 3. Si tiene pantalla: se comparó con el mockup en 390, 820 y 1440 (capturas revisadas) y la fila de `docs/progreso.md` está actualizada.
 4. Si tomó una decisión no escrita: está en `docs/decisiones.md`.
 5. Tiene su commit.

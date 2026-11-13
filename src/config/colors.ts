@@ -14,10 +14,13 @@ export const colors = [
   { id: 'cafe', label: 'Café', hex: '#a8683c' },
 ] as const;
 
+/** Id of one of the product colors. */
 export type ColorId = (typeof colors)[number]['id'];
 
+/** The color ids as a non-empty tuple, as Zod enums require. */
 export const colorIds = colors.map((c) => c.id) as [ColorId, ...ColorId[]];
 
+/** Type guard for a string that is a known color id. */
 export function isColorId(value: string): value is ColorId {
   return colors.some((c) => c.id === value);
 }

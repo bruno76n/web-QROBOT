@@ -23,6 +23,7 @@ Documentación en `docs/` (empieza por `docs/README.md`; para arrancar y probar 
 13. **Los `<script>` de página arrancan en `astro:page-load` y limpian en `astro:before-swap`** (por las View Transitions, `docs/07 §1`).
 14. **Aprende:** el Markdown se convierte a árbol (`src/lib/learn/markdown.ts`) al importar o guardar, nunca en cada visita, y se pinta con componentes; el texto de las páginas vive en D1 (carga inicial desde `content/aprende/`), no en `es.ts` (`docs/21 §5, §8`).
 15. **El navegador nunca habla con Meilisearch:** busca en `/api/aprende/buscar`, que usa Meilisearch o, si no está o falla, D1 (`docs/22 §1`). Las llaves de Meilisearch solo como secretos del Worker.
+16. **Código documentado, sin bitácora en los comentarios:** cada archivo y cada sección de código lleva arriba un comentario de para qué sirve y qué hace. Describe lo que el código hace **hoy**: si cambia, se reescribe el comentario; nunca dice «antes», «ahora», «se quitó» ni cita fases o fechas. La historia va en `docs/decisiones.md`, `docs/progreso.md`, los informes y los commits (`docs/16 §2`).
 
 ## Stack (decidido)
 

@@ -2,6 +2,7 @@
 // /img (the production image domain does not exist while the domain is provisional).
 import { spawn } from 'node:child_process';
 
+// `PORT` overrides the default 4321.
 const port = process.env.PORT ?? '4321';
 const child = spawn(
   'pnpm',
@@ -24,5 +25,6 @@ const child = spawn(
   ],
   { stdio: 'inherit' },
 );
+// Stops the server with this process, and ends with the server's exit code.
 for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => child.kill(signal));
 child.on('exit', (code) => process.exit(code ?? 0));
