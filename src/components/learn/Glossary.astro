@@ -1,0 +1,54 @@
+---
+/**
+ * The glossary (docs/21 §4.5): letters A–Z on top, fixed under the header (letters with terms
+ * are links; the rest are grey), and each term with its English name, its definition and a
+ * «Ver más» link to its page. Every term has an anchor (`#volumen-de-impresion`), the same one the
+ * search index uses.
+ */
+import { es } from '@/i18n/es';
+import { glossaryGroups, glossaryLetters } from '@/lib/learn/glossary';
+import type { LearnPageView } from '@/server/queries/learn';
+import Cta from './Cta.astro';
+
+interface Props {
+  page: LearnPageView;
+}
+const { page } = Astro.props;
+const groups = glossaryGroups(page.terms);
+const used = new Set(groups.map((g) => g.letter));
+---
+
+<nav class="az" aria-label={es.learn.letters}>
+  <div class="wrap">
+    {glossaryLetters.map((l) =>
+      used.has(l) ? <a href={`#letra-${l}`}>{l}</a> : <span aria-hidden="true">{l}</span>,
+    )}
+  </div>
+</nav>
+<div class="wrap gl gl-body">
+  {groups.map((g) => (
+    <>
+      <h2 id={`letra-${g.letter}`}>{g.letter}</h2>
+      <dl>
+        {g.terms.map((t) => (
+          <>
+            <dt id={t.id}>
+              {t.term}
+              {t.en && <small>({t.en})</small>}
+            </dt>
+            <dd>
+              {t.definition}
+              {t.href && (
+                <>
+                  {' '}
+                  <a href={t.href}>{es.learn.seeMore}</a>
+                </>
+              )}
+            </dd>
+          </>
+        ))}
+      </dl>
+    </>
+  ))}
+</div>
+<Cta cta={page.cta} ctaText={page.ctaText} title={page.title} />

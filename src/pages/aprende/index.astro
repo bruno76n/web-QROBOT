@@ -1,0 +1,160 @@
+---
+/* eslint-disable astro/jsx-a11y/no-noninteractive-tabindex -- table boxes scroll sideways and take focus so the keyboard can scroll them (axe: scrollable-region-focusable). */
+/**
+ * Home page of Aprende (`/aprende`, docs/21 §4.2): headline and the big search box with
+ * suggestions, the 11 topics with how many answers each has, «Filamentos de un vistazo», «Más
+ * buscado», the fact of the day (the same all day, so the HTML does not change), the questions of
+ * the home page and the WhatsApp call. Reads the home page of `learn_pages` and its data from D1.
+ */
+import LearnLayout from '@/layouts/LearnLayout.astro';
+import Search from '@/components/learn/Search.astro';
+import Faqs from '@/components/learn/Faqs.astro';
+import Cta from '@/components/learn/Cta.astro';
+import { es } from '@/i18n/es';
+import { learnUrl } from '@/lib/learn/content';
+import { heatLevel } from '@/lib/learn/heat';
+import { countText, splitMaterial } from '@/lib/learn/tables';
+import { getLearnHome } from '@/server/queries/learn';
+import { now } from '@/server/clock';
+
+export const prerender = false;
+const home = await getLearnHome(now(Astro.request));
+if (!home) return Astro.rewrite('/404');
+const { page, topics, glance, fact } = home;
+const t = es.learn;
+---
+
+<LearnLayout title={es.learn.homeTitle} description={page.summary} searchBar={false}>
+  <div class="home-hero">
+    <div class="wrap">
+      <h1>{t.home.headline}</h1>
+      <p class="lead">{page.summary}</p>
+      <Search id="s-home" big />
+      {page.suggestions.length > 0 && (
+        <div class="sugg">
+          <span>{t.home.try}</span>
+          {page.suggestions.map((q) => (
+            <button type="button" data-q={q}>
+              {q}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+
+  <div class="wrap home-block">
+    <h2 class="blk-h" id="temas">
+      {t.topics}
+    </h2>
+    <ul class="topics">
+      {topics.map((tp) => (
+        <li>
+          <a href={learnUrl(tp.id)}>
+            <b>{tp.name}</b>
+            <span>{tp.blurb}</span>
+            <em>
+              {tp.id === 'glosario'
+                ? countText(tp.count, t.termsCount)
+                : countText(tp.count, t.pagesCount)}
+            </em>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="wrap home-2 home-block">
+    <section aria-labelledby="g-h">
+      <h2 class="blk-h" id="g-h">
+        {t.glance}
+      </h2>
+      <div class="tbl-wrap wide" role="region" aria-label={t.glance} tabindex="0" data-scroll-hint>
+        <table>
+          <thead>
+            <tr>
+              <th>{t.filaments.cols.material}</th>
+              <th class="n">{t.filaments.cols.nozzle}</th>
+              <th class="n">{t.filaments.cols.bed}</th>
+              <th>{t.filaments.cols.heat}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {glance.rows.map((r) => {
+              const level = heatLevel(r.hdtC, glance.heatLevels);
+              return (
+                <tr>
+                  <td>
+                    <a href={learnUrl(r.slug)}>
+                      <b>{splitMaterial(r.material).name}</b>
+                    </a>
+                  </td>
+                  <td class="n">{r.nozzleC} °C</td>
+                  <td class="n">{r.bedC} °C</td>
+                  <td>
+                    {level && r.hdtC !== null ? (
+                      <span class={`lvl ${level.id}`}>
+                        {level.label} · {r.hdtC} °C
+                      </span>
+                    ) : (
+                      '—'
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p class="glance-all">
+        <a class="link" href="/aprende/filamentos">
+          {t.glanceAll}
+        </a>
+      </p>
+    </section>
+    {page.featured.length > 0 && (
+      <section aria-labelledby="f-h">
+        <h2 class="blk-h" id="f-h">
+          {t.featured}
+        </h2>
+        <ol class="feat">
+          {page.featured.map((f) => (
+            <li>
+              <a href={f.href}>
+                <span>{f.label}</span>
+                <i aria-hidden="true">→</i>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+  </div>
+
+  {fact && (
+    <div class="wrap home-block">
+      <div class="fact-big">
+        <img
+          src="/brand/q404/q404-morado-verde-265.webp"
+          srcset="/brand/q404/q404-morado-verde-265.webp 265w, /brand/q404/q404-morado-verde-530.webp 530w"
+          sizes="120px"
+          alt=""
+          width="120"
+          height="190"
+        />
+        <div>
+          <b>{t.fact}</b>
+          <p>{fact.text}</p>
+        </div>
+      </div>
+    </div>
+  )}
+
+  {page.faqs.length > 0 && (
+    <div class="wrap home-block">
+      <Faqs faqs={page.faqs} />
+    </div>
+  )}
+  <div class="home-end"></div>
+  <Cta cta={page.cta} ctaText={page.ctaText} title={es.learn.name} />
+</LearnLayout>
