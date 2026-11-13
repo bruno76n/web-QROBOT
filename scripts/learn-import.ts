@@ -4,7 +4,7 @@
 //   --overwrite    also replaces the pages edited in the panel
 //   --prune        deletes the pages that are not in the files
 //   --remote --yes writes to production through `wrangler d1 execute --remote` (needs credentials)
-//   --sync         then updates the search index (built in phase 7)
+//   --sync         reserved for updating the search index (docs/22 §6); it does nothing yet
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { join } from 'node:path';

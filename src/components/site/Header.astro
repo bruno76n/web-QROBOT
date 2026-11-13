@@ -66,7 +66,7 @@ const isCurrent = (href: string) => !href.includes('#') && current.startsWith(hr
 </header>
 
 <script>
-  // Phase 4 puts an element with `data-hero` at the top of the home page. While it is on
+  // The home page has an element with `data-hero` at the top. While it is on
   // screen the header shows the social-links invitation instead of the logo (class `data-over-hero`).
   // Page scripts start on `astro:page-load` and clean up on `astro:before-swap` (CLAUDE.md §13).
   let observer: IntersectionObserver | undefined;

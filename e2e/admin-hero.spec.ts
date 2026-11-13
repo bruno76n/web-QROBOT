@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { makePhoto, reseed } from './admin-helpers';
 
-// Panel · portada (docs/12 §5). Flow E of docs/04 §6 up to saving (seeing it on the home is phase 4).
+// Panel · portada (docs/12 §5). Flow E of docs/04 §6 up to saving (the public home is checked in the public flows).
 test.describe.configure({ mode: 'serial' });
 test.beforeAll(() => reseed());
 
