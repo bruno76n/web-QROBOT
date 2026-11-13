@@ -1,5 +1,11 @@
 import { test, expect, type Page } from '@playwright/test';
-import { makePhoto, openAdmin, waitForUploads, reseed } from './admin-helpers';
+import {
+  makePhoto,
+  moveDownWithKeyboard,
+  openAdmin,
+  waitForUploads,
+  reseed,
+} from './admin-helpers';
 
 // Panel · productos (docs/fases/fase-2.md §2.7–2.9). Flows D and F of docs/04 §6 up to "guardar".
 // They run on `pnpm dev` with the seed loaded, one after another.
@@ -9,10 +15,20 @@ test.beforeAll(() => reseed());
 const toast = (page: Page, text: string | RegExp) =>
   expect(page.locator('[data-sonner-toast]').filter({ hasText: text }).first()).toBeVisible();
 
-/** On a phone the list and the editor are separate screens: go back to the list. */
+/**
+ * Shows the product list again. Up to 860 px the panel shows either the list or the editor, and the
+ * editor has a "Volver a la lista" button (admin.css); wider, both are on screen.
+ */
 async function backToList(page: Page) {
-  const back = page.getByRole('button', { name: 'Volver a la lista' });
-  if (await back.isVisible()) await back.click();
+  if ((page.viewportSize()?.width ?? 0) > 860) return;
+  const back = page.getByRole('button', { name: 'Volver a la lista' }).first();
+  const list = page.locator('.list').first();
+  // After deleting, the panel goes back to the list by itself; after saving, the editor stays.
+  // While the editor re-renders the button may not be there yet, so it is tried again.
+  await expect(async () => {
+    if (await back.isVisible()) await back.click();
+    await expect(list).toBeVisible({ timeout: 1000 });
+  }).toPass({ timeout: 15_000 });
 }
 
 test('la lista trae los 14 productos y se puede buscar y filtrar', async ({ page }) => {
@@ -209,12 +225,7 @@ test('flujo F: ocultar un producto y reordenar la lista con el teclado', async (
     .locator('.list > li')
     .first()
     .getByRole('button', { name: 'Arrastrar para cambiar el orden' });
-  await grip.focus();
-  await page.keyboard.press('Space');
-  await page.waitForTimeout(250); // dnd-kit attaches its key listeners on the next tick
-  await page.keyboard.press('ArrowDown');
-  await page.waitForTimeout(250);
-  await page.keyboard.press('Space');
+  await moveDownWithKeyboard(page, grip);
   await toast(page, 'Orden guardado');
   const after = await names();
   expect(after[0]).toBe(before[1]);

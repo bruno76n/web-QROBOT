@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
-import { makePhoto, reseed } from './admin-helpers';
+import { makePhoto, moveDownWithKeyboard, reseed } from './admin-helpers';
 
 // Panel · portada (docs/12 §5). Flow E of docs/04 §6 up to saving (the public home is checked in the public flows).
 test.describe.configure({ mode: 'serial' });
@@ -56,12 +56,7 @@ test('se pueden ordenar las portadas con el teclado y quitar una', async ({ page
     .locator('.sl')
     .first()
     .getByRole('button', { name: /Arrastrar para cambiar el orden/ });
-  await grip.focus();
-  await page.keyboard.press('Space');
-  await page.waitForTimeout(250); // dnd-kit attaches its key listeners on the next tick
-  await page.keyboard.press('ArrowDown');
-  await page.waitForTimeout(250);
-  await page.keyboard.press('Space');
+  await moveDownWithKeyboard(page, grip);
   await expect(page.locator('.sl').nth(1).locator('.d img')).toHaveAttribute('src', firstId ?? '');
   await page.getByRole('button', { name: 'Guardar portada' }).click();
   await toast(page, 'Portada guardada');
@@ -84,8 +79,9 @@ test('centrar la foto de escritorio y volver a la foto original', async ({ page 
   await expect(dialog.getByText('Así se ve en el inicio')).toBeVisible();
   await dialog.getByLabel('Acercar').fill('1.5');
   await dialog.getByRole('button', { name: 'Listo' }).click();
+  // The new crop is uploaded before the thumbnail changes; the progress bar may not have shown yet.
+  await expect(img).not.toHaveAttribute('src', before ?? '', { timeout: 30_000 });
   await expect(page.locator('.sl .d i[role=progressbar]')).toHaveCount(0, { timeout: 30_000 });
-  await expect(img).not.toHaveAttribute('src', before ?? '');
 
   await page.getByRole('button', { name: 'Volver a la foto original' }).click();
   const confirm = page.getByRole('dialog');
