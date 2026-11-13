@@ -1,0 +1,127 @@
+---
+/* eslint-disable astro/jsx-a11y/no-noninteractive-tabindex -- the scroll box takes focus so it can be scrolled with the keyboard. */
+/**
+ * Printers table of `[[tabla:impresoras]]` (docs/21 §6.2): size chips, brand menu, «Solo cerradas»
+ * and sorting by brand or by size. Each row has the anchor the search links to
+ * (`#bambu-lab-p1s`) and a «¿Cabe?» cell that ¿Cabe mi pieza? fills. Phone: one card per printer;
+ * tablet: table without volume and notes. Behavior in src/scripts/learn-printers.ts.
+ */
+import { es } from '@/i18n/es';
+import type { PrintersData } from '@/lib/learn/content';
+import { printerSlug } from '@/lib/learn/search-docs';
+import { countText, printerLiters } from '@/lib/learn/tables';
+
+interface Props {
+  data: PrintersData;
+}
+const { data } = Astro.props;
+const t = es.learn.printers;
+const dash = '—';
+---
+
+<div class="dt" data-printers>
+  <div class="flt">
+    <span class="flt-l" id="pt-l">
+      {t.size}
+    </span>
+    <div class="chips" data-pt-chips role="group" aria-labelledby="pt-l">
+      {data.chips.map((c, i) => (
+        <button type="button" data-id={c.id} aria-pressed={i === 0 ? 'true' : 'false'}>
+          {c.label}
+        </button>
+      ))}
+    </div>
+    <div class="tgls pt-tools">
+      <select class="sel" data-pt-brand aria-label={t.brand}>
+        <option value="">{t.allBrands}</option>
+        {data.brands.map((b) => (
+          <option value={b}>{b}</option>
+        ))}
+      </select>
+      <label class="sw">
+        <input type="checkbox" data-pt-enclosed />
+        <i></i>
+        {t.onlyEnclosed}
+      </label>
+      <button
+        class="btn ghost sm"
+        type="button"
+        data-pt-sort
+        data-by-size={t.sortBySize}
+        data-by-brand={t.sortByBrand}
+      >
+        {t.sortBySize}
+      </button>
+    </div>
+  </div>
+  <p class="cnt" data-pt-count aria-live="polite" data-one={t.count.one} data-many={t.count.many}>
+    {countText(data.rows.length, t.count)}
+  </p>
+  <div class="tbl-wrap" role="region" aria-label={t.label} tabindex="0">
+    <table role="table">
+      <thead>
+        <tr>
+          <th>{t.cols.printer}</th>
+          <th class="n">{t.cols.size}</th>
+          <th class="n lo">{t.cols.volume}</th>
+          <th>{t.cols.type}</th>
+          <th>{t.cols.fits}</th>
+          <th class="lo">{t.cols.notes}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.rows.map((r, i) => {
+          const liters = printerLiters(r);
+          return (
+            <tr
+              id={printerSlug(r.brand, r.model)}
+              data-i={i}
+              data-size={r.size}
+              data-brand={r.brand}
+              data-enclosed={r.enclosed ? '1' : '0'}
+              data-w={r.widthMm}
+              data-d={r.depthMm}
+              data-h={r.heightMm}
+              data-l={liters.toFixed(1)}
+            >
+              <td class="k" data-label={t.cols.printer}>
+                <b>{r.model}</b>
+                <small>{r.brand}</small>
+              </td>
+              <td class="n" data-label={t.cols.size}>
+                {r.widthMm} × {r.depthMm} × {r.heightMm} mm
+              </td>
+              <td class="n lo" data-label={t.cols.volume}>
+                {liters.toFixed(1)} L
+              </td>
+              <td data-label={t.cols.type}>{t.type(r.enclosed, r.motion)}</td>
+              <td
+                class="fitcell"
+                data-label={t.cols.fits}
+                data-standing={es.learn.fit.standing}
+                data-lying={es.learn.fit.lying}
+                data-no={t.noFit}
+              >
+                {dash}
+              </td>
+              <td class="w lo" data-label={t.cols.notes}>
+                {r.note || dash}
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+  {data.notes.length > 0 && (
+    <ul class="tiny mute dt-notes">
+      {data.notes.map((n) => (
+        <li>{n}</li>
+      ))}
+    </ul>
+  )}
+</div>
+
+<script>
+  import '@/scripts/learn-printers';
+</script>

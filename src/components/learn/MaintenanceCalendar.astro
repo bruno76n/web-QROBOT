@@ -1,0 +1,77 @@
+---
+/**
+ * Maintenance calendar of `[[tabla:mantenimiento]]` (docs/21 §6.3): chips by period and one block
+ * per period with its tasks. A chip only toggles `hidden` on the blocks; from 820 px the period
+ * goes on the left and the tasks on the right.
+ */
+import { es } from '@/i18n/es';
+import type { MaintenanceData } from '@/lib/learn/content';
+
+interface Props {
+  data: MaintenanceData;
+}
+const { data } = Astro.props;
+---
+
+<div data-calendar>
+  <div class="flt">
+    <span class="flt-l" id="cal-l">
+      {es.learn.calendar.when}
+    </span>
+    <div class="chips" data-cal-chips role="group" aria-labelledby="cal-l">
+      {data.chips.map((c, i) => (
+        <button type="button" data-id={c.id} aria-pressed={i === 0 ? 'true' : 'false'}>
+          {c.label}
+        </button>
+      ))}
+    </div>
+  </div>
+  <div class="cal">
+    {data.rows.map((r) => (
+      <section data-f={r.filter}>
+        <h3>{r.when}</h3>
+        <ul>
+          {r.tasks.map((task) => (
+            <li>{task}</li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+</div>
+
+<script>
+  let stop: AbortController | null = null;
+
+  /** One chip at a time; the first one («Todo») shows every block. */
+  function setup() {
+    stop?.abort();
+    stop = new AbortController();
+    const signal = stop.signal;
+    document.querySelectorAll<HTMLElement>('[data-calendar]').forEach((box) => {
+      const chips = box.querySelector<HTMLElement>('[data-cal-chips]');
+      const all = chips?.querySelector('button')?.getAttribute('data-id');
+      chips?.addEventListener(
+        'click',
+        (e) => {
+          const b = (e.target as Element).closest('button');
+          if (!b) return;
+          chips
+            .querySelectorAll('button')
+            .forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+          const id = b.getAttribute('data-id');
+          box.querySelectorAll<HTMLElement>('.cal section').forEach((s) => {
+            s.hidden = !(id === all || s.dataset.f === id);
+          });
+        },
+        { signal },
+      );
+    });
+  }
+
+  document.addEventListener('astro:page-load', setup);
+  document.addEventListener('astro:before-swap', () => {
+    stop?.abort();
+    stop = null;
+  });
+</script>
