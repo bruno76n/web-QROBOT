@@ -43,8 +43,7 @@ describe('pageFrontmatter', () => {
   it('rejects a bad slug, a bad date and a missing field', () => {
     expect(pageFrontmatter.safeParse({ ...page, slug: 'Con Espacios' }).success).toBe(false);
     expect(pageFrontmatter.safeParse({ ...page, reviewed: 'noviembre' }).success).toBe(false);
-    const { title: _title, ...noTitle } = page;
-    expect(pageFrontmatter.safeParse(noTitle).success).toBe(false);
+    expect(pageFrontmatter.safeParse({ ...page, title: undefined }).success).toBe(false);
   });
 });
 
