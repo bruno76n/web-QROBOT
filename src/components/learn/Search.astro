@@ -2,9 +2,11 @@
 /* eslint-disable astro/jsx-a11y/no-noninteractive-element-to-interactive-role -- the search field is a WAI-ARIA combobox (docs/22 §9). */
 /**
  * Search box of Aprende. Without JavaScript it is a plain form that opens `/aprende/buscar`
- * (docs/22 §8); the live results panel is added on top of it (docs/22 §9).
+ * (docs/22 §8); with it, src/scripts/learn-search.ts shows live results in the panel (docs/22 §9).
  */
 import { es } from '@/i18n/es';
+import { site } from '@/config/site';
+import { learnTopics } from '@/config/learn';
 
 interface Props {
   /** Unique per page: it names the results list. */
@@ -14,9 +16,34 @@ interface Props {
   query?: string;
 }
 const { id, big = false, query = '' } = Astro.props;
+const t = es.learn.search;
+// Texts and settings for the live search script (src/scripts/learn-search.ts).
+const config = {
+  whatsapp: site.whatsapp,
+  q404: '/brand/q404/q404-morado-verde-265.webp',
+  topics: learnTopics.map((tp) => ({ id: tp.id, label: tp.name })),
+  t: {
+    all: t.all,
+    searching: t.searching,
+    results: t.results,
+    noResults: t.noResults,
+    seeAll: t.seeAll,
+    types: t.types,
+    empty: t.empty('{q}'),
+    emptyHint: t.emptyHint,
+    ask: t.ask,
+    error: t.error,
+  },
+};
 ---
 
-<form class:list={['sf', big && 'big']} data-search action="/aprende/buscar" role="search">
+<form
+  class:list={['sf', big && 'big']}
+  data-search
+  data-config={JSON.stringify(config)}
+  action="/aprende/buscar"
+  role="search"
+>
   <div class="sf-field">
     <svg
       width="20"
@@ -67,3 +94,7 @@ const { id, big = false, query = '' } = Astro.props;
     ></ul>
   </div>
 </form>
+
+<script>
+  import '@/scripts/learn-search';
+</script>

@@ -10,5 +10,10 @@ export const publicUrls: string[] = [
   '/producto/llaveros-con-nombre',
   '/producto/q-404',
   '/privacidad',
+  '/aprende',
+  '/aprende/filamentos',
+  '/aprende/filamentos/pla',
+  '/aprende/glosario',
+  '/aprende/buscar?q=petg',
   '/no-existe',
 ];

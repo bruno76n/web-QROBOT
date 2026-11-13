@@ -42,8 +42,8 @@ export default defineConfig({
   // e2e runs against the production build served by workerd (headers, CSP and size
   // are only real there). Flows that need `pnpm dev` start it themselves (phase 2+).
   webServer: {
-    // Starts from the seed so the public pages have the 14 example products.
-    command: `node scripts/setup-local.mjs && node scripts/seed.ts && pnpm build && pnpm preview --port ${port} --ignore-lock`,
+    // Starts from the seed (14 example products) and the content of Aprende (content/aprende/).
+    command: `node scripts/setup-local.mjs && node scripts/seed.ts && pnpm exec tsx scripts/learn-import.ts --overwrite && pnpm build && pnpm preview --port ${port} --ignore-lock`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,

@@ -2071,3 +2071,5 @@ html.lock {
   display: grid;
   gap: 14px;
 }
+/* «Dato curioso» on mint: the mockup's green label falls under 4.5:1 contrast; the darker green passes. */
+.learn .callout b, .learn .fact-big b { color: var(--green-dd); }
