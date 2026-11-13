@@ -1,0 +1,265 @@
+{
+  "synonyms": {
+    "se despega": [
+      "adhesion",
+      "primera capa",
+      "no pega"
+    ],
+    "no pega": [
+      "adhesion",
+      "primera capa"
+    ],
+    "se levanta": [
+      "warping",
+      "esquinas levantadas"
+    ],
+    "se curva": [
+      "warping",
+      "esquinas levantadas"
+    ],
+    "warping": [
+      "esquinas levantadas"
+    ],
+    "hilos": [
+      "stringing",
+      "telarana"
+    ],
+    "telarana": [
+      "hilos",
+      "stringing"
+    ],
+    "pelos": [
+      "hilos",
+      "stringing"
+    ],
+    "stringing": [
+      "hilos"
+    ],
+    "tapada": [
+      "atasco",
+      "boquilla tapada"
+    ],
+    "tapo": [
+      "atasco",
+      "boquilla tapada"
+    ],
+    "atorada": [
+      "atasco",
+      "boquilla tapada"
+    ],
+    "clog": [
+      "atasco",
+      "boquilla tapada"
+    ],
+    "no sale": [
+      "atasco",
+      "falta material"
+    ],
+    "se recorre": [
+      "capas desplazadas"
+    ],
+    "layer shift": [
+      "capas desplazadas"
+    ],
+    "chueca": [
+      "capas desplazadas"
+    ],
+    "huecos": [
+      "falta material",
+      "subextrusion"
+    ],
+    "under extrusion": [
+      "falta material"
+    ],
+    "truena": [
+      "filamento humedo",
+      "secado"
+    ],
+    "burbujas": [
+      "filamento humedo",
+      "secado"
+    ],
+    "nido": [
+      "espagueti"
+    ],
+    "spaghetti": [
+      "espagueti"
+    ],
+    "se rompe": [
+      "resistencia",
+      "capas separadas",
+      "filamento roto"
+    ],
+    "grietas": [
+      "capas separadas"
+    ],
+    "petj": [
+      "petg"
+    ],
+    "pet-g": [
+      "petg"
+    ],
+    "nailon": [
+      "nylon"
+    ],
+    "pa": [
+      "nylon"
+    ],
+    "policarbonato": [
+      "pc"
+    ],
+    "flexible": [
+      "tpu"
+    ],
+    "hule": [
+      "tpu"
+    ],
+    "goma": [
+      "tpu"
+    ],
+    "carbono": [
+      "cf",
+      "fibra de carbono"
+    ],
+    "fibra de vidrio": [
+      "gf"
+    ],
+    "soluble": [
+      "pva",
+      "bvoh"
+    ],
+    "brilla en la oscuridad": [
+      "glow",
+      "pla con efectos"
+    ],
+    "fosforescente": [
+      "glow",
+      "pla con efectos"
+    ],
+    "madera": [
+      "pla con efectos"
+    ],
+    "nozzle": [
+      "boquilla"
+    ],
+    "punta": [
+      "boquilla"
+    ],
+    "bed": [
+      "cama",
+      "placa"
+    ],
+    "base": [
+      "cama",
+      "placa"
+    ],
+    "plate": [
+      "placa"
+    ],
+    "slicer": [
+      "laminador"
+    ],
+    "rebanador": [
+      "laminador"
+    ],
+    "infill": [
+      "relleno"
+    ],
+    "walls": [
+      "paredes"
+    ],
+    "perimetros": [
+      "paredes"
+    ],
+    "brim": [
+      "borde"
+    ],
+    "raft": [
+      "balsa"
+    ],
+    "supports": [
+      "soportes"
+    ],
+    "overhang": [
+      "voladizo"
+    ],
+    "seam": [
+      "costura"
+    ],
+    "ironing": [
+      "planchado"
+    ],
+    "build volume": [
+      "volumen de impresion"
+    ],
+    "tamano maximo": [
+      "volumen de impresion"
+    ],
+    "medidas": [
+      "volumen de impresion"
+    ],
+    "cabe": [
+      "volumen de impresion"
+    ],
+    "area de impresion": [
+      "volumen de impresion"
+    ],
+    "que tan grande": [
+      "volumen de impresion"
+    ],
+    "gabinete": [
+      "impresora cerrada"
+    ],
+    "enclosure": [
+      "impresora cerrada"
+    ],
+    "luz": [
+      "electricidad",
+      "consumo electrico"
+    ],
+    "recibo": [
+      "electricidad"
+    ],
+    "caro": [
+      "precio",
+      "costo",
+      "por que cuesta"
+    ],
+    "cuanto cuesta": [
+      "precio",
+      "cotizar"
+    ],
+    "cobrar": [
+      "precio"
+    ],
+    "cotizar": [
+      "cotizacion",
+      "encargar"
+    ],
+    "stock": [
+      "inventario"
+    ],
+    "existencias": [
+      "inventario"
+    ]
+  },
+  "stopWords": [
+    "de",
+    "la",
+    "el",
+    "los",
+    "las",
+    "un",
+    "una",
+    "y",
+    "o",
+    "en",
+    "para",
+    "por",
+    "con",
+    "mi",
+    "que",
+    "como",
+    "se"
+  ]
+}

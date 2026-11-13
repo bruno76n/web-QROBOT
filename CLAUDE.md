@@ -4,7 +4,7 @@ Web pública del taller de impresión 3D **Quick Robot** (Guadalajara): **muestr
 
 Documentación en `docs/` (empieza por `docs/README.md`; para arrancar y probar en local, `docs/continuar-en-local.md`). Plan general en `docs/20-plan-de-construccion.md`; **detalle de cada fase en `docs/fases/fase-N.md`**. Prompts en `docs/prompts.md`.
 
-**Dónde está cada cosa:** idea y alcance → `01` · referencias → `02` · diseño → `03` · páginas y flujos → `04` · textos → `05` · stack → `06` · arquitectura → `07` · carpetas → `08` · datos → `09` · servidor → `10` · interfaz → `11` · panel → `12` · seguridad → `13` · SEO → `14` · rendimiento e imágenes → `15` · convenciones y pruebas → `16` · despliegue → `17` · analítica → `18` · legal → `19`.
+**Dónde está cada cosa:** idea y alcance → `01` · referencias → `02` · diseño → `03` · páginas y flujos → `04` · textos → `05` · stack → `06` · arquitectura → `07` · carpetas → `08` · datos → `09` · servidor → `10` · interfaz → `11` · panel → `12` · seguridad → `13` · SEO → `14` · rendimiento e imágenes → `15` · convenciones y pruebas → `16` · despliegue → `17` · analítica → `18` · legal → `19` · **Aprende → `21`** · **buscador → `22`** · **contenido de Aprende → `23` y `content/aprende/`**.
 
 ## Lo que no se negocia
 
@@ -21,10 +21,12 @@ Documentación en `docs/` (empieza por `docs/README.md`; para arrancar y probar 
 11. **Nada de `set:html`, `dangerouslySetInnerHTML`, `innerHTML` con datos ni `eval`.**
 12. **Igual al mockup** (`reference/mockups/`) en estructura, textos y comportamiento, salvo las diferencias decididas en `docs/02 §1`.
 13. **Los `<script>` de página arrancan en `astro:page-load` y limpian en `astro:before-swap`** (por las View Transitions, `docs/07 §1`).
+14. **Aprende:** el Markdown se convierte a árbol (`src/lib/learn/markdown.ts`) al importar o guardar, nunca en cada visita, y se pinta con componentes; el texto de las páginas vive en D1 (carga inicial desde `content/aprende/`), no en `es.ts` (`docs/21 §5, §8`).
+15. **El navegador nunca habla con Meilisearch:** busca en `/api/aprende/buscar`, que usa Meilisearch o, si no está o falla, D1 (`docs/22 §1`). Las llaves de Meilisearch solo como secretos del Worker.
 
 ## Stack (decidido)
 
-TypeScript estricto · pnpm · **Astro** + `@astrojs/cloudflare` + `@astrojs/react` · Tailwind + shadcn/ui · Geist · **D1 + Drizzle** · **R2** · **Cloudflare Access + jose** · Zod · Astro Actions · Embla · motion · three + R3F + drei · matter-js · react-dropzone · react-easy-crop · browser-image-compression · heic2any · dnd-kit · react-hook-form · TanStack Query · sonner · Vitest · Playwright · axe · Lighthouse CI. Detalle y porqué en `docs/06`.
+TypeScript estricto · pnpm · **Astro** + `@astrojs/cloudflare` + `@astrojs/react` · Tailwind + shadcn/ui · Geist · **D1 + Drizzle** · **R2** · **Cloudflare Access + jose** · Zod · Astro Actions · Embla · motion · three + R3F + drei · matter-js · react-dropzone · react-easy-crop · browser-image-compression · heic2any · dnd-kit · react-hook-form · TanStack Query · sonner · Vitest · Playwright · axe · Lighthouse CI. Aprende (fase 6): mdast-util-from-markdown + GFM · yaml · Meilisearch (SDK `meilisearch`). Detalle y porqué en `docs/06`.
 
 ## Idioma
 
@@ -85,4 +87,7 @@ pnpm security     # docs/13 §10
 pnpm size         # docs/15 §2
 pnpm lhci         # Lighthouse CI
 pnpm deploy       # solo con credenciales
+pnpm learn:import        # carga content/aprende/ en D1 local (--remote --yes, --overwrite, --sync)
+pnpm learn:sync          # actualiza el índice de Meilisearch (si hay MEILI_HOST)
+pnpm learn:search-setup  # crea el índice y las llaves (con MEILI_MASTER_KEY en la terminal)
 ```

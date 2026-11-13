@@ -303,3 +303,10 @@ Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y pre
 - WhatsApp y Facebook guardan la vista previa de cada link: para ver la nueva hay que pedirle al depurador de Facebook que vuelva a leerlo.
 - **Footer (mismo día):** el dueño pidió quitarlo también del © del footer: "© {año} Quick Robot · Impresión 3D". Ya no queda "Guadalajara" en nada visible; solo en el JSON-LD (`areaServed`, `addressLocality`) y en la zona horaria de la temporada.
 
+## 2026-11-13 · Plan de Aprende (lo decidió el dueño con Claude)
+- **Qué:** sección `/aprende` de respuestas sobre impresión 3D, con buscador como pieza principal. No es foro: sin cuentas ni comentarios (`01`, `21`).
+- **Contenido en D1, no en archivos de Astro:** el dueño lo quiere editar desde el panel, como los productos. La primera carga sale de `content/aprende/` con `pnpm learn:import`; lo editado en el panel no se sobrescribe (`21 §8`).
+- **Markdown sin `set:html`:** se convierte a un árbol propio con lista blanca al importar o guardar y se pinta con componentes (`21 §5`). Convertir en cada visita gastaría CPU del Worker.
+- **Meilisearch detrás del Worker:** el navegador busca en `/api/aprende/buscar`; la CSP no cambia, las llaves no salen al navegador y se cuentan las búsquedas sin resultado. Respaldo en D1 para local y para cuando Meilisearch falle (`22`).
+- **Sin llamados al sistema (Quick Cerebro):** el sistema todavía no sale; sus llamados se guardan con `cta: system` y quedan ocultos con `site.system.enabled = false`.
+- **Fases 6–8** con el mismo formato de las anteriores (`20`).

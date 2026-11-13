@@ -1,0 +1,242 @@
+[
+  {
+    "id": "bambu-tabla",
+    "name": "Bambu Lab · Tabla de materiales",
+    "url": "https://wiki.bambulab.com/en/general/filament-guide-material-table"
+  },
+  {
+    "id": "bambu-guia",
+    "name": "Bambu Lab · Guía de filamentos (PDF)",
+    "url": "https://cdn1.bambulab.com/filament/a5e185aed14e6/filament-guide-en-4.pdf"
+  },
+  {
+    "id": "bambu-secado",
+    "name": "Bambu Lab · Secado de filamento",
+    "url": "https://wiki.bambulab.com/en/filament-acc/filament/dry-filament"
+  },
+  {
+    "id": "bambu-mantenimiento",
+    "name": "Bambu Lab · Mantenimiento básico (serie X1)",
+    "url": "https://wiki.bambulab.com/en/x1/maintenance/basic-maintenance"
+  },
+  {
+    "id": "bambu-pei",
+    "name": "Bambu Lab · Limpieza de placas PEI",
+    "url": "https://wiki.bambulab.com/en/filament-acc/acc/pei-plate-clean-guide"
+  },
+  {
+    "id": "bambu-warping",
+    "name": "Bambu Lab · Esquinas levantadas y piezas que se caen",
+    "url": "https://wiki.bambulab.com/en/filament-acc/filament/print-quality/warping-falling-off-collapsing"
+  },
+  {
+    "id": "bambu-orejas",
+    "name": "Bambu Lab · Orejas de borde",
+    "url": "https://wiki.bambulab.com/en/software/bambu-studio/brim-ears"
+  },
+  {
+    "id": "bambu-x1-compat",
+    "name": "Bambu Lab · Compatibilidad de filamentos (X1)",
+    "url": "https://wiki.bambulab.com/en/x1/manual/compatibility-and-parameter-settings-of-filaments"
+  },
+  {
+    "id": "bambu-pa-cf",
+    "name": "Bambu Lab · Consejos para PA-CF",
+    "url": "https://wiki.bambulab.com/knowledge-sharing/pa-cf-printing-tips"
+  },
+  {
+    "id": "prusa-materiales",
+    "name": "Prusa · Guía de materiales",
+    "url": "https://help.prusa3d.com/filament-material-guide"
+  },
+  {
+    "id": "prusa-primera-capa",
+    "name": "Prusa · Problemas de primera capa",
+    "url": "https://help.prusa3d.com/article/first-layer-issues_1804"
+  },
+  {
+    "id": "prusa-hilos",
+    "name": "Prusa · Hilos y goteo",
+    "url": "https://help.prusa3d.com/article/stringing-and-oozing-issues_1805"
+  },
+  {
+    "id": "prusa-capas",
+    "name": "Prusa · Capas separadas y grietas",
+    "url": "https://help.prusa3d.com/article/warping_1806"
+  },
+  {
+    "id": "prusa-boquillas",
+    "name": "Prusa · Boquillas de distintos diámetros",
+    "url": "https://blog.prusa3d.com/everything-about-nozzles-with-a-different-diameter_8344/"
+  },
+  {
+    "id": "prusa-diseno",
+    "name": "Prusa · Modelar pensando en la impresión 3D",
+    "url": "https://help.prusa3d.com/article/modeling-with-3d-printing-in-mind_164135"
+  },
+  {
+    "id": "formlabs-tipos",
+    "name": "Formlabs · FDM, SLA y SLS",
+    "url": "https://formlabs.com/blog/fdm-vs-sla-vs-sls-how-to-choose-the-right-3d-printing-technology/"
+  },
+  {
+    "id": "all3dp-corexy",
+    "name": "All3DP · CoreXY y cartesiana",
+    "url": "https://all3dp.com/2/corexy-vs-cartesian-3d-printer-differences/"
+  },
+  {
+    "id": "all3dp-legal",
+    "name": "All3DP · Vender piezas impresas: guía legal",
+    "url": "https://all3dp.com/1/things-to-3d-print-and-sell-a-legal-guide/"
+  },
+  {
+    "id": "cc-licencias",
+    "name": "Creative Commons · Licencias",
+    "url": "https://creativecommons.org/share-your-work/cclicenses/"
+  },
+  {
+    "id": "ul-top10",
+    "name": "UL Chemical Insights · 10 puntos de seguridad en impresión 3D (PDF)",
+    "url": "https://chemicalinsights.ul.org/wp-content/uploads/2026/04/3DP_Handout_Top_10_082724.pdf"
+  },
+  {
+    "id": "vanos-2018",
+    "name": "UC San Diego · Temperatura en coches estacionados al sol (2018)",
+    "url": "https://scripps.ucsd.edu/news/research-highlight-hot-cars-can-hit-life-threatening-levels-approximately-one-hour"
+  },
+  {
+    "id": "cnc-kitchen",
+    "name": "CNC Kitchen · Consejos para insertos roscados",
+    "url": "https://www.cnckitchen.com/blog/tipps-amp-tricks-fr-gewindeeinstze-im-3d-druck-3awey"
+  },
+  {
+    "id": "bcn3d-desplazamiento",
+    "name": "BCN3D · Capas desplazadas",
+    "url": "https://support.bcn3d.com/knowledge/layer-shifting"
+  },
+  {
+    "id": "microcenter-glow",
+    "name": "Micro Center · Imprimir con PLA que brilla en la oscuridad",
+    "url": "https://www.microcenter.com/site/mc-news/article/how-to-print-with-glow-pla.aspx"
+  },
+  {
+    "id": "wikipedia-fff",
+    "name": "Wikipedia · Fused filament fabrication",
+    "url": "https://en.wikipedia.org/wiki/Fused_filament_fabrication"
+  },
+  {
+    "id": "bambu-lineup",
+    "name": "Innoaddi · Línea de impresoras Bambu Lab 2026 (A1 mini, P1S, X1 Carbon)",
+    "url": "https://www.innoaddi.com/blogs/news/the-full-bambu-lab-printer-lineup-in-2026-every-model-side-by-side"
+  },
+  {
+    "id": "bambu-a1",
+    "name": "Bambu Lab · A1",
+    "url": "https://eu.store.bambulab.com/products/a1"
+  },
+  {
+    "id": "bambu-a2l",
+    "name": "Bambu Lab · A2L (lanzamiento)",
+    "url": "https://blog.bambulab.com/bambu-lab-a2l-creative-playground-extra-large"
+  },
+  {
+    "id": "bambu-p2s",
+    "name": "Bambu Lab · P2S",
+    "url": "https://eu.store.bambulab.com/products/p2s"
+  },
+  {
+    "id": "bambu-x2d",
+    "name": "Bambu Lab · X2D (comunicado)",
+    "url": "https://en.prnasia.com/releases/global/xcellence-made-simple-bambu-lab-launches-x2d-next-gen-flagship-3d-printer-featuring-dual-extrusion-system-529576.shtml"
+  },
+  {
+    "id": "bambu-h2s",
+    "name": "Bambu Lab · H2S",
+    "url": "https://us.store.bambulab.com/products/h2s"
+  },
+  {
+    "id": "bambu-h2d",
+    "name": "3D Printing Industry · Ficha de la H2D",
+    "url": "https://3dprintingindustry.com/news/bambu-labs-new-h2d-3d-printer-technical-specifications-and-pricing-237763/"
+  },
+  {
+    "id": "bambu-h2c",
+    "name": "Bambu Lab · H2C (lanzamiento)",
+    "url": "https://blog.bambulab.com/bambu-lab-h2c-where-multi-material-vortek-system-meets-engineering-precision"
+  },
+  {
+    "id": "prusa-mk4s",
+    "name": "Prusa · MK4S",
+    "url": "https://www.prusa3d.com/product/original-prusa-mk4s-3d-printer-5/"
+  },
+  {
+    "id": "prusa-core-one-l",
+    "name": "Prusa · CORE One L",
+    "url": "https://www.prusa3d.com/p/core-one-l/"
+  },
+  {
+    "id": "eolas-prusa",
+    "name": "Eolas Prints · Guía de impresoras Prusa",
+    "url": "https://eolasprints.com/en-us/blogs/advanced-3d-printing/prusa-printer-buyers-guide"
+  },
+  {
+    "id": "polymaker-creality",
+    "name": "Polymaker Wiki · Impresoras Creality",
+    "url": "https://wiki.polymaker.com/the-basics/3d-printers/popular-printers/creality"
+  },
+  {
+    "id": "toms-k1c",
+    "name": "Tom's Hardware · K1C y Ender-3 V3",
+    "url": "https://www.tomshardware.com/3d-printing/creality-unveils-new-flagship-k1c-3d-printer-and-latest-ender-3-v3-model"
+  },
+  {
+    "id": "creality-k2",
+    "name": "Creality · Serie K2",
+    "url": "https://www.creality.com/blog/which-to-buy-k2-series-3d-printers"
+  },
+  {
+    "id": "elegoo-n4pro",
+    "name": "Elegoo · Neptune 4 Pro",
+    "url": "https://www.elegoo.com/en-ca/products/elegoo-neptune-4-pro-fdm-3d-printer"
+  },
+  {
+    "id": "elegoo-n4max",
+    "name": "Elegoo · Neptune 4 Max",
+    "url": "https://www.elegoo.com/collections/fdm-printers/products/neptune-4-max-fdm-3d-printer"
+  },
+  {
+    "id": "elegoo-cc",
+    "name": "Elegoo · Centauri Carbon",
+    "url": "https://www.elegoo.com/products/centauri-carbon"
+  },
+  {
+    "id": "anycubic-s1",
+    "name": "VoxelMatters · Reseña de la Kobra S1",
+    "url": "https://www.voxelmatters.com/anycubic-kobra-s1-review-no-fuss-corexy-for-speed-and-reliability/"
+  },
+  {
+    "id": "qidi-comparativa",
+    "name": "Qidi · Comparativa de impresoras 2026",
+    "url": "https://kr.qidi3d.com/blogs/news/qidi-3d-printer-comparison"
+  },
+  {
+    "id": "flashforge-ad5x",
+    "name": "Printer Hub · Flashforge AD5X",
+    "url": "https://printer-hub.com/printers/flashforge-ad5x"
+  },
+  {
+    "id": "sovol-sv08",
+    "name": "Sovol · SV08",
+    "url": "https://sovol3d.com/products/sovol-sv08-3d-printer"
+  },
+  {
+    "id": "calculo-propio",
+    "name": "Quick Robot · Cálculo con densidades típicas",
+    "url": null
+  },
+  {
+    "id": "quick-cerebro-formula",
+    "name": "Quick Robot · Fórmula de costo del taller",
+    "url": null
+  }
+]

@@ -23,6 +23,13 @@
 | idea | `idea` |
 | alberca | `ballPit` |
 | toque a WhatsApp | `whatsappClick` |
+| Aprende | `learn` (rutas en español: `/aprende`) |
+| tema (de Aprende) | `topic` |
+| página de Aprende | `learnPage` |
+| pregunta | `faq` |
+| tabla de datos | `dataset` |
+| búsqueda sin resultado | `searchMiss` |
+| ¿Cabe mi pieza? | `fit` |
 
 ## 2. Estilo de código
 

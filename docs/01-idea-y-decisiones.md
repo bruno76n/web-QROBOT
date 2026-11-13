@@ -35,11 +35,14 @@ Casi todos llegan desde el **celular**, por un link compartido en WhatsApp o en 
 - Página 404 con Q-404, aviso de privacidad.
 - Imagen y texto al compartir cada producto (WhatsApp, Facebook).
 - Conteo de toques al botón de WhatsApp por producto (ver `18`).
+- **Aprende** (`/aprende`): respuestas sobre impresión 3D por temas, con buscador (Meilisearch con respaldo en D1), tablas con filtros, ¿Cabe mi pieza?, calculadora de costo y su pestaña en el panel (`21`, `22`, `23`). Fases 6–8.
 
 **No entra (por ahora)** — se anota en "Después" si sale la idea:
 - Carrito, pagos, cuentas de clientes, inventario.
 - Cotizador automático o descuentos por cantidad fijos (el dueño no quiere amarrarse a un descuento).
 - Blog, reseñas, chat propio, API de WhatsApp.
+- Foro, comentarios, preguntas públicas o cuentas en Aprende (es una biblioteca de respuestas, no un foro).
+- La página de Quick Cerebro (el sistema para talleres) y sus llamados: se agregan cuando el sistema salga (`site.system.enabled`).
 - Varios idiomas, modo oscuro.
 - Conexión con el sistema interno (ver "Después").
 - Personalizador de nombre en 3D (estuvo en el catálogo; el dueño lo quitó el 2026-11-10).
@@ -64,6 +67,7 @@ Casi todos llegan desde el **celular**, por un link compartido en WhatsApp o en 
 | W14 | El mockup HTML es **referencia de diseño y comportamiento**, no código a copiar | `02` |
 | W15 | Construcción **autónoma** por fases, una carpeta de instrucciones por fase | `20`, `fases/` |
 | W16 | Los textos de la web hablan de **tú**, invitan y no describen; nada genérico | `05 §1` |
+| W17 | **Aprende**: contenido en D1 (carga inicial desde `content/aprende/`, edición en el panel); Markdown convertido a un árbol propio al guardar (sin `set:html`); buscador con **Meilisearch detrás del Worker** y respaldo en D1 | `21`, `22` |
 
 ## Pendientes del dueño
 
@@ -79,6 +83,9 @@ Datos que todavía no existen. Mientras falten, Claude Code usa el **valor provi
 | Video del timelapse | Entregado (`public/media/timelapse.mp4`, se reproduce a 0.5×); sin video (`src = null`) el botón queda deshabilitado sobre la portada | Sección "Así nace cada pieza" |
 | Domicilio para el aviso de privacidad | `[domicilio]` | `19` |
 | Componentes de 21st.dev | Reemplazo sencillo | `11 §4` |
+| Dónde corre Meilisearch (Cloud o servidor propio) y sus llaves | Sin Meilisearch: el buscador usa D1 | `22 §2–3` |
+| Anticipo, envíos, urgentes, política de personajes (Aprende › Si vas a encargar) | Páginas ocultas o líneas quitadas | `content/aprende/README.md` |
+| Fotos de cada falla (Aprende › Cuando algo sale mal) | Sin fotos | `21 §16` |
 
 ## Después (ideas fuera de alcance)
 
@@ -87,3 +94,4 @@ Datos que todavía no existen. Mientras falten, Claude Code usa el **valor provi
 - Importar un respaldo desde el panel (hoy solo se descarga).
 - Zoom en las fotos del producto.
 - Reseñas o fotos de clientes.
+- Aprende: fotos de fallas, «¿Te sirvió esta respuesta?», editar tablas de datos desde el panel (`21 §16`).

@@ -1,0 +1,503 @@
+{
+  "key": "impresoras",
+  "chips": [
+    {
+      "id": "todas",
+      "label": "Todas"
+    },
+    {
+      "id": "chica",
+      "label": "Chica (hasta 180 mm)"
+    },
+    {
+      "id": "mediana",
+      "label": "Mediana (210–270 mm)"
+    },
+    {
+      "id": "grande",
+      "label": "Grande (300–350 mm)"
+    },
+    {
+      "id": "muy-grande",
+      "label": "Muy grande (más de 350 mm)"
+    }
+  ],
+  "brands": [
+    "Bambu Lab",
+    "Prusa",
+    "Creality",
+    "Elegoo",
+    "Anycubic",
+    "Qidi",
+    "Flashforge",
+    "Sovol"
+  ],
+  "toggles": [
+    {
+      "id": "enclosed",
+      "label": "Solo cerradas",
+      "hideWhen": {
+        "enclosed": false
+      }
+    }
+  ],
+  "fitMarginMm": 5,
+  "rows": [
+    {
+      "brand": "Bambu Lab",
+      "model": "A1 mini",
+      "widthMm": 180,
+      "depthMm": 180,
+      "heightMm": 180,
+      "liters": 5.8,
+      "enclosed": false,
+      "motion": "bed-slinger",
+      "size": "chica",
+      "note": "",
+      "sources": [
+        "bambu-lineup"
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "model": "A1",
+      "widthMm": 256,
+      "depthMm": 256,
+      "heightMm": 256,
+      "liters": 16.8,
+      "enclosed": false,
+      "motion": "bed-slinger",
+      "size": "mediana",
+      "note": "",
+      "sources": [
+        "bambu-a1"
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "model": "A2L",
+      "widthMm": 330,
+      "depthMm": 320,
+      "heightMm": 325,
+      "liters": 34.3,
+      "enclosed": false,
+      "motion": "bed-slinger",
+      "size": "grande",
+      "note": "Salió en junio de 2026.",
+      "sources": [
+        "bambu-a2l"
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "model": "P1S",
+      "widthMm": 256,
+      "depthMm": 256,
+      "heightMm": 256,
+      "liters": 16.8,
+      "enclosed": true,
+      "motion": "corexy",
+      "size": "mediana",
+      "note": "",
+      "sources": [
+        "bambu-lineup"
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "model": "P2S",
+      "widthMm": 256,
+      "depthMm": 256,
+      "heightMm": 256,
+      "liters": 16.8,
+      "enclosed": true,
+      "motion": "corexy",
+      "size": "mediana",
+      "note": "",
+      "sources": [
+        "bambu-p2s"
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "model": "X1 Carbon",
+      "widthMm": 256,
+      "depthMm": 256,
+      "heightMm": 256,
+      "liters": 16.8,
+      "enclosed": true,
+      "motion": "corexy",
+      "size": "mediana",
+      "note": "",
+      "sources": [
+        "bambu-lineup"
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "model": "X2D",
+      "widthMm": 256,
+      "depthMm": 256,
+      "heightMm": 260,
+      "liters": 17.0,
+      "enclosed": true,
+      "motion": "corexy",
+      "size": "mediana",
+      "note": "Con las dos boquillas: 235.5 × 256 × 256 mm.",
+      "sources": [
+        "bambu-x2d"
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "model": "H2S",
+      "widthMm": 340,
+      "depthMm": 320,
+      "heightMm": 340,
+      "liters": 37.0,
+      "enclosed": true,
+      "motion": "corexy",
+      "size": "grande",
+      "note": "",
+      "sources": [
+        "bambu-h2s"
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "model": "H2D",
+      "widthMm": 325,
+      "depthMm": 320,
+      "heightMm": 325,
+      "liters": 33.8,
+      "enclosed": true,
+      "motion": "corexy",
+      "size": "grande",
+      "note": "Con las dos boquillas: 300 × 320 × 325 mm. Entre las dos alcanzan 350 × 320 × 325 mm.",
+      "sources": [
+        "bambu-h2d"
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "model": "H2C",
+      "widthMm": 305,
+      "depthMm": 320,
+      "heightMm": 325,
+      "liters": 31.7,
+      "enclosed": true,
+      "motion": "corexy",
+      "size": "grande",
+      "note": "Con las dos boquillas: 300 × 320 × 325 mm. Entre las dos alcanzan 330 × 320 × 325 mm.",
+      "sources": [
+        "bambu-h2c"
+      ]
+    },
+    {
+      "brand": "Prusa",
+      "model": "MINI+",
+      "widthMm": 180,
+      "depthMm": 180,
+      "heightMm": 180,
+      "liters": 5.8,
+      "enclosed": false,
+      "motion": "bed-slinger",
+      "size": "chica",
+      "note": "",
+      "sources": [
+        "eolas-prusa"
+      ]
+    },
+    {
+      "brand": "Prusa",
+      "model": "MK4S",
+      "widthMm": 250,
+      "depthMm": 210,
+      "heightMm": 220,
+      "liters": 11.6,
+      "enclosed": false,
+      "motion": "bed-slinger",
+      "size": "mediana",
+      "note": "",
+      "sources": [
+        "prusa-mk4s"
+      ]
+    },
+    {
+      "brand": "Prusa",
+      "model": "CORE One+",
+      "widthMm": 250,
+      "depthMm": 220,
+      "heightMm": 270,
+      "liters": 14.8,
+      "enclosed": true,
+      "motion": "corexy",
+      "size": "mediana",
+      "note": "",
+      "sources": [
+        "prusa-core-one-l"
+      ]
+    },
+    {
+      "brand": "Prusa",
+      "model": "CORE One L",
+      "widthMm": 300,
+      "depthMm": 300,
+      "heightMm": 330,
+      "liters": 29.7,
+      "enclosed": true,
+      "motion": "corexy",
+      "size": "grande",
+      "note": "",
+      "sources": [
+        "prusa-core-one-l"
+      ]
+    },
+    {
+      "brand": "Prusa",
+      "model": "XL",
+      "widthMm": 360,
+      "depthMm": 360,
+      "heightMm": 360,
+      "liters": 46.7,
+      "enclosed": false,
+      "motion": "corexy",
+      "size": "muy-grande",
+      "note": "Hasta 5 cabezales. Gabinete opcional.",
+      "sources": [
+        "eolas-prusa"
+      ]
+    },
+    {
+      "brand": "Creality",
+      "model": "Ender-3 V3 SE",
+      "widthMm": 220,
+      "depthMm": 220,
+      "heightMm": 250,
+      "liters": 12.1,
+      "enclosed": false,
+      "motion": "bed-slinger",
+      "size": "mediana",
+      "note": "",
+      "sources": [
+        "polymaker-creality"
+      ]
+    },
+    {
+      "brand": "Creality",
+      "model": "K1C",
+      "widthMm": 220,
+      "depthMm": 220,
+      "heightMm": 250,
+      "liters": 12.1,
+      "enclosed": true,
+      "motion": "corexy",
+      "size": "mediana",
+      "note": "",
+      "sources": [
+        "toms-k1c"
+      ]
+    },
+    {
+      "brand": "Creality",
+      "model": "K2",
+      "widthMm": 260,
+      "depthMm": 260,
+      "heightMm": 260,
+      "liters": 17.6,
+      "enclosed": true,
+      "motion": "corexy",
+      "size": "mediana",
+      "note": "",
+      "sources": [
+        "creality-k2"
+      ]
+    },
+    {
+      "brand": "Creality",
+      "model": "K2 Pro",
+      "widthMm": 300,
+      "depthMm": 300,
+      "heightMm": 300,
+      "liters": 27.0,
+      "enclosed": true,
+      "motion": "corexy",
+      "size": "grande",
+      "note": "",
+      "sources": [
+        "creality-k2"
+      ]
+    },
+    {
+      "brand": "Creality",
+      "model": "K2 Plus",
+      "widthMm": 350,
+      "depthMm": 350,
+      "heightMm": 350,
+      "liters": 42.9,
+      "enclosed": true,
+      "motion": "corexy",
+      "size": "grande",
+      "note": "",
+      "sources": [
+        "creality-k2"
+      ]
+    },
+    {
+      "brand": "Elegoo",
+      "model": "Neptune 4 Pro",
+      "widthMm": 225,
+      "depthMm": 225,
+      "heightMm": 265,
+      "liters": 13.4,
+      "enclosed": false,
+      "motion": "bed-slinger",
+      "size": "mediana",
+      "note": "",
+      "sources": [
+        "elegoo-n4pro"
+      ]
+    },
+    {
+      "brand": "Elegoo",
+      "model": "Neptune 4 Max",
+      "widthMm": 420,
+      "depthMm": 420,
+      "heightMm": 480,
+      "liters": 84.7,
+      "enclosed": false,
+      "motion": "bed-slinger",
+      "size": "muy-grande",
+      "note": "",
+      "sources": [
+        "elegoo-n4max"
+      ]
+    },
+    {
+      "brand": "Elegoo",
+      "model": "Centauri Carbon",
+      "widthMm": 256,
+      "depthMm": 256,
+      "heightMm": 256,
+      "liters": 16.8,
+      "enclosed": true,
+      "motion": "corexy",
+      "size": "mediana",
+      "note": "",
+      "sources": [
+        "elegoo-cc"
+      ]
+    },
+    {
+      "brand": "Anycubic",
+      "model": "Kobra S1",
+      "widthMm": 250,
+      "depthMm": 250,
+      "heightMm": 250,
+      "liters": 15.6,
+      "enclosed": true,
+      "motion": "corexy",
+      "size": "mediana",
+      "note": "",
+      "sources": [
+        "anycubic-s1"
+      ]
+    },
+    {
+      "brand": "Qidi",
+      "model": "Q2",
+      "widthMm": 270,
+      "depthMm": 270,
+      "heightMm": 256,
+      "liters": 18.7,
+      "enclosed": true,
+      "motion": "corexy",
+      "size": "mediana",
+      "note": "Cámara calentada a 65 °C.",
+      "sources": [
+        "qidi-comparativa"
+      ]
+    },
+    {
+      "brand": "Qidi",
+      "model": "Plus 5",
+      "widthMm": 320,
+      "depthMm": 320,
+      "heightMm": 300,
+      "liters": 30.7,
+      "enclosed": true,
+      "motion": "corexy",
+      "size": "grande",
+      "note": "Cámara calentada a 65 °C.",
+      "sources": [
+        "qidi-comparativa"
+      ]
+    },
+    {
+      "brand": "Qidi",
+      "model": "Plus4",
+      "widthMm": 305,
+      "depthMm": 305,
+      "heightMm": 280,
+      "liters": 26.0,
+      "enclosed": true,
+      "motion": "corexy",
+      "size": "grande",
+      "note": "Ya no se fabrica.",
+      "sources": [
+        "qidi-comparativa"
+      ]
+    },
+    {
+      "brand": "Qidi",
+      "model": "Max4",
+      "widthMm": 390,
+      "depthMm": 390,
+      "heightMm": 340,
+      "liters": 51.7,
+      "enclosed": true,
+      "motion": "corexy",
+      "size": "muy-grande",
+      "note": "Cámara calentada a 65 °C.",
+      "sources": [
+        "qidi-comparativa"
+      ]
+    },
+    {
+      "brand": "Flashforge",
+      "model": "AD5X",
+      "widthMm": 220,
+      "depthMm": 220,
+      "heightMm": 220,
+      "liters": 10.6,
+      "enclosed": false,
+      "motion": "corexy",
+      "size": "mediana",
+      "note": "Hasta 4 colores.",
+      "sources": [
+        "flashforge-ad5x"
+      ]
+    },
+    {
+      "brand": "Sovol",
+      "model": "SV08",
+      "widthMm": 350,
+      "depthMm": 350,
+      "heightMm": 345,
+      "liters": 42.3,
+      "enclosed": false,
+      "motion": "corexy",
+      "size": "grande",
+      "note": "Con gabinete: 350 × 350 × 330 mm.",
+      "sources": [
+        "sovol-sv08"
+      ]
+    }
+  ],
+  "notes": [
+    "Medidas de la ficha de cada fabricante (noviembre de 2026).",
+    "La zona útil real es unos milímetros menor por la línea de purga, los clips de la placa y las orillas.",
+    "En impresoras de dos boquillas, la pieza que usa las dos tiene menos ancho que la de una sola boquilla.",
+    "Un modelo que no está en la tabla se puede agregar con los datos de la ficha de su fabricante."
+  ]
+}

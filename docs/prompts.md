@@ -108,6 +108,76 @@ Al terminar escribe docs/informe-fase-5.md con los pendientes del dueño y los p
 después del lanzamiento, y actualiza docs/progreso.md.
 ```
 
+## Aprende · Preparar (una sola vez)
+
+1. En la carpeta del proyecto, en `main`, copia encima lo que viene en el .zip de Aprende (o aplica el parche: `git apply aprende-plan.patch`). Agrega o cambia:
+   ```
+   CLAUDE.md, docs/README.md, docs/01, docs/20, docs/prompts.md
+   docs/21-aprende.md, docs/22-buscador.md, docs/23-aprende-contenido.md
+   docs/fases/fase-6.md, fase-7.md, fase-8.md
+   content/aprende/          (118 páginas, datos, fuentes, buscador)
+   reference/mockups/aprende/ (3 maquetas)
+   ```
+2. Commit en `main` (`docs: plan and content for Aprende`).
+3. Meilisearch no hace falta para empezar: sin él, el buscador usa la base de datos (`docs/22 §2`).
+4. Abre Claude Code en la carpeta y pega el prompt de la fase 6.
+
+## Aprende · Fase 6 · Base
+
+```
+Haz la fase 6 en modo autónomo: sigue docs/fases/fase-6.md paso por paso. Parte de main y crea
+la rama fase-6.
+
+Lee CLAUDE.md, docs/informe-fase-5.md, docs/progreso.md, las secciones de docs/21-aprende.md que
+pide la fase y docs/fases/fase-6.md. En cada paso, lee solo lo que indica "Consultar".
+
+El contenido de content/aprende/ no se reescribe: si algo no pasa la validación, corrígelo lo
+mínimo y anótalo en docs/decisiones.md.
+
+La fase termina cuando pnpm learn:import carga las 118 páginas en D1 local sin errores y las
+consultas de docs/21 §9 pasan sus pruebas.
+
+No hagas nada fuera de la fase 6. No me hagas preguntas salvo los casos de parada de CLAUDE.md.
+Al terminar escribe docs/informe-fase-6.md y actualiza docs/progreso.md.
+```
+
+## Aprende · Fase 7 · Páginas y buscador
+
+```
+Haz la fase 7 en modo autónomo: sigue docs/fases/fase-7.md paso por paso. Parte de main con la
+fase 6 fusionada; crea la rama fase-7.
+
+Lee CLAUDE.md, docs/informe-fase-6.md, docs/21-aprende.md, docs/22-buscador.md y
+docs/fases/fase-7.md. En cada paso, lee solo lo que indica "Consultar". Compara con
+reference/mockups/aprende/ en 390, 820 y 1440.
+
+Si no hay Meilisearch configurado, no te detengas: el buscador funciona con D1; pruébalo con
+Meilisearch simulado (y con Docker si está disponible) y anótalo en el informe.
+
+La fase termina cuando pasan los flujos H a L de docs/21 §15, axe y Lighthouse cumplen en
+Aprende y pnpm size está dentro del presupuesto.
+
+No hagas nada fuera de la fase 7. No me hagas preguntas salvo los casos de parada de CLAUDE.md.
+Al terminar escribe docs/informe-fase-7.md y actualiza docs/progreso.md.
+```
+
+## Aprende · Fase 8 · Panel y publicación
+
+```
+Haz la fase 8 en modo autónomo: sigue docs/fases/fase-8.md paso por paso. Parte de main con la
+fase 7 fusionada; crea la rama fase-8.
+
+Lee CLAUDE.md, docs/informe-fase-7.md, las secciones de docs/12-panel.md que pide la fase y
+docs/fases/fase-8.md. En cada paso, lee solo lo que indica "Consultar".
+
+Para el paso 8.4: si faltan credenciales de Cloudflare o de Meilisearch, deja todo listo y la
+lista exacta de lo que necesitas. La importación remota solo agrega páginas; no borres nada en
+producción.
+
+Al terminar escribe docs/informe-fase-8.md con los pendientes del dueño y los pasos manuales, y
+actualiza docs/progreso.md.
+```
+
 ## 6. Integrar un componente externo después
 
 Cuando el dueño entregue un componente después de terminada la construcción:

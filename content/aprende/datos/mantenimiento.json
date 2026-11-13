@@ -1,0 +1,90 @@
+{
+  "key": "mantenimiento",
+  "chips": [
+    {
+      "id": "todas",
+      "label": "Todo"
+    },
+    {
+      "id": "diario",
+      "label": "Antes de imprimir"
+    },
+    {
+      "id": "semanal",
+      "label": "Semanal"
+    },
+    {
+      "id": "mensual",
+      "label": "Mensual"
+    },
+    {
+      "id": "trimestral",
+      "label": "Cada 3 meses"
+    },
+    {
+      "id": "por-rollos",
+      "label": "Por rollos"
+    },
+    {
+      "id": "cuando-aparece",
+      "label": "Cuando aparece"
+    }
+  ],
+  "rows": [
+    {
+      "when": "Antes de cada impresión",
+      "filter": "diario",
+      "tasks": [
+        "Revisar que el limpiador de boquilla no tenga restos ni esté roto.",
+        "Revisar que la placa esté limpia."
+      ]
+    },
+    {
+      "when": "Cada semana",
+      "filter": "semanal",
+      "tasks": [
+        "Limpiar con aire comprimido los engranes del extrusor; cambiarlos si están gastados.",
+        "Limpiar los ventiladores con aire comprimido, con la impresora apagada.",
+        "Con ABS, limpiar la lente de la cámara con alcohol isopropílico."
+      ]
+    },
+    {
+      "when": "Cada mes",
+      "filter": "mensual",
+      "tasks": [
+        "Revisar y limpiar las varillas con alcohol isopropílico y un trapo sin pelusa.",
+        "En impresoras de producción, cambiar el filtro de carbón activado."
+      ]
+    },
+    {
+      "when": "Cada 3 meses",
+      "filter": "trimestral",
+      "tasks": [
+        "Engrasar los husillos del eje Z con la grasa que indica el fabricante.",
+        "Pasar aceite antioxidante en las varillas de acero de los ejes Y y Z.",
+        "Cambiar el filtro de carbón activado (uso de unas 8 h al día)."
+      ]
+    },
+    {
+      "when": "Por rollos",
+      "filter": "por-rollos",
+      "tasks": [
+        "Cambiar el cortador de filamento cada 3–5 rollos (PLA, PETG, ABS, PC) o cada 1–2 rollos con PA-CF o PA-GF.",
+        "Con ABS o ASA, limpiar varillas cada 5 rollos.",
+        "Con ABS, limpiar el lidar cada 3–5 días."
+      ]
+    },
+    {
+      "when": "Cuando aparece",
+      "filter": "cuando-aparece",
+      "tasks": [
+        "Si una polea rechina, una gota de aceite ligero sintético. Si no rechina, no se aceita.",
+        "Si la boquilla está sucia o falta material, limpiarla a 200 °C y hacer limpieza en frío.",
+        "Cambiar el calcetín de silicón cuando esté roto o flojo."
+      ]
+    }
+  ],
+  "sources": [
+    "bambu-mantenimiento"
+  ]
+}

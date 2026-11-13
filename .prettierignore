@@ -10,3 +10,4 @@ migrations
 tests/negative
 docs
 .lighthouseci
+content

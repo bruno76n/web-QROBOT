@@ -1,0 +1,315 @@
+{
+  "key": "filamentos",
+  "chips": [
+    {
+      "id": "todos",
+      "label": "Todos"
+    },
+    {
+      "id": "decoracion",
+      "label": "Decoración"
+    },
+    {
+      "id": "uso-diario",
+      "label": "Uso diario"
+    },
+    {
+      "id": "exterior",
+      "label": "Exterior y sol"
+    },
+    {
+      "id": "calor",
+      "label": "Calor"
+    },
+    {
+      "id": "flexible",
+      "label": "Flexible"
+    },
+    {
+      "id": "mecanica",
+      "label": "Piezas mecánicas"
+    },
+    {
+      "id": "soportes",
+      "label": "Soportes"
+    }
+  ],
+  "toggles": [
+    {
+      "id": "open",
+      "label": "Mi impresora es abierta",
+      "hideWhen": {
+        "printer": "enclosed"
+      }
+    },
+    {
+      "id": "ams",
+      "label": "Uso AMS",
+      "hideWhen": {
+        "ams": "no"
+      }
+    },
+    {
+      "id": "brass",
+      "label": "Solo boquilla de latón",
+      "hideWhen": {
+        "hardenedNozzle": "yes"
+      }
+    }
+  ],
+  "heatLevels": [
+    {
+      "id": "low",
+      "label": "Bajo",
+      "maxC": 59
+    },
+    {
+      "id": "mid",
+      "label": "Medio",
+      "maxC": 90
+    },
+    {
+      "id": "high",
+      "label": "Alto",
+      "maxC": 150
+    },
+    {
+      "id": "very-high",
+      "label": "Muy alto",
+      "maxC": null
+    }
+  ],
+  "rows": [
+    {
+      "material": "PLA (Basic, Mate, Seda, Tough)",
+      "slug": "filamentos/pla",
+      "uses": "Figuras, llaveros, decoración, prototipos.",
+      "nozzleC": "190–240",
+      "bedC": "45–65",
+      "hdtC": 57,
+      "impactKjM2": 26.6,
+      "stiffnessMpa": 2750,
+      "waterPct": 0.43,
+      "drying": "55 °C · 8 h",
+      "maxSpeedMmS": 300,
+      "printer": "any",
+      "hardenedNozzle": "no",
+      "ams": "yes",
+      "filters": [
+        "decoracion",
+        "uso-diario"
+      ]
+    },
+    {
+      "material": "PLA-CF",
+      "slug": "filamentos/pla-cf",
+      "uses": "Piezas rígidas y ligeras, acabado mate.",
+      "nozzleC": "210–240",
+      "bedC": "45–65",
+      "hdtC": 55,
+      "impactKjM2": 23.2,
+      "stiffnessMpa": 3950,
+      "waterPct": 0.42,
+      "drying": "55 °C · 8 h",
+      "maxSpeedMmS": 250,
+      "printer": "any",
+      "hardenedNozzle": "yes",
+      "ams": "yes",
+      "filters": [
+        "uso-diario",
+        "mecanica"
+      ]
+    },
+    {
+      "material": "PETG",
+      "slug": "filamentos/petg",
+      "uses": "Piezas de uso diario; aguanta más calor y golpes que el PLA.",
+      "nozzleC": "240–270",
+      "bedC": "60–80",
+      "hdtC": 69,
+      "impactKjM2": 52.7,
+      "stiffnessMpa": 1670,
+      "waterPct": 0.32,
+      "drying": "70 °C · 8 h",
+      "maxSpeedMmS": 200,
+      "printer": "enclosed",
+      "hardenedNozzle": "no",
+      "ams": "yes",
+      "filters": [
+        "uso-diario",
+        "exterior",
+        "calor",
+        "mecanica"
+      ]
+    },
+    {
+      "material": "PETG-CF",
+      "slug": "filamentos/petg-cf",
+      "uses": "Piezas mecánicas rígidas, soportes, carcasas.",
+      "nozzleC": "240–270",
+      "bedC": "60–80",
+      "hdtC": 74,
+      "impactKjM2": 41.2,
+      "stiffnessMpa": 2910,
+      "waterPct": 0.3,
+      "drying": "70 °C · 8 h",
+      "maxSpeedMmS": 200,
+      "printer": "enclosed",
+      "hardenedNozzle": "yes",
+      "ams": "yes",
+      "filters": [
+        "mecanica",
+        "calor"
+      ]
+    },
+    {
+      "material": "ABS",
+      "slug": "filamentos/abs",
+      "uses": "Piezas que aguantan calor y golpes; se puede alisar con vapor de acetona.",
+      "nozzleC": "240–280",
+      "bedC": "90–100",
+      "hdtC": 87,
+      "impactKjM2": 39.3,
+      "stiffnessMpa": 1880,
+      "waterPct": 0.65,
+      "drying": "80 °C · 8 h",
+      "maxSpeedMmS": 300,
+      "printer": "enclosed",
+      "hardenedNozzle": "no",
+      "ams": "yes",
+      "filters": [
+        "calor",
+        "mecanica"
+      ]
+    },
+    {
+      "material": "ASA",
+      "slug": "filamentos/asa",
+      "uses": "Piezas de exterior; aguanta sol y calor.",
+      "nozzleC": "240–280",
+      "bedC": "90–100",
+      "hdtC": 100,
+      "impactKjM2": 41.0,
+      "stiffnessMpa": 1920,
+      "waterPct": 0.45,
+      "drying": "80 °C · 8 h",
+      "maxSpeedMmS": 300,
+      "printer": "enclosed",
+      "hardenedNozzle": "no",
+      "ams": "yes",
+      "filters": [
+        "exterior",
+        "calor"
+      ]
+    },
+    {
+      "material": "TPU 95A",
+      "slug": "filamentos/tpu",
+      "uses": "Fundas, topes, llantas, empaques.",
+      "nozzleC": "200–250",
+      "bedC": "35–45",
+      "hdtC": null,
+      "impactKjM2": 125.2,
+      "stiffnessMpa": null,
+      "waterPct": 1.16,
+      "drying": "70 °C · 8 h (siempre)",
+      "maxSpeedMmS": 80,
+      "printer": "any",
+      "hardenedNozzle": "no",
+      "ams": "no",
+      "filters": [
+        "flexible"
+      ]
+    },
+    {
+      "material": "PC (policarbonato)",
+      "slug": "filamentos/pc",
+      "uses": "Piezas que aguantan mucho calor y golpes.",
+      "nozzleC": "260–290",
+      "bedC": "100–120",
+      "hdtC": 117,
+      "impactKjM2": 34.8,
+      "stiffnessMpa": 2310,
+      "waterPct": 0.25,
+      "drying": "80 °C · 8 h (siempre)",
+      "maxSpeedMmS": 300,
+      "printer": "enclosed",
+      "hardenedNozzle": "no",
+      "ams": "yes",
+      "filters": [
+        "calor",
+        "mecanica"
+      ]
+    },
+    {
+      "material": "PA6-CF / PAHT-CF (nylon con fibra)",
+      "slug": "filamentos/nylon",
+      "uses": "Engranes, piezas mecánicas cerca de motores o calor.",
+      "nozzleC": "260–300",
+      "bedC": "100–120",
+      "hdtC": 194,
+      "impactKjM2": 57.5,
+      "stiffnessMpa": 4230,
+      "waterPct": 0.88,
+      "drying": "80 °C · 8–12 h (siempre)",
+      "maxSpeedMmS": 100,
+      "printer": "enclosed",
+      "hardenedNozzle": "yes",
+      "ams": "yes",
+      "filters": [
+        "calor",
+        "mecanica"
+      ],
+      "note": "Valores de PAHT-CF. PA6-CF: 184 °C, 40.3 kJ/m², 5460 MPa, 2.35 % de agua."
+    },
+    {
+      "material": "PET-CF",
+      "slug": "filamentos/pet-cf",
+      "uses": "Piezas muy rígidas y resistentes al calor; aguanta poco los golpes.",
+      "nozzleC": "260–300",
+      "bedC": "100–120",
+      "hdtC": 205,
+      "impactKjM2": 36.0,
+      "stiffnessMpa": 5320,
+      "waterPct": 0.37,
+      "drying": "80 °C · 8–12 h (siempre)",
+      "maxSpeedMmS": 100,
+      "printer": "enclosed",
+      "hardenedNozzle": "yes",
+      "ams": "no",
+      "filters": [
+        "calor",
+        "mecanica"
+      ]
+    },
+    {
+      "material": "PVA / BVOH",
+      "slug": "filamentos/soportes",
+      "uses": "Soporte que se disuelve en agua.",
+      "nozzleC": "190–240",
+      "bedC": "45–65",
+      "hdtC": null,
+      "impactKjM2": null,
+      "stiffnessMpa": null,
+      "waterPct": null,
+      "drying": "55 °C · 8 h (siempre)",
+      "maxSpeedMmS": null,
+      "printer": "any",
+      "hardenedNozzle": "no",
+      "ams": "dry",
+      "filters": [
+        "soportes"
+      ]
+    }
+  ],
+  "notes": [
+    "Cama de PEI liso o texturizado de Bambu Lab. Con placa fría (Cool Plate) el PLA va a 35–45 °C.",
+    "Secado en horno de aire. En la cama de la impresora tarda unas 12 h.",
+    "Calor que aguanta: HDT a 0.45 MPa. Golpes: impacto en el plano XY.",
+    "Otras marcas pueden pedir otras temperaturas. Revisa la etiqueta del rollo."
+  ],
+  "sources": [
+    "bambu-tabla",
+    "bambu-guia"
+  ]
+}

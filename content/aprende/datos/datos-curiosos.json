@@ -1,0 +1,176 @@
+{
+  "key": "datos-curiosos",
+  "rows": [
+    {
+      "text": "En un coche estacionado al sol, el tablero llegó a 69 °C en una hora. El PLA empieza a deformarse a 57 °C.",
+      "topic": "filamentos",
+      "sources": [
+        "vanos-2018",
+        "bambu-guia"
+      ]
+    },
+    {
+      "text": "Un rollo de 1 kg de PLA de 1.75 mm mide unos 335 metros.",
+      "topic": "filamentos",
+      "sources": [
+        "calculo-propio"
+      ]
+    },
+    {
+      "text": "El ABS rinde unos 400 m por kilo porque es más ligero que el PLA.",
+      "topic": "filamentos",
+      "sources": [
+        "calculo-propio"
+      ]
+    },
+    {
+      "text": "El PLA se hace con almidón de plantas como el maíz o la caña de azúcar.",
+      "topic": "filamentos",
+      "sources": []
+    },
+    {
+      "text": "Los bloques de LEGO son de ABS.",
+      "topic": "filamentos",
+      "sources": []
+    },
+    {
+      "text": "La «G» de PETG es de glicol.",
+      "topic": "filamentos",
+      "sources": []
+    },
+    {
+      "text": "El ASA aguanta 100 °C y el ABS 87 °C, aunque se imprimen casi igual.",
+      "topic": "filamentos",
+      "sources": [
+        "bambu-guia"
+      ]
+    },
+    {
+      "text": "El TPU aguanta casi 5 veces más impacto que el PLA (125.2 contra 26.6 kJ/m²).",
+      "topic": "filamentos",
+      "sources": [
+        "bambu-guia"
+      ]
+    },
+    {
+      "text": "El PA6-CF puede absorber hasta 2.35 % de su peso en agua: más de 20 g en un rollo de 1 kg.",
+      "topic": "filamentos",
+      "sources": [
+        "bambu-guia"
+      ]
+    },
+    {
+      "text": "El PLA que brilla en la oscuridad lleva aluminato de estroncio, que desgasta la boquilla de latón.",
+      "topic": "filamentos",
+      "sources": [
+        "microcenter-glow",
+        "bambu-tabla"
+      ]
+    },
+    {
+      "text": "El PET-CF aguanta 205 °C, el más alto de la tabla de Bambu Lab.",
+      "topic": "filamentos",
+      "sources": [
+        "bambu-guia"
+      ]
+    },
+    {
+      "text": "Una pieza aguanta casi la mitad de impacto entre capas que a lo largo de ellas (PLA: 13.8 contra 26.6 kJ/m²).",
+      "topic": "laminado",
+      "sources": [
+        "bambu-guia"
+      ]
+    },
+    {
+      "text": "Con boquilla de 0.6 mm, una pieza aguantó 25.6 % más impacto que con 0.4 mm.",
+      "topic": "maquinas",
+      "sources": [
+        "prusa-boquillas"
+      ]
+    },
+    {
+      "text": "La patente de la impresión por filamento fundido venció en 2009; desde entonces aparecieron las impresoras caseras.",
+      "topic": "maquinas",
+      "sources": [
+        "wikipedia-fff"
+      ]
+    },
+    {
+      "text": "El nombre FDM es marca registrada; por eso el proyecto RepRap usó FFF.",
+      "topic": "maquinas",
+      "sources": [
+        "wikipedia-fff"
+      ]
+    },
+    {
+      "text": "En SLS la pieza no necesita soportes: el polvo sin fundir la sostiene.",
+      "topic": "maquinas",
+      "sources": [
+        "formlabs-tipos"
+      ]
+    },
+    {
+      "text": "Bambu Studio y OrcaSlicer vienen de PrusaSlicer, que viene de Slic3r.",
+      "topic": "laminado",
+      "sources": []
+    },
+    {
+      "text": "El cortador de filamento de las Bambu Lab hace entre 5,000 y 7,000 cortes antes de perder el filo.",
+      "topic": "mantenimiento",
+      "sources": [
+        "bambu-mantenimiento"
+      ]
+    },
+    {
+      "text": "Las varillas de fibra de carbono no llevan grasa.",
+      "topic": "mantenimiento",
+      "sources": [
+        "bambu-mantenimiento"
+      ]
+    },
+    {
+      "text": "Los pañuelos con crema o suavizante hacen que la pieza no pegue a la cama.",
+      "topic": "problemas",
+      "sources": [
+        "prusa-primera-capa"
+      ]
+    },
+    {
+      "text": "«Gratis para descargar» no quiere decir «libre para vender».",
+      "topic": "modelos",
+      "sources": [
+        "cc-licencias"
+      ]
+    },
+    {
+      "text": "Si 1 de cada 20 piezas sale mal, el costo de cada pieza buena sube 5.3 %, no 5 %.",
+      "topic": "negocio",
+      "sources": [
+        "quick-cerebro-formula"
+      ]
+    },
+    {
+      "text": "Una pieza al doble de tamaño tiene 8 veces más volumen.",
+      "topic": "encargar",
+      "sources": []
+    },
+    {
+      "text": "Q-404 tiene 23 piezas, se imprime en 4 placas y pesa unos 62 g.",
+      "topic": "encargar",
+      "sources": []
+    },
+    {
+      "text": "En una cama de 256 × 256 mm, una pieza delgada en diagonal puede medir casi 36 cm.",
+      "topic": "maquinas",
+      "sources": []
+    },
+    {
+      "text": "La Elegoo Neptune 4 Max tiene unos 85 litros de volumen de impresión; una A1 mini, 5.8 litros.",
+      "topic": "maquinas",
+      "sources": [
+        "elegoo-n4max",
+        "bambu-lineup"
+      ]
+    }
+  ]
+}

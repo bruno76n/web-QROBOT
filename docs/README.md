@@ -25,7 +25,10 @@ Muestrario con precios y página por producto; los pedidos van por WhatsApp. Con
 | [17 · Despliegue](17-despliegue.md) | Cloudflare, variables, entornos, CI, respaldo, lo que necesita del dueño |
 | [18 · Analítica](18-analitica.md) | Visitas y toques a WhatsApp |
 | [19 · Legal](19-legal.md) | Datos que trata la web, aviso de privacidad |
-| [20 · Plan de construcción](20-plan-de-construccion.md) | **Las 5 fases** y la plantilla de informe |
+| [20 · Plan de construcción](20-plan-de-construccion.md) | **Las fases (1–8)** y la plantilla de informe |
+| [21 · Aprende](21-aprende.md) | Sección de respuestas: rutas, temas, pantallas, Markdown seguro, datos interactivos, tablas, importador |
+| [22 · Buscador](22-buscador.md) | Meilisearch detrás del Worker, índice, sincronización, respaldo en D1, interfaz |
+| [23 · Aprende · Contenido](23-aprende-contenido.md) | Investigación y texto de cada página, reglas de redacción, datos curiosos, sinónimos, fuentes |
 | [fases/](fases/) | **Un archivo por fase** con pasos, qué consultar y cuándo está listo |
 | [prompts](prompts.md) | Un prompt por fase, cómo integrar componentes después, qué hacer entre fases |
 | [continuar en local](continuar-en-local.md) | **Empieza aquí para seguir:** cómo arrancar, probar y dónde cambiar cada dato |
@@ -40,10 +43,12 @@ Muestrario con precios y página por producto; los pedidos van por WhatsApp. Con
 | `reference/mockups/` | Las 4 páginas HTML del mockup (inicio, catálogo, producto, panel) |
 | `reference/seed-photos/` | Fotos de ejemplo de los 14 productos (para la semilla) |
 | `reference/hero/` | Portada por defecto (escritorio y celular) |
+| `reference/mockups/aprende/` | Maquetas de Aprende: portada, tema con tabla y artículo para clientes |
+| `content/aprende/` | Contenido de Aprende para importar (`21 §8`) |
 | `assets/` | Logo (cabeza de Q-404), renders finales de Q-404, fotos de las ideas |
 
 ## Por dónde empezar
 
 - **Para entender el plan:** `01` → `02` → `07` → `20`.
 - **Para construir:** preparar la carpeta (`prompts.md §0`) y pegar el prompt de la fase 1.
-- **Para consultar un tema:** páginas → `04` · textos → `05` · datos → `09` · servidor → `10` · interfaz → `11` · panel → `12` · seguridad → `13`.
+- **Para consultar un tema:** páginas → `04` · textos → `05` · datos → `09` · servidor → `10` · interfaz → `11` · panel → `12` · seguridad → `13` · Aprende → `21`, `22`, `23`.
