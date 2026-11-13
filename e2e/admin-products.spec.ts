@@ -42,8 +42,8 @@ test('editar el nombre y guardar se conserva al recargar', async ({ page }) => {
   await expect(page.getByText('Sin guardar')).toHaveCount(0);
   await page.reload();
   await expect(page.getByLabel('Nombre', { exact: true })).toHaveValue('Gato editado');
-  // the address of a published product does not follow the name (docs/09 §3)
-  await expect(page.getByLabel('Dirección de la página')).toHaveValue('gato');
+  // the address field was removed: the address always follows the name (docs/09 §3)
+  await expect(page.getByLabel('Dirección de la página')).toHaveCount(0);
 });
 
 test('cambios sin guardar piden confirmación antes de salir', async ({ page }) => {
@@ -70,11 +70,10 @@ test('flujo D: producto nuevo con dos fotos, se centra, se publica y se ve en la
   const publish = page.getByLabel('Publicado', { exact: true });
   await expect(publish).toBeDisabled({ timeout: 30_000 });
   await expect(
-    page.getByText('Para publicarlo falta: una foto, una categoría, el precio desde y el nombre'),
+    page.getByText('Para publicarlo falta: una foto, el precio desde y el nombre'),
   ).toBeVisible();
 
   await page.getByLabel('Nombre', { exact: true }).fill('Producto e2e');
-  await expect(page.getByLabel('Dirección de la página')).toHaveValue('producto-e2e');
   await page.getByLabel('Precio desde (por pieza)').fill('75');
   await page.getByText('Para la casa', { exact: true }).click();
   await page.getByText('Verde', { exact: true }).click();

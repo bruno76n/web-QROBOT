@@ -11,17 +11,15 @@ for (const url of publicUrls) {
       await page.goto(url);
       const header = page.locator('header[data-top]');
       await expect(header).toBeVisible();
-      expect((await header.boundingBox())?.height).toBe(68);
+      // 68 px, slimmer (56 px) on phones up to 760 px (global.css).
+      expect((await header.boundingBox())?.height).toBe(
+        (page.viewportSize()?.width ?? 0) <= 760 ? 56 : 68,
+      );
 
-      // Black tab with the four links only from 900 px up (mockup: @media max-width 900px).
+      // The Catálogo link shows at every width (a black tab from 900 px up).
       const nav = page.getByRole('navigation', { name: 'Principal' });
-      const wide = (page.viewportSize()?.width ?? 0) > 900;
-      if (wide) {
-        await expect(nav).toBeVisible();
-        await expect(nav.getByRole('link')).toHaveText(['Navidad', 'Ideas', 'Catálogo', 'Q-404']);
-      } else {
-        await expect(nav).toBeHidden();
-      }
+      await expect(nav).toBeVisible();
+      await expect(nav.getByRole('link')).toHaveText(['Catálogo']);
       await expect(header.getByRole('link', { name: 'Cotizar' })).toHaveAttribute(
         'href',
         '/#pedido',

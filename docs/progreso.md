@@ -64,6 +64,10 @@ Trabajo en local y en la nube (sesión de Claude Code en la web); se unió en `m
 - Pruebas que seguían con valores viejos (dominio, host de fotos, `'wasm-unsafe-eval'`) leen ahora `site.ts`. Siguen en rojo en `pnpm e2e`, desde antes de este cambio: header de 56 px y menú (`layout.spec.ts`), video "sin archivo" (`flow-home.spec.ts`) y contraste de color en el inicio (`a11y.spec.ts`).
 - **Despliegue:** a mano (`pnpm build && pnpm exec wrangler deploy`), versión `b0b62a10`, sin migraciones. Revisado en vivo: número en el footer y en los links, catálogo sin personalizador.
 
+## 2026-11-13
+
+- **Pruebas e2e al día:** `pnpm e2e` pasa completo (154 públicas + 42 del panel). Solo se actualizaron pruebas, ningún código de la web: las fotos se simulan desde `site.imgBase`, header de 56 px en celular y solo el link Catálogo, video con archivo, publicar sin categoría y dirección que sigue al nombre.
+
 ## Valores provisionales en uso (`01 › Pendientes del dueño`)
 
 | Dato | Valor provisional | Desde |

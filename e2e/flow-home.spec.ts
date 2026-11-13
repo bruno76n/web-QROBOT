@@ -127,12 +127,13 @@ test('Q-404: elegir colores cambia el render, el nombre y el mensaje', async ({ 
   await expect(page.locator('.r1-note')).toContainText('Desde $350');
 });
 
-test('Video: sin archivo el botón está deshabilitado y dice por qué', async ({ page }) => {
+test('Video: con archivo el botón de play está activo y solo muestra el ícono', async ({
+  page,
+}) => {
   await page.goto('/');
   const play = page.locator('[data-play]');
-  await expect(play).toBeDisabled();
-  await expect(play).toHaveAttribute('aria-label', /todavía no hay video/);
-  await expect(page.getByText('Timelapse')).toBeVisible();
+  await expect(play).toBeEnabled();
+  await expect(play).toHaveAttribute('aria-label', 'Reproducir el video');
 });
 
 test('la alberca: matter-js solo se baja al tocar, aparece el canvas y Escape lo quita', async ({
