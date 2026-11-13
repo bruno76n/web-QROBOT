@@ -4,7 +4,7 @@
 //   --overwrite    also replaces the pages edited in the panel
 //   --prune        deletes the pages that are not in the files
 //   --remote --yes writes to production through `wrangler d1 execute --remote` (needs credentials)
-//   --sync         reserved for updating the search index (docs/22 §6); it does nothing yet
+//   --sync         reserved for updating the search index (docs/22 §6); it only prints a notice
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { join } from 'node:path';
@@ -20,6 +20,7 @@ import {
 } from '../src/server/learn-import.ts';
 import { loadLearnFiles } from './learn-files.ts';
 
+// Project root, parsed flags and the target database name.
 const root = new URL('..', import.meta.url).pathname;
 const args = new Set(process.argv.slice(2));
 const known = ['--if-empty', '--overwrite', '--prune', '--remote', '--yes', '--sync'];
@@ -31,6 +32,7 @@ for (const a of args)
 const remote = args.has('--remote');
 const dbName = 'quick-robot-web';
 
+/** Prints what the import did, with the page names when the lists are short. */
 function print(summary: ImportSummary, where: string) {
   const list = (name: string, items: string[]) =>
     console.log(
@@ -46,10 +48,15 @@ function print(summary: ImportSummary, where: string) {
   for (const w of summary.warnings) console.warn(`  aviso: ${w}`);
 }
 
+/** Runs wrangler through pnpm from the project root and returns its output. */
 function wrangler(argv: string[]) {
   return spawnSync('pnpm', ['exec', 'wrangler', ...argv], { cwd: root, encoding: 'utf8' });
 }
 
+/**
+ * Builds the plan from `content/aprende/` and writes it: to production as an SQL file run by wrangler
+ * (`--remote`, only with `--yes`), or to the local D1 directly.
+ */
 async function main() {
   if (remote && !args.has('--yes')) {
     console.error(
@@ -61,6 +68,7 @@ async function main() {
   const now = Date.now();
 
   if (remote) {
+    // Read which pages exist so the SQL only creates, updates or prunes what it should.
     const q = wrangler([
       'd1',
       'execute',
@@ -100,6 +108,7 @@ async function main() {
     }
     print(summary, 'producción');
   } else {
+    // Refuse to write when the config points the local binding at a remote database.
     const config = readFileSync(join(root, 'wrangler.jsonc'), 'utf8');
     if (/"remote"\s*:\s*true/.test(config)) {
       console.error(
@@ -129,6 +138,7 @@ async function main() {
   if (args.has('--sync')) console.log('learn:import: el buscador se sincroniza desde la fase 7.');
 }
 
+// Invalid content gets a short message; anything else shows the full error.
 main().catch((e: unknown) => {
   if (e instanceof ImportError) console.error(`learn:import: ${e.message}`);
   else console.error(e);

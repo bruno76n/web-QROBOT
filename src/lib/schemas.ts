@@ -3,6 +3,8 @@ import { colorIds } from '@/config/colors';
 import { limits, slugPattern } from './publish';
 
 /** Shared Zod schemas: the panel forms and the server actions use the same ones (docs/06). */
+
+/** A crop rectangle in pixels of the original photo. */
 export const cropSchema = z.object({
   // Negative `x`/`y` and sizes past the original only happen with padded product crops; the
   // services check the real limits against the original (`isValidCrop`).
@@ -22,10 +24,13 @@ export const photoRefSchema = z.object({
 });
 export type PhotoRef = z.infer<typeof photoRefSchema>;
 
+/** True when no value repeats. */
 const isUnique = (items: readonly string[]) => new Set(items).size === items.length;
 
+/** A trimmed string of at most `max` characters. */
 const text = (max: number) => z.string().trim().max(max);
 
+/** Category input: ids are slugs, labels are short non-empty text; reorder takes the full id list. */
 export const categoryIdSchema = z.string().max(40).regex(slugPattern);
 export const categoryLabelSchema = z.string().trim().min(1).max(limits.categoryLabelMax);
 
@@ -36,6 +41,7 @@ export const categoryReorderSchema = z.object({
   ids: z.array(categoryIdSchema).max(limits.maxCategories).refine(isUnique, 'duplicates'),
 });
 
+/** A product as saved by the panel (`admin.saveProduct`); defaults fill what the form leaves out. */
 export const productInputSchema = z.object({
   /** Missing for a new product. */
   id: z.string().min(1).max(64).optional(),
@@ -64,13 +70,16 @@ export const productInputSchema = z.object({
 });
 export type ProductInput = z.infer<typeof productInputSchema>;
 
+/** A hero slide: a 16:9 desktop photo and an optional 3:4 phone photo. */
 export const heroSlideInputSchema = z.object({
   desktop: photoRefSchema,
   mobile: photoRefSchema.nullable().default(null),
 });
 
+/** Seconds a hero slide stays on screen, as offered by the panel. */
 export const heroIntervals = [4, 6, 8, 12] as const;
 
+/** The hero as saved by the panel. */
 export const heroInputSchema = z.object({
   // Loose here on purpose: the 6-slide limit answers TOO_MANY_SLIDES.
   slides: z.array(heroSlideInputSchema).max(50),
@@ -78,6 +87,7 @@ export const heroInputSchema = z.object({
 });
 export type HeroInput = z.infer<typeof heroInputSchema>;
 
+/** Small action inputs: an id, an id with a published flag, and an ordered list of ids. */
 export const idSchema = z.object({ id: z.string().min(1).max(64) });
 export const setPublishedSchema = z.object({
   id: z.string().min(1).max(64),
@@ -125,6 +135,7 @@ export const clickInputSchema = z
   })
   .refine((v) => (v.source === 'product') === (v.productId !== undefined));
 
+/** Window of the click statistics, in days. */
 export const clickStatsInputSchema = z.object({
   days: z.number().int().min(1).max(365).default(30),
 });

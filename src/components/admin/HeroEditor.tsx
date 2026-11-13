@@ -1,3 +1,5 @@
+/** "Portada" tab of the panel: edits the home hero slides (desktop and phone photos, order, interval). */
+
 /* eslint-disable react-hooks/refs -- dnd-kit's `useSortable` returns ref callbacks that the React Compiler lint flags wrongly */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -46,8 +48,10 @@ import { setDirty } from './lib/dirty';
 import { keys, useHero } from './lib/queries';
 
 const t = es.admin.hero;
+/** Rotation intervals offered, in seconds (the same values the server accepts). */
 const intervals = [4, 6, 8, 12] as const;
 
+/** An empty photo slot in the `preparing` state, shown while its file is being processed. */
 const blank = (): PhotoItem => ({
   key: `h-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
   id: null,
@@ -65,11 +69,13 @@ const blank = (): PhotoItem => ({
   retry: null,
 });
 
+/** Spanish text for a failed photo step; unknown errors become the generic one. */
 const messageFor = (error: unknown) =>
   error instanceof PhotoError
     ? errorText({ ok: false, code: error.code })
     : es.admin.errors.INTERNAL('—');
 
+/** Loads the saved hero and mounts the form; shows a skeleton while loading and an error if it cannot be read. */
 export function HeroEditor() {
   const { data, isPending, error } = useHero();
   if (isPending)
@@ -91,27 +97,39 @@ export function HeroEditor() {
   return <HeroForm initial={data} />;
 }
 
+/**
+ * The hero editor proper. It keeps its own copy of the slides and interval (so refetching never
+ * overwrites edits), compares them with the last saved state to know when there are unsaved
+ * changes, and saves everything at once.
+ */
 function HeroForm({ initial }: { initial: HeroView }) {
   const qc = useQueryClient();
   const confirm = useConfirm();
   const [slides, setSlides] = useState<SlideItem[]>(() => slidesFromView(initial));
   const [interval, setIntervalSeconds] = useState<number>(initial.intervalSeconds);
+  /** Fingerprint of the saved hero, to detect unsaved changes. */
   const [baseline, setBaseline] = useState(() =>
     heroFingerprint(slidesFromView(initial), initial.intervalSeconds),
   );
+  /** Index of the slide shown in the preview. */
   const [active, setActive] = useState(0);
   const [saving, setSaving] = useState(false);
+  /** The photo being re-centered (with the image the cropper shows), or null when the cropper is closed. */
   const [cropping, setCropping] = useState<{ key: string; slot: Slot; src: string } | null>(null);
+  /** Always the latest slides, for async callbacks that must not read a stale list. */
   const slidesRef = useRef(slides);
   slidesRef.current = slides;
+  /** Latest `ingest`, so a retry button always runs the current version. */
   const ingestRef = useRef<(key: string, slot: Slot, file: File) => Promise<void>>(async () => {});
 
   const dirty = heroFingerprint(slides, interval) !== baseline;
+  // Publishes the unsaved-changes flag for the tabs; clears it when the editor closes.
   useEffect(() => {
     setDirty(dirty);
     return () => setDirty(false);
   }, [dirty]);
 
+  /** Updates one photo (desktop or mobile) of one slide, if that slide and photo still exist. */
   const patchPhoto = useCallback((key: string, slot: Slot, changes: Partial<PhotoItem>) => {
     setSlides((list) =>
       list.map((s) => {
@@ -158,10 +176,12 @@ function HeroForm({ initial }: { initial: HeroView }) {
     [patchPhoto],
   );
 
+  // Keeps `ingestRef` pointing at the latest `ingest`.
   useEffect(() => {
     ingestRef.current = ingest;
   }, [ingest]);
 
+  /** Dropped files become new slides (desktop photo) up to the slide limit; extra files are ignored with a message. */
   const addFiles = useCallback(
     (files: File[]) => {
       const room = limits.maxSlides - slidesRef.current.length;
@@ -181,6 +201,7 @@ function HeroForm({ initial }: { initial: HeroView }) {
     [ingest],
   );
 
+  /** A file chosen for an existing slide: replaces its desktop photo or adds/replaces its mobile photo. */
   const pick = (key: string, slot: Slot, file: File) => {
     if (slot === 'mobile') {
       setSlides((list) => list.map((s) => (s.key === key ? { ...s, mobile: blank() } : s)));
@@ -190,6 +211,7 @@ function HeroForm({ initial }: { initial: HeroView }) {
     void ingest(key, slot, file);
   };
 
+  /** Re-crops an already uploaded photo with a new crop rectangle; on failure it keeps the previous photo. */
   const recenter = async (key: string, slot: Slot, crop: CropRect) => {
     const slide = slidesRef.current.find((s) => s.key === key);
     const item = slot === 'desktop' ? slide?.desktop : slide?.mobile;
@@ -222,6 +244,7 @@ function HeroForm({ initial }: { initial: HeroView }) {
     }
   };
 
+  /** Opens the cropper on a photo, using the local file when available or the stored original. */
   const openCropper = (key: string, slot: Slot) => {
     const slide = slides.find((s) => s.key === key);
     const item = slot === 'desktop' ? slide?.desktop : slide?.mobile;
@@ -232,11 +255,13 @@ function HeroForm({ initial }: { initial: HeroView }) {
       src: item.blob ? URL.createObjectURL(item.blob) : `/api/admin/photo/${item.id}`,
     });
   };
+  /** Closes the cropper and frees the temporary local URL, if any. */
   const closeCropper = () => {
     if (cropping?.src.startsWith('blob:')) URL.revokeObjectURL(cropping.src);
     setCropping(null);
   };
 
+  /** Saves the whole hero once every photo is ready, then reloads it from the server. */
   const save = async () => {
     if (isBusy(slides)) return void toast.error(es.admin.actions.waitUploads);
     const input = toHeroInput(slides, interval as 4 | 6 | 8 | 12);
@@ -249,6 +274,7 @@ function HeroForm({ initial }: { initial: HeroView }) {
     await reload();
   };
 
+  /** Replaces the editor's state with the saved hero and marks it as unchanged. */
   const reload = async () => {
     const res = await api.getHero();
     if (!res.ok) return;
@@ -260,6 +286,7 @@ function HeroForm({ initial }: { initial: HeroView }) {
     setActive(0);
   };
 
+  /** After confirmation, removes every slide so the home returns to the default photo. */
   const reset = async () => {
     const yes = await confirm({
       title: t.resetTitle,
@@ -275,23 +302,29 @@ function HeroForm({ initial }: { initial: HeroView }) {
     await reload();
   };
 
+  // Drop zone: only accepted image types up to the original-size limit; rejected files show a toast.
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: photoAccept,
     maxSize: maxOriginalBytes,
     onDropAccepted: addFiles,
     onDropRejected: (r) => toast.error(rejectionText(r)),
   });
+  // Pointer drags start after 6 px so a click on the grip still selects the slide; the keyboard can reorder too.
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   );
+  /** Slide keys in display order, as dnd-kit item ids. */
   const ids = useMemo(() => slides.map((s) => s.key), [slides]);
+  /** Moves the dragged slide to where it was dropped. */
   const onDragEnd = ({ active: a, over }: DragEndEvent) => {
     if (!over || a.id === over.id) return;
     setSlides((list) => moveSlide(list, ids.indexOf(String(a.id)), ids.indexOf(String(over.id))));
   };
 
+  /** Slide shown in the preview; `active` is clamped in case slides were removed. */
   const current = slides[Math.min(active, slides.length - 1)];
+  /** The photo the open cropper edits. */
   const croppingItem = cropping ? slides.find((s) => s.key === cropping.key) : undefined;
   const croppingPhoto = cropping?.slot === 'mobile' ? croppingItem?.mobile : croppingItem?.desktop;
 

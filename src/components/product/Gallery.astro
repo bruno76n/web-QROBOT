@@ -1,4 +1,7 @@
 ---
+// Product photo gallery: a carousel with previous/next buttons, a counter and a thumbnail strip.
+// With one photo there are no controls; with none, an empty placeholder. The script drives it
+// with Embla.
 import { es } from '@/i18n/es';
 import { type PhotoSrc, photoImg } from '@/lib/photos';
 import Picture from '@/components/site/Picture.astro';
@@ -9,6 +12,7 @@ interface Props {
 }
 const { photos, imgBase } = Astro.props;
 const t = es.product;
+// Buttons, counter and thumbnails only exist with more than one photo.
 const many = photos.length > 1;
 ---
 
@@ -98,6 +102,8 @@ const many = photos.length > 1;
   import { es } from '@/i18n/es';
 
   // Starts on astro:page-load and cleans on astro:before-swap (CLAUDE.md rule 13).
+  // Each gallery gets a main carousel and a thumbnail one; buttons, counter and the current
+  // thumbnail follow the selected slide.
   const apis: EmblaCarouselType[] = [];
   const cleanups: (() => void)[] = [];
 
@@ -117,6 +123,7 @@ const many = photos.length > 1;
       const counter = root.querySelector<HTMLElement>('[data-counter]');
       const dots = [...root.querySelectorAll<HTMLElement>('[data-thumb]')];
 
+      // Brings buttons, counter, current thumbnail and thumbnail scroll in line with the slide.
       const sync = () => {
         const i = main.selectedScrollSnap();
         if (prev) prev.disabled = !main.canScrollPrev();

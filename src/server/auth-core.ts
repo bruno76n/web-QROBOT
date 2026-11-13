@@ -13,10 +13,13 @@ export interface AccessConfig {
   allowedEmails: readonly string[];
 }
 
+/** Outcome of checking a token; `reason` is for logs, never shown to the person. */
 export type AccessResult = { ok: true; email: string } | { ok: false; reason: string };
 
+/** Request header where Cloudflare Access puts the signed token. */
 export const ACCESS_HEADER = 'Cf-Access-Jwt-Assertion';
 
+/** Splits the comma-separated list of admin e-mails; lowercase, trimmed, no empty items. */
 export function parseAllowedEmails(raw: string | undefined): string[] {
   return (raw ?? '')
     .split(',')
@@ -31,10 +34,15 @@ export function issuerFromTeamDomain(domain: string | undefined): string {
   return d.startsWith('https://') ? d : `https://${d}`;
 }
 
+/**
+ * Checks signature (RS256), issuer, audience and expiry of the token, then that its e-mail is on the
+ * allowed list. Never throws: any failure comes back as `{ ok: false, reason }`.
+ */
 export async function verifyAccessToken(
   token: string | null | undefined,
   config: AccessConfig,
   keys: JWTVerifyGetKey,
+  /** Moment used to check expiry; tests pass a fixed date. */
   now: Date = new Date(),
 ): Promise<AccessResult> {
   if (!token) return { ok: false, reason: 'no token' };

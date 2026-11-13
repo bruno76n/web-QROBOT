@@ -1,3 +1,5 @@
+/** Form values, validation and conversions of the product form in the panel. Pure. */
+
 import { z } from 'zod';
 import type { CategoryId } from '@/config/categories';
 import { colorIds, type ColorId } from '@/config/colors';
@@ -29,7 +31,9 @@ export interface ProductFormValues {
   published: boolean;
 }
 
+/** Panel texts. */
 const t = es.admin;
+/** A trimmed string of at most `max` characters, with the panel's own message. */
 const bounded = (max: number) => z.string().trim().max(max, t.tooLong(max));
 
 /** Same limits as the server schema (`productInputSchema`), with the panel's own messages. */
@@ -54,6 +58,7 @@ export const productFormSchema = z.object({
   published: z.boolean(),
 });
 
+/** Values of a new product form. */
 export function emptyValues(): ProductFormValues {
   return {
     name: '',
@@ -77,6 +82,7 @@ export function emptyValues(): ProductFormValues {
   };
 }
 
+/** Form values of an existing product (price becomes text in pesos). */
 export function valuesFromDetail(d: ProductDetail): ProductFormValues {
   return {
     name: d.name,
@@ -100,7 +106,10 @@ export function valuesFromDetail(d: ProductDetail): ProductFormValues {
   };
 }
 
-/** Form + photos → what `admin.saveProduct` expects. */
+/**
+ * Form + photos → what `admin.saveProduct` expects. Text is trimmed, the price becomes cents and
+ * the personalization hint is dropped when the product is not personalizable.
+ */
 export function toProductInput(
   v: ProductFormValues,
   photos: PhotoRef[],

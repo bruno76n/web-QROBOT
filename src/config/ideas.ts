@@ -9,6 +9,7 @@ export interface Idea {
   order: { quantity: number; piece: number; with: number; when: number };
 }
 
+/** The ideas in display order. */
 export const ideas: readonly Idea[] = [
   {
     id: 'servilleteros',

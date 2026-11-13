@@ -1,3 +1,6 @@
+/**
+ * `/robots.txt`, generated from the site domain by `robotsTxt` and cached for an hour.
+ */
 import type { APIRoute } from 'astro';
 import { site } from '@/config/site';
 import { robotsTxt } from '@/lib/seo';

@@ -1,4 +1,8 @@
 ---
+// Product page `/producto/<slug>`: gallery, "price from", options that build the WhatsApp order
+// link, data sheet, description and related products.
+// Reads the published product, its categories and related products from D1 (`src/server`).
+// Also emits Product and Breadcrumb JSON-LD, the Open Graph image and a preload of the first photo.
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/site/Breadcrumbs.astro';
 import Price from '@/components/site/Price.astro';
@@ -24,7 +28,7 @@ const { slug = '' } = Astro.params;
 // Hidden or missing products are a 404, never a page (docs/04 §1).
 const product = await getPublishedProduct(slug);
 if (!product) {
-  // An address the product used to have: send people to the current one.
+  // The slug is an old address of a renamed product: permanent redirect to the current one.
   const current = await findCurrentSlug(slug);
   if (current) return Astro.redirect(`/producto/${current}`, 301);
   return Astro.rewrite('/404');
@@ -33,18 +37,23 @@ if (!product) {
 const imgBase = getEnv().PUBLIC_IMG_BASE;
 const related = await listRelated(product);
 const categories = await listCategories();
+// Display name of a category id (falls back to the id itself).
 const label = (id: string) => categories.find((c) => c.id === id)?.label ?? id;
 const mainCategory = product.category;
+// Breadcrumb trail: Catálogo > main category (when it has one) > this product (no link).
 const crumbs = [
   { label: es.catalog.catalog, href: '/catalogo' },
   ...(mainCategory ? [{ label: label(mainCategory), href: `/catalogo/${mainCategory}` }] : []),
   { label: product.name },
 ];
+// First photo's image attributes: the page preloads it (it is the largest image above the fold).
 const first = product.photos[0] ? photoImg(product.photos[0], imgBase) : null;
+// Description paragraphs: a blank line separates them.
 const paragraphs = product.description
   .split(/\n\s*\n/)
   .map((p) => p.trim())
   .filter(Boolean);
+// Data-sheet rows (label, value); rows without a value are left out.
 const sheet = [
   [es.product.sheet.size, product.size],
   [es.product.sheet.customSize, product.customSize],
@@ -52,6 +61,8 @@ const sheet = [
   [es.product.sheet.leadTime, product.leadTime],
 ].filter(([, value]) => value);
 const productUrl = `${site.domain}/producto/${product.slug}`;
+// Absolute image URLs for the JSON-LD: per photo, the widest variant up to 1200 px
+// (the smallest one when every variant is wider).
 const images = product.photos.map((p) =>
   absoluteUrl(
     site.domain,
@@ -62,9 +73,11 @@ const images = product.photos.map((p) =>
     ),
   ),
 );
+// Share image: the Open Graph variant of the first photo; the layout's brand image when none.
 const ogImage = product.photos[0]
   ? absoluteUrl(site.domain, photoOgUrl(product.photos[0], imgBase))
   : undefined;
+// Structured data: the Product (with its "price from") and the breadcrumb.
 const jsonLd = [
   productJsonLd({
     domain: site.domain,

@@ -1,3 +1,5 @@
+/** Class-name helper used by the components. */
+
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 

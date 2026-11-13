@@ -1,4 +1,7 @@
 ---
+// Home Christmas section (`#navidad`), rendered only in season: title, countdown clock, a timeline
+// with the order-deadline mark and today's robot, and up to four gift picks (`picks`).
+// The server renders the values for `now`; the script then ticks the clock every second.
 import Head from '../../../assets/logo-cabeza.svg';
 import { site } from '@/config/site';
 import { es } from '@/i18n/es';
@@ -15,6 +18,8 @@ interface Props {
 }
 const { picks, now } = Astro.props;
 const t = es.home.xmas;
+// Season dates and time zone from `site.ts`; the countdown, timeline position and deadline mark
+// are computed for `now` with the pure functions of `lib/season`.
 const cfg: SeasonConfig = { ...site.christmas, timeZone: site.timeZone };
 const c = countdown(now, cfg);
 const pos = timelinePosition(now, cfg);
@@ -176,6 +181,7 @@ const imgBase = getEnv().PUBLIC_IMG_BASE;
   .tiles div:first-child b {
     color: var(--green);
   }
+  /* A digit that changes replays this animation (the script toggles `flip`). */
   .tiles b.flip {
     animation: flip 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
@@ -237,6 +243,7 @@ const imgBase = getEnv().PUBLIC_IMG_BASE;
     color: #fff;
     font-weight: 500;
   }
+  /* The robot that marks today on the timeline; its label comes from `data-today`. */
   .bot {
     position: absolute;
     top: 50%;
@@ -378,6 +385,7 @@ const imgBase = getEnv().PUBLIC_IMG_BASE;
     };
     const t = es.home.xmas;
     const pad = (n: number) => String(n).padStart(2, '0');
+    // Writes a clock digit only when it changes, replaying the flip animation.
     const set = (el: HTMLElement, value: string) => {
       if (el.textContent === value) return;
       el.textContent = value;
@@ -385,6 +393,7 @@ const imgBase = getEnv().PUBLIC_IMG_BASE;
       void el.offsetWidth;
       el.classList.add('flip');
     };
+    // Refreshes the clock, the timeline and the deadline mark for the current time.
     const tick = () => {
       const now = new Date();
       const c = countdown(now, cfg);

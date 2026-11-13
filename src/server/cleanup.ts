@@ -1,8 +1,11 @@
+/** Scheduled sweep of photos that were uploaded but never attached. */
+
 import { and, eq, lt } from 'drizzle-orm';
 import { r2Keys } from '@/lib/crop';
 import { schema } from './db/client';
 import { removePrefixes, runBatch, type AdminDeps } from './admin/context';
 
+/** One day in milliseconds; the age a pending photo reaches before it is swept. */
 const DAY_MS = 24 * 3600 * 1000;
 
 /**

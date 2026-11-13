@@ -1,3 +1,4 @@
+/** Quantity and unit helpers for product messages. Pure. */
 /** Picks the singular or plural unit for a quantity (docs/09 › unit_singular, unit_plural). */
 export function unitFor(
   quantity: number,
@@ -9,7 +10,7 @@ export function unitFor(
   return quantity === 1 ? singular : plural;
 }
 
-/** Quantity typed by a person → a whole number ≥ 1 (empty or nonsense becomes 1). */
+/** Quantity typed by a person → a whole number ≥ 1 (empty or nonsense becomes 1, the maximum is 9999). */
 export function normalizeQuantity(input: string | number): number {
   const n = typeof input === 'number' ? Math.trunc(input) : parseInt(input, 10);
   return Number.isFinite(n) && n >= 1 ? Math.min(n, 9999) : 1;

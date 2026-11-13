@@ -1,14 +1,18 @@
 /** ¿Cabe mi pieza? (docs/21 §6.2). Millimetres everywhere; `toMm` converts the typed values. */
 
+/** Unit the person types the piece in. */
 export type FitUnit = 'mm' | 'cm';
+/** `standing`: fits as typed; `lying`: fits only turned on its side; `no`: does not fit. */
 export type FitResult = 'standing' | 'lying' | 'no';
 
+/** Width, depth and height in millimetres (of a piece or of a print volume). */
 export interface Dims {
   widthMm: number;
   depthMm: number;
   heightMm: number;
 }
 
+/** Converts a typed value to millimetres. */
 export function toMm(value: number, unit: FitUnit): number {
   return unit === 'cm' ? value * 10 : value;
 }
@@ -36,13 +40,18 @@ export function fitPiece(piece: Dims, printer: Dims, marginMm: number): FitResul
   return 'no';
 }
 
+/** Result of testing one piece against a list of printers. */
 export interface FitSummary {
+  /** `false` when the piece is not valid; then nothing fits. */
   valid: boolean;
+  /** Printers where the piece fits (standing or lying). */
   fitting: number;
   total: number;
+  /** One result per printer, in the order given. */
   results: FitResult[];
 }
 
+/** Tests the piece against every printer and counts how many it fits. */
 export function fitAll(piece: Dims, printers: readonly Dims[], marginMm: number): FitSummary {
   if (!validPiece(piece))
     return { valid: false, fitting: 0, total: printers.length, results: printers.map(() => 'no') };

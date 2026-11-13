@@ -1,3 +1,5 @@
+/** WhatsApp tap counters: one row per day, source and product, plus the stats the panel reads. */
+
 import { site } from '@/config/site';
 import { and, eq, gte, sql } from 'drizzle-orm';
 import { localParts } from '@/lib/season';
@@ -11,13 +13,17 @@ export function dayKey(date: Date, timeZone: string): string {
   return `${p.year}-${String(p.month).padStart(2, '0')}-${String(p.day).padStart(2, '0')}`;
 }
 
-/** Adds one to today's counter. Nothing about the person is stored (docs/18 §2). */
+/**
+ * Adds one to today's counter. Nothing about the person is stored (docs/18 §2). Returns `false`,
+ * writing nothing, when the product id does not exist; only `product` taps keep a product id.
+ */
 export async function recordClick(
   db: Db,
   input: { source: ClickSource; productId?: string | undefined },
   now: Date,
   timeZone: string,
 ): Promise<boolean> {
+  // Taps from other sources are counted without a product.
   const productId = input.source === 'product' ? (input.productId ?? '') : '';
   if (productId) {
     const [found] = await db
@@ -40,7 +46,7 @@ export async function recordClick(
   return true;
 }
 
-/** Taps of the last `days` days (today included), by source and by product. */
+/** Taps of the last `days` days (today included), totalled by source and by product. */
 export async function clickStats(
   db: Db,
   days: number,
@@ -57,6 +63,7 @@ export async function clickStats(
     .from(schema.whatsappClicks)
     .where(and(gte(schema.whatsappClicks.day, since)))
     .groupBy(schema.whatsappClicks.source, schema.whatsappClicks.productId);
+  // Rows with a source this version does not know are ignored.
   const stats: ClickStats = {
     days,
     total: 0,
@@ -73,11 +80,12 @@ export async function clickStats(
   return stats;
 }
 
-/** Used by the route and the panel action: the real database, the business time zone. */
+/** `recordClick` over the real database and the business time zone, for the route and the panel. */
 export const countClick = (
   input: { source: ClickSource; productId?: string | undefined },
   at: Date,
 ) => recordClick(getDb(), input, at, site.timeZone);
 
+/** `clickStats` over the real database and the business time zone. */
 export const recentClickStats = (days: number, at: Date) =>
   clickStats(getDb(), days, at, site.timeZone);

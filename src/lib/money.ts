@@ -1,3 +1,5 @@
+/** Money formatting and parsing; prices are integer cents. Pure. */
+
 /** Prices are stored in cents; the site shows whole pesos like "$1,250". */
 export function formatMoney(cents: number): string {
   const pesos = cents / 100;

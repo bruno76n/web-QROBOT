@@ -34,4 +34,5 @@ export const site = {
   system: { enabled: false },
 } as const;
 
+/** Type of the business data. */
 export type Site = typeof site;

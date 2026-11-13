@@ -1,9 +1,13 @@
 ---
+// Site footer: logo, contact data from `site.ts`, legal line with the privacy link, and the brand
+// name set across the full width of the container.
 import { es } from '@/i18n/es';
 import { site } from '@/config/site';
 import Logo from './Logo.astro';
 
+// Year shown in the legal line.
 const year = new Date().getFullYear();
+// Contact entries; only those with a `url` render as links.
 const contacts = [
   { label: es.footer.whatsapp, value: site.whatsappLabel, url: null as string | null },
   { label: es.footer.facebook, value: site.facebook.label, url: site.facebook.url },
@@ -20,7 +24,13 @@ const contacts = [
       {contacts.map((c) => (
         <p class="text-[15px]">
           <span class="block text-[13px] text-ink-2">{c.label}</span>
-          {c.url ? <a href={c.url} target="_blank" rel="noopener">{c.value}</a> : c.value}
+          {c.url ? (
+            <a href={c.url} target="_blank" rel="noopener">
+              {c.value}
+            </a>
+          ) : (
+            c.value
+          )}
         </p>
       ))}
     </div>
@@ -37,6 +47,7 @@ const contacts = [
 </footer>
 
 <style>
+  /* Container-query unit base for the font size below. */
   .footer-name {
     container-type: inline-size;
   }
@@ -46,7 +57,7 @@ const contacts = [
     font-weight: 600;
     letter-spacing: -0.068em;
     line-height: 0.82;
-    /* 100cqw / (text width at 1em); measured for Geist 600 (docs/decisiones.md, paso 1.4). */
+    /* 100cqw divided by the text width at 1em, measured for Geist 600, so the name fills the row. */
     font-size: calc(100cqw / 5.168);
   }
 </style>

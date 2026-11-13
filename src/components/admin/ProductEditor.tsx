@@ -1,9 +1,12 @@
+/** Right-hand side of the products screen: loads one product and hands it to the form. */
+
 import { es } from '@/i18n/es';
 import { EditorForm } from './EditorForm';
 import { ApiError } from './lib/call';
 import { errorText } from './lib/error-text';
 import { useProduct } from './lib/queries';
 
+/** `id` is the product to edit (null starts a new one); `onSelect` changes the selection; `onSaved` reports the id after a first save. */
 interface Props {
   /** null = a new product. */
   id: string | null;
@@ -11,7 +14,11 @@ interface Props {
   onSaved: (id: string) => void;
 }
 
-/** Loads the product (or starts an empty one) and mounts the form once the data is there. */
+/**
+ * Loads the product (or starts an empty one) and mounts the form once the data is there; shows a
+ * skeleton while loading and an error with a back button if it cannot be read.
+ * The form is keyed by product, so its state resets when the selection changes.
+ */
 export function ProductEditor({ id, onSelect, onSaved }: Props) {
   const { data, isPending, error } = useProduct(id);
 

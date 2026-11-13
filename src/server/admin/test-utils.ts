@@ -1,3 +1,8 @@
+/**
+ * Shared helpers of the admin service tests (they run in the Workers runtime, with local D1 and R2):
+ * dependencies with a controllable clock, a full reset, photo fixtures and a valid product input.
+ */
+
 import { seedCategories } from '@/config/categories';
 import { env } from 'cloudflare:workers';
 import { getDb, schema } from '../db/client';
@@ -5,7 +10,7 @@ import { r2Keys, usageAspect, widthsToGenerate, wantedWidths, type PhotoUsage } 
 import type { PhotoRef, ProductInput } from '@/lib/schemas';
 import type { AdminDeps } from './context';
 
-/** Shared helpers of the admin service tests (they run in the Workers runtime, local D1 and R2). */
+/** Admin dependencies over the test database and bucket, with a fake clock and sequential ids (`id1`, `id2`...). */
 export function makeDeps(start = 1_800_000_000_000) {
   let clock = start;
   let n = 0;
@@ -26,7 +31,7 @@ export async function resetAll() {
   await db.delete(schema.photos);
   await db.delete(schema.products);
   await db.delete(schema.settings);
-  // Categories go back to the three the migration creates.
+  // Categories are reset to the default list.
   await db.delete(schema.categories);
   await db
     .insert(schema.categories)
@@ -44,6 +49,7 @@ export async function resetAll() {
   } while (cursor);
 }
 
+/** Pixel size of the fake original of each photo usage. */
 const originalSize: Record<PhotoUsage, { width: number; height: number }> = {
   product: { width: 1000, height: 1000 },
   hero_desktop: { width: 2400, height: 1350 },
@@ -61,6 +67,7 @@ export async function putVersionFiles(
   if (usage === 'product') await env.BUCKET.put(r2Keys.og(id, version), 'jpg');
 }
 
+/** Options of `seedPhoto`; everything but `id` is optional. */
 export interface SeedPhotoOptions {
   id: string;
   usage?: PhotoUsage;
@@ -68,6 +75,7 @@ export interface SeedPhotoOptions {
   ownerId?: string | null;
   version?: string;
   sortOrder?: number;
+  /** Unix ms; also used as `updatedAt`. */
   createdAt?: number;
 }
 
@@ -110,6 +118,7 @@ export async function seedPhoto(o: SeedPhotoOptions): Promise<PhotoRef> {
   };
 }
 
+/** Sorted R2 keys that start with `prefix`. */
 export const keysUnder = async (prefix: string) =>
   (await env.BUCKET.list({ prefix })).objects.map((o) => o.key).sort();
 

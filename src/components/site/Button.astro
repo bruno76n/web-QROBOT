@@ -1,4 +1,6 @@
 ---
+// Rectangular button. With `href` it renders a link (`<a>`), without it a `<button type="button">`.
+// Look and size come from the shared `buttonVariants`; extra attributes pass through.
 import type { HTMLAttributes } from 'astro/types';
 import { cn } from '@/lib/cn';
 import {
@@ -10,6 +12,7 @@ import {
 interface Props extends HTMLAttributes<'a'>, ButtonVariantProps {
   /** Without href it renders a <button>. */
   href?: string;
+  /** Adds a decorative → after the label. */
   arrow?: boolean;
   /** Only for the <button> form. */
   disabled?: boolean;

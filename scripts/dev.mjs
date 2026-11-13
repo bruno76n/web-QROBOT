@@ -1,6 +1,7 @@
 // pnpm dev: local setup, brand assets, then the Astro dev server with the local env file.
 import { spawnSync } from 'node:child_process';
 
+// Runs a command with inherited output; the first failure stops the whole script.
 const run = (cmd, args, env = {}) => {
   const r = spawnSync(cmd, args, { stdio: 'inherit', env: { ...process.env, ...env } });
   if (r.status !== 0) process.exit(r.status ?? 1);

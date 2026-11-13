@@ -10,6 +10,7 @@ import type { PhrasingContent, RootContent } from 'mdast';
  * never on a visit.
  */
 
+/** Interactive blocks a page can place with a `[[name]]` paragraph. */
 export type MarkName =
   | 'tabla:filamentos'
   | 'tabla:impresoras'
@@ -17,6 +18,7 @@ export type MarkName =
   | 'cabe-mi-pieza'
   | 'calculadora-costo';
 
+/** Every known mark name (same list as `MarkName`, for runtime checks). */
 export const markNames: readonly MarkName[] = [
   'tabla:filamentos',
   'tabla:impresoras',
@@ -25,8 +27,10 @@ export const markNames: readonly MarkName[] = [
   'calculadora-costo',
 ];
 
+/** Callout flavours: curious fact, trick, warning. */
 export type CalloutKind = 'fact' | 'tip' | 'careful';
 
+/** Inline content of a block. `t` is the node type; `c` its children, `v` its text. */
 export type InlineNode =
   | { t: 'text'; v: string }
   | { t: 'strong'; c: InlineNode[] }
@@ -34,6 +38,7 @@ export type InlineNode =
   | { t: 'code'; v: string }
   | { t: 'a'; href: string; external: boolean; c: InlineNode[] };
 
+/** Block of a page tree. Headings are only `h2` or `h3`; `mark` is an interactive block. */
 export type LearnNode =
   | { t: 'h'; level: 2 | 3; id: string; c: InlineNode[] }
   | { t: 'p'; c: InlineNode[] }
@@ -44,7 +49,9 @@ export type LearnNode =
   | { t: 'quote'; c: LearnNode[] }
   | { t: 'mark'; name: MarkName };
 
+/** Result of parsing a body. */
 export interface ParsedMarkdown {
+  /** Block tree to render. */
   ast: LearnNode[];
   /** The `h2` of the body, for "En esta página". */
   toc: { id: string; text: string }[];
@@ -52,13 +59,18 @@ export interface ParsedMarkdown {
   text: string;
 }
 
+/** Bold lead-in words (lowercase, no final period) that turn a quote into a callout. */
 const calloutLabels: Record<string, CalloutKind> = {
   'dato curioso': 'fact',
   truco: 'tip',
   cuidado: 'careful',
 };
 
-/** Which links may be a link (docs/21 §5). `https://` ones are external. */
+/**
+ * Classifies a link against the allow-list (docs/21 §5): `https://` is external; anchors and the
+ * `/aprende`, `/catalogo` and `/producto/` paths are internal; anything else is `null` and the link
+ * is dropped, keeping its text.
+ */
 export function linkKind(href: string): 'internal' | 'external' | null {
   const h = href.trim();
   if (h.startsWith('https://')) return 'external';
@@ -70,6 +82,10 @@ export function linkKind(href: string): 'internal' | 'external' | null {
   return null;
 }
 
+/**
+ * Converts Markdown inline nodes to ours. Adjacent text is merged, strikethrough is flattened,
+ * raw HTML is kept as plain text, and images and other unknown nodes are dropped.
+ */
 function inlineOf(nodes: PhrasingContent[]): InlineNode[] {
   const out: InlineNode[] = [];
   const push = (n: InlineNode) => {
@@ -114,10 +130,12 @@ function inlineOf(nodes: PhrasingContent[]): InlineNode[] {
   return out;
 }
 
+/** Plain text of inline nodes. */
 export function inlineText(nodes: readonly InlineNode[]): string {
   return nodes.map((n) => (n.t === 'text' || n.t === 'code' ? n.v : inlineText(n.c))).join('');
 }
 
+/** Plain text of blocks, one string per paragraph, heading, list item, table row or code block. */
 export function plainOf(nodes: readonly LearnNode[]): string[] {
   const parts: string[] = [];
   for (const n of nodes) {
@@ -147,6 +165,7 @@ export function plainOf(nodes: readonly LearnNode[]): string[] {
   return parts;
 }
 
+/** A paragraph that is only `[[name]]`. */
 const markPattern = /^\[\[([a-z:-]+)\]\]$/;
 
 /** The `[[…]]` marks written in a body, one per paragraph, known or not (docs/21 §5, §8). */
@@ -156,10 +175,16 @@ export function findMarks(markdown: string): string[] {
   return found;
 }
 
+/** Narrows a string to a known mark name. */
 export function isMarkName(name: string): name is MarkName {
   return (markNames as readonly string[]).includes(name);
 }
 
+/**
+ * Parses GFM Markdown into the block tree, the list of `h2` headings and the plain text. Heading ids
+ * are slugs made unique with a numeric suffix. Only the allow-listed node types survive, so the
+ * output is safe to render with components.
+ */
 export function parseMarkdown(markdown: string): ParsedMarkdown {
   const root = fromMarkdown(markdown, {
     extensions: [gfm()],
@@ -168,6 +193,7 @@ export function parseMarkdown(markdown: string): ParsedMarkdown {
   const usedIds = new Map<string, number>();
   const toc: ParsedMarkdown['toc'] = [];
 
+  // Slug for a heading id; repeated titles get `-2`, `-3`...
   const uniqueId = (text: string): string => {
     const base = slugify(text, { separator: '-', lowercase: true, decamelize: false }) || 'seccion';
     const n = (usedIds.get(base) ?? 0) + 1;
@@ -175,12 +201,14 @@ export function parseMarkdown(markdown: string): ParsedMarkdown {
     return n === 1 ? base : `${base}-${n}`;
   };
 
+  // Converts block-level nodes, recursing into lists and quotes.
   const blocks = (nodes: RootContent[]): LearnNode[] => {
     const out: LearnNode[] = [];
     for (const n of nodes) {
       switch (n.type) {
         case 'heading': {
           const c = inlineOf(n.children);
+          // `#` and `##` are `h2`; deeper headings are `h3`.
           const level = n.depth <= 2 ? 2 : 3;
           const id = uniqueId(inlineText(c));
           if (level === 2) toc.push({ id, text: inlineText(c) });
@@ -188,6 +216,7 @@ export function parseMarkdown(markdown: string): ParsedMarkdown {
           break;
         }
         case 'paragraph': {
+          // A paragraph made only of `[[name]]` with a known name becomes a mark block.
           const only = n.children.length > 0 && n.children.every((c) => c.type === 'text');
           if (only) {
             const raw = n.children.map((c) => (c.type === 'text' ? c.value : '')).join('');

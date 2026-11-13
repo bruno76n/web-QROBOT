@@ -1,3 +1,5 @@
+/** Read queries of the admin panel's product list and product form (all products, published or not). */
+
 import { and, asc, eq, inArray } from 'drizzle-orm';
 import type { ProductDetail, ProductRow } from '@/lib/admin-types';
 import type { CategoryId } from '@/config/categories';
@@ -46,6 +48,7 @@ export async function listAllProductsForAdmin(
 
   const byCategoryOrder = categoryOrder(await listCategories(db));
   return products.map((p) => {
+    // Only attached photos count; the thumbnail is the smallest version of the first one.
     const own = photos.filter((ph) => ph.ownerId === p.id && ph.status === 'attached');
     const first = own[0] ? toPhotoView(own[0], imgBase) : null;
     const smallest = first
@@ -69,7 +72,7 @@ export async function listAllProductsForAdmin(
   });
 }
 
-/** Everything about one product, including photos with crop, version, widths and alt. */
+/** Everything about one product, including its attached photos with crop, version, widths and alt; null when it does not exist. */
 export async function getProductForAdmin(
   id: string,
   db: Db = getDb(),

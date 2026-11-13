@@ -4,12 +4,16 @@ import { learnUrl, type PrintersData } from './content';
 
 /** Documents of the Meilisearch index `learn` (docs/22 §4) and the highlight splitter (§7). */
 
+/** `page`, a question of a page, a glossary term or a printer of the volume table. */
 export type SearchDocType = 'page' | 'faq' | 'term' | 'printer';
 
+/** One document of the search index. */
 export interface SearchDoc {
+  /** Unique id; prefix by type (`p_`, `f_`, `t_`, `i_`). */
   id: string;
   type: SearchDocType;
   title: string;
+  /** Short text shown under the title (summary, answer, definition or dimensions). */
   text: string;
   /** Plain text of the body, up to 2,000 characters; only on pages. */
   body: string;
@@ -17,11 +21,15 @@ export interface SearchDoc {
   topic: string;
   topicLabel: string;
   audience: string;
+  /** Page the document belongs to. */
   pageId: string;
+  /** Link to the page, with an anchor for questions, terms and printers. */
   url: string;
+  /** Sort order of the page it belongs to. */
   order: number;
 }
 
+/** The fields of a stored page that the index needs. */
 export interface SearchPageRow {
   id: string;
   slug: string;
@@ -38,6 +46,7 @@ export interface SearchPageRow {
   terms?: { term: string; en: string | null; definition: string }[];
 }
 
+/** A stored question of a page. */
 export interface SearchFaqRow {
   id: string;
   pageId: string;
@@ -47,9 +56,16 @@ export interface SearchFaqRow {
   answer: string;
 }
 
+/** Maximum characters of page body that go into the index. */
 export const bodyMax = 2000;
+/** Page that holds the printer volume table; printers link to it. */
 export const volumeSlug = 'maquinas/volumen-de-impresion';
 
+/**
+ * Builds every search document: one per published page, one per glossary term of those pages, one
+ * per question of those pages and, when the volume page is published, one per printer. Unpublished
+ * pages and their questions are left out.
+ */
 export function buildSearchDocs(input: {
   pages: readonly SearchPageRow[];
   faqs: readonly SearchFaqRow[];
@@ -134,13 +150,16 @@ export function buildSearchDocs(input: {
   return docs;
 }
 
+/** Anchor of a printer row on the volume page, from brand and model. */
 export function printerSlug(brand: string, model: string): string {
   return slugify(`${brand} ${model}`, { separator: '-', lowercase: true, decamelize: false });
 }
 
+/** Control characters the search engine puts around a matched word (never present in normal text). */
 export const markStart = '\u0001';
 export const markEnd = '\u0002';
 
+/** Piece of text; `m` is true when it matched the query. */
 export interface HighlightPart {
   t: string;
   m: boolean;

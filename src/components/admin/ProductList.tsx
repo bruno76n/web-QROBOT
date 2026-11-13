@@ -1,3 +1,5 @@
+/** Left column of the products screen: search, filter, click totals and the drag-to-reorder product list. */
+
 /* eslint-disable react-hooks/refs -- dnd-kit's `useSortable` returns ref callbacks that the React Compiler lint flags wrongly */
 import { useMemo, useState } from 'react';
 import { cn } from '@/lib/cn';
@@ -28,13 +30,20 @@ import { errorText } from './lib/error-text';
 import { keys, useClickStats, useProducts } from './lib/queries';
 
 const t = es.admin;
+/** Status filter of the list: everything, only published or only hidden. */
 type Filter = 'all' | 'pub' | 'hid';
 
+/** `selectedId` is the open product (highlighted); `onSelect` receives a product id, or 'new' to start one. */
 interface Props {
   selectedId: string | null;
   onSelect: (id: string | null) => void;
 }
 
+/**
+ * Sidebar with every product (published or hidden). Search and filter work on the loaded rows; the
+ * click totals come from the last 30 days. Reordering is optimistic and rolls back to the server
+ * order if saving fails.
+ */
 export function ProductList({ selectedId, onSelect }: Props) {
   const { data, isPending, error } = useProducts();
   const stats = useClickStats().data;
@@ -42,6 +51,7 @@ export function ProductList({ selectedId, onSelect }: Props) {
   const [q, setQ] = useState('');
   const [filter, setFilter] = useState<Filter>('all');
 
+  /** Rows that match the search text (by name) and the status filter. */
   const shown = useMemo(() => {
     const term = q.trim().toLowerCase();
     return (data ?? []).filter(
@@ -53,11 +63,13 @@ export function ProductList({ selectedId, onSelect }: Props) {
   // Dragging only makes sense on the whole list: with a search or filter it is off (docs/12 §2).
   const canDrag = q.trim() === '' && filter === 'all';
 
+  // Pointer drags start after 5 px so a plain click still selects; the keyboard can reorder too.
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   );
 
+  /** Moves the dragged product in the cache at once, then saves the new order; on failure it reloads the list. */
   const onDragEnd = async ({ active, over }: DragEndEvent) => {
     if (!data || !over || active.id === over.id) return;
     const from = data.findIndex((p) => p.id === active.id);
@@ -162,6 +174,7 @@ export function ProductList({ selectedId, onSelect }: Props) {
   );
 }
 
+/** One product line: drag handle, thumbnail, name, price ("desde"), tap count and status; the handle is disabled when dragging is off. */
 function Row({
   product: p,
   selected,

@@ -1,3 +1,5 @@
+/** Read queries of catalog categories. */
+
 import { asc } from 'drizzle-orm';
 import type { CategoryView } from '@/config/categories';
 import { getDb, schema, type Db } from '../db/client';

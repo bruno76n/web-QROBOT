@@ -1,7 +1,8 @@
 /**
- * Pages every cross-cutting test (headers, axe, screenshots, Lighthouse) must visit.
- * It grows with each phase; tests only look at pages that exist today.
+ * List of public pages that cross-cutting tests visit (security headers, accessibility,
+ * screenshots, Lighthouse). The last entry is an address that does not exist, to cover the 404 page.
  */
+/** Pages every cross-cutting test must visit. */
 export const publicUrls: string[] = [
   '/',
   '/catalogo',

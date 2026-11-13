@@ -1,16 +1,21 @@
+/**
+ * The robot pool of the Alberca section: Q-404 of every color falls over the whole screen and
+ * piles up (docs/04 §2.7). Physics by matter-js; drawing on a fixed canvas that receives no
+ * clicks. Loaded on demand by `Alberca.astro` when the button is touched.
+ */
 import Matter from 'matter-js';
 import { q404Combos } from '@/config/q404';
 
 /**
- * The robot pool: Q-404 of every color falls over the whole screen and piles up (docs/04 §2.7).
- * Physics by matter-js; drawing on a fixed canvas that receives no clicks. Loaded only when the
- * button is touched. Phases: rain → hold (3 s) → drain, or earlier with Escape / "Vaciar".
+ * Controls of a running pool. Its phases are rain → hold (3 s) → drain; `drain` opens the floor
+ * earlier (Escape / "Vaciar") and `destroy` removes everything at once.
  */
 export interface Pit {
   drain: () => void;
   destroy: () => void;
 }
 
+// Loads an image; a failed load still resolves, so a missing file never blocks the pool.
 const loadImage = (src: string) =>
   new Promise<HTMLImageElement>((resolve) => {
     const img = new Image();
@@ -19,6 +24,11 @@ const loadImage = (src: string) =>
     img.src = src;
   });
 
+/**
+ * Starts the pool and resolves with its controls once the sprites are loaded.
+ * `reduce` skips the animation (a pre-piled frame shown for a few seconds); `onDrain` fires when
+ * the floor opens and `onFinish` when the pool has ended on its own (it is not called by `destroy`).
+ */
 export async function startPit(opts: {
   reduce: boolean;
   onFinish: () => void;
@@ -28,11 +38,13 @@ export async function startPit(opts: {
   const images = await Promise.all(
     q404Combos.map((c) => loadImage(`/brand/q404/${c.file}-265.webp`)),
   );
+  // Width/height ratio of the Q-404 sprites.
   const ratio = 530 / 840;
   const W = window.innerWidth;
   const H = window.innerHeight;
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
+  // Full-screen canvas above the page that ignores the pointer, so the page stays usable.
   const canvas = document.createElement('canvas');
   canvas.className = 'pit';
   canvas.setAttribute('aria-hidden', 'true');
@@ -51,6 +63,7 @@ export async function startPit(opts: {
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('no 2d context');
 
+  // Sprite height follows the screen size; the robot count fills about 80% of the area.
   const sprite = Math.max(84, Math.min(136, Math.round(Math.min(W, H) * 0.15)));
   const radius = sprite * 0.33;
   let target = Math.max(
@@ -59,6 +72,7 @@ export async function startPit(opts: {
   );
   if (opts.reduce) target = Math.round(target * 0.5);
 
+  // World: gravity, two side walls and a floor that is removed to drain.
   const engine = Engine.create({ gravity: { x: 0, y: 1.6 } });
   const thick = 200;
   const walls = [
@@ -74,6 +88,7 @@ export async function startPit(opts: {
   type Robot = { body: Matter.Body; k: number; s: number };
   const robots: Robot[] = [];
   const rnd = (a: number, b: number) => a + Math.random() * (b - a);
+  // Adds one robot with a random size, speed and spin, above the screen or already inside it.
   const spawn = (inScreen: boolean) => {
     const s = rnd(0.88, 1.12);
     const r = radius * s;
@@ -89,6 +104,7 @@ export async function startPit(opts: {
     robots.push({ body, k: (Math.random() * images.length) | 0, s });
   };
 
+  // Mouse position (touch is ignored); robots near it are pushed away.
   const pointer = { x: -9999, y: -9999 };
   const onMove = (e: PointerEvent) => {
     if (e.pointerType === 'mouse') {
@@ -109,6 +125,7 @@ export async function startPit(opts: {
   let endTimer = 0;
   let destroyed = false;
 
+  // Paints every robot at its body's position and angle.
   const draw = () => {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
@@ -126,6 +143,7 @@ export async function startPit(opts: {
     }
   };
 
+  // Opens the floor and gives every robot a small push; runs once.
   const drain = () => {
     if (phase === 'drain' || destroyed) return;
     phase = 'drain';
@@ -138,6 +156,7 @@ export async function startPit(opts: {
     opts.onDrain();
   };
 
+  // Stops the loop and listeners and removes the canvas; runs once.
   const destroy = () => {
     if (destroyed) return;
     destroyed = true;
@@ -150,6 +169,8 @@ export async function startPit(opts: {
     canvas.remove();
   };
 
+  // One simulation step: advances the phase (rain, hold, drain), pushes robots away from the
+  // mouse and steps the physics. `dt` is in seconds.
   const update = (dt: number) => {
     if (phase === 'rain') {
       acc += dt * (target / 3.2);

@@ -1,6 +1,10 @@
 // Helper: run `astro preview` (the built site on workerd) for scripts that need a server.
 import { spawn } from 'node:child_process';
 
+/**
+ * Starts `astro preview` on `port`, waits up to 60 s until it answers, runs `fn(baseUrl)` and always
+ * stops the server afterwards. Returns what `fn` returns.
+ */
 export async function withPreview(port, fn) {
   const child = spawn(
     'pnpm',

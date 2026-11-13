@@ -1,3 +1,5 @@
+/** State and actions of the photo list of one product: add files, reorder, alt text, re-center, remove. */
+
 import { useCallback, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { arrayMove } from '@dnd-kit/sortable';
@@ -32,6 +34,7 @@ export interface PhotoItem {
   retry: (() => void) | null;
 }
 
+/** Builds a ready thumbnail from a saved photo. */
 export const itemFromView = (v: PhotoView, usage: PhotoUsage): PhotoItem => ({
   key: v.id,
   id: v.id,
@@ -49,6 +52,7 @@ export const itemFromView = (v: PhotoView, usage: PhotoUsage): PhotoItem => ({
   retry: null,
 });
 
+/** The photos that can be saved (ready, with id, crop and version), in order, as references for the save action. */
 export const refsOf = (items: PhotoItem[]): PhotoRef[] =>
   items.flatMap((p) =>
     p.status === 'ready' && p.id && p.crop && p.version
@@ -60,22 +64,31 @@ export const refsOf = (items: PhotoItem[]): PhotoRef[] =>
 export const fingerprint = (items: PhotoItem[]) =>
   JSON.stringify(items.map((p) => [p.id, p.version, p.alt]));
 
+/** Source of unique local keys for photos that have no server id yet. */
 let counter = 0;
 const newKey = () => `local-${Date.now()}-${++counter}`;
 
+/** Spanish text for a failed photo step; unknown errors become the generic one. */
 const messageFor = (error: unknown) =>
   error instanceof PhotoError ? errorText({ ok: false, code: error.code }) : t.errors.INTERNAL('—');
 
-/** State and actions of a list of photos of one kind (product photos). */
+/**
+ * State and actions of a list of photos of one kind (product photos), starting from `initial`.
+ * `max` caps how many can be added. `busy` is true while any photo is still being prepared or
+ * uploaded, so the form can wait before saving.
+ */
 export function usePhotos(initial: PhotoItem[], usage: PhotoUsage, max: number) {
   const [photos, setPhotos] = useState<PhotoItem[]>(initial);
+  /** Always the latest list, for async callbacks that must not read a stale one. */
   const photosRef = useRef(photos);
   photosRef.current = photos;
 
+  /** Updates one photo by its local key. */
   const patch = useCallback((key: string, changes: Partial<PhotoItem>) => {
     setPhotos((list) => list.map((p) => (p.key === key ? { ...p, ...changes } : p)));
   }, []);
 
+  /** Prepares, centers and uploads a file for the photo with this key; on failure the thumbnail shows the error with a retry. */
   const start = useCallback(
     async (key: string, file: File) => {
       try {
@@ -110,6 +123,7 @@ export function usePhotos(initial: PhotoItem[], usage: PhotoUsage, max: number) 
     [patch, usage],
   );
 
+  /** Adds dropped files as new thumbnails up to the limit (extra files are ignored with a message) and starts their upload. */
   const addFiles = useCallback(
     (files: File[]) => {
       const room = max - photosRef.current.length;
@@ -143,6 +157,7 @@ export function usePhotos(initial: PhotoItem[], usage: PhotoUsage, max: number) 
     [],
   );
   const setAlt = useCallback((key: string, alt: string) => patch(key, { alt }), [patch]);
+  /** Moves a photo to a new position; the first one is the cover. */
   const move = useCallback(
     (from: number, to: number) => setPhotos((list) => arrayMove(list, from, to)),
     [],

@@ -1,3 +1,5 @@
+/** State and message of the order composer on the home page. Pure. */
+
 import { christmasOrder, ideas } from '@/config/ideas';
 import { pieces, whenOptions, withOptions } from '@/config/order';
 import { orderMessage } from './whatsapp';
@@ -12,6 +14,7 @@ export interface OrderState {
   details: string;
 }
 
+/** Initial values of the composer. */
 export const defaultOrder: OrderState = {
   name: '',
   quantity: 20,
@@ -21,6 +24,7 @@ export const defaultOrder: OrderState = {
   details: '',
 };
 
+/** `value` when it is a valid index into a list of `length` items, else 0. */
 export const clampIndex = (value: number, length: number) =>
   Number.isInteger(value) && value >= 0 && value < length ? value : 0;
 
@@ -36,7 +40,10 @@ export function parseOrderHash(
   return idea ? { ...idea.order } : null;
 }
 
-/** The WhatsApp message for the composer (docs/05 §5). */
+/**
+ * The WhatsApp message for the composer (docs/05 §5). Indexes fall back to the first option and
+ * the quantity is kept between 1 and 9999.
+ */
 export function orderStateMessage(state: OrderState): string {
   const piece = pieces[clampIndex(state.piece, pieces.length)] ?? pieces[0];
   return orderMessage({

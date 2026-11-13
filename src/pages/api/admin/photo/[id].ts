@@ -1,3 +1,7 @@
+/**
+ * Original-photo endpoint `GET /api/admin/photo/<id>`: streams the stored original from R2
+ * through this origin, so the panel can crop it again without CORS problems. Admin only.
+ */
 import type { APIRoute } from 'astro';
 import { fail } from '@/lib/result';
 import { UnauthorizedError, requireAdmin } from '@/server/auth';

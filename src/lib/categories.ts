@@ -1,3 +1,5 @@
+/** Pure rules for managing categories: ids, protection, deletion impact and ordering. */
+
 import { CHRISTMAS_CATEGORY } from '@/config/categories';
 import { slugFromName, uniqueSlug } from './publish';
 

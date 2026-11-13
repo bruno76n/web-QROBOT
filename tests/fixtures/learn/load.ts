@@ -1,3 +1,5 @@
+/** Test helper: the small fixture set of the learning content, with a way to alter one file. */
+
 import type { LearnFiles } from '../../../src/lib/learn/import';
 
 // Vite reads the fixtures at build time, so this works in Node and inside the Workers runtime.
@@ -12,7 +14,9 @@ const entries = Object.entries(raw)
   .filter((f) => f.path !== 'README.md')
   .sort((a, b) => a.path.localeCompare(b.path));
 
+/** The fixture pages, data tables, sources and search config; throws if a required file is missing. */
 export function fixtureFiles(): LearnFiles {
+  // The file with this path, or an error naming it.
   const find = (p: string) => {
     const f = entries.find((e) => e.path === p);
     if (!f) throw new Error(`fixture ${p} missing`);
@@ -26,9 +30,10 @@ export function fixtureFiles(): LearnFiles {
   };
 }
 
-/** A copy of the fixtures with one file changed. */
+/** A copy of the fixtures where the file at `path` has its text replaced by `change(raw)`. */
 export function withFile(path: string, change: (raw: string) => string): LearnFiles {
   const files = fixtureFiles();
+  // Applies the change to the file with the matching path and leaves the others as they are.
   const swap = (list: { path: string; raw: string }[]) =>
     list.map((f) => (f.path === path ? { ...f, raw: change(f.raw) } : f));
   return {

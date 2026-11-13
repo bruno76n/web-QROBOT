@@ -6,6 +6,10 @@ export interface HeatLevel {
   maxC: number | null;
 }
 
+/**
+ * First level whose ceiling is at or above `hdtC`; levels must come ordered from lowest to highest.
+ * Returns `undefined` when the filament has no known HDT.
+ */
 export function heatLevel<T extends HeatLevel>(
   hdtC: number | null,
   levels: readonly T[],

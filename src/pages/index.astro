@@ -1,4 +1,8 @@
 ---
+// Home page `/`: hero, Christmas section (only in season), ideas, video, printing scene, Q-404
+// picker, ball pit and the order composer.
+// Reads the hero from D1, the Christmas picks (in season) and the `q-404` product for its price and
+// size. Also emits LocalBusiness JSON-LD and preloads the first hero image (mobile and desktop).
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Hero from '@/components/sections/Hero.astro';
 import Navidad from '@/components/sections/Navidad.astro';
@@ -22,12 +26,15 @@ export const prerender = false;
 const moment = now(Astro.request);
 // Christmas only exists from 1 October to 24 December, Guadalajara time (docs/04 §2.2).
 const inSeason = isChristmasSeason(moment, { ...site.christmas, timeZone: site.timeZone });
+// Independent reads run in parallel; the Christmas picks are only queried in season.
 const [hero, picks, q404] = await Promise.all([
   getHero(),
   inSeason ? listChristmasPicks(4) : Promise.resolve([]),
   getPublishedProduct('q-404'),
 ]);
+// First hero slide: it is the main image above the fold, so the head preloads it.
 const first = heroSlides(hero, es.home.hero.alt, es.home.hero.slideAlt)[0];
+// Social profile URLs that are set, for the LocalBusiness data.
 const sameAs = [site.facebook.url, site.instagram.url].filter((u): u is string => Boolean(u));
 ---
 

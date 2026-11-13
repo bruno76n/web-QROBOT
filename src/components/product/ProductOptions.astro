@@ -1,4 +1,8 @@
 ---
+// Product options block: color swatches, optional personalization text, quantity stepper and the
+// WhatsApp order button. The server renders a working base link (quantity 1, first color), so it
+// works without JavaScript; the script rebuilds the link whenever an option changes. The values it
+// needs travel in `data-*` attributes of the root element.
 import { colors, type ColorId } from '@/config/colors';
 import { es } from '@/i18n/es';
 import { productMessage, waLink } from '@/lib/whatsapp';
@@ -19,6 +23,7 @@ interface Props {
 }
 const p = Astro.props;
 const t = es.product;
+// Color definitions in the order the product lists them (ids without a definition in `config/colors` are skipped).
 const options = p.colors.flatMap((id) => colors.filter((c) => c.id === id));
 const first = options[0];
 // The server renders the base link (quantity 1, first color): it works without JavaScript.
@@ -148,6 +153,7 @@ const href = waLink(
     if (!order || !qty) return;
     let color: string | undefined = swatches[0]?.dataset.color;
 
+    // Rebuilds the WhatsApp link from the current color, quantity and personalization.
     const update = () => {
       const quantity = normalizeQuantity(qty.value);
       order.href = waLink(
@@ -167,6 +173,7 @@ const href = waLink(
       );
     };
 
+    // Every listener is registered through `on` so cleanup can remove them all.
     const handlers: [Element, string, EventListener][] = [];
     const on = (el: Element | null, ev: string, fn: EventListener) => {
       if (!el) return;

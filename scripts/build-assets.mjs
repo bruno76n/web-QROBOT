@@ -12,10 +12,12 @@ import {
 } from 'node:fs';
 import { basename, extname, join } from 'node:path';
 
+// Project root and a helper to build absolute paths from it.
 const root = new URL('..', import.meta.url).pathname;
 const at = (...p) => join(root, ...p);
 const QUALITY = 82; // docs/15 §3
 
+// Output folders (created when missing).
 const out = { brand: at('public/brand'), fonts: at('public/fonts') };
 for (const dir of [out.brand, out.fonts, at('public/brand/q404'), at('public/brand/ideas')]) {
   mkdirSync(dir, { recursive: true });
@@ -26,6 +28,7 @@ const script = statSync(at('scripts/build-assets.mjs')).mtimeMs;
 const fresh = (src, dest) =>
   existsSync(dest) && statSync(dest).mtimeMs >= Math.max(statSync(src).mtimeMs, script);
 
+// Number of files written in this run, reported at the end.
 let made = 0;
 
 /** Writes `<name>-<w>.webp` for each wanted width that does not enlarge the source. */
@@ -57,7 +60,7 @@ if (!fresh(fontSrc, join(out.fonts, 'geist-latin.woff2'))) {
   made++;
 }
 
-// Q-404 renders, ideas, default hero
+// Q-404 renders and ideas (widths depend on the picture), then the default hero photos
 for (const f of readdirSync(at('assets/q404'))) {
   const impresion = f.includes('impresion');
   await responsive(

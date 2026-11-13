@@ -1,4 +1,6 @@
 ---
+// Component sampler `/dev/ui`: logo, buttons, type scale, color tokens and a brand image.
+// Only exists in `astro dev` (404 otherwise); it carries `noindex` and is not linked anywhere.
 import '@/styles/global.css';
 import Button from '@/components/site/Button.astro';
 import Logo from '@/components/site/Logo.astro';
@@ -7,6 +9,7 @@ import Picture from '@/components/site/Picture.astro';
 // Component sampler: development only (docs/10 §9).
 if (!import.meta.env.DEV) return new Response(null, { status: 404 });
 
+// Color tokens shown as swatches: name and hex.
 const colors = [
   ['ink', '#121214'],
   ['ink-2', '#6a6a73'],

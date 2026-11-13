@@ -1,3 +1,5 @@
+/** "Categorías" tab of the panel: create, rename, reorder and delete catalog categories. */
+
 /* eslint-disable react-hooks/refs -- dnd-kit's `useSortable` returns ref callbacks that the React Compiler lint flags wrongly */
 import { useState, type FormEvent } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -31,21 +33,28 @@ import { keys, useCategories } from './lib/queries';
 
 const t = es.admin.categories;
 
-/** Tab "Categorías": create, rename, reorder and delete the catalog groups. */
+/**
+ * Tab "Categorías": create, rename, reorder and delete the catalog groups. Reordering is optimistic
+ * and reloads the server order if saving fails; deleting asks first and also refreshes the products.
+ */
 export function CategoriesView() {
   const { data, isPending, error } = useCategories();
   const qc = useQueryClient();
   const confirm = useConfirm();
   const [label, setLabel] = useState('');
   const [busy, setBusy] = useState(false);
+  /** Id of the category whose name is being edited, if any. */
   const [editing, setEditing] = useState<string | null>(null);
 
+  /** Reloads the categories from the server. */
   const refresh = () => qc.invalidateQueries({ queryKey: keys.categories });
+  // Pointer drags start after 5 px so a plain click still works; the keyboard can reorder too.
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   );
 
+  /** Creates a category from the form text; the field is cleared on success. */
   const add = async (e: FormEvent) => {
     e.preventDefault();
     const value = label.trim();
@@ -59,6 +68,7 @@ export function CategoriesView() {
     void refresh();
   };
 
+  /** Saves a new name and leaves edit mode. */
   const rename = async (id: string, value: string) => {
     const res = await api.renameCategory(id, value);
     if (!res.ok) return void toast.error(errorText(res));
@@ -67,6 +77,7 @@ export function CategoriesView() {
     void refresh();
   };
 
+  /** Asks for confirmation, deletes the category and refreshes categories and products (their category lists change). */
   const remove = async (c: CategoryView) => {
     const yes = await confirm({
       title: t.removeTitle(c.label),
@@ -83,6 +94,7 @@ export function CategoriesView() {
     void qc.invalidateQueries({ queryKey: keys.products });
   };
 
+  /** Moves the dragged category in the cache at once, then saves the new order. */
   const onDragEnd = async ({ active, over }: DragEndEvent) => {
     if (!data || !over || active.id === over.id) return;
     const moved = arrayMove(
@@ -162,6 +174,7 @@ export function CategoriesView() {
   );
 }
 
+/** One category line: drag handle, name with its catalog address (or a note when protected), and rename/delete buttons. Protected categories cannot be deleted. */
 function Row({
   category: c,
   editing,
@@ -178,6 +191,7 @@ function Row({
   onRemove: () => void;
 }) {
   const s = useSortable({ id: c.id });
+  /** Draft of the name while editing. */
   const [value, setValue] = useState(c.label);
   const locked = isProtectedCategory(c.id);
   return (

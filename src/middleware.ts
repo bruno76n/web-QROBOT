@@ -1,9 +1,13 @@
+/**
+ * Request middleware for every route: canonical URLs, the admin session gate and the security
+ * headers of every response.
+ */
 import { defineMiddleware } from 'astro:middleware';
 import { es } from '@/i18n/es';
 import { isAdminRequest } from '@/server/auth';
 
 /**
- * Security headers for every response (docs/13 §3).
+ * Fixed security headers for every response (docs/13 §3).
  * The Content-Security-Policy itself comes from Astro (`security.csp` in astro.config.mjs),
  * which hashes the inline scripts at build time; it already carries `frame-ancestors 'none'`.
  */
@@ -14,18 +18,24 @@ const staticHeaders: Record<string, string> = {
   'Referrer-Policy': 'strict-origin-when-cross-origin',
 };
 
+/** `Permissions-Policy` value for a path: only the panel may use the camera. */
 const permissionsPolicy = (pathname: string) =>
   // The panel may take a photo with the camera (docs/13 §3).
   pathname === '/admin' || pathname.startsWith('/admin/')
     ? 'camera=(self), microphone=(), geolocation=()'
     : 'camera=(), microphone=(), geolocation=()';
 
-/** Requests that need a valid admin session BEFORE Astro validates anything (docs/13 §2, rule 5). */
+/** Admin action and upload endpoints: they need a valid admin session BEFORE Astro validates anything (docs/13 §2, rule 5). */
 const isAdminApi = (pathname: string) =>
   pathname.startsWith('/_actions/admin.') || pathname.startsWith('/api/admin/');
 
+/** True for the panel pages (`/admin` and anything under it). */
 const isPanel = (pathname: string) => pathname === '/admin' || pathname.startsWith('/admin/');
 
+/**
+ * Redirects trailing-slash GETs, answers 401 to panel pages and admin APIs without a valid
+ * session, and adds the security headers (plus `noindex` and `no-store` for the admin) to the response.
+ */
 export const onRequest = defineMiddleware(async (context, next) => {
   const { pathname } = context.url;
   // One URL per page: `/catalogo/` answers 301 to `/catalogo` (docs/14 §4).

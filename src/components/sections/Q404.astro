@@ -1,4 +1,8 @@
 ---
+// Home Q-404 section (`#q404`): giant title, a render of the robot with callout notes, and a sticky
+// bar to choose a color pair and order it on WhatsApp. The server renders the first pair; the
+// script swaps the visible render, the name and the message link when the choice changes.
+// Receives the price and size of the `q-404` product (null/empty when it is not published).
 import { q404Combos } from '@/config/q404';
 import { site } from '@/config/site';
 import { es } from '@/i18n/es';
@@ -14,6 +18,7 @@ interface Props {
 }
 const { priceFromCents, size } = Astro.props;
 const t = es.home.q404;
+// The first pair is the one selected on load; its link works without JavaScript.
 const first = q404Combos[0];
 const href = first ? waLink(site.whatsapp, q404Message(first.label)) : '#';
 ---
@@ -134,6 +139,7 @@ const href = first ? waLink(site.whatsapp, q404Message(first.label)) : '#';
     letter-spacing: -0.075em;
     color: var(--purple);
   }
+  /* Stack of renders, one per color pair; only the selected one is opaque. */
   .r1-imgs {
     position: relative;
     /* The robot fits the screen together with the picker bar, so both are seen at once. */
@@ -146,6 +152,7 @@ const href = first ? waLink(site.whatsapp, q404Message(first.label)) : '#';
     inset: 0;
     transition: opacity 0.25s;
   }
+  /* Callout notes around the robot (wide screens); phones use the `.cos-m` list instead. */
   .cos {
     list-style: none;
     margin: 0;
@@ -212,6 +219,7 @@ const href = first ? waLink(site.whatsapp, q404Message(first.label)) : '#';
   .co.r i::after {
     left: -4px;
   }
+  /* Color picker and order button, stuck to the bottom of the screen while the section is on view. */
   .r1-bar {
     position: sticky;
     bottom: 16px;
@@ -375,7 +383,8 @@ const href = first ? waLink(site.whatsapp, q404Message(first.label)) : '#';
 <script>
   import { q404Message, waLink } from '@/lib/whatsapp';
 
-  // Choosing a color pair swaps the render and the WhatsApp message. Rule 13 for the lifecycle.
+  // Choosing a color pair swaps the render and the WhatsApp message. Starts on astro:page-load
+  // and cleans on astro:before-swap (rule 13).
   let cleanup: (() => void) | undefined;
   function setup() {
     const root = document.querySelector<HTMLElement>('[data-q404]');
@@ -384,6 +393,7 @@ const href = first ? waLink(site.whatsapp, q404Message(first.label)) : '#';
     const name = root.querySelector<HTMLElement>('[data-name]');
     const send = root.querySelector<HTMLAnchorElement>('[data-send]');
     const radios = [...root.querySelectorAll<HTMLInputElement>('input[name="r1"]')];
+    // Shows the render of the checked pair and rewrites the name and the order link.
     const update = () => {
       const sel = radios.find((r) => r.checked);
       const k = sel ? Number(sel.value) : 0;

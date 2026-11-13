@@ -1,3 +1,5 @@
+/** Shapes of the data the server hands to the panel. Types only. */
+
 import type { Aspect, CropRect } from './crop';
 import type { CategoryId } from '@/config/categories';
 import type { ColorId } from '@/config/colors';
@@ -17,6 +19,7 @@ export interface PhotoView {
   ogUrl: string | null;
 }
 
+/** A product as listed in the panel. */
 export interface ProductRow {
   id: string;
   slug: string;
@@ -31,6 +34,7 @@ export interface ProductRow {
   sortOrder: number;
 }
 
+/** A product with everything the editing form needs. */
 export interface ProductDetail {
   id: string;
   slug: string;
@@ -49,18 +53,21 @@ export interface ProductDetail {
   personalHint: string;
   featured: boolean;
   published: boolean;
+  /** True once the product has been published at least once. */
   everPublished: boolean;
   categories: CategoryId[];
   colors: ColorId[];
   photos: PhotoView[];
 }
 
+/** A hero slide as read by the panel. */
 export interface HeroSlideView {
   id: string;
   desktop: PhotoView;
   mobile: PhotoView | null;
 }
 
+/** The hero as read by the panel: its slides and how long each stays. */
 export interface HeroView {
   slides: HeroSlideView[];
   intervalSeconds: 4 | 6 | 8 | 12;

@@ -1,10 +1,14 @@
+/**
+ * Writes an import plan of the learning content into D1 (docs/21 §8), or renders it as SQL for a
+ * remote database. Only src/server/ touches the database.
+ */
+
 import { eq, inArray, notInArray } from 'drizzle-orm';
 import type { Db } from './db/client';
 import * as schema from './db/schema';
 import type { FaqRecord, ImportPlan, PageRecord } from '@/lib/learn/import';
 
-/** Writes an import plan into D1 (docs/21 §8). Only src/server/ touches the database. */
-
+/** Options of an import. */
 export interface ApplyOptions {
   /** Replace pages edited in the panel too. */
   overwrite?: boolean;
@@ -12,10 +16,13 @@ export interface ApplyOptions {
   prune?: boolean;
   /** Do nothing when the database already has pages (used by `pnpm dev`). */
   ifEmpty?: boolean;
+  /** Unix ms stored as the write time. */
   now: number;
 }
 
+/** What an import did, page by page (slugs). */
 export interface ImportSummary {
+  /** True when `ifEmpty` found pages and nothing was written. */
   skipped: boolean;
   created: string[];
   updated: string[];
@@ -23,10 +30,12 @@ export interface ImportSummary {
   /** Edited in the panel: not touched. */
   untouched: string[];
   pruned: string[];
+  /** Questions written. */
   faqs: number;
   warnings: string[];
 }
 
+/** A page already in the database, as far as the importer needs to know it. */
 export interface ExistingPage {
   id: string;
   slug: string;
@@ -35,6 +44,7 @@ export interface ExistingPage {
   record?: PageRecord;
 }
 
+/** Fields of a page that the files decide and the importer compares and writes. */
 const recordKeys = [
   'kind',
   'topic',
@@ -64,17 +74,21 @@ function contentOf(page: PageRecord): Omit<PageRecord, 'id' | 'slug'> {
   return Object.fromEntries(recordKeys.map((k) => [k, page[k]])) as Omit<PageRecord, 'id' | 'slug'>;
 }
 
+/** True when every file-decided field is identical. */
 function sameContent(a: PageRecord, b: PageRecord): boolean {
   return recordKeys.every((k) => a[k] === b[k]);
 }
 
-/** Decides what happens to each page of the plan. Pure. */
+/**
+ * Decides what happens to each page of the plan. Pure. Pages edited in the panel stay untouched
+ * unless `overwrite`; a page whose stored content cannot be compared counts as updated.
+ */
 export function classify(
   plan: ImportPlan,
   existing: readonly ExistingPage[],
   overwrite: boolean,
 ): Pick<ImportSummary, 'created' | 'updated' | 'unchanged' | 'untouched'> & {
-  /** Page of the plan → id of the row it writes to. */
+  /** Pages to write, each with the id of the row it goes to. */
   writes: { page: PageRecord; id: string; isNew: boolean }[];
 } {
   const bySlug = new Map(existing.map((e) => [e.slug, e]));
@@ -102,17 +116,24 @@ export function classify(
   return out;
 }
 
+/** Splits a list into groups of at most `size`, to keep each statement small. */
 const chunk = <T>(list: readonly T[], size: number): T[][] => {
   const out: T[][] = [];
   for (let i = 0; i < list.length; i += size) out.push(list.slice(i, i + size));
   return out;
 };
 
+/**
+ * Applies the plan in a single `db.batch`: creates and updates pages, replaces the questions of
+ * every written page, upserts the data tables, replaces all sources and, with `prune`, deletes pages
+ * that are not in the files. Updated pages go back to `editedInPanel = false`.
+ */
 export async function applyImport(
   db: Db,
   plan: ImportPlan,
   opts: ApplyOptions,
 ): Promise<ImportSummary> {
+  // Base summary; the outcome lists are filled in at the end.
   const empty: ImportSummary = {
     skipped: false,
     created: [],
@@ -204,6 +225,7 @@ export async function applyImport(
 
 // ---- Remote: the same plan as an SQL file for `wrangler d1 execute --remote --file` ----
 
+/** Quotes a value as an SQL literal (strings escaped, booleans as 0/1). */
 const q = (v: string | number | boolean | null): string => {
   if (v === null) return 'NULL';
   if (typeof v === 'boolean') return v ? '1' : '0';
@@ -211,7 +233,10 @@ const q = (v: string | number | boolean | null): string => {
   return `'${v.replace(/'/g, "''")}'`;
 };
 
-/** SQL of the writes decided by `classify`. Same rules as `applyImport`. */
+/**
+ * SQL script of the writes decided by `classify`, for `wrangler d1 execute --remote --file`. Same
+ * rules as `applyImport`, but the list of existing pages decides what is new or pruned.
+ */
 export function renderImportSql(
   plan: ImportPlan,
   existing: readonly ExistingPage[],
@@ -279,6 +304,7 @@ export function renderImportSql(
   };
 }
 
+/** `sortOrder` → `sort_order`. */
 function snake(k: string): string {
   return k.replace(/[A-Z]/g, (c) => `_${c.toLowerCase()}`);
 }

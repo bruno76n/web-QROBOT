@@ -1,5 +1,8 @@
+/** Typed access to the Worker environment: bindings (D1, R2) and variables. */
+
 import { env as cfEnv } from 'cloudflare:workers';
 
+/** Where the app runs; `production` is the strictest. */
 export type AppEnv = 'development' | 'preview' | 'production';
 
 /** Non-secret variables and bindings, read in one place (docs/10 §1). */

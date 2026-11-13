@@ -1,4 +1,7 @@
 ---
+// Home hero: full-width photo (or carousel of photos) with the giant "Quick Robot" name over it.
+// Shows the slides saved in the panel, or the default photo when there are none. Phones can get
+// their own 3:4 version. The `<h1>` carries `data-hero`, which the header watches.
 import Head from '../../../assets/logo-cabeza.svg';
 import { site } from '@/config/site';
 import { es } from '@/i18n/es';
@@ -11,6 +14,7 @@ interface Props {
 const { hero } = Astro.props;
 const t = es.home.hero;
 
+// One entry per slide; more than one turns the section into an autoplay carousel.
 const slides = heroSlides(hero, t.alt, t.slideAlt);
 const many = slides.length > 1;
 ---
@@ -67,6 +71,7 @@ const many = slides.length > 1;
 </section>
 
 <style>
+  /* 16:9 height, never shorter than 520px nor taller than the space under the header. */
   .hero-img {
     height: max(520px, min(56.25vw, calc(100svh - var(--top))));
     object-position: 50% 80%;
@@ -78,6 +83,7 @@ const many = slides.length > 1;
       min-height: 420px;
     }
   }
+  /* Container-query unit base for the name's font size. */
   .hero-name {
     container-type: inline-size;
   }
@@ -109,8 +115,9 @@ const many = slides.length > 1;
   import EmblaCarousel, { type EmblaCarouselType } from 'embla-carousel';
   import Autoplay from 'embla-carousel-autoplay';
 
-  // Several photos slide to the next one every N seconds (the panel sets N); they can also be
-  // swiped. No autoplay with reduced motion. Starts on astro:page-load, cleans on astro:before-swap (rule 13).
+  // Hero carousel (only rendered with several photos): it moves to the next one every N seconds
+  // (the panel sets N) and can also be swiped. No autoplay with reduced motion.
+  // Starts on astro:page-load, cleans on astro:before-swap (rule 13).
   let api: EmblaCarouselType | undefined;
   function setup() {
     const root = document.querySelector<HTMLElement>('[data-hero-section]');

@@ -4,6 +4,9 @@
 ---
 
 <script>
+  // Elements opt in with `data-click` (the source) and, optionally, `data-click-product`;
+  // links marked `aria-disabled` are not counted. The listener lives on the document and is never
+  // removed, so it needs no `astro:before-swap` cleanup.
   document.addEventListener(
     'click',
     (event) => {

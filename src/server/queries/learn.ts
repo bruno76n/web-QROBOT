@@ -15,24 +15,28 @@ import { getDb, schema, type Db } from '../db/client';
 
 /** Reading Aprende (docs/21 §9). Only published pages ever leave this file. */
 
+/** Link to a related page. */
 export interface LearnTopicLink {
   slug: string;
   title: string;
   topic: string;
 }
 
+/** A cited source. */
 export interface LearnSource {
   id: string;
   name: string;
   url: string | null;
 }
 
+/** Data tables a page may need, loaded only when its body places the matching mark. */
 export interface LearnData {
   filamentos?: FilamentsData;
   impresoras?: PrintersData;
   mantenimiento?: MaintenanceData;
 }
 
+/** A published page with everything it renders, already parsed from the JSON columns. */
 export interface LearnPageView {
   id: string;
   slug: string;
@@ -41,7 +45,9 @@ export interface LearnPageView {
   title: string;
   subtitle: string;
   summary: string;
+  /** Body as a block tree. */
   ast: LearnNode[];
+  /** The `h2` of the body. */
   toc: { id: string; text: string }[];
   chips: { id: string; label: string }[];
   filters: string[];
@@ -52,16 +58,22 @@ export interface LearnPageView {
   /** `YYYY-MM`. */
   reviewed: string;
   updatedAt: Date;
+  /** Highlighted links (home and topic pages). */
   featured: { label: string; href: string }[];
+  /** Example searches. */
   suggestions: string[];
+  /** Glossary entries (glossary page). */
   terms: { term: string; en: string | null; definition: string; href?: string }[];
+  /** Questions in order; `position` is the number of `#pregunta-N`. */
   faqs: { position: number; question: string; answer: string }[];
+  /** Published related pages, in the order the page lists them. */
   related: LearnTopicLink[];
   sources: LearnSource[];
   /** The tables the `[[…]]` marks of the body ask for. */
   data: LearnData;
 }
 
+/** A page in a topic's list. */
 export interface LearnListItem {
   slug: string;
   title: string;
@@ -69,8 +81,10 @@ export interface LearnListItem {
   filters: string[];
 }
 
+/** A row of `learn_pages`. */
 type PageRow = typeof schema.learnPages.$inferSelect;
 
+/** Parses a JSON column, returning `fallback` when it is not valid. */
 const json = <T>(text: string, fallback: T): T => {
   try {
     return JSON.parse(text) as T;
@@ -79,6 +93,7 @@ const json = <T>(text: string, fallback: T): T => {
   }
 };
 
+/** Which data table each interactive mark needs. */
 const dataKeyOfMark: Partial<Record<MarkName, keyof LearnData>> = {
   'tabla:filamentos': 'filamentos',
   'tabla:impresoras': 'impresoras',
@@ -86,6 +101,7 @@ const dataKeyOfMark: Partial<Record<MarkName, keyof LearnData>> = {
   'tabla:mantenimiento': 'mantenimiento',
 };
 
+/** Data tables needed by the marks of a body, including those inside callouts and quotes. */
 function marksIn(ast: readonly LearnNode[]): Set<keyof LearnData> {
   const keys = new Set<keyof LearnData>();
   for (const n of ast) {
@@ -97,7 +113,10 @@ function marksIn(ast: readonly LearnNode[]): Set<keyof LearnData> {
   return keys;
 }
 
-/** Everything a page needs besides its own row: questions, related, sources and tables, in ONE batch. */
+/**
+ * Everything a page needs besides its own row: questions, related, sources and tables, in ONE batch.
+ * Empty lists are replaced by a value that matches nothing so the `IN (...)` stays valid.
+ */
 async function loadPage(db: Db, row: PageRow): Promise<LearnPageView> {
   const ast = json<LearnNode[]>(row.bodyAst, []);
   const relatedSlugs = json<string[]>(row.related, []);
@@ -179,6 +198,7 @@ export async function getLearnPage(slug: string, db: Db = getDb()): Promise<Lear
   return row ? loadPage(db, row) : null;
 }
 
+/** A topic page plus the published pages listed under it. */
 export interface LearnTopicView {
   page: LearnPageView;
   pages: LearnListItem[];
@@ -220,14 +240,18 @@ export async function getLearnTopic(
   };
 }
 
+/** The learning home: its page, the topics with page counts, a glance at filaments and a fact. */
 export interface LearnHomeView {
   page: LearnPageView;
+  /** `count` excludes the topic's own section page. */
   topics: { id: LearnTopicId; name: string; blurb: string; count: number }[];
   /** Rows of the filaments table for the "de un vistazo" block, with the levels of heat. */
   glance: { rows: FilamentsData['rows']; heatLevels: FilamentsData['heatLevels'] };
+  /** Fact of the day; null when there are none. */
   fact: FunFactsData['rows'][number] | null;
 }
 
+/** Filament pages whose rows appear in the home's glance table. */
 export const glanceSlugs = [
   'filamentos/pla',
   'filamentos/petg',
@@ -243,6 +267,7 @@ export function dayOfYear(date: Date): number {
   return Math.floor((date.getTime() - start) / 86_400_000);
 }
 
+/** The learning home, or null when it is not published. `now` picks the fact of the day. */
 export async function getLearnHome(
   now: Date = new Date(),
   db: Db = getDb(),
@@ -296,6 +321,7 @@ export async function listLearnSitemap(
     .orderBy(asc(schema.learnPages.slug));
 }
 
+/** One search result. */
 export interface LearnSearchHit {
   type: 'page';
   url: string;
@@ -305,8 +331,10 @@ export interface LearnSearchHit {
   text: string;
 }
 
+/** Maximum results of a search. */
 export const searchLimit = 8;
 
+/** Escapes `LIKE` wildcards so a word is matched literally. */
 const escapeLike = (w: string) => w.replace(/[\\%_]/g, (c) => `\\${c}`);
 
 /**
@@ -327,6 +355,7 @@ export async function searchLearnD1(
   const words = expandSynonyms(normalizeQuery(query), config);
   if (words.length === 0) return [];
 
+  // A page matches when its search text contains any of the words.
   const match = or(
     ...words.map(
       (w) => sql`${schema.learnPages.searchText} LIKE ${`%${escapeLike(w)}%`} ESCAPE '\\'`,
@@ -343,6 +372,7 @@ export async function searchLearnD1(
         match,
       ),
     );
+  // `searchText` holds title, tags and the rest on three lines; each word scores 3, 2 or 1 by where it appears.
   const scored = rows.map((r) => {
     const [title = '', tags = '', rest = ''] = r.searchText.split('\n');
     let score = 0;

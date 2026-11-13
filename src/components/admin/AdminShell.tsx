@@ -1,3 +1,5 @@
+/** Frame shared by every panel page: top bar with tabs, catalog link and the ••• menu. */
+
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { toast } from 'sonner';
 import { es } from '@/i18n/es';
@@ -9,12 +11,16 @@ import { useConfirm } from './ConfirmDialog';
 
 const t = es.admin;
 
+/** `view` marks the current tab; `children` is the page content rendered under the bar. */
 interface Props {
   view: 'products' | 'categories' | 'hero';
   children: ReactNode;
 }
 
-/** Top bar: tabs, catalog link and the ••• menu with the backup (docs/12 §1). */
+/**
+ * Top bar: tabs, catalog link and the ••• menu with the backup (docs/12 §1). Tab links ask for
+ * confirmation first when the editor has unsaved changes.
+ */
 export function AdminShell({ view, children }: Props) {
   const confirm = useConfirm();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -25,6 +31,7 @@ export function AdminShell({ view, children }: Props) {
     void api.cleanupPending();
   }, []);
 
+  // While the menu is open, a click outside it or the Escape key closes it.
   useEffect(() => {
     if (!menuOpen) return;
     const close = (e: MouseEvent | KeyboardEvent) => {
@@ -44,6 +51,7 @@ export function AdminShell({ view, children }: Props) {
     };
   }, [menuOpen]);
 
+  /** Tab click: with unsaved changes it stops the navigation and asks; it follows the link only if the person agrees. */
   const go = async (event: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (!isDirty()) return;
     event.preventDefault();
@@ -53,6 +61,7 @@ export function AdminShell({ view, children }: Props) {
     }
   };
 
+  /** Fetches the backup JSON and saves it in the browser as a dated file; a failure shows a toast. */
   const downloadBackup = async () => {
     setMenuOpen(false);
     const res = await api.exportBackup();

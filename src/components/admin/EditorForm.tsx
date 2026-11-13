@@ -1,3 +1,5 @@
+/** The product editor form: photos, basics, page, options and the save bar, with its save, duplicate and delete flows. */
+
 import { useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,16 +26,22 @@ import { setDirty } from './lib/dirty';
 import { keys } from './lib/queries';
 
 const t = es.admin;
+/** Photo rows of a saved product for the uploader (empty for a new one). */
 const photoItems = (d: ProductDetail | null) =>
   d?.photos.map((p) => itemFromView(p, 'product')) ?? [];
 
+/** `detail` is the saved product (null for a new one); `onSelect` changes the selection; `onSaved` reports the id of a newly created product. */
 interface Props {
   detail: ProductDetail | null;
   onSelect: (id: string | null) => void;
   onSaved: (id: string) => void;
 }
 
-/** The product editor (docs/12 §2): photos, basics, page, options and the save bar. */
+/**
+ * The product editor (docs/12 §2): photos, basics, page, options and the save bar.
+ * Form values live in react-hook-form and photos in `usePhotos`; changes to either mark the panel
+ * as having unsaved changes.
+ */
 export function EditorForm({ detail, onSelect, onSaved }: Props) {
   const qc = useQueryClient();
   const confirm = useConfirm();
@@ -42,6 +50,7 @@ export function EditorForm({ detail, onSelect, onSaved }: Props) {
     defaultValues: detail ? valuesFromDetail(detail) : emptyValues(),
   });
   const photos = usePhotos(photoItems(detail), 'product', 10);
+  /** Fingerprint of the photos as last saved, to detect photo changes the form does not track. */
   const [baseline, setBaseline] = useState(() => fingerprint(photoItems(detail)));
   const [saving, setSaving] = useState(false);
 
@@ -50,6 +59,7 @@ export function EditorForm({ detail, onSelect, onSaved }: Props) {
   const values = form.watch();
   const photosChanged = fingerprint(photos.photos) !== baseline;
   const dirty = form.formState.isDirty || photosChanged;
+  // Publishes the unsaved-changes flag for the tabs and the list; clears it when the editor closes.
   useEffect(() => {
     setDirty(dirty);
     return () => setDirty(false);
@@ -59,6 +69,7 @@ export function EditorForm({ detail, onSelect, onSaved }: Props) {
   // whether the product could be published.
   const slugPreview = slugFromName(values.name) || detail?.slug || '';
 
+  /** What is still needed to publish (shown in the options box, which blocks publishing meanwhile). */
   const missing = useMemo(
     () =>
       missingToPublish({
@@ -71,6 +82,7 @@ export function EditorForm({ detail, onSelect, onSaved }: Props) {
     [values.name, values.categories.length, values.priceText, slugPreview, photos.photos],
   );
 
+  /** Re-reads the saved product and resets form, photos and the saved-photos baseline to it. */
   const reload = async (id: string) => {
     const res = await api.getProduct(id);
     if (!res.ok) return;
@@ -80,6 +92,11 @@ export function EditorForm({ detail, onSelect, onSaved }: Props) {
     setBaseline(fingerprint(photoItems(res.data)));
   };
 
+  /**
+   * Saves the product (waits for photo uploads first). On success the list is refreshed; an
+   * existing product is reloaded, a new one is selected. `CANNOT_PUBLISH` unchecks "published" and
+   * server validation errors are shown on their fields.
+   */
   const onSubmit = form.handleSubmit(async (v) => {
     if (photos.busy) return void toast.error(t.actions.waitUploads);
     setSaving(true);
@@ -109,6 +126,7 @@ export function EditorForm({ detail, onSelect, onSaved }: Props) {
     toast.error(errorText(res));
   });
 
+  /** Duplicates the saved product and opens the copy. */
   const duplicate = async () => {
     if (!detail) return;
     const res = await api.duplicateProduct(detail.id);
@@ -118,6 +136,7 @@ export function EditorForm({ detail, onSelect, onSaved }: Props) {
     onSelect(res.data.id);
   };
 
+  /** Asks for confirmation, deletes the saved product and returns to the empty selection. */
   const remove = async () => {
     if (!detail) return;
     const yes = await confirm({
@@ -136,6 +155,7 @@ export function EditorForm({ detail, onSelect, onSaved }: Props) {
     onSelect(null);
   };
 
+  /** Heading: the name being typed, the saved name, or the "new product" text. */
   const title = values.name.trim() || (detail ? detail.name : t.editor.newTitle);
   return (
     <FormProvider {...form}>

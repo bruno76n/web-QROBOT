@@ -1,3 +1,5 @@
+/** Texts and links for the WhatsApp buttons (docs/05 §5). Pure: the text is exactly what the person sends. */
+
 import { unitFor } from './plural';
 
 /** `https://wa.me/<number>?text=<encoded message>` (docs/05 §5). */
@@ -5,6 +7,7 @@ export function waLink(number: string, message: string): string {
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 }
 
+/** Choices of a visitor on a product page. */
 export interface ProductMessageInput {
   quantity: number;
   unitSingular: string;
@@ -17,6 +20,7 @@ export interface ProductMessageInput {
   url: string;
 }
 
+/** Message for a product page: quantity, unit, optional color and personalization, and the page URL. */
 export function productMessage(i: ProductMessageInput): string {
   const unit = unitFor(
     i.quantity,
@@ -34,6 +38,7 @@ export function productMessage(i: ProductMessageInput): string {
   );
 }
 
+/** Chosen values of the order composer. */
 export interface OrderMessageInput {
   name?: string | undefined;
   quantity: number;
@@ -44,6 +49,7 @@ export interface OrderMessageInput {
   details?: string | undefined;
 }
 
+/** Message for the order composer: who, how many of which piece, with what, when and optional details. */
 export function orderMessage(i: OrderMessageInput): string {
   const name = i.name?.trim();
   const piece = i.quantity === 1 ? i.piece[0] : i.piece[1];

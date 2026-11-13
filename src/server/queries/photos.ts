@@ -1,3 +1,5 @@
+/** Read helpers for photos: the view the pages and the panel use, and the original's R2 key. */
+
 import type { PhotoView } from '@/lib/admin-types';
 import { r2Keys } from '@/lib/crop';
 import { eq } from 'drizzle-orm';
@@ -5,6 +7,7 @@ import { getDb, schema, type Db } from '../db/client';
 import type { Photo } from '../db/schema';
 import { photoUrl } from '../storage';
 
+/** Reads the `widths` JSON column; anything invalid gives an empty list. */
 function parseWidths(raw: string): number[] {
   try {
     const value: unknown = JSON.parse(raw);

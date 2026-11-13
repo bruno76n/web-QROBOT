@@ -1,4 +1,7 @@
 ---
+// Category page `/catalogo/<categoria>`: the catalog filtered by one category.
+// Reads the category list and the published products of that category from D1; an unknown
+// category is a 404. Builds its meta description and breadcrumb JSON-LD from that data.
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import CatalogPage from '@/components/catalog/CatalogPage.astro';
 import { listCategories } from '@/server/queries/categories';
@@ -14,11 +17,13 @@ const found = (await listCategories()).find((c) => c.id === categoria);
 if (!found) return Astro.rewrite('/404');
 const label = found.label;
 const products = await listPublishedProducts({ category: categoria });
+// Lowest "price from" among the products that have one, or null.
 const cheapest = products.reduce<number | null>(
   (min, p) =>
     p.priceFromCents !== null && (min === null || p.priceFromCents < min) ? p.priceFromCents : min,
   null,
 );
+// Meta description: category, up to four product names and the lowest price, when any.
 const description =
   products.length > 0
     ? `${label}: ${products

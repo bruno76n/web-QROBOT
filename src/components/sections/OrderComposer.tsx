@@ -1,3 +1,8 @@
+/**
+ * Island of the order section: a WhatsApp-style chat whose sentence has fill-in blanks (name,
+ * quantity, piece, extras, deadline) and details. It builds the `wa.me` link from that state and
+ * reacts to `#pedido=<id>` addresses to preload a preset.
+ */
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { pieces, whenOptions, withOptions } from '@/config/order';
 import { es } from '@/i18n/es';
@@ -7,6 +12,7 @@ import { waLink } from '@/lib/whatsapp';
 
 const t = es.home.order;
 
+// The island's only input is the number the message goes to.
 interface Props {
   /** WhatsApp number from `site.ts`. */
   whatsapp: string;
@@ -35,11 +41,13 @@ export default function OrderComposer({ whatsapp }: Props) {
   const detailsRef = useRef<HTMLTextAreaElement>(null);
   const root = useRef<HTMLFormElement>(null);
 
+  // Applies a preset's quantity, piece, extras and deadline, keeping the name and details.
   const apply = (preset: Pick<OrderState, 'quantity' | 'piece' | 'with' | 'when'>) => {
     setState((s) => ({ ...s, ...preset }));
     setQuantityText(String(preset.quantity));
   };
 
+  // Fills the blanks from `#pedido=<id>` on mount and on every `hashchange`.
   useEffect(() => {
     const fromHash = () => {
       const preset = parseOrderHash(window.location.hash);
@@ -71,6 +79,7 @@ export default function OrderComposer({ whatsapp }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Quantity as a valid number (the text field may hold a partial value while typing).
   const quantity = normalizeQuantity(quantityText);
   const piece = pieces[state.piece] ?? pieces[0];
   const href = waLink(whatsapp, orderStateMessage({ ...state, quantity }));

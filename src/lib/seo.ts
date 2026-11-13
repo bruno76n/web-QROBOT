@@ -1,3 +1,5 @@
+/** Structured data (JSON-LD), titles, sitemap and robots text for search engines (docs/14). Pure. */
+
 import { formatMoney } from './money';
 
 /** Absolute URL from the site domain and a path; absolute inputs pass through (docs/14 §1). */
@@ -6,12 +8,14 @@ export function absoluteUrl(domain: string, pathOrUrl: string): string {
   return `${domain.replace(/\/+$/, '')}/${pathOrUrl.replace(/^\/+/, '')}`;
 }
 
+/** One step of a breadcrumb trail. */
 export interface Crumb {
   name: string;
   /** Path or URL; the last crumb (the page itself) may omit it. */
   href?: string;
 }
 
+/** `BreadcrumbList` structured data for a trail of pages. */
 export function breadcrumbJsonLd(domain: string, crumbs: Crumb[]) {
   return {
     '@context': 'https://schema.org',
@@ -25,6 +29,7 @@ export function breadcrumbJsonLd(domain: string, crumbs: Crumb[]) {
   };
 }
 
+/** What the `Product` structured data needs. */
 export interface ProductSeoInput {
   domain: string;
   slug: string;
@@ -58,6 +63,7 @@ export function productJsonLd(i: ProductSeoInput) {
   };
 }
 
+/** What the `LocalBusiness` structured data needs. */
 export interface BusinessSeoInput {
   domain: string;
   name: string;
@@ -67,6 +73,7 @@ export interface BusinessSeoInput {
   sameAs: string[];
 }
 
+/** `LocalBusiness` structured data for the whole site; phone and social links are optional. */
 export function localBusinessJsonLd(i: BusinessSeoInput) {
   return {
     '@context': 'https://schema.org',
@@ -94,19 +101,23 @@ export function productTitle(name: string, priceFromCents: number | null): strin
     : `${name} desde ${formatMoney(priceFromCents)} · Quick Robot`;
 }
 
+/** Meta description of a product page: its short text plus "Impresión 3D.". */
 export function productDescription(short: string): string {
   const base = short.trim();
   return base ? `${base} Impresión 3D.` : 'Impresión 3D.';
 }
 
+/** A page of the sitemap; `lastmod` is optional. */
 export interface SitemapEntry {
   path: string;
   lastmod?: Date;
 }
 
+/** Escapes the characters that are special in XML text. */
 const xmlEscape = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+/** `sitemap.xml` for the given pages (absolute URLs, `lastmod` as `YYYY-MM-DD`). */
 export function sitemapXml(domain: string, entries: SitemapEntry[]): string {
   const urls = entries
     .map(
@@ -117,6 +128,7 @@ export function sitemapXml(domain: string, entries: SitemapEntry[]): string {
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
 }
 
+/** `robots.txt`: allows the public site, blocks `/admin` and `/api`, points to the sitemap. */
 export function robotsTxt(domain: string): string {
   return [
     'User-agent: *',

@@ -60,13 +60,17 @@ export const learnTopics = [
   },
 ] as const;
 
+/** Id of a topic of Aprende. */
 export type LearnTopicId = (typeof learnTopics)[number]['id'];
+/** The topic ids as a non-empty tuple, as Zod enums require. */
 export const learnTopicIds = learnTopics.map((t) => t.id) as [LearnTopicId, ...LearnTopicId[]];
 
+/** Display name of a topic; an empty string for an unknown id. */
 export function learnTopicName(id: string): string {
   return learnTopics.find((t) => t.id === id)?.name ?? '';
 }
 
+/** Type guard for a string that is a known topic id. */
 export function isLearnTopic(id: string): id is LearnTopicId {
   return learnTopics.some((t) => t.id === id);
 }

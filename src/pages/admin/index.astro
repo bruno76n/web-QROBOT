@@ -1,4 +1,7 @@
 ---
+// Panel page `/admin`: mounts the admin React app on its products view.
+// Rendered on demand; the app is client-only (`client:only`), so the server sends just the shell.
+// The middleware requires an admin session before this page is served.
 import AdminLayout from '@/layouts/AdminLayout.astro';
 import AdminApp from '@/components/admin/AdminApp';
 

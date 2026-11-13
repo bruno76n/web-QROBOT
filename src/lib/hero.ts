@@ -1,3 +1,5 @@
+/** Turns the hero saved in the panel into the slides the home page draws. Pure. */
+
 import type { HeroView } from './admin-types';
 
 /** What the hero needs to draw each slide (docs/04 §2.1, docs/15 §3). Pure. */
@@ -7,8 +9,10 @@ export interface HeroSlideImg {
   mobile: { srcset: string; width: number; height: number } | null;
 }
 
+/** Alt text of the default slide. */
 const DEFAULT_ALT = 'Portada de Quick Robot';
 
+/** Slide drawn when the panel has none: the brand photo shipped with the site. */
 export const defaultHeroSlide = (alt: string = DEFAULT_ALT): HeroSlideImg => ({
   desktop: {
     srcset: '/brand/hero-desktop-1200.webp 1200w, /brand/hero-desktop-2400.webp 2400w',
@@ -24,6 +28,7 @@ export const defaultHeroSlide = (alt: string = DEFAULT_ALT): HeroSlideImg => ({
   },
 });
 
+/** `srcset` from a width → URL map, smallest first. */
 const srcsetOf = (urls: Record<string, string>) =>
   Object.entries(urls)
     .map(([w, u]) => [Number(w), u] as const)
@@ -31,6 +36,7 @@ const srcsetOf = (urls: Record<string, string>) =>
     .map(([w, u]) => `${u} ${w}w`)
     .join(', ');
 
+/** URL of the widest version, or an empty string when there are none. */
 const largestUrl = (urls: Record<string, string>) => {
   const widths = Object.keys(urls)
     .map(Number)

@@ -1,9 +1,11 @@
-// Negative lint test (docs/fases/fase-1.md §1.2): each fixture MUST break the lint.
-// Fixtures are linted through stdin, pretending to live at `as`, so the folder-based
-// rules (frontiers) apply to them.
+// Negative lint test: each fixture in tests/negative MUST break the lint with the expected rule,
+// proving the rules really catch what they forbid. Fixtures are linted through stdin, pretending
+// to live at `as`, so the folder-based rules (frontiers) apply to them.
+
 import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
+// `file`: the bad code; `as`: the path it is linted as; `rule`: the ESLint rule that must fire.
 const fixtures = [
   {
     file: 'tests/negative/frontier-db-import.tsx',
@@ -23,6 +25,7 @@ const fixtures = [
   { file: 'tests/negative/lib-impure.ts', as: 'src/lib/bad.ts', rule: 'no-restricted-imports' },
 ];
 
+// Counts fixtures that did not trigger their rule; the exit code is non-zero if any.
 let failed = 0;
 for (const f of fixtures) {
   const r = spawnSync(

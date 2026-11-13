@@ -1,3 +1,8 @@
+/**
+ * Admin authentication: checks the Cloudflare Access token of each request and exposes
+ * `requireAdmin` for the middleware and the handlers (docs/13 §2).
+ */
+
 import { createRemoteJWKSet, type JWTVerifyGetKey } from 'jose';
 import { getEnv } from './env';
 import {
@@ -8,6 +13,7 @@ import {
   type AccessConfig,
 } from './auth-core';
 
+/** The signed-in administrator. */
 export interface AdminSession {
   email: string;
 }
@@ -19,6 +25,7 @@ export class UnauthorizedError extends Error {
   }
 }
 
+/** Last key set created, reused while the issuer stays the same. */
 let cachedKeys: { issuer: string; keys: JWTVerifyGetKey } | undefined;
 
 /** Public keys of the Access team, cached per isolate (the library refreshes them on rotation). */
@@ -34,6 +41,7 @@ function keysFor(issuer: string): JWTVerifyGetKey {
   return cachedKeys.keys;
 }
 
+/** Access settings from the environment (team domain, application tag, allowed e-mails). */
 function readConfig(): AccessConfig {
   const env = getEnv();
   return {
@@ -45,7 +53,8 @@ function readConfig(): AccessConfig {
 
 /**
  * Every admin request goes through here: in the middleware (before Astro validates the input)
- * and again inside each handler (docs/13 §2, defense in depth).
+ * and again inside each handler (docs/13 §2, defense in depth). Returns the session or throws
+ * `UnauthorizedError`. In development it always returns a fixed local administrator.
  */
 export async function requireAdmin(request: Request): Promise<AdminSession> {
   // Development only. Vite replaces `import.meta.env.DEV` with `false` in the production

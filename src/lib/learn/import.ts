@@ -15,19 +15,24 @@ import { astLinks, astPlainText, findMarks, isMarkName, parseMarkdown } from './
  * writes the database; this only validates and converts. An error names the file and the field.
  */
 
+/** A file read from disk, not yet validated. */
 export interface RawFile {
   /** Path inside `content/aprende/`, e.g. `paginas/filamentos/pla.md`. */
   path: string;
+  /** Full text of the file. */
   raw: string;
 }
 
+/** Every file of `content/aprende/` the import needs. */
 export interface LearnFiles {
   pages: RawFile[];
   datasets: RawFile[];
   sources: RawFile;
+  /** Search configuration (synonyms and stop words). */
   search: RawFile;
 }
 
+/** Invalid content; the message says the file and, when known, the field. */
 export class ImportError extends Error {
   constructor(
     readonly file: string,
@@ -39,6 +44,7 @@ export class ImportError extends Error {
   }
 }
 
+/** A page ready to store. Lists and objects are JSON text, as the database keeps them. */
 export interface PageRecord {
   id: string;
   slug: string;
@@ -48,23 +54,29 @@ export interface PageRecord {
   subtitle: string;
   summary: string;
   bodyMd: string;
+  /** JSON of the parsed body. */
   bodyAst: string;
+  /** JSON of the table of contents. */
   toc: string;
+  /** Normalized title, tags, subtitle, summary and questions, one group per line. */
   searchText: string;
   filters: string;
   chips: string;
   tags: string;
   related: string;
   sources: string;
+  /** JSON with the optional `featured`, `suggestions` and `terms` of the page. */
   extra: string;
   audience: PageFrontmatter['audience'];
   cta: PageFrontmatter['cta'];
   ctaText: string;
   published: boolean;
   sortOrder: number;
+  /** Month of the last review, `YYYY-MM`. */
   reviewed: string;
 }
 
+/** A question of a page; `position` starts at 1. */
 export interface FaqRecord {
   id: string;
   pageId: string;
@@ -73,11 +85,14 @@ export interface FaqRecord {
   answer: string;
 }
 
+/** What the import writes to the database. */
 export interface ImportPlan {
   pages: PageRecord[];
   faqs: FaqRecord[];
+  /** Data tables (and the search config under `buscador`) as JSON text. */
   datasets: { key: string; data: string }[];
   sources: { id: string; name: string; url: string | null }[];
+  /** Problems that do not stop the import (broken links, unknown sources). */
   warnings: string[];
 }
 
@@ -92,6 +107,7 @@ export function slugFromPath(path: string): string {
   return rel === 'index' ? '' : rel;
 }
 
+/** Separates the YAML block between `---` lines from the Markdown body. */
 function splitFrontmatter(file: RawFile): { data: unknown; body: string } {
   const m = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/.exec(file.raw);
   if (!m) throw new ImportError(file.path, 'frontmatter', 'falta el bloque --- de arriba');
@@ -102,6 +118,7 @@ function splitFrontmatter(file: RawFile): { data: unknown; body: string } {
   }
 }
 
+/** Parses a JSON file or fails with an `ImportError`. */
 function parseJson(file: RawFile): unknown {
   try {
     return JSON.parse(file.raw);
@@ -110,6 +127,7 @@ function parseJson(file: RawFile): unknown {
   }
 }
 
+/** Raises an `ImportError` for the first issue of a failed schema. */
 function zodFail(file: string, issues: { path: PropertyKey[]; message: string }[]): never {
   const first = issues[0];
   throw new ImportError(
@@ -119,12 +137,18 @@ function zodFail(file: string, issues: { path: PropertyKey[]; message: string }[
   );
 }
 
+/** Short name for the query normalizer, used to build `searchText`. */
 const norm = normalizeQuery;
 
+/**
+ * Validates all files and builds the plan. A broken file, a duplicated slug, an unknown `related`
+ * page, source or `[[mark]]` throws `ImportError`; links to missing pages and unknown sources in
+ * the data tables only add warnings.
+ */
 export function buildImportPlan(files: LearnFiles): ImportPlan {
   const warnings: string[] = [];
 
-  // Sources
+  // Sources: validated first, since pages and tables refer to their ids.
   const sourcesResult = sourcesFile.safeParse(parseJson(files.sources));
   if (!sourcesResult.success) zodFail(files.sources.path, sourcesResult.error.issues);
   const sources = sourcesResult.data.map((s) => ({ id: s.id, name: s.name, url: s.url ?? null }));
@@ -174,11 +198,13 @@ export function buildImportPlan(files: LearnFiles): ImportPlan {
 
   const pages: PageRecord[] = [];
   const faqs: FaqRecord[] = [];
+  // Slug of an internal `/aprende` link, or null for any other link.
   const slugOf = (href: string): string | null => {
     const clean = href.split('#')[0]?.split('?')[0] ?? '';
     if (clean === '/aprende') return '';
     return clean.startsWith('/aprende/') ? clean.slice('/aprende/'.length) : null;
   };
+  // Warns when an internal link points to a page that does not exist.
   const checkHref = (path: string, where: string, href: string) => {
     const s = slugOf(href);
     if (s !== null && !slugs.has(s)) warnings.push(`${path} › ${where}: la liga ${href} no existe`);
@@ -241,7 +267,7 @@ export function buildImportPlan(files: LearnFiles): ImportPlan {
     });
   }
 
-  // Data tables
+  // Data tables: each one is checked against the schema of its key.
   const datasets: ImportPlan['datasets'] = [];
   for (const file of files.datasets) {
     const key = file.path.replace(/^datos\//, '').replace(/\.json$/, '');
@@ -265,7 +291,7 @@ export function buildImportPlan(files: LearnFiles): ImportPlan {
   return { pages, faqs, datasets, sources, warnings };
 }
 
-/** Plain text of a page body for the search index. */
+/** Plain text of a stored page body (its JSON AST), for the search index. */
 export function bodyTextOf(bodyAst: string): string {
   return astPlainText(JSON.parse(bodyAst));
 }

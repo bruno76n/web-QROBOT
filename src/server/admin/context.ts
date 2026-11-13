@@ -1,3 +1,5 @@
+/** Shared plumbing of the admin services: injected dependencies, atomic batches, R2 cleanup. */
+
 import type { BatchItem } from 'drizzle-orm/batch';
 import { getDb, type Db } from '../db/client';
 import { getEnv } from '../env';
@@ -7,12 +9,15 @@ import { deleteByPrefix } from '../storage';
 export interface AdminDeps {
   db: Db;
   bucket: R2Bucket;
+  /** Base of the public image URLs. */
   imgBase: string;
-  /** Unix ms. */
+  /** Current time in unix ms. */
   now: () => number;
+  /** New random id for rows and photos. */
   newId: () => string;
 }
 
+/** Dependencies wired to the real database, bucket and clock. */
 export function realDeps(): AdminDeps {
   const env = getEnv();
   return {

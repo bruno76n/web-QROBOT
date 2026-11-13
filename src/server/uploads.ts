@@ -1,3 +1,8 @@
+/**
+ * Photo upload service: validates the form (crop, widths, real file types), stores the original and
+ * the generated versions in R2 and records the photo in D1.
+ */
+
 import { eq } from 'drizzle-orm';
 import {
   aspectRatio,
@@ -22,8 +27,10 @@ import {
 import { getEnv } from './env';
 import { deleteByPrefix, photoUrl, putObject } from './storage';
 
+/** Cache policy for photo files: their key changes whenever the photo changes. */
 const IMMUTABLE = 'public, max-age=31536000, immutable';
 
+/** What the upload needs from the outside. */
 export interface UploadDeps {
   db: Db;
   bucket: R2Bucket;
@@ -31,19 +38,23 @@ export interface UploadDeps {
   imgBase: string;
   /** Moment and randomness, injected so tests are exact. */
   now: () => number;
+  /** New random id for a photo or a version. */
   randomId: () => string;
 }
 
+/** Answer of a successful upload: `urls` has one public URL per width, plus `og` for products. */
 export interface UploadSuccess {
   ok: true;
   data: { photoId: string; version: string; widths: number[]; urls: Record<string, string> };
 }
 
+/** HTTP status and body for the route to send as is. */
 export interface UploadResponse {
   status: number;
   body: UploadSuccess | Failure;
 }
 
+/** Failure response with the given HTTP status. */
 const failure = (
   status: number,
   code: Parameters<typeof fail>[0],
@@ -58,6 +69,10 @@ function asFile(value: FormDataEntryValue | null): File | null {
   return value instanceof File && value.size > 0 ? value : null;
 }
 
+/**
+ * Reads a file after checking its size and its real type (from the bytes, which must also match
+ * the declared type). Returns the bytes or a ready-made 413 / 415 response.
+ */
 async function readChecked(
   file: File,
   maxBytes: number,
@@ -72,15 +87,19 @@ async function readChecked(
   return { bytes, type };
 }
 
+/** Tells a `readChecked` failure from its success value. */
 const isResponse = (v: unknown): v is UploadResponse =>
   typeof v === 'object' && v !== null && 'status' in v;
 
 /**
  * `POST /api/admin/upload` without the HTTP plumbing (docs/10 §4). One photo per call:
  * validates everything first, uploads, and on any failure deletes what it already uploaded.
+ * Without `photoId` it stores a new photo (original, versions, and a `pending` row); with it, the
+ * photo is re-centered: only new versions are stored and the row is left for the save to update.
  * Session checks happen before this function (middleware and route).
  */
 export async function handleUpload(form: FormData, deps: UploadDeps): Promise<UploadResponse> {
+  // Text fields only; files are read later, one by one.
   const fieldsRaw = Object.fromEntries(
     [...form.entries()].filter((entry): entry is [string, string] => typeof entry[1] === 'string'),
   );
@@ -104,6 +123,7 @@ export async function handleUpload(form: FormData, deps: UploadDeps): Promise<Up
     original = { width: row.originalWidth, height: row.originalHeight };
   }
 
+  // Crop rectangle: inside the original (products may have padding) and with the right shape.
   const crop = { x: f.cropX, y: f.cropY, width: f.cropWidth, height: f.cropHeight };
   if (!isValidCrop(crop, original.width, original.height, { allowPadding: f.kind === 'product' })) {
     return failure(400, 'VALIDATION', { fields: { crop: ['outside the original'] } });
@@ -138,6 +158,7 @@ export async function handleUpload(form: FormData, deps: UploadDeps): Promise<Up
     variants.push({ width, bytes: checked.bytes });
   }
 
+  // Products also carry a 1200 × 630 JPEG for social previews.
   let og: Uint8Array | null = null;
   if (f.kind === 'product') {
     const file = asFile(form.get('og'));
@@ -147,6 +168,7 @@ export async function handleUpload(form: FormData, deps: UploadDeps): Promise<Up
     og = checked.bytes;
   }
 
+  // `version` changes with every crop, so a re-centered photo gets new keys.
   const photoId = f.photoId ?? deps.randomId();
   const version = cropVersion(crop, `${deps.now()}-${deps.randomId()}`);
   const uploadedPrefixes = [r2Keys.versionPrefix(photoId, version)];
@@ -198,7 +220,7 @@ export async function handleUpload(form: FormData, deps: UploadDeps): Promise<Up
   }
 }
 
-/** The real dependencies of the Worker: production code calls this one (docs/07 §6). */
+/** `handleUpload` with the real database, bucket and clock: what production code calls (docs/07 §6). */
 export function runUpload(form: FormData): Promise<UploadResponse> {
   const env = getEnv();
   return handleUpload(form, {

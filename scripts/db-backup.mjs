@@ -3,6 +3,7 @@
 import { mkdirSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 
+// `--remote` exports production; without it, the local database.
 const remote = process.argv.includes('--remote');
 const date = new Date().toISOString().slice(0, 10);
 mkdirSync('backups', { recursive: true });

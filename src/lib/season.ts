@@ -1,8 +1,10 @@
 /**
  * Christmas season, countdown and timeline (docs/04 §2.2). Pure: every function receives "now".
- * Dates come as `MM-DD` (docs/10 §6) and are read in the business time zone. Mexico has no daylight
- * saving time any more, so wall-clock differences equal real differences.
+ * Dates come as `MM-DD` (docs/10 §6) and are read in the business time zone, which has no daylight
+ * saving time, so wall-clock differences equal real differences.
  */
+
+/** Season dates and the time zone they are read in. */
 export interface SeasonConfig {
   /** `MM-DD` of the first day of the season (10-01). */
   seasonStart: string;
@@ -13,6 +15,7 @@ export interface SeasonConfig {
   timeZone: string;
 }
 
+/** Calendar and clock fields of a moment as seen in a time zone. */
 export interface LocalParts {
   year: number;
   month: number;
@@ -22,6 +25,7 @@ export interface LocalParts {
   second: number;
 }
 
+/** Breaks a moment into the wall-clock fields it has in `timeZone`. */
 export function localParts(date: Date, timeZone: string): LocalParts {
   const parts = new Intl.DateTimeFormat('en-US', {
     timeZone,
@@ -44,8 +48,10 @@ export function localParts(date: Date, timeZone: string): LocalParts {
   };
 }
 
+/** Wall-clock fields as a UTC timestamp, so two local moments can be subtracted. */
 const wallMs = (p: LocalParts) => Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute, p.second);
 
+/** Splits an `MM-DD` string (falls back to January 1st when malformed). */
 function mmdd(value: string): { month: number; day: number } {
   const [m, d] = value.split('-').map(Number);
   return { month: m ?? 1, day: d ?? 1 };
@@ -66,6 +72,7 @@ export function isChristmasSeason(now: Date, cfg: SeasonConfig): boolean {
   return t >= start && t < endExclusive;
 }
 
+/** Time left until Nochebuena, broken into units. */
 export interface Countdown {
   days: number;
   hours: number;

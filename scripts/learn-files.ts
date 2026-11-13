@@ -3,6 +3,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import type { LearnFiles, RawFile } from '../src/lib/learn/import.ts';
 
+/** Every file under `dir` with the extension `ext`, sorted, including subfolders. */
 export function walk(dir: string, ext: string): string[] {
   const out: string[] = [];
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -13,6 +14,7 @@ export function walk(dir: string, ext: string): string[] {
   return out.sort();
 }
 
+/** Reads the pages, data tables, sources and search config; paths are relative to `root` with `/`. */
 export function loadLearnFiles(root: string): LearnFiles {
   const read = (file: string): RawFile => ({
     path: relative(root, file).split('\\').join('/'),

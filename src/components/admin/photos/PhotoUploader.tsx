@@ -1,3 +1,5 @@
+/** Product photo picker: drop zone, sortable thumbnails (cover, alt text, re-center, remove) and the cropper. */
+
 /* eslint-disable react-hooks/refs -- dnd-kit's `useSortable` returns ref callbacks that the React Compiler lint flags wrongly */
 import { useEffect, useMemo, useState } from 'react';
 import { cn } from '@/lib/cn';
@@ -37,11 +39,17 @@ export const photoAccept = {
   'image/heif': ['.heif'],
 };
 
+/** Spanish message for files the drop zone refused: too large, or an unsupported type. */
 export function rejectionText(rejections: FileRejection[]): string {
   const codes = rejections.flatMap((r) => r.errors.map((e) => e.code));
   return codes.includes('file-too-large') ? t.photo.tooLarge : t.photo.unsupported;
 }
 
+/**
+ * `photos` are the thumbnails in order (the first is the cover); `max` is shown as a counter.
+ * The callbacks add files, remove a photo, change its alt text, move one from an index to another,
+ * and apply a new crop to a photo.
+ */
 interface Props {
   photos: PhotoItem[];
   usage: PhotoUsage;
@@ -53,7 +61,10 @@ interface Props {
   onRecenter: (key: string, crop: CropRect) => void;
 }
 
-/** Drop zone plus the sortable thumbnails of a product (docs/12 §3). */
+/**
+ * Drop zone plus the sortable thumbnails of a product (docs/12 §3). It holds no photo state: it
+ * renders `photos` and reports every change through its callbacks. Only the open cropper is local.
+ */
 export function PhotoUploader({
   photos,
   usage,
@@ -64,6 +75,7 @@ export function PhotoUploader({
   onMove,
   onRecenter,
 }: Props) {
+  /** The photo whose cropper is open, and the image the cropper shows (a local blob URL or the stored original). */
   const [cropping, setCropping] = useState<PhotoItem | null>(null);
   const [cropSrc, setCropSrc] = useState<string | null>(null);
   const dropzone = useDropzone({
@@ -73,26 +85,32 @@ export function PhotoUploader({
     onDropRejected: (rejections) => toast.error(rejectionText(rejections)),
   });
 
+  // Pointer drags start after 6 px so a tap on a thumbnail button is not a drag; the keyboard can reorder too.
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   );
+  /** Photo keys in display order, as dnd-kit item ids. */
   const ids = useMemo(() => photos.map((p) => p.key), [photos]);
 
+  /** Reports the move of the dragged photo to where it was dropped. */
   const onDragEnd = ({ active, over }: DragEndEvent) => {
     if (!over || active.id === over.id) return;
     onMove(ids.indexOf(String(active.id)), ids.indexOf(String(over.id)));
   };
 
+  /** Opens the cropper on a photo, using the local file when available or the stored original. */
   const openCropper = (item: PhotoItem) => {
     setCropSrc(item.blob ? URL.createObjectURL(item.blob) : `/api/admin/photo/${item.id}`);
     setCropping(item);
   };
+  /** Closes the cropper and frees the temporary local URL, if any. */
   const closeCropper = () => {
     if (cropSrc?.startsWith('blob:')) URL.revokeObjectURL(cropSrc);
     setCropping(null);
     setCropSrc(null);
   };
+  // Frees the local URL when the cropper changes or the component unmounts.
   useEffect(
     () => () => {
       if (cropSrc?.startsWith('blob:')) URL.revokeObjectURL(cropSrc);
@@ -150,6 +168,11 @@ export function PhotoUploader({
   );
 }
 
+/**
+ * One thumbnail. While preparing or uploading it shows progress and cannot be dragged; a failed one
+ * shows the error with retry and remove; a ready one shows the center, alt-text and remove actions.
+ * The first photo is marked as the cover.
+ */
 function Thumb({
   item,
   index,
@@ -168,6 +191,7 @@ function Thumb({
     transform: CSS.Transform.toString(sortable.transform),
     transition: sortable.transition,
   };
+  /** Whether the alt-text field is open. */
   const [editingAlt, setEditingAlt] = useState(false);
   const busy = item.status === 'preparing' || item.status === 'uploading';
 

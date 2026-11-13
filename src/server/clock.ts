@@ -1,3 +1,5 @@
+/** Server clock with a test override outside production. */
+
 import { getAppEnv } from './env';
 
 /**

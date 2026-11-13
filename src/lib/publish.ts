@@ -1,3 +1,7 @@
+/**
+ * Rules for publishing a product and for building its URL slug: limits, what is missing to
+ * publish, slug generation and uniqueness. Pure.
+ */
 import slugify from '@sindresorhus/slugify';
 
 /** Limits of docs/09 §3 and docs/15 §6. */
@@ -13,8 +17,10 @@ export const limits = {
   categoryLabelMax: 40,
 } as const;
 
+/** A requirement that can still be missing on a product. */
 export type Missing = 'photo' | 'category' | 'price' | 'name';
 
+/** The facts about a product that decide whether it can be published. */
 export interface PublishInput {
   name: string;
   slug: string;
@@ -23,13 +29,18 @@ export interface PublishInput {
   priceFromCents: number | null;
 }
 
+/** Lowercase words and digits joined by single hyphens. */
 export const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
+/** True for a slug that matches `slugPattern` and has at most 80 characters. */
 export function isValidSlug(slug: string): boolean {
   return slugPattern.test(slug) && slug.length <= 80;
 }
 
-/** What is still missing to publish (docs/09 §3). Empty list = can be published. */
+/**
+ * What is still missing to publish (docs/09 §3): at least one photo, a price (0 or more) and a
+ * name with a valid slug. Empty list = can be published.
+ */
 export function missingToPublish(input: PublishInput): Missing[] {
   const missing: Missing[] = [];
   if (input.photoCount < 1) missing.push('photo');

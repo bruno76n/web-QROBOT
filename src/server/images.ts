@@ -1,3 +1,5 @@
+/** Responses that stream photos straight from R2: the development image server and the admin original. */
+
 import type { AppEnv } from './env';
 
 /**
@@ -11,6 +13,7 @@ export async function serveDevImage(
 ): Promise<Response> {
   const notFound = () => new Response(null, { status: 404 });
   if (appEnv === 'production') return notFound();
+  // The key must be a plain relative R2 key: no parent segments, no leading slash.
   if (!key || key.includes('..') || key.startsWith('/')) return notFound();
 
   const object = await bucket.get(key);

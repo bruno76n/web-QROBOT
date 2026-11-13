@@ -1,5 +1,8 @@
 /** Maths of "Imprimiendo": Q-404 appears layer by layer with the scroll (docs/04 §2.5). */
+
+/** Number of layers of the printed model. */
 export const TOTAL_LAYERS = 640;
+/** Total print time shown by the section, in minutes. */
 const TOTAL_MINUTES = 128;
 
 export interface PrintGeometry {
@@ -18,8 +21,10 @@ export function printProgress(g: PrintGeometry): number {
   return Math.min(1, Math.max(0, raw));
 }
 
+/** Layer shown for a progress value, from 1 to `TOTAL_LAYERS`. */
 export const layerOf = (progress: number) => Math.max(1, Math.round(progress * TOTAL_LAYERS));
 
+/** True once the print is complete (a hair under 1 absorbs rounding). */
 export const isDone = (progress: number) => progress >= 0.999;
 
 /** "listo" or "faltan 2 h 8 min". */

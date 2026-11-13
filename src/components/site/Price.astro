@@ -1,8 +1,11 @@
 ---
+// "Price from" line: the label, the formatted amount and, optionally, "per piece". Without a
+// price it shows the no-price text. `card` size is for lists, `page` for the product page.
 import { es } from '@/i18n/es';
 import { formatMoney } from '@/lib/money';
 
 interface Props {
+  /** Price in cents; null when the product has none. */
   cents: number | null;
   /** Show "por pieza" after the price (product page). */
   perPiece?: boolean;
