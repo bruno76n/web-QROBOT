@@ -23,6 +23,9 @@ async function backToList(page: Page) {
   if ((page.viewportSize()?.width ?? 0) > 860) return;
   const back = page.getByRole('button', { name: 'Volver a la lista' }).first();
   const list = page.locator('.list').first();
+  // Right after «Guardado» the form may still count as changed for a moment; leaving then would
+  // open the «¿Salir sin guardar?» dialog.
+  await expect(page.getByText('Sin guardar')).toHaveCount(0);
   // After deleting, the panel goes back to the list by itself; after saving, the editor stays.
   // While the editor re-renders the button may not be there yet, so it is tried again.
   await expect(async () => {
