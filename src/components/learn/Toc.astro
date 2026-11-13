@@ -1,0 +1,15 @@
+---
+/** «En esta página»: links to the `h2` of the body (and extra blocks such as «Respuestas»). */
+import { es } from '@/i18n/es';
+
+interface Props {
+  items: { id: string; text: string }[];
+}
+const { items } = Astro.props;
+---
+
+<nav class="toc" aria-label={es.learn.onThisPage}>
+  {items.map((i) => (
+    <a href={`#${i.id}`}>{i.text}</a>
+  ))}
+</nav>

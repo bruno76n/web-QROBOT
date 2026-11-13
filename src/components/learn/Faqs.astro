@@ -1,0 +1,25 @@
+---
+/** The questions of a page as `<details>`, each one with its `#pregunta-N` anchor (docs/21 §4.1). */
+import { es } from '@/i18n/es';
+
+interface Props {
+  faqs: { position: number; question: string; answer: string }[];
+}
+const { faqs } = Astro.props;
+---
+
+{faqs.length > 0 && (
+  <section aria-labelledby="faq-h">
+    <h2 class="blk-h" id="faq-h">
+      {es.learn.faq}
+    </h2>
+    <div class="faq">
+      {faqs.map((f) => (
+        <details id={`pregunta-${f.position}`}>
+          <summary>{f.question}</summary>
+          <p>{f.answer}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+)}

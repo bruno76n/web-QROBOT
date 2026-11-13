@@ -1,0 +1,44 @@
+---
+/**
+ * Layout of every Aprende page: the site layout (head, header, footer) with the Aprende styles,
+ * the compact search bar on top (except on the home page, which has the big one) and the page
+ * scripts shared by every Aprende page (LearnScripts.astro).
+ */
+import BaseLayout from './BaseLayout.astro';
+import Search from '@/components/learn/Search.astro';
+import LearnScripts from '@/components/learn/LearnScripts.astro';
+import '@/styles/learn.css';
+
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;
+  jsonLd?: object[];
+  /** The home page has its own big search box, so the top bar is left out. */
+  searchBar?: boolean;
+  /** Text already in the search box (results page). */
+  query?: string;
+}
+const {
+  title,
+  description,
+  noindex = false,
+  jsonLd = [],
+  searchBar = true,
+  query = '',
+} = Astro.props;
+---
+
+<BaseLayout title={title} description={description} noindex={noindex} jsonLd={jsonLd}>
+  <div class="learn">
+    {searchBar && (
+      <div class="ap-bar">
+        <div class="wrap">
+          <Search id="s-top" query={query} />
+        </div>
+      </div>
+    )}
+    <slot />
+  </div>
+  <LearnScripts />
+</BaseLayout>

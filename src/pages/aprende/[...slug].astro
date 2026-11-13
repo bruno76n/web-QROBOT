@@ -1,0 +1,59 @@
+---
+/**
+ * Every Aprende page below `/aprende` (docs/21 §2): a topic (`/aprende/filamentos`), a sheet,
+ * article or problem (`/aprende/filamentos/pla`) and the glossary (`/aprende/glosario`). Reads the
+ * published page from D1; a topic not in src/config/learn.ts, a missing page or a hidden one is a 404.
+ */
+import LearnLayout from '@/layouts/LearnLayout.astro';
+import PageHead from '@/components/learn/PageHead.astro';
+import Article from '@/components/learn/Article.astro';
+import TopicPages from '@/components/learn/TopicPages.astro';
+import Glossary from '@/components/learn/Glossary.astro';
+import QuickCheck from '@/components/learn/QuickCheck.astro';
+import { es } from '@/i18n/es';
+import { isLearnTopic, learnTopicName } from '@/config/learn';
+import { learnTitle } from '@/lib/learn/content';
+import { getLearnPage, getLearnTopic, type LearnPageView } from '@/server/queries/learn';
+
+export const prerender = false;
+const slug = (Astro.params.slug ?? '').replace(/\/+$/, '');
+const parts = slug.split('/');
+
+// A first segment that is not a topic never reaches the database.
+if (!slug || !isLearnTopic(parts[0] ?? '') || parts.length > 2) return Astro.rewrite('/404');
+
+// A one-segment slug is a topic (with its list of pages), except the glossary.
+const isTopic = parts.length === 1 && slug !== 'glosario';
+const topicPages = isTopic ? await getLearnTopic(slug) : null;
+const page: LearnPageView | null = isTopic ? (topicPages?.page ?? null) : await getLearnPage(slug);
+if (!page) return Astro.rewrite('/404');
+
+// Trail: Aprende › topic (when the page is not the topic itself).
+const crumbs: { label: string; href: string }[] = [{ label: es.learn.name, href: '/aprende' }];
+if (parts.length === 2)
+  crumbs.push({ label: learnTopicName(page.topic), href: `/aprende/${page.topic}` });
+---
+
+<LearnLayout title={learnTitle(page.title)} description={page.summary || page.subtitle}>
+  <PageHead
+    title={page.title}
+    subtitle={page.subtitle}
+    summary={page.summary}
+    reviewed={page.reviewed}
+    crumbs={crumbs}
+  />
+  {page.kind === 'glossary' ? (
+    <Glossary page={page} />
+  ) : topicPages ? (
+    <Article page={page} extraToc={[{ id: 'pl-h', text: es.learn.answers }]}>
+      <TopicPages
+        slot="after-body"
+        title={page.title}
+        chips={page.chips}
+        pages={topicPages.pages}
+      />
+    </Article>
+  ) : (
+    <Article page={page}>{page.kind === 'problem' && <QuickCheck slot="before-body" />}</Article>
+  )}
+</LearnLayout>

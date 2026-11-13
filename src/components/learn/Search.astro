@@ -1,0 +1,69 @@
+---
+/* eslint-disable astro/jsx-a11y/no-noninteractive-element-to-interactive-role -- the search field is a WAI-ARIA combobox (docs/22 §9). */
+/**
+ * Search box of Aprende. Without JavaScript it is a plain form that opens `/aprende/buscar`
+ * (docs/22 §8); the live results panel is added on top of it (docs/22 §9).
+ */
+import { es } from '@/i18n/es';
+
+interface Props {
+  /** Unique per page: it names the results list. */
+  id: string;
+  /** The big box of the home page. */
+  big?: boolean;
+  query?: string;
+}
+const { id, big = false, query = '' } = Astro.props;
+---
+
+<form class:list={['sf', big && 'big']} data-search action="/aprende/buscar" role="search">
+  <div class="sf-field">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      aria-hidden="true"
+    >
+      <circle cx="11" cy="11" r="7"></circle>
+      <path d="m20 20-3.5-3.5" stroke-linecap="round"></path>
+    </svg>
+    <input
+      type="search"
+      name="q"
+      value={query}
+      placeholder={es.learn.searchPlaceholder}
+      autocomplete="off"
+      autocapitalize="off"
+      spellcheck="false"
+      role="combobox"
+      aria-expanded="false"
+      aria-controls={`${id}-list`}
+      aria-autocomplete="list"
+      aria-label={es.learn.searchShort}
+      enterkeyhint="search"
+      maxlength="80"
+    />
+    <span class="sf-kbd" aria-hidden="true">
+      <kbd>⌘</kbd>
+      <kbd>K</kbd>
+    </span>
+    <button class="sf-close" type="button">
+      {es.learn.search.close}
+    </button>
+  </div>
+  <div class="sp" hidden>
+    <div class="sp-top">
+      <span class="sp-n" aria-live="polite"></span>
+      <div class="sp-chips"></div>
+    </div>
+    <ul
+      class="sp-list"
+      id={`${id}-list`}
+      role="listbox"
+      aria-label={es.learn.search.resultsTitle}
+    ></ul>
+  </div>
+</form>

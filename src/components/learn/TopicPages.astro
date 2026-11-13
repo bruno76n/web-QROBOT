@@ -1,0 +1,89 @@
+---
+/**
+ * «Respuestas» of a topic page (docs/21 §4.3): its published pages in order, with title and
+ * summary. When the topic has chips, they filter the list by each page's `filters` (script in
+ * LearnScripts.astro, without reloading; «Todas» by default). With no pages it says so and offers
+ * WhatsApp.
+ */
+import { es } from '@/i18n/es';
+import { site } from '@/config/site';
+import { learnUrl } from '@/lib/learn/content';
+import { learnQuoteMessage, waLink } from '@/lib/whatsapp';
+import { countText } from '@/lib/learn/tables';
+import type { LearnListItem } from '@/server/queries/learn';
+
+interface Props {
+  title: string;
+  chips: { id: string; label: string }[];
+  pages: LearnListItem[];
+}
+const { title, chips, pages } = Astro.props;
+---
+
+<section aria-labelledby="pl-h">
+  <h2 class="blk-h" id="pl-h">
+    {es.learn.answers}
+  </h2>
+  {pages.length === 0 ? (
+    <p class="empty">
+      {es.learn.emptyTopic}{' '}
+      <a
+        class="link"
+        href={waLink(site.whatsapp, learnQuoteMessage(title))}
+        target="_blank"
+        rel="noopener"
+      >
+        {es.learn.cta.button}
+      </a>
+    </p>
+  ) : (
+    <>
+      {chips.length > 0 && (
+        <>
+          <div class="flt">
+            <span class="flt-l" id="pl-l">
+              {es.learn.topicChips}
+            </span>
+            <div
+              class="chips"
+              data-chips="pages"
+              aria-controls="plist"
+              data-count="pl-n"
+              role="group"
+              aria-labelledby="pl-l"
+            >
+              <button type="button" data-id="todas" aria-pressed="true">
+                {es.learn.allPages}
+              </button>
+              {chips.map((c) => (
+                <button type="button" data-id={c.id} aria-pressed="false">
+                  {c.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+      <p
+        class="cnt"
+        id="pl-n"
+        aria-live="polite"
+        data-one={es.learn.pagesCount.one}
+        data-many={es.learn.pagesCount.many}
+      >
+        {countText(pages.length, es.learn.pagesCount)}
+      </p>
+      <ul class="plist" id="plist">
+        {pages.map((p) => (
+          <li data-filters={p.filters.join(' ')}>
+            <a href={learnUrl(p.slug)}>
+              <b>{p.title}</b>
+              <span>{p.summary}</span>
+              <i aria-hidden="true">→</i>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </>
+  )}
+</section>
