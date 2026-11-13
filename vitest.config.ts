@@ -9,6 +9,8 @@ export default defineConfig({
     passWithNoTests: true,
     coverage: { provider: 'v8', include: ['src/lib/**', 'src/server/**', 'src/actions/**'] },
     projects: [
+      // Astro components rendered with the Container API (vitest.astro.config.ts).
+      './vitest.astro.config.ts',
       {
         // Pure logic and tooling: plain Node.
         resolve: { alias },
@@ -16,7 +18,12 @@ export default defineConfig({
           name: 'unit',
           environment: 'node',
           include: ['src/lib/**/*.test.ts', 'src/components/**/*.test.ts', 'tests/**/*.test.ts'],
-          exclude: ['tests/negative/**', '**/*.server.test.ts', 'node_modules/**'],
+          exclude: [
+            'tests/negative/**',
+            '**/*.server.test.ts',
+            '**/*.astro.test.ts',
+            'node_modules/**',
+          ],
         },
       },
       {

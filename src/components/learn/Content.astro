@@ -1,0 +1,19 @@
+---
+/**
+ * The body of an Aprende page: the saved tree (`body_ast`), painted node by node with Node.astro.
+ * The Markdown was converted when the page was imported or saved, never on a visit (docs/21 §5).
+ */
+import type { LearnNode } from '@/lib/learn/markdown';
+import type { LearnData } from '@/server/queries/learn';
+import Node from './Node.astro';
+
+interface Props {
+  ast: LearnNode[];
+  data: LearnData;
+}
+const { ast, data } = Astro.props;
+---
+
+{ast.map((node) => (
+  <Node node={node} data={data} />
+))}

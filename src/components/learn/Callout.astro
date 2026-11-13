@@ -1,0 +1,45 @@
+---
+/**
+ * The boxes of Aprende: «Dato curioso» (green) and «Truco» (lilac) carry a Q-404 render;
+ * «Cuidado» (amber) carries a warning sign instead (docs/21 §5). The body comes in the slot.
+ */
+import type { CalloutKind } from '@/lib/learn/markdown';
+import { es } from '@/i18n/es';
+
+interface Props {
+  kind: CalloutKind;
+}
+const { kind } = Astro.props;
+const label = { fact: es.learn.fact, tip: es.learn.tip, careful: es.learn.careful }[kind];
+const cls = { fact: 'callout', tip: 'callout tip', careful: 'callout care' }[kind];
+// Each box kind shows a different Q-404 color.
+const render = kind === 'tip' ? 'q404-azul-lima' : 'q404-morado-verde';
+---
+
+<aside class={cls}>
+  {kind === 'careful' ? (
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M12 3 2 21h20L12 3Z"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linejoin="round"
+      />
+      <path d="M12 10v5M12 18v.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    </svg>
+  ) : (
+    <img
+      src={`/brand/q404/${render}-265.webp`}
+      srcset={`/brand/q404/${render}-265.webp 265w, /brand/q404/${render}-530.webp 530w`}
+      sizes="72px"
+      alt=""
+      width="72"
+      height="114"
+      loading="lazy"
+    />
+  )}
+  <div>
+    <b>{label}</b>
+    <slot />
+  </div>
+</aside>
