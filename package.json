@@ -28,6 +28,8 @@
     "deploy": "wrangler deploy",
     "seed": "node scripts/setup-local.mjs && node scripts/seed.ts",
     "learn:import": "node scripts/setup-local.mjs && tsx scripts/learn-import.ts",
+    "learn:sync": "tsx scripts/learn-sync.ts",
+    "learn:search-setup": "tsx scripts/learn-search-setup.ts",
     "e2e:public": "playwright test",
     "e2e:admin": "playwright test -c playwright.admin.config.ts",
     "db:backup": "node scripts/db-backup.mjs",

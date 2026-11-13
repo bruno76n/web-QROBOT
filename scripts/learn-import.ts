@@ -19,6 +19,7 @@ import {
   type ImportSummary,
 } from '../src/server/learn-import.ts';
 import { loadLearnFiles } from './learn-files.ts';
+import { runSync } from './learn-sync.ts';
 
 // Project root, parsed flags and the target database name.
 const root = new URL('..', import.meta.url).pathname;
@@ -135,7 +136,13 @@ async function main() {
       await proxy.dispose();
     }
   }
-  if (args.has('--sync')) console.log('learn:import: el buscador se sincroniza desde la fase 7.');
+  if (args.has('--sync')) {
+    if (remote)
+      console.log(
+        'learn:import: el índice de producción se actualiza desde el panel («Actualizar buscador»).',
+      );
+    else process.exitCode = await runSync();
+  }
 }
 
 // Invalid content gets a short message; anything else shows the full error.

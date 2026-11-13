@@ -1,0 +1,11 @@
+---
+/** Text with its search highlight: marked parts in `<mark>`, the rest as plain text (no markup). */
+import type { HighlightPart } from '@/lib/learn/search-docs';
+
+interface Props {
+  parts: HighlightPart[];
+}
+const { parts } = Astro.props;
+---
+
+{parts.map((p) => (p.m ? <mark>{p.t}</mark> : p.t))}

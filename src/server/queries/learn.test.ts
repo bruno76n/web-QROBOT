@@ -234,20 +234,20 @@ describe('with the real content', () => {
   });
 
   it('search: “se despega” finds the first layer through its synonym', async () => {
-    const hits = await searchLearnD1('se despega', undefined);
+    const { hits } = await searchLearnD1('se despega', undefined);
     expect(hits.length).toBeGreaterThan(0);
     expect(hits.length).toBeLessThanOrEqual(8);
     expect(hits.map((h) => h.url)).toContain('/aprende/problemas/primera-capa');
   });
 
   it('search: a word in the title ranks first', async () => {
-    const hits = await searchLearnD1('petg', undefined);
+    const { hits } = await searchLearnD1('petg', undefined);
     expect(hits[0]?.url).toBe('/aprende/filamentos/petg');
   });
 
   it('search: with a topic filter only that topic comes back', async () => {
-    const all = await searchLearnD1('boquilla', undefined);
-    const only = await searchLearnD1('boquilla', 'mantenimiento');
+    const all = (await searchLearnD1('boquilla', undefined)).hits;
+    const only = (await searchLearnD1('boquilla', 'mantenimiento')).hits;
     expect(all.some((h) => h.topic !== 'mantenimiento')).toBe(true);
     expect(only.length).toBeGreaterThan(0);
     expect(only.every((h) => h.topic === 'mantenimiento')).toBe(true);
@@ -258,16 +258,25 @@ describe('with the real content', () => {
     const a = await searchLearnD1('TELARAÑA', undefined);
     const b = await searchLearnD1('telarana', undefined);
     expect(a).toEqual(b);
-    const hits = await searchLearnD1('pago anticipo', undefined);
+    const { hits } = await searchLearnD1('pago anticipo', undefined);
     expect(hits.map((h) => h.url)).not.toContain('/aprende/encargar/pago');
-    expect((await searchLearnD1('aprende', undefined)).map((h) => h.url)).not.toContain('/aprende');
+    expect((await searchLearnD1('aprende', undefined)).hits.map((h) => h.url)).not.toContain(
+      '/aprende',
+    );
   });
 
   it('search: nothing, only stop words, or % and _ do not break it', async () => {
-    expect(await searchLearnD1('zzzxqj', undefined)).toEqual([]);
-    expect(await searchLearnD1('   ', undefined)).toEqual([]);
-    expect(await searchLearnD1('de la', undefined)).toEqual([]);
-    expect(await searchLearnD1('100%_', undefined)).toEqual([]);
+    expect((await searchLearnD1('zzzxqj', undefined)).hits).toEqual([]);
+    expect((await searchLearnD1('   ', undefined)).hits).toEqual([]);
+    expect((await searchLearnD1('de la', undefined)).hits).toEqual([]);
+    expect((await searchLearnD1('100%_', undefined)).hits).toEqual([]);
+  });
+
+  it('search: a typo still finds the page («petj» → PETG) and says which words to mark', async () => {
+    const r = await searchLearnD1('petj', undefined);
+    expect(r.hits[0]?.url).toBe('/aprende/filamentos/petg');
+    expect(r.words).toContain('petj');
+    expect(r.total).toBeGreaterThanOrEqual(r.hits.length);
   });
 });
 
