@@ -118,7 +118,7 @@ export function inlineText(nodes: readonly InlineNode[]): string {
   return nodes.map((n) => (n.t === 'text' || n.t === 'code' ? n.v : inlineText(n.c))).join('');
 }
 
-function plainOf(nodes: readonly LearnNode[]): string[] {
+export function plainOf(nodes: readonly LearnNode[]): string[] {
   const parts: string[] = [];
   for (const n of nodes) {
     switch (n.t) {
@@ -254,4 +254,33 @@ function toCallout(inner: LearnNode[]): LearnNode {
     }
   }
   return { t: 'quote', c: inner };
+}
+
+/** Plain text of a saved tree (for the search index). */
+export function astPlainText(ast: readonly LearnNode[]): string {
+  return plainOf(ast).join(' ').replace(/\s+/g, ' ').trim();
+}
+
+/** Every link of a tree, in order. */
+export function astLinks(ast: readonly LearnNode[]): string[] {
+  const out: string[] = [];
+  const inline = (nodes: readonly InlineNode[]) => {
+    for (const n of nodes) {
+      if (n.t === 'a') {
+        out.push(n.href);
+        inline(n.c);
+      } else if (n.t === 'strong' || n.t === 'em') inline(n.c);
+    }
+  };
+  const walk = (nodes: readonly LearnNode[]) => {
+    for (const n of nodes) {
+      if (n.t === 'h' || n.t === 'p') inline(n.c);
+      else if (n.t === 'ul' || n.t === 'ol') for (const item of n.items) walk(item);
+      else if (n.t === 'table')
+        for (const row of [n.head, ...n.rows]) for (const c of row) inline(c);
+      else if (n.t === 'callout' || n.t === 'quote') walk(n.c);
+    }
+  };
+  walk(ast);
+  return out;
 }

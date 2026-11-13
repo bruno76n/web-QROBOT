@@ -167,9 +167,110 @@ export const whatsappClicks = sqliteTable(
   (t) => [primaryKey({ columns: [t.day, t.source, t.productId] })],
 );
 
+export const learnKindValues = [
+  'home',
+  'section',
+  'sheet',
+  'article',
+  'problem',
+  'glossary',
+] as const;
+export const learnAudienceValues = ['all', 'shops', 'clients'] as const;
+export const learnCtaValues = ['whatsapp', 'system', 'none'] as const;
+
+/** One row per page of Aprende (docs/21 §7). `slug` is '' for the home page. */
+export const learnPages = sqliteTable(
+  'learn_pages',
+  {
+    id: text('id').primaryKey(),
+    slug: text('slug').notNull(),
+    kind: text('kind', { enum: learnKindValues }).notNull(),
+    topic: text('topic').notNull().default(''),
+    title: text('title').notNull(),
+    subtitle: text('subtitle').notNull().default(''),
+    summary: text('summary').notNull().default(''),
+    bodyMd: text('body_md').notNull().default(''),
+    /** JSON `LearnNode[]` made when saving (docs/21 §5). */
+    bodyAst: text('body_ast').notNull().default('[]'),
+    /** JSON `{ id, text }[]` with the `h2` of the body. */
+    toc: text('toc').notNull().default('[]'),
+    /** Normalized text of title, subtitle, summary, tags and questions: what the D1 search reads. */
+    searchText: text('search_text').notNull().default(''),
+    /** JSON arrays of strings (`chips`: `{ id, label }[]`). */
+    filters: text('filters').notNull().default('[]'),
+    chips: text('chips').notNull().default('[]'),
+    tags: text('tags').notNull().default('[]'),
+    related: text('related').notNull().default('[]'),
+    sources: text('sources').notNull().default('[]'),
+    /** JSON with what only some pages have: `featured`, `suggestions`, `terms`. */
+    extra: text('extra').notNull().default('{}'),
+    audience: text('audience', { enum: learnAudienceValues }).notNull().default('all'),
+    cta: text('cta', { enum: learnCtaValues }).notNull().default('whatsapp'),
+    ctaText: text('cta_text').notNull().default(''),
+    published: integer('published', { mode: 'boolean' }).notNull().default(false),
+    sortOrder: integer('sort_order').notNull().default(0),
+    /** `YYYY-MM`. */
+    reviewed: text('reviewed').notNull().default(''),
+    /** True once the page was saved from the panel: the importer does not touch it (docs/21 §8). */
+    editedInPanel: integer('edited_in_panel', { mode: 'boolean' }).notNull().default(false),
+    ...timestamps,
+  },
+  (t) => [
+    uniqueIndex('learn_pages_slug_unique').on(t.slug),
+    index('learn_pages_topic_idx').on(t.topic, t.published, t.sortOrder),
+  ],
+);
+
+export const learnFaqs = sqliteTable(
+  'learn_faqs',
+  {
+    id: text('id').primaryKey(),
+    pageId: text('page_id')
+      .notNull()
+      .references(() => learnPages.id, { onDelete: 'cascade' }),
+    /** Starts at 1: the number of `#pregunta-N`. */
+    position: integer('position').notNull(),
+    question: text('question').notNull(),
+    answer: text('answer').notNull(),
+  },
+  (t) => [index('learn_faqs_page_idx').on(t.pageId, t.position)],
+);
+
+/** Tables of data (`filamentos`, `impresoras`, `mantenimiento`, `datos-curiosos`, `buscador`). */
+export const learnDatasets = sqliteTable('learn_datasets', {
+  key: text('key').primaryKey(),
+  data: text('data').notNull(),
+  updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
+    .notNull()
+    .default(sql`(unixepoch() * 1000)`),
+});
+
+export const learnSources = sqliteTable('learn_sources', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  url: text('url'),
+});
+
+/** Searches with no result, per day, without anything that identifies the person (docs/22 §11). */
+export const learnSearchMisses = sqliteTable(
+  'learn_search_misses',
+  {
+    day: text('day').notNull(),
+    query: text('query').notNull(),
+    count: integer('count').notNull().default(0),
+  },
+  (t) => [
+    primaryKey({ columns: [t.day, t.query] }),
+    index('learn_search_misses_day_idx').on(t.day),
+  ],
+);
+
 export type Setting = typeof settings.$inferSelect;
 export type Product = typeof products.$inferSelect;
 export type NewProduct = typeof products.$inferInsert;
 export type Photo = typeof photos.$inferSelect;
 export type NewPhoto = typeof photos.$inferInsert;
 export type HeroSlide = typeof heroSlides.$inferSelect;
+export type LearnPage = typeof learnPages.$inferSelect;
+export type NewLearnPage = typeof learnPages.$inferInsert;
+export type LearnFaq = typeof learnFaqs.$inferSelect;

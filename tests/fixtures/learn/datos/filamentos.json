@@ -1,0 +1,30 @@
+{
+  "key": "filamentos",
+  "chips": [{ "id": "todos", "label": "Todos" }],
+  "toggles": [{ "id": "open", "label": "Abierta", "hideWhen": { "printer": "enclosed" } }],
+  "heatLevels": [
+    { "id": "low", "label": "Bajo", "maxC": 59 },
+    { "id": "high", "label": "Alto", "maxC": null }
+  ],
+  "rows": [
+    {
+      "material": "PLA",
+      "slug": "filamentos/pla",
+      "uses": "Figuras.",
+      "nozzleC": "190–240",
+      "bedC": "45–65",
+      "hdtC": 57,
+      "impactKjM2": 26.6,
+      "stiffnessMpa": 2750,
+      "waterPct": 0.43,
+      "drying": "55 °C · 8 h",
+      "maxSpeedMmS": 300,
+      "printer": "any",
+      "hardenedNozzle": "no",
+      "ams": "yes",
+      "filters": ["decoracion"]
+    }
+  ],
+  "notes": [],
+  "sources": ["bambu-tabla"]
+}

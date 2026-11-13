@@ -55,21 +55,23 @@ export const pageFrontmatter = z.object({
 export type PageFrontmatter = z.infer<typeof pageFrontmatter>;
 
 const pctText = z.string();
+/** A value the sources do not give is `null` (the table shows a dash). */
 export const filamentRow = z.object({
   material: z.string(),
   slug: pageSlug,
   uses: z.string(),
   nozzleC: pctText,
   bedC: pctText,
-  hdtC: z.number(),
-  impactKjM2: z.number(),
-  stiffnessMpa: z.number(),
-  waterPct: z.number(),
+  hdtC: z.number().nullable(),
+  impactKjM2: z.number().nullable(),
+  stiffnessMpa: z.number().nullable(),
+  waterPct: z.number().nullable(),
   drying: z.string(),
-  maxSpeedMmS: z.number(),
+  maxSpeedMmS: z.number().nullable(),
   printer: z.enum(['any', 'enclosed']),
   hardenedNozzle: z.enum(['yes', 'no']),
-  ams: z.enum(['yes', 'no']),
+  /** `dry`: only with a dry spool (PVA / BVOH). */
+  ams: z.enum(['yes', 'no', 'dry']),
   filters: z.array(z.string()),
 });
 

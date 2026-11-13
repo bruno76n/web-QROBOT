@@ -32,6 +32,10 @@ export async function resetAll() {
     .insert(schema.categories)
     .values(seedCategories.map((c, position) => ({ id: c.id, label: c.label, position })));
   await db.delete(schema.whatsappClicks);
+  await db.delete(schema.learnPages); // its questions go with it
+  await db.delete(schema.learnDatasets);
+  await db.delete(schema.learnSources);
+  await db.delete(schema.learnSearchMisses);
   let cursor: string | undefined;
   do {
     const page = await env.BUCKET.list(cursor ? { cursor } : {});

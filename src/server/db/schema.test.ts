@@ -86,4 +86,48 @@ describe('schema (local D1)', () => {
     await db.insert(schema.heroSlides).values({ id: 's1', desktopPhotoId: 'h1' });
     expect(await db.select().from(schema.heroSlides)).toHaveLength(1);
   });
+
+  it('stores and reads a learn page with its questions; deleting the page deletes them', async () => {
+    const db = getDb(env.DB);
+    await db.insert(schema.learnPages).values({
+      id: 'lp1',
+      slug: 'filamentos/pla',
+      kind: 'sheet',
+      topic: 'filamentos',
+      title: 'PLA',
+      published: true,
+    });
+    await db.insert(schema.learnFaqs).values([
+      { id: 'q2', pageId: 'lp1', position: 2, question: '¿B?', answer: 'b' },
+      { id: 'q1', pageId: 'lp1', position: 1, question: '¿A?', answer: 'a' },
+    ]);
+    const [page] = await db
+      .select()
+      .from(schema.learnPages)
+      .where(eq(schema.learnPages.slug, 'filamentos/pla'));
+    expect(page).toMatchObject({
+      title: 'PLA',
+      published: true,
+      editedInPanel: false,
+      bodyAst: '[]',
+    });
+    const faqs = await db.select().from(schema.learnFaqs).orderBy(schema.learnFaqs.position);
+    expect(faqs.map((f) => f.question)).toEqual(['¿A?', '¿B?']);
+    await expect(
+      db
+        .insert(schema.learnPages)
+        .values({ id: 'lp2', slug: 'filamentos/pla', kind: 'sheet', title: 'Otra' }),
+    ).rejects.toThrow();
+    await db.delete(schema.learnPages).where(eq(schema.learnPages.id, 'lp1'));
+    expect(await db.select().from(schema.learnFaqs)).toEqual([]);
+  });
+
+  it('search misses add up per day and query', async () => {
+    const db = getDb(env.DB);
+    const miss = { day: '2026-11-13', query: 'boquilla rara' };
+    await db.insert(schema.learnSearchMisses).values({ ...miss, count: 1 });
+    await expect(
+      db.insert(schema.learnSearchMisses).values({ ...miss, count: 1 }),
+    ).rejects.toThrow();
+  });
 });

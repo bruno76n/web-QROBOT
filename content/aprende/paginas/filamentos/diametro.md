@@ -8,8 +8,8 @@ summary: Casi todas las impresoras actuales usan 1.75 mm. Algunas, como las Ulti
 filters: []
 tags:
 - diametro
-- 1.75
-- 2.85
+- '1.75'
+- '2.85'
 - 3 mm
 - grosor del filamento
 related:

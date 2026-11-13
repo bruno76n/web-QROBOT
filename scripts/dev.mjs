@@ -7,5 +7,6 @@ const run = (cmd, args, env = {}) => {
 };
 run('node', ['scripts/setup-local.mjs']);
 run('node', ['scripts/seed.ts', '--if-empty']); // only when the local database is empty
+run('pnpm', ['exec', 'tsx', 'scripts/learn-import.ts', '--if-empty']); // Aprende's pages, only when none
 run('node', ['scripts/build-assets.mjs']);
 run('pnpm', ['exec', 'astro', 'dev', ...process.argv.slice(2)], { CLOUDFLARE_ENV: 'local' });

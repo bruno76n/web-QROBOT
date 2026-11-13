@@ -6,6 +6,10 @@ export interface HeatLevel {
   maxC: number | null;
 }
 
-export function heatLevel<T extends HeatLevel>(hdtC: number, levels: readonly T[]): T | undefined {
+export function heatLevel<T extends HeatLevel>(
+  hdtC: number | null,
+  levels: readonly T[],
+): T | undefined {
+  if (hdtC === null) return undefined;
   return levels.find((l) => l.maxC === null || hdtC <= l.maxC);
 }
