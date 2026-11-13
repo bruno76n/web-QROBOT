@@ -22,6 +22,7 @@ Se declaran como variables CSS y en el tema de Tailwind (`src/styles/global.css`
 | `--soft` | `#f6f6f8` | Fondo de fotos de producto, tarjetas, chat del pedido |
 | `--purple` | `#6b3fd4` | Marca; campos para llenar; foco; selección de texto |
 | `--green` | `#00ae42` | Marca; botón de WhatsApp (texto `--ink` encima) |
+| `--lilac` | `#f1ecfd` | Recuadro «En corto» y cuadros «Truco» de Aprende (`21 §4.1`) |
 | `--green-l` | `#e3f5e9` | Burbuja del mensaje propio en el pedido |
 | `--top` | `68px` | Alto del header |
 | `--gutter` | `clamp(20px, 4.5vw, 64px)` | Margen lateral |

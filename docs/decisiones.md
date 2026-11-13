@@ -310,3 +310,11 @@ Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y pre
 - **Meilisearch detrás del Worker:** el navegador busca en `/api/aprende/buscar`; la CSP no cambia, las llaves no salen al navegador y se cuentan las búsquedas sin resultado. Respaldo en D1 para local y para cuando Meilisearch falle (`22`).
 - **Sin llamados al sistema (Quick Cerebro):** el sistema todavía no sale; sus llamados se guardan con `cta: system` y quedan ocultos con `site.system.enabled = false`.
 - **Fases 6–8** con el mismo formato de las anteriores (`20`).
+
+## 2026-11-13 · Fase 6: librerías de Aprende
+- **mdast-util-from-markdown, micromark-extension-gfm, mdast-util-gfm:** convierten el Markdown a un árbol que se filtra con lista blanca (`21 §5`). Resuelven el Markdown y las tablas GFM sin escribir un analizador a mano (regla 2). Alternativas descartadas: `marked` y `markdown-it` producen HTML (obligaría a `set:html`).
+- **@types/mdast:** solo tipos del árbol.
+- **yaml:** lee el frontmatter de los archivos de `content/aprende/` (el importador, solo en Node).
+- **meilisearch:** SDK oficial para el buscador (`22`); se usa desde la fase 7. Se instala ahora para dejar `package.json` completo.
+- `pnpm audit --prod`: una vulnerabilidad moderada en `astro` que ya existía; ninguna alta ni crítica.
+- `--lilac: #f1ecfd` agregado a los tokens (`03 §2`, `global.css`).

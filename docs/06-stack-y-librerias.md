@@ -51,6 +51,14 @@
 | Slug a partir del nombre | **@sindresorhus/slugify** |
 | Revisar que un archivo es de verdad una imagen (servidor) | **file-type** (o verificación de bytes iniciales si no corre en Workers; ver `13`) |
 
+## 3b. Aprende (fase 6)
+
+| Necesidad | Librería |
+|---|---|
+| Convertir el Markdown de las páginas a un árbol (al importar o guardar, nunca por visita) | **mdast-util-from-markdown** + **micromark-extension-gfm** + **mdast-util-gfm** (tablas GFM) y **@types/mdast** (solo tipos) |
+| Leer el frontmatter de `content/aprende/` | **yaml** |
+| Buscador (SDK solo en el Worker y en `pnpm learn:sync`; el navegador nunca lo usa) | **meilisearch** (`22`) |
+
 ## 4. SEO, analítica y calidad
 
 | Necesidad | Librería o servicio |
