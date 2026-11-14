@@ -1061,8 +1061,103 @@ export const es = {
       // ── inicio: end ──
 
       // ── costo-pedidos: start (agent «costo-pedidos»: UiPiece, UiOrder) ──
-      piece: {},
-      order: {},
+      /** Cost of a piece (`UiPiece`). */
+      piece: {
+        /** Description of the whole screen for screen readers. */
+        label: (system: string, piece: string, cost: string, price: string, profit: string) =>
+          `Costo de una pieza en ${system}: ${piece.toLowerCase()}, costo de ${cost} desglosado en material, máquina, reserva por fallos y luz; precio de ${price}, ganancia de ${profit} y ganancia por canal`,
+        /** Minutes as «2 h 30 min» (also the time left of `UiOrder`). */
+        duration: (minutes: number) => {
+          const h = Math.floor(minutes / 60);
+          const m = Math.round(minutes % 60);
+          return h > 0 ? (m > 0 ? `${h} h ${m} min` : `${h} h`) : `${m} min`;
+        },
+        grams: (n: number) => `${n} g`,
+        breakdown: 'Desglose del costo',
+        /** Rows of the breakdown. */
+        rows: {
+          material: 'Material',
+          machine: 'Máquina',
+          failures: 'Reserva por fallos',
+          power: 'Luz',
+          extras: 'Extras',
+        },
+        /** How each row is worked out, under its name. */
+        how: {
+          material: (grams: number, perGram: string, factor: string) =>
+            `${grams} g × ${perGram} × ${factor}`,
+          machine: (hours: string, perHour: string) => `${hours} h × ${perHour}`,
+          failures: (pct: number) => `${pct} %`,
+          power: (hours: string, kw: string, kwhPrice: string) =>
+            `${hours} h × ${kw} kW × ${kwhPrice}`,
+        },
+        /** «63.6 %». */
+        pct: (n: string) => `${n} %`,
+        cost: 'Costo',
+        byValue: 'Por valor',
+        byFormula: 'Por fórmula',
+        listPrice: 'Precio de lista',
+        profit: 'Ganancia',
+        margin: 'Margen',
+        times: 'Veces el costo',
+        /** «4.5×». */
+        timesValue: (n: string) => `${n}×`,
+        floor: (price: string, pct: number) =>
+          `Arriba del precio mínimo: ${price} (margen ${pct} %)`,
+        byChannel: 'Ganancia por canal',
+        channel: 'Canal',
+        fee: 'Comisión',
+      },
+      /** An order (`UiOrder`). */
+      order: {
+        /** Description of the whole screen for screen readers. */
+        label: (
+          system: string,
+          n: number,
+          state: string,
+          total: string,
+          paid: string,
+          balance: string,
+          items: string,
+        ) =>
+          `Pedido #${n} en ${system}: estado ${state}, total ${total}, pagado ${paid} y saldo ${balance}; ${items} con su impresora, avance y tiempo restante, y fin estimado de producción`,
+        /** Number of items in words for the description: «dos artículos». */
+        itemCount: (n: number) =>
+          n === 1
+            ? 'un artículo'
+            : `${['', '', 'dos', 'tres', 'cuatro', 'cinco'][n] || n} artículos`,
+        number: (n: number) => `Pedido #${n}`,
+        /** States of an order, in order (keys of `demoOrder3Detail.steps`). */
+        steps: {
+          quoted: 'Cotizado',
+          accepted: 'Aceptado',
+          production: 'En producción',
+          ready: 'Listo',
+          delivered: 'Entregado',
+        },
+        total: 'Total',
+        paid: 'Pagado',
+        balance: 'Saldo',
+        due: 'Fecha de entrega',
+        items: 'Artículos',
+        pieces: (n: number) => `${n} piezas`,
+        item: (qty: number, name: string) => `${qty} × ${name}`,
+        fromStock: (n: number) => `Existencias: ${n}`,
+        toPrint: (n: number) => `Por imprimir: ${n}`,
+        /** Progress and time left of the printer: «62 % · 6 h 50 min». */
+        progress: (pct: number, left: string) => `${pct} % · ${left}`,
+        end: (when: string) => `Fin estimado de producción: ${when}`,
+        payments: 'Pagos',
+        /** Kinds of payment (keys of `demoOrder3Detail.payments`). */
+        paymentKinds: { deposit: 'Anticipo', partial: 'Abono' },
+        payment: (kind: string, date: string) => `${kind} · ${date}`,
+        actions: {
+          markReady: 'Marcar listo',
+          addPayment: 'Registrar pago',
+          quote: 'Cotización',
+          copy: 'Copiar',
+        },
+      },
       // ── costo-pedidos: end ──
 
       // ── taller: start (agent «taller»: UiPrinters, UiFilaments, UiPurchases, UiStock) ──

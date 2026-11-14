@@ -218,6 +218,69 @@ export const demoDeliveries: readonly {
 
 // ── costo-pedidos: start (agent «costo-pedidos»: UiPiece, UiOrder) ──
 
+/** States of an order, in order (keys of `es.system.ui.order.steps`). */
+type DemoOrderStep = 'quoted' | 'accepted' | 'production' | 'ready' | 'delivered';
+
+/**
+ * Order #3 in detail (`UiOrder`): its states with their dates, the items with where they come
+ * from (finished stock or to print) and the printer that makes them, the estimated end and the
+ * payments. The items add up to `demoOrder3.total` and the payments to `demoOrder3.paid`
+ * (`tests/system-demo-costo-pedidos.test.ts`). Dates as the screen shows them.
+ */
+export const demoOrder3Detail: {
+  steps: readonly { id: DemoOrderStep; date: string | null }[];
+  /** The state the order is in. */
+  current: DemoOrderStep;
+  items: readonly {
+    qty: number;
+    name: string;
+    amount: number;
+    fromStock: number;
+    toPrint: number;
+    printer: string;
+    /** Progress of the printer, in %. */
+    progress: number;
+    /** Time left of the printer, in minutes. */
+    minutesLeft: number;
+  }[];
+  /** Estimated end of the production. */
+  end: string;
+  payments: readonly { kind: 'deposit' | 'partial'; date: string; amount: number }[];
+} = {
+  steps: [
+    { id: 'quoted', date: '2 nov' },
+    { id: 'accepted', date: '3 nov' },
+    { id: 'production', date: '12 nov' },
+    { id: 'ready', date: null },
+    { id: 'delivered', date: null },
+  ],
+  current: 'production',
+  items: [
+    {
+      qty: 3,
+      name: 'Letrero de taquería',
+      amount: 1350,
+      fromStock: 0,
+      toPrint: 3,
+      printer: 'Bambu Lab P1S',
+      progress: 62,
+      minutesLeft: 410,
+    },
+    {
+      qty: 10,
+      name: demoPiece.name,
+      amount: 1000,
+      fromStock: 4,
+      toPrint: 6,
+      printer: 'Ender 3 V3 SE',
+      progress: 30,
+      minutesLeft: 1050,
+    },
+  ],
+  end: 'sábado 14 nov, 1:20 p. m.',
+  payments: [{ kind: 'deposit', date: '3 nov', amount: 1000 }],
+};
+
 // ── costo-pedidos: end ──
 
 // ── taller: start (agent «taller»: UiPrinters, UiFilaments, UiPurchases, UiStock) ──

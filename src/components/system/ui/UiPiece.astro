@@ -1,12 +1,158 @@
 ---
 /**
- * System screen «Costo por pieza» (docs/25 §6.3), drawn in HTML with the sample data of `system-demo.ts` and
- * the labels of `es.system.ui`. Placeholder frame until the screen is drawn.
+ * System screen «Costo de una pieza» (docs/25 §6.3), drawn in HTML with the napkin holder of
+ * `demoPiece` and the labels of `es.system.ui.piece`: header (filament · grams · time · printer),
+ * cost breakdown with its bar and share (worked out from the data, largest first) and the cost;
+ * list price (by value or by formula, drawn), profit, margin, times the cost and the minimum price
+ * notice; and the profit by channel after its fee (`demoChannels`). On phones (≤ 480) the bar
+ * column of the breakdown hides (`.brk td.bar`, `system-ui.css`).
  */
+import Check from '@lucide/astro/icons/check';
+import UiBar from './UiBar.astro';
 import UiFrame from './UiFrame.astro';
 import { site } from '@/config/site';
+import { demoChannels, demoPiece as p } from '@/config/system-demo';
+import { es } from '@/i18n/es';
+import { formatPesos, round2 } from '@/lib/learn/cost';
+import { formatMoney } from '@/lib/money';
+
+const t = es.system.ui.piece;
+
+// Number without a currency sign and with two decimals («120.00»).
+const fixed2 = (n: number) =>
+  n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+// Breakdown rows: each part of the formula; the reserve for failures is what the cost adds over
+// the sum of the parts. Sorted largest first (stable, so equal amounts keep the formula order).
+const failures = round2(p.cost - (p.material + p.machine + p.power + p.extras));
+const hours = String(p.hours);
+const rows = [
+  {
+    id: 'material',
+    amount: p.material,
+    how: t.how.material(p.grams, formatPesos(p.perGram), (1 + p.purgePct / 100).toFixed(2)),
+  },
+  { id: 'machine', amount: p.machine, how: t.how.machine(hours, formatPesos(p.machinePerHour)) },
+  { id: 'failures', amount: failures, how: t.how.failures(p.failPct) },
+  {
+    id: 'power',
+    amount: p.power,
+    how: t.how.power(hours, String(p.kw), formatPesos(p.kwhPrice)),
+  },
+  { id: 'extras', amount: p.extras, how: '' },
+] as const;
+const breakdown = [...rows].sort((a, b) => b.amount - a.amount);
+const share = (amount: number) => t.pct(((amount / p.cost) * 100).toFixed(1));
+
+// Profit by channel: the list price less the fee of the channel, less the cost.
+const channels = demoChannels.map((c) => ({
+  name: c.name,
+  feePct: c.feePct,
+  profit: round2(p.price * (1 - c.feePct / 100) - p.cost),
+}));
+
+const meta = [p.filament, t.grams(p.grams), t.duration(p.hours * 60), p.printer].join(' · ');
+const label = t.label(
+  site.system.name,
+  p.name,
+  formatPesos(p.cost),
+  formatMoney(p.price * 100),
+  formatPesos(p.profit),
+);
 ---
 
-<UiFrame label={site.system.name}>
-  <div class="ui-panel">Costo por pieza</div>
+<UiFrame label={label} kind="card" inner="ui-pieza">
+  <div class="ui-ph pz-h">
+    <svg class="pz-thumb" viewBox="0 0 44 44" aria-hidden="true">
+      <rect width="44" height="44" rx="10"></rect>
+      <path class="pz-p" d="M12 31h20v3H12zM14 31l3-17h10l3 17"></path>
+      <path class="pz-l" d="M19 22h6"></path>
+    </svg>
+    <span>
+      <b class="ui-t">{p.name}</b>
+      <span class="ui-meta">{meta}</span>
+    </span>
+  </div>
+
+  <div class="pz-grid">
+    {/* Cost breakdown: name and how it is worked out, bar, share and amount. */}
+    <div class="pz-cost">
+      <span class="ui-lbl">{t.breakdown}</span>
+      <table class="ui-tbl brk">
+        <tbody>
+          {breakdown.map((r) => (
+            <tr>
+              <td>
+                <b>{t.rows[r.id]}</b>
+                <span class="ui-meta">{r.how}</span>
+              </td>
+              <td class="bar">
+                <UiBar value={r.amount} max={p.cost} />
+              </td>
+              <td class="r ui-num">{share(r.amount)}</td>
+              <td class="r ui-num">{formatPesos(r.amount)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div class="pz-total">
+        <span>{t.cost}</span>
+        <b class="ui-num">{formatPesos(p.cost)}</b>
+      </div>
+    </div>
+
+    {/* List price (drawn field) and what is left of it. */}
+    <div class="pz-price">
+      <span class="ui-seg pz-mode">
+        <span class="on">{t.byValue}</span>
+        <span>{t.byFormula}</span>
+      </span>
+      <span class="ui-lbl">{t.listPrice}</span>
+      <div class="ui-input">
+        <span>$</span>
+        <b class="ui-num">{fixed2(p.price)}</b>
+      </div>
+      <dl class="pz-res">
+        <div class="g">
+          <dt>{t.profit}</dt>
+          <dd class="ui-num">{formatPesos(p.profit)}</dd>
+        </div>
+        <div>
+          <dt>{t.margin}</dt>
+          <dd class="ui-num">{t.pct(p.marginPct.toFixed(1))}</dd>
+        </div>
+        <div>
+          <dt>{t.times}</dt>
+          <dd class="ui-num">{t.timesValue(p.times.toFixed(1))}</dd>
+        </div>
+      </dl>
+      <p class="pz-floor">
+        <Check class="ic" aria-hidden="true" />
+        {t.floor(formatPesos(p.minPrice), p.minMarginPct)}
+      </p>
+    </div>
+  </div>
+
+  {/* Profit by channel, after the fee of each one. */}
+  <div class="pz-ch">
+    <span class="ui-lbl">{t.byChannel}</span>
+    <table class="ui-tbl">
+      <thead>
+        <tr>
+          <th>{t.channel}</th>
+          <th class="r">{t.fee}</th>
+          <th class="r">{t.profit}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {channels.map((c) => (
+          <tr>
+            <td>{c.name}</td>
+            <td class="r ui-num">{t.pct(String(c.feePct))}</td>
+            <td class="r ui-num g">{formatPesos(c.profit)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
 </UiFrame>
