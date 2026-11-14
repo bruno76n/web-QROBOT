@@ -16,6 +16,8 @@ export const es = {
       { label: 'Catálogo', href: '/catalogo' },
       { label: 'Aprende', href: '/aprende' },
     ],
+    /** Menu link to the page for workshops; only shown while it is visible (docs/25 §2). */
+    system: { label: 'Para talleres', short: 'Talleres', href: '/talleres' },
     quote: 'Cotizar',
     /** Over the hero the header shows this instead of the logo (docs/03 §5). */
     social: { lead: 'Visita nuestras redes:', button: 'Instagram' },
