@@ -1,7 +1,8 @@
 // pnpm security — docs/13 §10. Runs each check that applies to the files present and exits
 // non-zero if any step fails.
 import { spawnSync } from 'node:child_process';
-import { existsSync, readdirSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 // Result of every step: `{ label, ok }`.
 const steps = [];
@@ -41,6 +42,48 @@ if (has('tests/security', /\.test\.ts$/)) {
 }
 if (has('tests/security', /\.spec\.ts$/)) {
   run('playwright security', 'pnpm', ['exec', 'playwright', 'test', 'tests/security']);
+}
+
+// 5. The page for workshops stays hidden (docs/25 §2, §12): its pages are never prerendered and
+// each one carries its own lock; the build has no static HTML that names it (Cloudflare would serve
+// that without passing through the Worker). Runs after Playwright, whose server builds `dist/`.
+const check = (label, problems) => {
+  console.log(`\n▶ ${label}`);
+  for (const p of problems) console.error(`  ${p}`);
+  steps.push({ label, ok: problems.length === 0 });
+  if (problems.length) console.error(`✗ ${label}`);
+};
+/** Every file under `dir`, with its path. */
+const walk = (dir) =>
+  readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+    e.isDirectory() ? walk(join(dir, e.name)) : [join(dir, e.name)],
+  );
+const systemPages = existsSync('src/pages/talleres')
+  ? walk('src/pages/talleres').filter((f) => f.endsWith('.astro'))
+  : [];
+check(
+  'page for workshops: never prerendered, locked page by page',
+  systemPages.flatMap((f) => {
+    const src = readFileSync(f, 'utf8');
+    return [
+      ...(/prerender\s*=\s*true/.test(src) ? [`${f}: prerender = true`] : []),
+      ...(!/export const prerender = false;/.test(src) ? [`${f}: without prerender = false`] : []),
+      ...(!src.includes("if (!systemVisible) return Astro.rewrite('/404');")
+        ? [`${f}: without its lock`]
+        : []),
+    ];
+  }),
+);
+if (existsSync('dist')) {
+  check(
+    'page for workshops: no static HTML names it',
+    walk('dist')
+      .filter((f) => f.endsWith('.html'))
+      .filter((f) => f.includes('talleres') || readFileSync(f, 'utf8').includes('/talleres'))
+      .map((f) => `${f}: names /talleres`),
+  );
+} else {
+  console.warn('\n! dist/ does not exist: the static HTML check was skipped (pnpm build first).');
 }
 
 const bad = steps.filter((s) => !s.ok);

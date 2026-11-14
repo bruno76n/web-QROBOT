@@ -32,6 +32,7 @@ Se valida en la fase 3 con el validador de Schema.org (prueba que compara contra
 
 - Sin `@astrojs/sitemap` (solo ve páginas fijas). El sitemap es una ruta del servidor (`src/pages/sitemap.xml.ts`) que lista inicio, catálogo, categorías, productos publicados (con `lastmod = updated_at`) y privacidad.
 - `robots.txt` (`src/pages/robots.txt.ts`): permite todo salvo `/admin` y `/api`; apunta al sitemap.
+- **Para talleres** (`25 §2`): el sitemap incluye sus 3 páginas solo con `systemVisible`; `robots.txt` nunca menciona `/talleres` (un `Disallow` anunciaría la ruta).
 
 ## 4. URLs
 

@@ -1,0 +1,19 @@
+---
+// The page for workshops: pricing. Hidden until the system is out (docs/25 §2): the middleware locks
+// `/talleres` and this page locks itself too; never prerendered.
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { site } from '@/config/site';
+import { systemVisible } from '@/config/system';
+import { es } from '@/i18n/es';
+
+export const prerender = false;
+if (!systemVisible) return Astro.rewrite('/404');
+
+const seo = es.system.seo.pricing(site.system.name);
+---
+
+<BaseLayout title={seo.title} description={seo.description} stickyHeader={false}>
+  <div class="wrap py-16">
+    <h1>{es.system.pricing.title}</h1>
+  </div>
+</BaseLayout>

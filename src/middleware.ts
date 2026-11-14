@@ -1,9 +1,11 @@
 /**
- * Request middleware for every route: canonical URLs, the admin session gate and the security
- * headers of every response.
+ * Request middleware for every route: canonical URLs, the lock of the hidden page for workshops,
+ * the admin session gate and the security headers of every response.
  */
 import { defineMiddleware } from 'astro:middleware';
+import { systemVisible } from '@/config/system';
 import { es } from '@/i18n/es';
+import { isSystemPath } from '@/lib/system/visibility';
 import { isAdminRequest } from '@/server/auth';
 
 /**
@@ -33,8 +35,8 @@ const isAdminApi = (pathname: string) =>
 const isPanel = (pathname: string) => pathname === '/admin' || pathname.startsWith('/admin/');
 
 /**
- * Redirects trailing-slash GETs, answers 401 to panel pages and admin APIs without a valid
- * session, and adds the security headers (plus `noindex` and `no-store` for the admin) to the response.
+ * Redirects trailing-slash GETs, answers the site's 404 page under `/talleres` while the page for
+ * workshops is hidden, answers 401 to panel pages and admin APIs without a valid session, and adds the security headers (plus `noindex` and `no-store` for the admin) to the response.
  */
 export const onRequest = defineMiddleware(async (context, next) => {
   const { pathname } = context.url;
@@ -45,17 +47,24 @@ export const onRequest = defineMiddleware(async (context, next) => {
       301,
     );
   }
+  // The page for workshops is hidden until the system is out: any path under `/talleres`, also
+  // encoded, gets the site's 404 before anything else runs (docs/25 §2). Each page locks itself too.
+  const hidden = !systemVisible && isSystemPath(pathname);
   // The panel pages need the session too: without it not even the empty shell is served.
   const denied =
-    (isAdminApi(pathname) || isPanel(pathname)) && !(await isAdminRequest(context.request));
-  const response = denied
-    ? isPanel(pathname)
-      ? new Response(es.admin.errors.UNAUTHORIZED, {
-          status: 401,
-          headers: { 'Content-Type': 'text/plain; charset=utf-8' },
-        })
-      : Response.json({ ok: false, code: 'UNAUTHORIZED' }, { status: 401 })
-    : await next();
+    !hidden &&
+    (isAdminApi(pathname) || isPanel(pathname)) &&
+    !(await isAdminRequest(context.request));
+  const response = hidden
+    ? await context.rewrite('/404')
+    : denied
+      ? isPanel(pathname)
+        ? new Response(es.admin.errors.UNAUTHORIZED, {
+            status: 401,
+            headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+          })
+        : Response.json({ ok: false, code: 'UNAUTHORIZED' }, { status: 401 })
+      : await next();
   // Responses from `fetch` can be immutable: rebuild the headers on a copy when needed.
   const headers = new Headers(response.headers);
   for (const [name, value] of Object.entries(staticHeaders)) headers.set(name, value);
