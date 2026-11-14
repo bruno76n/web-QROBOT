@@ -20,7 +20,7 @@ Antes de la fase se estabilizaron las pruebas del panel que fallaban a veces (or
 ## Pruebas
 - **Vitest: 428** (unit, servidor y el proyecto nuevo `astro` para componentes). Nuevas: `fuzzy`, `tables`, `glossary`, búsqueda en D1 con «petj» y con `instr`, buscador del servidor con Meilisearch simulado (camino feliz, caído → D1, `400`, `429`, búsquedas sin resultado sin IP, `syncLearnIndex` con intercambio de índices), inyección al pintar.
 - **Playwright público: 241** en 390, 820 y 1440, incluidos los flujos **H, I, J, K y L**, el teclado completo, la búsqueda sin JavaScript, la navegación inicio → Aprende → ficha → catálogo → Aprende sin errores, y 360 px (portada, filamentos, ¿Cabe mi pieza?, calculadora). axe sin errores serios en portada, tema, ficha, glosario y resultados.
-- **Panel: 63** (ver abajo el resultado de la corrida final).
+- **Panel: 63/63** (con el header y el footer nuevos).
 - **`pnpm security`: 5/5.** `pnpm lint` y `pnpm typecheck`: limpios.
 - **`pnpm size`:** Aprende 9.9–11.3 KB al abrir (presupuesto 25), sin `requestIdleCallback(` ni *lookbehind*.
 - **Lighthouse (celular):** `/aprende`, `/aprende/filamentos` y `/aprende/filamentos/pla` 100/100/100/100; el resto de la web igual que antes.
