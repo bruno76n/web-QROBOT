@@ -1,0 +1,156 @@
+---
+/**
+ * Section of one module (docs/25 §6.2, mockup `.feat`): the module name with its icon, the title,
+ * the sentence, its details (`Specs`) and the system screen on its lilac background (`Stage`).
+ * Variants: `rev` puts the screen on the left on desktop, `soft` gray background, `wide` text on
+ * top (title on the left, details on the right) and the screen full width, `dark` black background
+ * with a dark gray stage, `center` centers a narrower screen. The `text` slot goes under the
+ * sentence, before the details (the cost formula); the default slot is the screen.
+ */
+import ModuleKick from './ModuleKick.astro';
+import Specs from './Specs.astro';
+import Stage from './Stage.astro';
+import type { IconKey } from '@/config/system';
+
+interface Props {
+  /** Id of the section (anchor); the heading is `<id>-h`. */
+  id: string;
+  kick: { icon: IconKey; label: string };
+  title: string;
+  lead: string;
+  specs: readonly { name: string; text: string }[];
+  rev?: boolean;
+  soft?: boolean;
+  wide?: boolean;
+  dark?: boolean;
+  center?: boolean;
+  /** Class of the stage (`two-ui` puts two screens side by side). */
+  stageClass?: string;
+}
+const {
+  id,
+  kick,
+  title,
+  lead,
+  specs,
+  rev = false,
+  soft = false,
+  wide = false,
+  dark = false,
+  center = false,
+  stageClass,
+} = Astro.props;
+const headingId = `${id}-h`;
+---
+
+<section class:list={['feat', { rev, soft, wide, dark }]} id={id} aria-labelledby={headingId}>
+  {wide ? (
+    <div class="wrap">
+      <div class="feat-top">
+        <div>
+          <ModuleKick icon={kick.icon} label={kick.label} />
+          <h2 class="t-h2" id={headingId}>
+            {title}
+          </h2>
+          <p class="lead">{lead}</p>
+          <slot name="text" />
+        </div>
+        <Specs items={specs} class="two" />
+      </div>
+      <Stage center={center} class={stageClass}>
+        <slot />
+      </Stage>
+    </div>
+  ) : (
+    <div class="wrap feat-in">
+      <div class="feat-t">
+        <ModuleKick icon={kick.icon} label={kick.label} />
+        <h2 class="t-h2" id={headingId}>
+          {title}
+        </h2>
+        <p class="lead">{lead}</p>
+        <slot name="text" />
+        <Specs items={specs} class="feat-specs" />
+      </div>
+      <Stage center={center} class={stageClass}>
+        <slot />
+      </Stage>
+    </div>
+  )}
+</section>
+
+<style>
+  /* Grid gaps with their Safari 14 alias. */
+  .feat-in {
+    display: grid;
+    grid-gap: 36px;
+    gap: 36px;
+  }
+  .feat-t .lead,
+  .feat-top .lead {
+    margin-top: 18px;
+  }
+  .feat-t :global(.feat-specs),
+  .feat-t :global(.formula) {
+    margin-top: 28px;
+  }
+  @media (min-width: 1100px) {
+    .feat-in {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      grid-column-gap: 64px;
+      column-gap: 64px;
+      align-items: center;
+    }
+    .feat.rev .feat-in {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+    .feat.rev .feat-in > :global(.stage) {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .feat.rev .feat-t {
+      grid-column: 2;
+    }
+  }
+  /* Wide sections: title and details on top, the screen below, full width. */
+  .feat-top {
+    display: grid;
+    grid-gap: 24px;
+    gap: 24px;
+    margin-bottom: clamp(28px, 3.6vw, 48px);
+  }
+  @media (min-width: 1100px) {
+    .feat-top {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      grid-column-gap: 64px;
+      column-gap: 64px;
+      align-items: start;
+    }
+  }
+  /* Two screens side by side on desktop (filaments and purchases). */
+  .feat :global(.stage.two-ui) {
+    display: grid;
+    grid-gap: 20px;
+    gap: 20px;
+  }
+  @media (min-width: 1100px) {
+    .feat :global(.stage.two-ui) {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      align-items: start;
+    }
+  }
+  .feat.soft {
+    background: var(--soft);
+  }
+  /* Dark section (reports). */
+  .feat.dark {
+    background: var(--ink);
+    color: #fff;
+  }
+  .feat.dark .lead {
+    color: #b9b9c3;
+  }
+  .feat.dark :global(:focus-visible) {
+    outline-color: #b49af5;
+  }
+</style>

@@ -1,19 +1,47 @@
 ---
-// The page for workshops: home (docs/25 §7). Hidden until the system is out (docs/25 §2): the
-// middleware locks `/talleres` and this page locks itself too; never prerendered.
-import BaseLayout from '@/layouts/BaseLayout.astro';
+// The page for workshops: main page (docs/25 §7.1). Hidden until the system is out (docs/25 §2):
+// the middleware locks `/talleres` and this page locks itself too; never prerendered.
+import SystemLayout from '@/layouts/SystemLayout.astro';
+import EndCta from '@/components/system/EndCta.astro';
+import FeatureSection from '@/components/system/FeatureSection.astro';
+import PlanBand from '@/components/system/PlanBand.astro';
+import SectionHead from '@/components/system/SectionHead.astro';
+import Wordmark from '@/components/system/Wordmark.astro';
 import { site } from '@/config/site';
 import { systemVisible } from '@/config/system';
 import { es } from '@/i18n/es';
+import { systemBase } from '@/lib/system/visibility';
 
 export const prerender = false;
 if (!systemVisible) return Astro.rewrite('/404');
 
 const seo = es.system.seo.home(site.system.name);
+const m = es.system.modules;
 ---
 
-<BaseLayout title={seo.title} description={seo.description} stickyHeader={false}>
-  <div class="wrap py-16">
-    <h1>{seo.title}</h1>
-  </div>
-</BaseLayout>
+<SystemLayout title={seo.title} description={seo.description} current="home">
+  <section class="pt-10" aria-labelledby="h1">
+    <div class="wrap">
+      <Wordmark />
+    </div>
+  </section>
+
+  <FeatureSection
+    id="pedidos"
+    kick={{ icon: 'orders', label: m.orders.name }}
+    title={m.orders.name}
+    lead={m.orders.text}
+    specs={[{ name: m.orders.name, text: m.orders.text }]}
+    rev
+    soft
+  />
+
+  <section class="soft" aria-labelledby="price-h">
+    <div class="wrap">
+      <SectionHead id="price-h" title={es.system.plans.label} />
+      <PlanBand />
+    </div>
+  </section>
+
+  <EndCta secondary={{ label: es.system.cta.downloadApp, href: `${systemBase}/descargar` }} />
+</SystemLayout>

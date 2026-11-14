@@ -1,0 +1,39 @@
+---
+/**
+ * Header of a section of the page for workshops (docs/25 §6.2, mockup `.sec-h`): the module name
+ * with its icon (optional), the `h2` and, if given, its sentence. No double rule (§7).
+ */
+import ModuleKick from './ModuleKick.astro';
+import type { IconKey } from '@/config/system';
+
+interface Props {
+  /** Id of the heading, for the section's `aria-labelledby`. */
+  id: string;
+  title: string;
+  lead?: string;
+  kick?: { icon: IconKey; label: string };
+}
+const { id, title, lead, kick } = Astro.props;
+---
+
+<header class="sec-h">
+  {kick && <ModuleKick icon={kick.icon} label={kick.label} />}
+  <h2 class="t-h2" id={id}>
+    {title}
+  </h2>
+  {lead && <p class="lead">{lead}</p>}
+</header>
+
+<style>
+  /* Grid gap with its Safari 14 alias. */
+  .sec-h {
+    display: grid;
+    grid-gap: 16px;
+    gap: 16px;
+    margin-bottom: clamp(32px, 4.4vw, 56px);
+    max-width: 860px;
+  }
+  .sec-h :global(.kick) {
+    margin-bottom: 2px;
+  }
+</style>

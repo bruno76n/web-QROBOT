@@ -1,0 +1,65 @@
+---
+/**
+ * Dark closing band of the 3 pages for workshops (docs/25 §6.2, mockup `.s-end`): «Tu taller merece
+ * un cerebro.», the trial sentence, «Crear cuenta» (green, to the system) and, if given, a second
+ * button with a light outline. Links outside the site get `noopener`.
+ */
+import Button from '@/components/site/Button.astro';
+import { site } from '@/config/site';
+import { es } from '@/i18n/es';
+
+interface Props {
+  /** Second button (the main page adds «Descargar app»). */
+  secondary?: { label: string; href: string };
+}
+const { secondary } = Astro.props;
+const { appUrl, signUpPath, trialDays } = site.system;
+const t = es.system.end;
+---
+
+<section class="s-end" aria-labelledby="end-h">
+  <div class="wrap s-end-in">
+    <h2 class="t-h2" id="end-h">
+      {t.title}
+    </h2>
+    <p class="lead">{t.lead(trialDays)}</p>
+    <div class="end-cta">
+      <Button href={`${appUrl}${signUpPath}`} rel="noopener" variant="green" arrow class="end-btn">
+        {es.system.cta.signUp}
+      </Button>
+      {secondary && (
+        <Button href={secondary.href} variant="outlineLight" class="end-btn">
+          {secondary.label}
+        </Button>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .s-end {
+    background: var(--ink);
+    color: #fff;
+  }
+  /* Grid gap with its Safari 14 alias. */
+  .s-end-in {
+    display: grid;
+    grid-gap: 22px;
+    gap: 22px;
+  }
+  .s-end .lead {
+    color: #c9c9d1;
+  }
+  /* Spacing with margins, not `gap` in flex (Safari 14, docs/24 §5). */
+  .end-cta {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -6px;
+  }
+  .end-cta :global(.end-btn) {
+    margin: 6px;
+  }
+  .s-end :global(:focus-visible) {
+    outline-color: #b49af5;
+  }
+</style>

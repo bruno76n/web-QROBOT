@@ -1,0 +1,27 @@
+---
+/**
+ * The system's name in big letters, in one line, as the `h1` of the main page (docs/25 §6.2,
+ * mockup `.wordmark`): 13.4 vw on phones (at least 56 px), up to 200 px on desktop (§8).
+ */
+import { site } from '@/config/site';
+
+interface Props {
+  id?: string;
+}
+const { id = 'h1' } = Astro.props;
+---
+
+<h1 class="wordmark" id={id}>
+  {site.system.name}
+</h1>
+
+<style>
+  .wordmark {
+    font-size: clamp(56px, 13.4vw, 200px);
+    line-height: 0.84;
+    letter-spacing: -0.068em;
+    font-weight: 600;
+    margin-left: -0.05em;
+    white-space: nowrap;
+  }
+</style>

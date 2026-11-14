@@ -124,6 +124,7 @@ En `src/components/system/`, cada uno con sus estilos en su `<style>`:
 | `SystemNav.astro` | Barra del producto (ícono, nombre, Módulos · Precios · Descargar, Iniciar sesión, Probar gratis); en celular las ligas van en un `<details>` (sin script) | `.pbar` |
 | `Wordmark.astro` | El nombre del sistema en grande (`h1`), en una línea | `.wordmark` |
 | `ModuleKick.astro` | Nombre del módulo con su ícono del menú, arriba del título de una sección | `.kick` |
+| `ModuleIcon.astro` | El ícono de lucide de cada módulo o sección (claves de `config/system.ts`); decorativo | `.ic` |
 | `SectionHead.astro` | `ModuleKick` opcional, `h2` y frase | `.sec-h` |
 | `ModuleIndex.astro` | Los 13 módulos en 3 grupos (Vender, Taller, Negocio) con ícono, nombre y qué hace | `.mods` |
 | `FeatureSection.astro` | Sección de un módulo: `ModuleKick`, título, frase, `Specs` y la pantalla del sistema sobre su fondo lila (`Stage`); variantes `rev` (pantalla a la izquierda en escritorio), `soft` (fondo gris), `wide` (texto arriba, pantalla a todo lo ancho), `dark` (fondo negro, fondo de la pantalla gris oscuro) | `.feat` |
