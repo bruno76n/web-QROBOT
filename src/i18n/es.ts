@@ -20,6 +20,8 @@ export const es = {
     /** Over the hero the header shows this instead of the logo (docs/03 §5). */
     social: { lead: 'Visita nuestras redes:', button: 'Instagram' },
     quoteHref: '/#pedido',
+    /** Menu link of the page for workshops, only while it is visible (docs/25 §2, §6.1). */
+    system: { label: 'Para talleres', short: 'Talleres', href: '/talleres' },
   },
   footer: {
     navLabel: 'Secciones',
