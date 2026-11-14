@@ -1,0 +1,57 @@
+---
+// Test page `/dev/ui-docs-reportes` of the quote and reports screens of the page for workshops:
+// the two sections as the mockup draws them (`#documentos` gray and centered, `#reportes` wide and
+// dark), so the screens get the same width as on the page. Placeholder texts. Only exists in
+// `astro dev` (404 otherwise); it carries `noindex` and is not linked anywhere.
+import SystemLayout from '@/layouts/SystemLayout.astro';
+import FeatureSection from '@/components/system/FeatureSection.astro';
+import UiQuote from '@/components/system/ui/UiQuote.astro';
+import UiReports from '@/components/system/ui/UiReports.astro';
+
+// Test page: development only (docs/10 §9).
+if (!import.meta.env.DEV) return new Response(null, { status: 404 });
+---
+
+<SystemLayout
+  title="UI · Cotización y reportes (dev)"
+  description="Página de prueba"
+  current="home"
+>
+  <meta slot="head" name="robots" content="noindex" />
+
+  <FeatureSection
+    id="documentos"
+    kick={{ icon: 'documents', label: 'Cotizaciones y notas de venta' }}
+    title="Cotiza como empresa grande."
+    lead="Con los datos de tu negocio, en PDF o lista para pegar en WhatsApp."
+    specs={[
+      { name: 'PDF o impresión', text: 'Desde el pedido o la venta.' },
+      { name: 'Texto para WhatsApp', text: 'La misma cotización, lista para pegar en el chat.' },
+      { name: 'Datos del negocio', text: 'Se capturan una vez en Ajustes.' },
+    ]}
+    soft
+    center
+  >
+    <UiQuote />
+  </FeatureSection>
+
+  <FeatureSection
+    id="reportes"
+    kick={{ icon: 'reports', label: 'Reportes' }}
+    title="Ganancia real, no la de la libreta."
+    lead="Ventas, gastos y ganancia neta por semana, canal y producto, contra el periodo anterior."
+    specs={[
+      {
+        name: 'Distribución de cada $100',
+        text: 'Material, máquina, luz, comisiones, gastos y ganancia neta.',
+      },
+      { name: 'Por canal y por producto', text: 'Las colecciones se reparten entre sus piezas.' },
+      { name: 'Gastos', text: 'Fijos y variables; los recurrentes se prorratean por día.' },
+      { name: 'Resumen', text: 'Para copiar y compartir.' },
+    ]}
+    wide
+    dark
+  >
+    <UiReports />
+  </FeatureSection>
+</SystemLayout>
