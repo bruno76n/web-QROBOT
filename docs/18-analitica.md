@@ -24,6 +24,10 @@ Web Analytics no cuenta clics. Por eso la web suma sus propios toques (tabla `wh
 - Cuenta **toques al botón**, no pedidos reales: el dueño lo sabe (el texto del panel dice "toques", no "ventas").
 - Lo que **no** se guarda: IP, navegador, hora exacta, nada que identifique a la persona.
 
+## 2b. Búsquedas sin resultado de Aprende
+
+Cada búsqueda de 3 caracteres o más que no encuentra nada suma 1 por día en `learn_search_misses` (la búsqueda normalizada y el día; sin IP ni nada de la persona, `22 §7.6, §11`). Sirve para decidir qué respuesta escribir; se verá en el panel de Aprende (fase 8, `22 §10`).
+
 ## 3. Dónde se ve
 
 En el panel, pestaña Productos (`12 §6`):

@@ -4,7 +4,7 @@ kind: section
 topic: filamentos
 title: Filamentos
 subtitle: Temperaturas, usos y cuidados. Datos de Bambu Lab, revisados en noviembre de 2026.
-summary: PLA para casi todo lo que va dentro de la casa. PETG si la pieza tiene que aguantar más calor o golpes. ASA para lo que va al sol. TPU para lo flexible. Los de fibra y los técnicos (PC, nylon) piden impresora cerrada y filamento seco.
+summary: 'PLA o PETG para lo que va dentro de la casa: sirven para lo mismo y el PETG, además, aguanta más golpes y calor. ASA para lo que va al sol. TPU para lo flexible. Los de fibra y los técnicos (PC, nylon) piden impresora cerrada y filamento seco.'
 filters: []
 tags:
 - filamento
@@ -29,7 +29,7 @@ reviewed: 2026-11
 cta: whatsapp
 faqs:
 - q: ¿PLA o PETG?
-  a: PLA para piezas de interior que no cargan peso ni están cerca de calor. PETG para piezas de uso diario que se golpean, se doblan un poco o pueden pasar de 57 °C (un coche, una ventana con sol).
+  a: 'Para figuras, llaveros y decoración, cualquiera de los dos: decide el precio y los colores que encuentres. El PETG sirve para todo lo que sirve el PLA, pero el PLA no sirve para todo lo del PETG: las piezas que se golpean, se doblan un poco o pueden pasar de 57 °C (un coche, una ventana con sol) van en PETG.'
 - q: ¿Qué filamento uso para piezas que van al sol?
   a: ASA. Aguanta 100 °C y resiste los rayos UV. Pide impresora cerrada.
 - q: ¿Cuál es el filamento más resistente?

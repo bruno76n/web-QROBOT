@@ -50,10 +50,12 @@ quick-robot-web/
    │  ├─ sitemap.xml.ts, robots.txt.ts   para buscadores (`14 §3`)
    │  └─ img/[...key].ts          SOLO en desarrollo: sirve fotos desde R2 local
    ├─ layouts/
-   │  └─ BaseLayout.astro         <head> (SEO, `14`), header, footer, ClientRouter
-   ├─ lib/learn/                  lógica pura de Aprende: markdown, content, import, fit, cost, heat, search-docs (`21`, `22`)
+   │  ├─ BaseLayout.astro         <head> (SEO, `14`), header, footer, ClientRouter
+   │  └─ LearnLayout.astro        Aprende: estilos (`src/styles/learn.css`), barra del buscador y scripts comunes
+   ├─ lib/learn/                  lógica pura de Aprende: markdown, content, import, fit, cost, heat, tables, glossary, fuzzy, search-docs (`21`, `22`)
+   ├─ scripts/                    scripts de navegador compartidos de Aprende: learn-search.ts (buscador), learn-printers.ts (¿Cabe mi pieza? e impresoras)
    ├─ components/
-   │  ├─ learn/                   Aprende (fase 7): Content, Node, Search, tablas, herramientas
+   │  ├─ learn/                   Aprende: Content, Node, Inline, Callout, Mark, PageHead, Article, TopicPages, Glossary, Search, Marked, tablas (FilamentTable, PrinterTable, MaintenanceCalendar), FitTool, CostCalculator, LearnScripts
    │  ├─ site/                    Header, Footer, Logo, ProductCard, Price, Breadcrumbs (Astro)
    │  ├─ sections/                una por sección del inicio: Hero, Navidad, Ideas, Video,
    │  │                           Imprimiendo, Q404, Alberca, Pedido (Astro + su isla si hace falta)
@@ -72,6 +74,8 @@ quick-robot-web/
    │  │  └─ client.ts             getDb(env)
    │  ├─ queries/                 lecturas: products.ts, hero.ts, clicks.ts, learn.ts
    │  ├─ learn-import.ts          escribe el plan del importador en D1 (y arma el SQL de --remote)
+   │  ├─ search.ts                buscar en Aprende: Meilisearch con tiempo máximo, respaldo en D1, búsquedas sin resultado
+   │  ├─ search-index.ts          índice de Meilisearch: ajustes, documentos y sincronización (`22 §4–6`)
    │  ├─ storage.ts               R2: getBucket, putObject, deleteByPrefix, photoUrl
 │  ├─ clock.ts                 now() (con x-test-now fuera de producción, `10 §8`)
 │  ├─ env.ts                   variables y secretos

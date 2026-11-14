@@ -1,0 +1,44 @@
+---
+/**
+ * Lilac header of an Aprende page (docs/21 §4.1): breadcrumbs, `h1`, subtitle, «Revisado en…»
+ * and the «En corto» box with the summary, which is also what the search shows.
+ */
+import { es } from '@/i18n/es';
+import { reviewedLabel } from '@/lib/learn/content';
+
+interface Props {
+  title: string;
+  subtitle: string;
+  summary: string;
+  /** `YYYY-MM`; nothing is shown when empty. */
+  reviewed: string;
+  /** Trail before the current page, e.g. Aprende › Filamentos. */
+  crumbs: { label: string; href: string }[];
+}
+const { title, subtitle, summary, reviewed, crumbs } = Astro.props;
+const reviewedText = reviewedLabel(reviewed, es.learn.months, es.learn.reviewed);
+---
+
+<div class="ap-head">
+  <div class="wrap">
+    <nav class="crumbs" aria-label={es.learn.crumbs}>
+      <ol>
+        {crumbs.map((c) => (
+          <li>
+            <a href={c.href}>{c.label}</a>
+          </li>
+        ))}
+        <li aria-current="page">{title}</li>
+      </ol>
+    </nav>
+    <h1 class="ap-h1">{title}</h1>
+    {subtitle && <p class="ap-sub">{subtitle}</p>}
+    {reviewedText && <p class="ap-rev">{reviewedText}</p>}
+    {summary && (
+      <div class="ap-sum">
+        <b>{es.learn.summary}</b>
+        <p>{summary}</p>
+      </div>
+    )}
+  </div>
+</div>

@@ -180,6 +180,34 @@ export type PrintersData = z.infer<typeof printersData>;
 export type MaintenanceData = z.infer<typeof maintenanceData>;
 export type FunFactsData = z.infer<typeof funFactsData>;
 
+/**
+ * Input of the search endpoint (docs/22 §7.2): `q` of 1 to 80 characters once trimmed and
+ * `tema` empty or a topic id.
+ */
+export const learnSearchInput = z.object({
+  q: z.string().trim().min(1).max(80),
+  tema: z.union([z.literal(''), z.enum(learnTopicIds)]),
+});
+
+/** `<title>` of an Aprende page: «PLA · Aprende · Quick Robot» (docs/21 §12). */
+export function learnTitle(title: string): string {
+  return `${title} · Aprende · Quick Robot`;
+}
+
+/**
+ * «Revisado en noviembre de 2026» from `2026-11`; empty when the value is not `YYYY-MM`.
+ * `months` and `template` come from es.ts.
+ */
+export function reviewedLabel(
+  reviewed: string,
+  months: readonly string[],
+  template: (month: string, year: number) => string,
+): string {
+  const m = /^(\d{4})-(\d{2})$/.exec(reviewed);
+  const month = m ? months[Number(m[2]) - 1] : undefined;
+  return m && month ? template(month, Number(m[1])) : '';
+}
+
 /** `''` → `/aprende`; `filamentos/pla` → `/aprende/filamentos/pla`. */
 export function learnUrl(slug: string): string {
   return slug === '' ? '/aprende' : `/aprende/${slug}`;

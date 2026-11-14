@@ -123,7 +123,7 @@
     {
       "material": "PETG",
       "slug": "filamentos/petg",
-      "uses": "Piezas de uso diario; aguanta más calor y golpes que el PLA.",
+      "uses": "Lo mismo que el PLA y piezas de uso diario; aguanta más calor y golpes.",
       "nozzleC": "240–270",
       "bedC": "60–80",
       "hdtC": 69,
@@ -136,6 +136,7 @@
       "hardenedNozzle": "no",
       "ams": "yes",
       "filters": [
+        "decoracion",
         "uso-diario",
         "exterior",
         "calor",

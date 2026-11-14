@@ -22,6 +22,21 @@ const widths = [
   { name: 'w1440', width: 1440, height: 900 },
 ] as const;
 
+/**
+ * WebKit (Safari's engine) runs the Aprende flows H–L on an iPhone 13 (docs/24 §6). It is added only
+ * where Playwright's WebKit is installed (`pnpm exec playwright install webkit`), so the suite still
+ * runs on machines that only have Chromium.
+ */
+function hasWebKit(): boolean {
+  const dirs = [process.env.PLAYWRIGHT_BROWSERS_PATH, `${process.env.HOME}/.cache/ms-playwright`];
+  return dirs.some(
+    (d) => !!d && existsSync(d) && readdirSync(d).some((n) => n.startsWith('webkit-')),
+  );
+}
+const webkit = hasWebKit()
+  ? [{ name: 'webkit', testMatch: /flow-learn\.spec\.ts/, use: { ...devices['iPhone 13'] } }]
+  : [];
+
 export default defineConfig({
   testDir: '.',
   testMatch: ['e2e/**/*.spec.ts', 'tests/**/*.spec.ts'],
@@ -31,19 +46,22 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [['github'], ['list']] : 'list',
   use: { baseURL, trace: 'retain-on-failure' },
-  projects: widths.map((w) => ({
-    name: w.name,
-    use: {
-      ...devices['Desktop Chrome'],
-      viewport: { width: w.width, height: w.height },
-      launchOptions,
-    },
-  })),
+  projects: [
+    ...widths.map((w) => ({
+      name: w.name,
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: w.width, height: w.height },
+        launchOptions,
+      },
+    })),
+    ...webkit,
+  ],
   // e2e runs against the production build served by workerd (headers, CSP and size
   // are only real there). Flows that need `pnpm dev` start it themselves (phase 2+).
   webServer: {
-    // Starts from the seed so the public pages have the 14 example products.
-    command: `node scripts/setup-local.mjs && node scripts/seed.ts && pnpm build && pnpm preview --port ${port} --ignore-lock`,
+    // Starts from the seed (14 example products) and the content of Aprende (content/aprende/).
+    command: `node scripts/setup-local.mjs && node scripts/seed.ts && pnpm exec tsx scripts/learn-import.ts --overwrite && pnpm build && pnpm preview --port ${port} --ignore-lock`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,

@@ -150,7 +150,7 @@ terms:
   href: /aprende/maquinas/placas
 - term: PETG
   en: null
-  definition: Plástico de uso diario, más resistente que el PLA.
+  definition: Plástico que sirve para lo mismo que el PLA y aguanta más golpes y calor.
   href: /aprende/filamentos/petg
 - term: Pie de elefante
   en: elephant foot

@@ -1,0 +1,32 @@
+---
+/**
+ * The tool a `[[…]]` mark of the body asks for (docs/21 §5–6): the filaments, printers and
+ * maintenance tables, ¿Cabe mi pieza? and the cost calculator. Each one gets the data the page
+ * query loaded for it; a mark whose data is missing paints nothing.
+ */
+import type { MarkName } from '@/lib/learn/markdown';
+import type { LearnData } from '@/server/queries/learn';
+import FilamentTable from './FilamentTable.astro';
+import PrinterTable from './PrinterTable.astro';
+import FitTool from './FitTool.astro';
+import MaintenanceCalendar from './MaintenanceCalendar.astro';
+import CostCalculator from './CostCalculator.astro';
+
+interface Props {
+  name: MarkName;
+  data: LearnData;
+}
+const { name, data } = Astro.props;
+---
+
+{name === 'tabla:filamentos' ? (
+  data.filamentos && <FilamentTable data={data.filamentos} />
+) : name === 'tabla:impresoras' ? (
+  data.impresoras && <PrinterTable data={data.impresoras} />
+) : name === 'cabe-mi-pieza' ? (
+  data.impresoras && <FitTool data={data.impresoras} />
+) : name === 'tabla:mantenimiento' ? (
+  data.mantenimiento && <MaintenanceCalendar data={data.mantenimiento} />
+) : (
+  <CostCalculator />
+)}

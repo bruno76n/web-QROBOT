@@ -1,0 +1,20 @@
+---
+/** «También te puede servir»: related pages with their topic above the title (docs/21 §4.1). */
+import { learnTopicName } from '@/config/learn';
+import { learnUrl } from '@/lib/learn/content';
+import type { LearnTopicLink } from '@/server/queries/learn';
+
+interface Props {
+  items: LearnTopicLink[];
+}
+const { items } = Astro.props;
+---
+
+<div class="rel">
+  {items.map((r) => (
+    <a href={learnUrl(r.slug)}>
+      <span>{learnTopicName(r.topic)}</span>
+      <b>{r.title}</b>
+    </a>
+  ))}
+</div>

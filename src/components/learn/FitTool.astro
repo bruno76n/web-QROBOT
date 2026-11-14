@@ -1,0 +1,61 @@
+---
+/**
+ * ¿Cabe mi pieza? (`[[cabe-mi-pieza]]`, docs/21 §6.2): width, depth and height in cm or mm. While
+ * typing it says in how many printers the piece fits; when the printers table is on the same page,
+ * each row also says «Cabe de pie», «Cabe acostada» or «No cabe». Rule in src/lib/learn/fit.ts,
+ * behavior in src/scripts/learn-printers.ts. Numbers accept comma or point (docs/24 §2).
+ */
+import { es } from '@/i18n/es';
+import type { PrintersData } from '@/lib/learn/content';
+
+interface Props {
+  data: PrintersData;
+}
+const { data } = Astro.props;
+const t = es.learn.fit;
+// Sizes of every printer, for counting when the table is not on the page.
+const sizes = data.rows.map((r) => [r.widthMm, r.depthMm, r.heightMm]);
+---
+
+<section
+  class="fit"
+  aria-labelledby="fit-h2"
+  data-fit
+  data-margin={data.fitMarginMm}
+  data-sizes={JSON.stringify(sizes)}
+  data-prompt={t.prompt}
+  data-none={t.none}
+  data-count={t.count}
+>
+  <h2 id="fit-h2">{t.title}</h2>
+  <div class="fit-in">
+    <label>
+      {t.width}
+      <input data-fit-in="w" inputmode="decimal" autocomplete="off" placeholder="0" />
+    </label>
+    <label>
+      {t.depth}
+      <input data-fit-in="d" inputmode="decimal" autocomplete="off" placeholder="0" />
+    </label>
+    <label>
+      {t.height}
+      <input data-fit-in="h" inputmode="decimal" autocomplete="off" placeholder="0" />
+    </label>
+    <div class="seg2" data-fit-unit role="group" aria-label={t.unit}>
+      <button type="button" data-u="cm" aria-pressed="true">
+        {t.cm}
+      </button>
+      <button type="button" data-u="mm" aria-pressed="false">
+        {t.mm}
+      </button>
+    </div>
+  </div>
+  <p class="fit-out" data-fit-out aria-live="polite">
+    {t.prompt}
+  </p>
+  <p class="tiny mute">{t.note(data.fitMarginMm)}</p>
+</section>
+
+<script>
+  import '@/scripts/learn-printers';
+</script>

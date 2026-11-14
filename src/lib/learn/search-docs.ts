@@ -1,6 +1,7 @@
 import slugify from '@sindresorhus/slugify';
 import { learnTopicName } from '@/config/learn';
 import { learnUrl, type PrintersData } from './content';
+import { termId } from './glossary';
 
 /** Documents of the Meilisearch index `learn` (docs/22 §4) and the highlight splitter (§7). */
 
@@ -90,7 +91,7 @@ export function buildSearchDocs(input: {
       order: p.sortOrder,
     });
     for (const t of p.terms ?? []) {
-      const slug = slugify(t.term, { separator: '-', lowercase: true, decamelize: false });
+      const slug = termId(t.term);
       docs.push({
         id: `t_${slug}`,
         type: 'term',

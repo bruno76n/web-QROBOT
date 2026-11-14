@@ -34,7 +34,7 @@ Versión: la estable más reciente al construir; se anota en `decisiones.md`.
 |---|---|---|---|
 | `MEILI_HOST` | variable | `wrangler.jsonc` (`''` = sin Meilisearch) | Por ejemplo `https://ms-xxxx.meilisearch.io` |
 | `MEILI_SEARCH_KEY` | secreto | `wrangler secret put` | Llave con solo `search` sobre el índice `learn` |
-| `MEILI_WRITE_KEY` | secreto | `wrangler secret put` | Llave con `documents.add`, `documents.delete`, `indexes.create`, `indexes.swap`, `indexes.delete`, `settings.update` y `tasks.get` sobre `learn` y `learn_tmp` |
+| `MEILI_WRITE_KEY` | secreto | `wrangler secret put` | Llave con `documents.add`, `documents.delete`, `indexes.create`, `indexes.get`, `indexes.swap`, `indexes.delete`, `settings.update` y `tasks.get` sobre `learn` y `learn_tmp` (`indexes.get` para saber si `learn` ya existe antes del intercambio) |
 | `MEILI_MASTER_KEY` | solo en la terminal del dueño | Nunca en el repositorio ni en el Worker | La usa `pnpm learn:search-setup` para crear el índice y las dos llaves |
 | `SEARCH_LIMITER` | binding de Rate Limiting | `wrangler.jsonc` | 60 búsquedas por minuto por IP (`namespace_id: "1002"`) |
 
@@ -128,10 +128,11 @@ Sin `MEILI_HOST` no hace nada y lo dice (`{ ok: true, skipped: true }`).
 
 1. Normaliza la búsqueda (como §7.6) y la parte en palabras; quita las de `stopWords`.
 2. Agrega los sinónimos de `buscador.json` (`expandSynonyms()`, pura, en `src/lib/learn/content.ts`).
-3. Busca con `LIKE` en `learn_pages.search_text` (título, subtítulo, `summary`, `tags` y preguntas, ya normalizados al importar o guardar) de las páginas publicadas.
-4. Ordena: palabra en el título > en `tags` > en el resto; empate por `sort_order`. Máximo 8.
+3. Busca cada palabra dentro de `learn_pages.search_text` (título, subtítulo, `summary`, `tags` y preguntas, ya normalizados al importar o guardar) de las páginas publicadas, con `instr()`: D1 limita los patrones de `LIKE` a 50 bytes y `instr` no necesita escapar `%` ni `_`.
+4. Si eso no encuentra nada, compara las palabras de 4 letras o más con los títulos y etiquetas de todas las páginas publicadas, con la misma tolerancia que Meilisearch (1 error desde 4 letras, 2 desde 8; `src/lib/learn/fuzzy.ts`). Así «petj» encuentra PETG aunque no haya Meilisearch.
+5. Ordena: palabra en el título > en `tags` > en el resto; empate por `sort_order`. Máximo 8. Las palabras buscadas se resaltan en el título y la frase (`highlightWords`).
 
-No tolera errores de dedo. La página `/aprende/buscar?q=` (sin JavaScript) usa la misma función que el endpoint: Meilisearch si hay, si no D1.
+Solo encuentra páginas (no preguntas sueltas, términos ni impresoras: eso lo agrega Meilisearch). La página `/aprende/buscar?q=` (sin JavaScript) usa la misma función que el endpoint: Meilisearch si hay, si no D1.
 
 ## 9. Interfaz
 

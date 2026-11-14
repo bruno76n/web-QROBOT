@@ -15,7 +15,7 @@
 
 Página estática, en lenguaje sencillo, con:
 1. **Responsable:** Bruno Ortiz, con el nombre comercial Quick Robot, domicilio `[domicilio]` y contacto `[correo]`.
-2. **Qué datos se obtienen en la web:** ninguno personal; estadísticas anónimas de visitas.
+2. **Qué datos se obtienen en la web:** ninguno personal; estadísticas anónimas de visitas; en Aprende, el texto de las búsquedas que no encuentran nada y el día, sin nada que identifique a quien buscó (`22 §11`).
 3. **WhatsApp:** al tocar "Pedir por WhatsApp" la persona sale de la web y su conversación se rige por WhatsApp; los datos que comparta en el chat (nombre, teléfono, fotos, logo) se usan **solo para cotizar y hacer su pedido**.
 4. **Fotos que mandan los clientes** (para figuras o logos): se usan solo para su pedido y no se publican sin permiso.
 5. **Derechos ARCO** (acceso, rectificación, cancelación, oposición): se ejercen escribiendo al contacto.

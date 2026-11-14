@@ -1,0 +1,37 @@
+---
+/**
+ * Closing call of an Aprende page by its `cta` (docs/21 §4.6): `whatsapp` shows the quote text
+ * (or the page's own `ctaText`) and the green button. `system` (Quick Cerebro) and `none` show
+ * nothing: the system call is not built while `site.system.enabled` is false (docs/21 §16).
+ */
+import { es } from '@/i18n/es';
+import { site } from '@/config/site';
+import { learnQuoteMessage, waLink } from '@/lib/whatsapp';
+
+interface Props {
+  cta: 'whatsapp' | 'system' | 'none';
+  ctaText: string;
+  /** Page title, quoted in the WhatsApp message. */
+  title: string;
+}
+const { cta, ctaText, title } = Astro.props;
+---
+
+{cta === 'whatsapp' && (
+  <div class="ap-cta">
+    <div class="wrap">
+      <p>{ctaText || es.learn.cta.text}</p>
+      <a
+        class="btn wa"
+        href={waLink(site.whatsapp, learnQuoteMessage(title))}
+        target="_blank"
+        rel="noopener"
+      >
+        {es.learn.cta.button}{' '}
+        <span class="ar" aria-hidden="true">
+          →
+        </span>
+      </a>
+    </div>
+  </div>
+)}

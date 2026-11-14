@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  articleJsonLd,
+  definedTermSetJsonLd,
   absoluteUrl,
   jsonLdString,
   breadcrumbJsonLd,
@@ -150,5 +152,39 @@ describe('jsonLdString', () => {
     expect(text).not.toContain('>');
     expect(text).not.toContain('&');
     expect(JSON.parse(text)).toEqual(nasty);
+  });
+});
+
+describe('Aprende structured data', () => {
+  it('Article with date, language and Quick Robot as author and publisher', () => {
+    const a = articleJsonLd({
+      domain: 'https://quickrobot.example',
+      path: '/aprende/filamentos/pla',
+      headline: 'PLA',
+      description: 'Para figuras.',
+      updatedAt: new Date('2026-11-13T12:00:00Z'),
+    });
+    expect(a).toMatchObject({
+      '@type': 'Article',
+      headline: 'PLA',
+      url: 'https://quickrobot.example/aprende/filamentos/pla',
+      dateModified: '2026-11-13T12:00:00.000Z',
+      inLanguage: 'es-MX',
+      author: { '@type': 'Organization', name: 'Quick Robot' },
+      publisher: { '@type': 'Organization', name: 'Quick Robot' },
+    });
+  });
+  it('DefinedTermSet with one term per anchor', () => {
+    const d = definedTermSetJsonLd('https://quickrobot.example', '/aprende/glosario', 'Glosario', [
+      { name: 'Boquilla', description: 'Punta por donde sale el plástico.', id: 'boquilla' },
+    ]);
+    expect(d.hasDefinedTerm).toEqual([
+      {
+        '@type': 'DefinedTerm',
+        name: 'Boquilla',
+        description: 'Punta por donde sale el plástico.',
+        url: 'https://quickrobot.example/aprende/glosario#boquilla',
+      },
+    ]);
   });
 });

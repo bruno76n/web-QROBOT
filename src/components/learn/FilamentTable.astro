@@ -1,0 +1,224 @@
+---
+/* eslint-disable astro/jsx-a11y/no-redundant-roles, astro/jsx-a11y/no-interactive-element-to-noninteractive-role, astro/jsx-a11y/no-noninteractive-tabindex -- Safari drops table semantics when CSS turns rows into cards, so roles are explicit (docs/24 §3); the scroll box takes focus so it can be scrolled with the keyboard. */
+/**
+ * Filaments table of `[[tabla:filamentos]]` (docs/21 §6.1): use chips (one at a time) and the
+ * switches of datos/filamentos.json, then the table (desktop), 2-column cards (tablet) or one card
+ * per material (phone). Filtering only toggles `hidden` on the rows (rule in src/lib/learn/tables.ts);
+ * the table keeps `role` attributes because Safari drops its meaning when CSS turns it into cards.
+ */
+import { es } from '@/i18n/es';
+import { learnUrl, type FilamentsData } from '@/lib/learn/content';
+import { heatLevel } from '@/lib/learn/heat';
+import { countText, splitMaterial } from '@/lib/learn/tables';
+
+interface Props {
+  data: FilamentsData;
+}
+const { data } = Astro.props;
+const t = es.learn.filaments;
+const dash = '—';
+// Heat cell: level and degrees, e.g. «Bajo · 57 °C».
+const heat = (hdt: number | null) => {
+  const level = heatLevel(hdt, data.heatLevels);
+  return level && hdt !== null ? { id: level.id, text: `${level.label} · ${hdt} °C` } : null;
+};
+---
+
+<div class="dt cards-tab" data-filaments data-toggles={JSON.stringify(data.toggles)}>
+  <div class="flt">
+    <span class="flt-l" id="ft-l">
+      {t.use}
+    </span>
+    <div class="chips" data-ft-chips role="group" aria-labelledby="ft-l">
+      {data.chips.map((c, i) => (
+        <button type="button" data-id={c.id} aria-pressed={i === 0 ? 'true' : 'false'}>
+          {c.label}
+        </button>
+      ))}
+    </div>
+    <div class="tgls">
+      {data.toggles.map((tg) => (
+        <label class="sw">
+          <input type="checkbox" data-tgl={tg.id} />
+          <i />
+          {tg.label}
+        </label>
+      ))}
+    </div>
+  </div>
+  <p class="cnt" data-ft-count aria-live="polite" data-one={t.count.one} data-many={t.count.many}>
+    {countText(data.rows.length, t.count)}
+  </p>
+  <div class="tbl-wrap" role="region" aria-label={t.label} tabindex="0">
+    <table role="table">
+      <thead role="rowgroup">
+        <tr role="row">
+          <th role="columnheader">{t.cols.material}</th>
+          <th role="columnheader">{t.cols.uses}</th>
+          <th role="columnheader" class="n">
+            {t.cols.nozzle}
+          </th>
+          <th role="columnheader" class="n">
+            {t.cols.bed}
+          </th>
+          <th role="columnheader">{t.cols.heat}</th>
+          <th role="columnheader" class="n lo">
+            {t.cols.impact}
+          </th>
+          <th role="columnheader" class="n">
+            {t.cols.drying}
+          </th>
+          <th role="columnheader">{t.cols.printer}</th>
+          <th role="columnheader" class="lo">
+            {t.cols.hardened}
+          </th>
+          <th role="columnheader" class="lo">
+            {t.cols.ams}
+          </th>
+        </tr>
+      </thead>
+      <tbody role="rowgroup">
+        {data.rows.map((r) => {
+          const m = splitMaterial(r.material);
+          const h = heat(r.hdtC);
+          return (
+            <tr
+              role="row"
+              data-filters={r.filters.join(' ')}
+              data-printer={r.printer}
+              data-ams={r.ams}
+              data-hardenednozzle={r.hardenedNozzle}
+            >
+              <td role="cell" class="k" data-label={t.cols.material}>
+                <a href={learnUrl(r.slug)}>{m.name}</a>
+                {m.note && <small>{m.note}</small>}
+              </td>
+              <td role="cell" class="w" data-label={t.cols.uses}>
+                {r.uses}
+              </td>
+              <td role="cell" class="n" data-label={t.cols.nozzle}>
+                {r.nozzleC} °C
+              </td>
+              <td role="cell" class="n" data-label={t.cols.bed}>
+                {r.bedC} °C
+              </td>
+              <td role="cell" data-label={t.cols.heat}>
+                {h ? <span class={`lvl ${h.id}`}>{h.text}</span> : dash}
+              </td>
+              <td role="cell" class="n lo" data-label={t.cols.impact}>
+                {r.impactKjM2 === null ? dash : `${r.impactKjM2.toFixed(1)} kJ/m²`}
+              </td>
+              <td role="cell" class="n" data-label={t.cols.drying}>
+                {r.drying}
+              </td>
+              <td role="cell" data-label={t.cols.printer}>
+                {t.printer[r.printer]}
+              </td>
+              <td role="cell" class="lo" data-label={t.cols.hardenedLong}>
+                {r.hardenedNozzle === 'yes' ? <span class="yes">{t.yes}</span> : t.no}
+              </td>
+              <td role="cell" class="lo" data-label={t.cols.ams}>
+                {r.ams === 'yes' ? (
+                  <span class="yes">{t.yes}</span>
+                ) : r.ams === 'dry' ? (
+                  t.amsDry
+                ) : (
+                  t.no
+                )}
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+  <p class="dt-empty" data-ft-none hidden>
+    {es.learn.noResultsTable}
+  </p>
+  {data.notes.length > 0 && (
+    <ul class="tiny mute dt-notes">
+      {data.notes.map((n) => (
+        <li>{n}</li>
+      ))}
+    </ul>
+  )}
+</div>
+
+<script>
+  import { fillText, filamentVisible, type FilamentRow } from '@/lib/learn/tables';
+  import type { FilamentsData } from '@/lib/learn/content';
+
+  // One state per page visit; listeners are removed before the next page swaps in (docs/07 §1).
+  let stop: AbortController | null = null;
+
+  function setup() {
+    stop?.abort();
+    stop = new AbortController();
+    const signal = stop.signal;
+    document.querySelectorAll<HTMLElement>('[data-filaments]').forEach((box) => {
+      const toggles = JSON.parse(box.dataset.toggles || '[]') as FilamentsData['toggles'];
+      const rows = Array.prototype.slice.call(box.querySelectorAll('tbody tr')) as HTMLElement[];
+      const chips = box.querySelector('[data-ft-chips]');
+      const count = box.querySelector<HTMLElement>('[data-ft-count]');
+      const none = box.querySelector<HTMLElement>('[data-ft-none]');
+      const state = { chip: 'todos', toggles: [] as string[] };
+      // The row as the pure rule expects it, read from its data attributes.
+      const asRow = (tr: HTMLElement) =>
+        ({
+          filters: (tr.dataset.filters || '').split(' ').filter(Boolean),
+          printer: tr.dataset.printer,
+          ams: tr.dataset.ams,
+          hardenedNozzle: tr.dataset.hardenednozzle,
+        }) as unknown as FilamentRow;
+      const apply = () => {
+        let n = 0;
+        rows.forEach((tr) => {
+          const ok = filamentVisible(asRow(tr), state, toggles);
+          tr.hidden = !ok;
+          if (ok) n++;
+        });
+        if (count)
+          count.textContent = fillText((n === 1 ? count.dataset.one : count.dataset.many) || '', {
+            n,
+          });
+        if (none) none.hidden = n > 0;
+      };
+      chips?.addEventListener(
+        'click',
+        (e) => {
+          const b = (e.target as Element).closest('button');
+          if (!b) return;
+          chips
+            .querySelectorAll('button')
+            .forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+          state.chip = b.getAttribute('data-id') || 'todos';
+          apply();
+        },
+        { signal },
+      );
+      box.querySelectorAll<HTMLInputElement>('[data-tgl]').forEach((input) =>
+        input.addEventListener(
+          'change',
+          () => {
+            const id = input.dataset.tgl || '';
+            state.toggles = state.toggles.filter((x) => x !== id);
+            if (input.checked) state.toggles.push(id);
+            apply();
+          },
+          { signal },
+        ),
+      );
+      // Switches the browser restored after going back keep their effect.
+      box.querySelectorAll<HTMLInputElement>('[data-tgl]').forEach((input) => {
+        if (input.checked) state.toggles.push(input.dataset.tgl || '');
+      });
+      apply();
+    });
+  }
+
+  document.addEventListener('astro:page-load', setup);
+  document.addEventListener('astro:before-swap', () => {
+    stop?.abort();
+    stop = null;
+  });
+</script>

@@ -59,7 +59,11 @@ test('el header muestra "Visita nuestras redes:" con botón a Instagram sobre el
   await page.goto('/');
   const header = page.locator('header[data-top]');
   await expect(header).toHaveAttribute('data-over-hero', '');
-  await expect(header).toContainText('Visita nuestras redes:');
+  // From 481 px the invitation text goes with the button; on small phones only the button fits.
+  const lead = header.getByText('Visita nuestras redes:');
+  if ((page.viewportSize()?.width ?? 0) > 480) await expect(lead).toBeVisible();
+  else await expect(lead).toBeHidden();
+  await expect(header.getByRole('link', { name: 'Instagram' })).toBeVisible();
   await expect(header.getByRole('link', { name: 'Instagram' })).toHaveAttribute(
     'href',
     'https://www.instagram.com/quick_robot3d/',

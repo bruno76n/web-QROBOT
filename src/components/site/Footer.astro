@@ -1,5 +1,5 @@
 ---
-// Site footer: logo, contact data from `site.ts`, legal line with the privacy link, and the brand
+// Site footer: logo, contact data from `site.ts`, links to the sections (Catálogo, Aprende), legal line with the privacy link, and the brand
 // name set across the full width of the container.
 import { es } from '@/i18n/es';
 import { site } from '@/config/site';
@@ -34,6 +34,16 @@ const contacts = [
         </p>
       ))}
     </div>
+    <nav aria-label={es.footer.navLabel} class="flex w-full flex-wrap gap-x-7 text-[15px]">
+      {es.header.nav.map((item) => (
+        <a
+          href={item.href}
+          class="inline-flex min-h-11 items-center text-ink-2 no-underline hover:text-ink"
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
     <p class="w-full text-[13px] text-ink-2">
       {es.footer.legal(year)} · <a href="/privacidad">{es.footer.privacy}</a>
     </p>

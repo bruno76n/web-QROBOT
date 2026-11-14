@@ -78,8 +78,27 @@ Plan y contenido aplicados el 2026-11-13 (`docs/21`–`23`, `content/aprende/`, 
 | Fase | Estado |
 |---|---|
 | 6 · Base de Aprende | **Terminada en local** (rama `fase-6`); ver `docs/informe-fase-6.md`. `pnpm learn:import` carga las 118 páginas en D1 local (116 publicadas, 2 ocultas a la espera del dueño), 66 preguntas, 4 tablas, 48 fuentes y la configuración del buscador. Migración `0007` (todavía no aplicada en producción) |
-| 7 · Páginas y buscador | Pendiente |
+| 7 · Páginas y buscador | **Terminada en local** (rama `fase-7`); ver `docs/informe-fase-7.md`. «Aprende» en el menú y el footer. Buscador en D1 hasta que el dueño elija dónde corre Meilisearch (`22 §2`) |
 | 8 · Panel y publicación | Pendiente |
+
+Pantallas de Aprende frente a las maquetas (`reference/mockups/aprende/`), capturas de Playwright:
+
+| Pantalla | 390 | 820 | 1440 | Notas |
+|---|---|---|---|---|
+| Portada `/aprende` | igual | igual | igual | El dato curioso cambia por día (`21 §4.2`) |
+| Tema `/aprende/problemas` | igual | igual | igual | |
+| Tema con tabla `/aprende/filamentos` | igual | igual | igual | «Dato curioso» y «Truco» en dos cuadros (`21 §11`) |
+| Mantenimiento `/aprende/mantenimiento` | igual | igual | igual | |
+| Ficha `/aprende/filamentos/pla` | igual | igual | igual | |
+| Problema `/aprende/problemas/primera-capa` | igual | igual | igual | |
+| Artículo para clientes `/aprende/encargar/por-que-cuesta` | diferencia aceptada | diferencia aceptada | diferencia aceptada | Sin foto de Q-404 junto a la lista (`21 §11`) |
+| Impresoras `/aprende/maquinas/volumen-de-impresion` | igual | igual | igual | |
+| Calculadora `/aprende/negocio/costo` | igual | igual | igual | |
+| Glosario `/aprende/glosario` | igual | igual | igual | |
+| Resultados `/aprende/buscar` | diferencia aceptada | diferencia aceptada | diferencia aceptada | Con D1 solo salen páginas (`22 §8`) |
+| Demás temas y respuestas | igual (sin maqueta) | igual (sin maqueta) | igual (sin maqueta) | Mismos patrones |
+
+En todas: header y footer reales de la web (`21 §11`), etiqueta «Dato curioso» más oscura por contraste.
 
 Pendientes del dueño para Aprende: dónde corre Meilisearch (mientras no exista, el buscador usa D1); anticipo y formas de pago, envíos, urgentes y personajes con licencia (`encargar/pago` y `encargar/personajes` siguen ocultas); fotos de fallas.
 

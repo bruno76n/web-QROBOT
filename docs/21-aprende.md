@@ -237,6 +237,10 @@ Las maquetas (`reference/mockups/aprende/`) ya tienen el header de la web (Catá
 | Footer resumido | El footer real de la web |
 | Ligas a páginas sin maqueta llevan a `#sin-maqueta-…` | Ligas reales |
 | Recuadros amarillos | Notas de la maqueta; no se construyen |
+| Dos citas seguidas («Dato curioso» y «Truco») en un solo cuadro | Un cuadro por cita, como están en el contenido (§5) |
+| `articulo-clientes.html`: foto de Q-404 junto a «Q-404 por dentro» | Sin foto: el cuerpo no lleva imágenes (§5) |
+| `buscar.html` con preguntas, términos e impresoras en los resultados | Con Meilisearch, igual; con el respaldo en D1, solo páginas (`22 §8`) |
+| Etiqueta «Dato curioso» en verde `#00873a` sobre menta | Verde más oscuro (`--green-dd`): el de la maqueta no llega a 4.5:1 de contraste |
 | «¿Tienes taller?» y llamados a Quick Cerebro | No aparecen en las maquetas; en la web quedan ocultos hasta que salga el sistema (`site.system.enabled`) |
 
 ## 12. SEO

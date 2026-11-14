@@ -110,6 +110,10 @@ export const site = {
 
 Fechas sin año: el año se calcula con la fecha de hoy en Guadalajara (`src/lib/season.ts`).
 
+## 7b. Buscar en Aprende (`GET /api/aprende/buscar`)
+
+Mismo patrón que `/api/click`: límite por IP (`SEARCH_LIMITER`, 60/min, la IP no se guarda), entrada con Zod y errores con código. Detalle en `22 §7`; lógica en `src/server/search.ts`.
+
 ## 7. Contar toques a WhatsApp (`POST /api/click`, fase 5)
 
 Recibe `{ source, productId? }` (con `navigator.sendBeacon`). Pasa por el limitador (`CLICK_LIMITER`, `13 §4`), valida con Zod, suma 1 en `whatsapp_clicks` del día (`product_id = ''` si no es de producto) y responde `204`. No guarda IP ni nada de la persona.

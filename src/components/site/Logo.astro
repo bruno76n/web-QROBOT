@@ -8,12 +8,18 @@ interface Props {
   /** Head width in px (height follows the 120 × 104 proportion). */
   size?: number;
   class?: string;
+  /** Hide the name on small phones (≤ 480 px), leaving only the head (docs/24 §3). */
+  compact?: boolean;
 }
 
-const { withName = true, size = 30, class: className } = Astro.props;
+const { withName = true, size = 30, class: className, compact = false } = Astro.props;
 ---
 
 <span class:list={['inline-flex items-center gap-2.5', className]}>
   <Head width={size} height={Math.round((size * 104) / 120)} aria-hidden="true" />
-  {withName && <b class="text-lg font-semibold tracking-[-0.02em]">Quick Robot</b>}
+  {withName && (
+    <b class:list={['text-lg font-semibold tracking-[-0.02em]', compact && 'max-[480px]:hidden']}>
+      Quick Robot
+    </b>
+  )}
 </span>

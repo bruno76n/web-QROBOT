@@ -1,0 +1,118 @@
+---
+/* eslint-disable astro/jsx-a11y/no-noninteractive-tabindex -- table boxes scroll sideways and take focus so the keyboard can scroll them (axe: scrollable-region-focusable). */
+/**
+ * Paints one block node of the Aprende tree (`LearnNode`) and, through itself, its children
+ * (docs/21 §5): headings with their id, paragraphs, lists, tables inside a scroll box, code with a
+ * «Copiar» button, the three boxes, quotes, and the `[[…]]` marks, which get their tool from the
+ * `marks` slot of Content.astro.
+ */
+import type { LearnNode } from '@/lib/learn/markdown';
+import { es } from '@/i18n/es';
+import Inline from './Inline.astro';
+import Callout from './Callout.astro';
+import Mark from './Mark.astro';
+import type { LearnData } from '@/server/queries/learn';
+
+interface Props {
+  node: LearnNode;
+  data: LearnData;
+}
+const { node, data } = Astro.props;
+// A numbered list whose every item starts in bold («**La idea.** …») is a list of steps (numbered boxes).
+const isSteps =
+  node.t === 'ol' && node.items.every((item) => item[0]?.t === 'p' && item[0].c[0]?.t === 'strong');
+---
+
+{node.t === 'h' ? (
+  node.level === 2 ? (
+    <h2 id={node.id}>
+      <Inline nodes={node.c} />
+    </h2>
+  ) : (
+    <h3 id={node.id}>
+      <Inline nodes={node.c} />
+    </h3>
+  )
+) : node.t === 'p' ? (
+  <p>
+    <Inline nodes={node.c} />
+  </p>
+) : node.t === 'ul' || node.t === 'ol' ? (
+  node.t === 'ul' ? (
+    <ul>
+      {node.items.map((item) => (
+        <li>
+          {item.length === 1 && item[0]?.t === 'p' ? (
+            <Inline nodes={item[0].c} />
+          ) : (
+            item.map((child) => <Astro.self node={child} data={data} />)
+          )}
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <ol class:list={[isSteps && 'steps']}>
+      {node.items.map((item) => (
+        <li>
+          {item.length === 1 && item[0]?.t === 'p' ? (
+            <Inline nodes={item[0].c} />
+          ) : (
+            item.map((child) => <Astro.self node={child} data={data} />)
+          )}
+        </li>
+      ))}
+    </ol>
+  )
+) : node.t === 'table' ? (
+  <div
+    class:list={['tbl-wrap', node.head.length >= 3 && 'wide']}
+    role="region"
+    aria-label={es.learn.table}
+    tabindex="0"
+    data-scroll-hint
+  >
+    <table>
+      <thead>
+        <tr>
+          {node.head.map((cell) => (
+            <th scope="col">
+              <Inline nodes={cell} />
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {node.rows.map((row) => (
+          <tr>
+            {row.map((cell) => (
+              <td>
+                <Inline nodes={cell} />
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+) : node.t === 'pre' ? (
+  <div class="code">
+    <pre>{node.v}</pre>
+    <button type="button" class="btn ghost sm copy" data-copy data-copied={es.learn.copied}>
+      {es.learn.copy}
+    </button>
+  </div>
+) : node.t === 'callout' ? (
+  <Callout kind={node.kind}>
+    {node.c.map((child) => (
+      <Astro.self node={child} data={data} />
+    ))}
+  </Callout>
+) : node.t === 'quote' ? (
+  <blockquote>
+    {node.c.map((child) => (
+      <Astro.self node={child} data={data} />
+    ))}
+  </blockquote>
+) : node.t === 'mark' ? (
+  <Mark name={node.name} data={data} />
+) : null}

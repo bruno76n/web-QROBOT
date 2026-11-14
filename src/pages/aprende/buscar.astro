@@ -1,0 +1,103 @@
+---
+/**
+ * Search results page `/aprende/buscar?q=…&tema=…` (docs/22 §8): the same search as the endpoint
+ * (Meilisearch if configured, D1 otherwise), built on the server so it works without JavaScript.
+ * Not indexed. With no results it shows Q-404 and offers to ask on WhatsApp; a search without
+ * results is counted like in the endpoint.
+ */
+import LearnLayout from '@/layouts/LearnLayout.astro';
+import Marked from '@/components/learn/Marked.astro';
+import { es } from '@/i18n/es';
+import { site } from '@/config/site';
+import { learnSearchInput } from '@/lib/learn/content';
+import { countText, fillText } from '@/lib/learn/tables';
+import { learnMissMessage, waLink } from '@/lib/whatsapp';
+import { getEnv } from '@/server/env';
+import { now } from '@/server/clock';
+import { dayKey } from '@/server/clicks';
+import { meiliConfig, recordSearchMiss, searchLearn, type SearchResult } from '@/server/search';
+
+export const prerender = false;
+const t = es.learn.search;
+const input = learnSearchInput.safeParse({
+  q: Astro.url.searchParams.get('q') ?? '',
+  tema: Astro.url.searchParams.get('tema') ?? '',
+});
+const q = input.success ? input.data.q : '';
+let result: SearchResult | null = null;
+if (input.success) {
+  result = await searchLearn(q, input.data.tema || undefined, meiliConfig(getEnv()));
+  if (result.total === 0) await recordSearchMiss(q, dayKey(now(Astro.request), site.timeZone));
+}
+---
+
+<LearnLayout
+  title={q ? t.pageTitle(q) : t.pageTitleEmpty}
+  description={t.heading}
+  noindex
+  query={q}
+>
+  <div class="ap-head">
+    <div class="wrap">
+      <nav class="crumbs" aria-label={es.learn.crumbs}>
+        <ol>
+          <li>
+            <a href="/aprende">{es.learn.name}</a>
+          </li>
+          <li aria-current="page">{t.crumb}</li>
+        </ol>
+      </nav>
+      <h1 class="ap-h1">{t.resultsTitle}</h1>
+      {result && result.total > 0 && (
+        <p class="ap-sub">{fillText(countText(result.total, t.resultsFor), { q })}</p>
+      )}
+    </div>
+  </div>
+  <div class="wrap res-page">
+    {result && result.hits.length > 0 && (
+      <ul class="res">
+        {result.hits.map((h) => (
+          <li>
+            <a href={h.url}>
+              <span class="k">
+                {t.types[h.type]} · {h.topicLabel}
+              </span>
+              <span class="t">
+                <Marked parts={h.title} />
+              </span>
+              <span class="x">
+                <Marked parts={h.text} />
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+    {result && result.total === 0 && (
+      <div class="big404">
+        <img
+          src="/brand/q404/q404-morado-verde-265.webp"
+          srcset="/brand/q404/q404-morado-verde-265.webp 265w, /brand/q404/q404-morado-verde-530.webp 530w"
+          sizes="180px"
+          alt=""
+          width="180"
+          height="285"
+        />
+        <div class="big404-text">
+          <h2>{t.empty(q)}</h2>
+          <p class="mute">{t.emptyHint}</p>
+          <p>
+            <a
+              class="btn wa"
+              href={waLink(site.whatsapp, learnMissMessage(q))}
+              target="_blank"
+              rel="noopener"
+            >
+              {t.ask}
+            </a>
+          </p>
+        </div>
+      </div>
+    )}
+  </div>
+</LearnLayout>

@@ -24,7 +24,7 @@ export const site = {
   /** Responsible party of the privacy notice (docs/19 §2). Address and e-mail are provisional. */
   owner: { name: 'Bruno Ortiz', address: '[domicilio]', email: '[correo]' },
   /** Date shown on the privacy notice (`YYYY-MM-DD`); change it every time the text changes. */
-  privacyUpdated: '2026-11-04',
+  privacyUpdated: '2026-11-14',
   /** Dates without year (MM-DD); the year comes from today in Guadalajara. */
   christmas: { orderDeadline: '12-12', eve: '12-24', seasonStart: '10-01' },
   timeZone: 'America/Mexico_City',

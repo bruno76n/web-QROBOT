@@ -1,3 +1,7 @@
 # Copied to .dev.vars.local (git-ignored) by `pnpm dev` when the file is missing.
 APP_ENV=development
 PUBLIC_IMG_BASE=/img
+# Meilisearch for Aprende (optional, docs/22 §12). Without MEILI_HOST the search uses D1.
+# MEILI_HOST=http://localhost:7700
+# MEILI_SEARCH_KEY=
+# MEILI_WRITE_KEY=

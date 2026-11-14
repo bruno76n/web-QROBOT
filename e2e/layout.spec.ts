@@ -16,10 +16,10 @@ for (const url of publicUrls) {
         (page.viewportSize()?.width ?? 0) <= 760 ? 56 : 68,
       );
 
-      // The Catálogo link shows at every width (a black tab from 900 px up).
+      // Catálogo and Aprende show at every width (a black tab from 900 px up).
       const nav = page.getByRole('navigation', { name: 'Principal' });
       await expect(nav).toBeVisible();
-      await expect(nav.getByRole('link')).toHaveText(['Catálogo']);
+      await expect(nav.getByRole('link')).toHaveText(['Catálogo', 'Aprende']);
       await expect(header.getByRole('link', { name: 'Cotizar' })).toHaveAttribute(
         'href',
         '/#pedido',

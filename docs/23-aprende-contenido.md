@@ -204,7 +204,7 @@ tipo: seccion
 tema: filamentos
 titulo: Filamentos
 subtitulo: Temperaturas, usos y cuidados. Datos de Bambu Lab, revisados en noviembre de 2026.
-en_corto: PLA para casi todo lo que va dentro de la casa. PETG si la pieza tiene que aguantar más calor o golpes. ASA para lo que va al sol. TPU para lo flexible. Los de fibra y los técnicos (PC, nylon) piden impresora cerrada y filamento seco.
+en_corto: 'PLA o PETG para lo que va dentro de la casa: sirven para lo mismo y el PETG, además, aguanta más golpes y calor. ASA para lo que va al sol. TPU para lo flexible. Los de fibra y los técnicos (PC, nylon) piden impresora cerrada y filamento seco.'
 filtros: [decoracion, uso-diario, exterior, calor, flexible, mecanica, soportes]
 etiquetas: [filamento, material, plastico, rollo, carrete, temperatura, cual usar]
 relacionadas: [filamentos/secado, filamentos/resistencia-al-calor, problemas/hilos, negocio/costo]
@@ -221,7 +221,7 @@ revisado: 2026-11
 | Chip | Muestra | Criterio |
 |---|---|---|
 | Todos | Todos | |
-| Decoración | PLA, PLA especiales | Figuras, regalos, piezas que no cargan peso |
+| Decoración | PLA, PLA especiales, PETG | Figuras, regalos, piezas que no cargan peso (el PETG sirve igual) |
 | Uso diario | PLA, PETG, PLA-CF | Piezas de casa y oficina, dentro, sin calor |
 | Exterior y sol | ASA, PETG | Sol, lluvia y calor de la calle. ASA es la primera opción |
 | Calor | ASA, PC, PA-CF, PET-CF (y PETG, ABS en nivel medio) | Ver niveles abajo |
@@ -255,7 +255,7 @@ Nota bajo la tabla: «Temperatura de deformación bajo carga (HDT a 0.45 MPa) de
 
 #### Preguntas
 
-- **¿PLA o PETG?** PLA para piezas de interior que no cargan peso ni están cerca de calor. PETG para piezas de uso diario que se golpean, se doblan un poco o pueden pasar de 57 °C (un coche, una ventana con sol).
+- **¿PLA o PETG?** Para figuras, llaveros y decoración, cualquiera de los dos: decide el precio y los colores que encuentres. El PETG sirve para todo lo que sirve el PLA, pero el PLA no sirve para todo lo del PETG: las piezas que se golpean, se doblan un poco o pueden pasar de 57 °C (un coche, una ventana con sol) van en PETG.
 - **¿Qué filamento uso para piezas que van al sol?** ASA. Aguanta 100 °C y resiste los rayos UV. Pide impresora cerrada.
 - **¿Cuál es el filamento más resistente?** Depende de qué tiene que resistir. A golpes: TPU, y entre los rígidos, PAHT-CF y PETG. A calor: PET-CF y PAHT-CF. A doblarse (rigidez): PA6-CF y PET-CF.
 - **¿Puedo usar filamento de otra marca con estos datos?** Como punto de partida, sí. Cada marca ajusta su fórmula; la etiqueta del rollo manda.
@@ -314,7 +314,7 @@ filas:
     ams: "si"
     filtros: [uso-diario, mecanica]
   - material: PETG
-    usos: Piezas de uso diario; aguanta más calor y golpes que el PLA.
+    usos: Lo mismo que el PLA y piezas de uso diario; aguanta más calor y golpes.
     boquilla_c: 240–270
     cama_pei_c: 60–80
     calor_hdt_c: 69
@@ -323,10 +323,10 @@ filas:
     agua_pct: 0.32
     secado: 70 °C · 8 h
     velocidad_max_mm_s: 200
-    impresora: cerrada recomendada
+    impresora: mejor cerrada
     endurecida: "no"
     ams: "si"
-    filtros: [uso-diario, exterior, calor, mecanica]
+    filtros: [decoracion, uso-diario, exterior, calor, mecanica]
   - material: PETG-CF
     usos: Piezas mecánicas rígidas, soportes, carcasas.
     boquilla_c: 240–270
@@ -462,7 +462,7 @@ tipo: ficha
 tema: filamentos
 titulo: PLA
 subtitulo: El filamento más usado. Fácil de imprimir, rígido y con muchos colores.
-en_corto: Para figuras, decoración y piezas de interior que no cargan peso. Se deforma desde 57 °C, así que no sirve para el coche ni para lugares calientes.
+en_corto: Para figuras, decoración y piezas de interior que no cargan peso; para eso también sirve el PETG. Se deforma desde 57 °C, así que no sirve para el coche ni para lugares calientes.
 filtros: [decoracion, uso-diario]
 etiquetas: [pla, acido polilactico, pla basic, pla mate, pla matte, pla silk, pla seda, pla tough, pla+]
 relacionadas: [filamentos/petg, filamentos/pla-especiales, filamentos/resistencia-al-calor, filamentos/recocido]
@@ -501,6 +501,8 @@ revisado: 2026-11
 
 Figuras, llaveros, decoración, maquetas, prototipos, organizadores, piezas de exhibición.
 
+Todo esto también sale en PETG. Entre los dos, elige por precio y por los colores que encuentres.
+
 #### No se recomienda para
 
 - Piezas dentro de un coche o junto a una ventana con sol.
@@ -518,6 +520,7 @@ Figuras, llaveros, decoración, maquetas, prototipos, organizadores, piezas de e
 
 #### Preguntas
 
+- **¿PLA o PETG para figuras?** Cualquiera de los dos. El PETG sirve para todo lo que sirve el PLA y aguanta más golpes y calor; el PLA no sirve para todo lo del PETG. Si el PETG te sale igual o más barato, úsalo para todo.
 - **¿El PLA es biodegradable?** Solo en composta industrial, con calor y humedad controlados. En la tierra o en la basura de la casa tarda años.
 - **¿PLA o PLA+?** «PLA+» no es una norma: cada marca le pone ese nombre a su fórmula. Casi siempre aguanta un poco más los golpes. Revisa la ficha de esa marca.
 - **¿Por qué mi PLA se rompe en el tubo antes de llegar a la impresora?** Está húmedo o viejo. Sécalo; si sigue quebradizo, úsalo para pruebas.
@@ -613,7 +616,7 @@ slug: filamentos/petg
 tipo: ficha
 tema: filamentos
 titulo: PETG
-subtitulo: Para piezas de uso diario que se golpean o se calientan un poco.
+subtitulo: Sirve para lo mismo que el PLA y, además, para piezas que se golpean o se calientan un poco.
 en_corto: Aguanta más golpes que el PLA (casi el doble) y más calor (69 °C). Deja más hilos al imprimir y se pega mucho a la cama de PEI liso.
 filtros: [uso-diario, exterior, calor, mecanica]
 etiquetas: [petg, pet-g, pet g, petg hf, petg translucido, pet]
@@ -634,29 +637,31 @@ revisado: 2026-11
 | Rigidez | 1670 MPa |
 | Agua que absorbe | 0.32 % |
 | Secado | 70 °C · 8 h |
-| Impresora | Cerrada recomendada (Bambu Lab) |
+| Impresora | Mejor cerrada; también imprime en abierta |
 | Boquilla endurecida | No |
 | AMS | Sí |
 | Velocidad máxima | 200 mm/s |
 
 #### Usos
 
-Soportes de pared, macetas, piezas para el coche, cajas, carcasas, piezas que se doblan un poco sin romperse.
+Todo lo del PLA (figuras, llaveros, decoración, maquetas) y, además, soportes de pared, macetas, piezas para el coche, cajas, carcasas y piezas que se doblan un poco sin romperse.
 
 #### No se recomienda para
 
-Piezas con detalle muy fino y piezas que necesitan superficie impecable sin hilos.
+Piezas que van a estar años al sol (mejor ASA) y piezas cerca de motores o calor fuerte (PC o nylon con fibra).
 
 #### Cómo imprimirlo
 
 - En PEI liso se pega tanto que puede arrancar pedazos de la placa. Usa pegamento en barra como separador o la placa texturizada.
 - Ventilador de capa más bajo que con PLA.
 - Si salen hilos, sécalo antes de mover la retracción.
+- En detalle muy fino deja más hilos que el PLA. Con el filamento seco y la boquilla 5–10 °C más fría casi no se nota.
 
 > **Dato curioso.** La «G» de PETG es de glicol. Se le agrega al PET de las botellas para que no se cristalice y se pueda imprimir.
 
 #### Preguntas
 
+- **¿Puedo usar PETG en lugar de PLA?** Sí, para todo. Sirve para lo mismo y aguanta más golpes y calor. Lo que decide es el precio: si encuentras PETG igual o más barato, no necesitas PLA. Al revés no: el PLA no aguanta lo que aguanta el PETG.
 - **¿El PETG aguanta el sol?** Mejor que el PLA. Para piezas que van a estar años al sol, el ASA es mejor opción.
 - **¿Por qué mi PETG deja tantos hilos?** Es su comportamiento normal y empeora con humedad. Sécalo y baja la boquilla 5–10 °C.
 - **¿Se puede pegar?** Sí, con pegamento instantáneo (cianoacrilato) o epóxico.
@@ -3976,7 +3981,7 @@ tipo: articulo
 tema: encargar
 titulo: ¿Qué material conviene para mi pieza?
 subtitulo: Versión corta de la tabla de filamentos.
-en_corto: Dentro de la casa, PLA. Golpes o algo de calor, PETG. Al sol, ASA. Flexible, TPU. Si no sabes, dinos para qué es y lo elegimos.
+en_corto: Dentro de la casa, PLA o PETG. Golpes o algo de calor, PETG. Al sol, ASA. Flexible, TPU. Si no sabes, dinos para qué es y lo elegimos.
 etiquetas: [que material, cual material, plastico, resistente, para que sirve]
 relacionadas: [filamentos, filamentos/resistencia-al-calor, filamentos/exterior]
 fuentes: [bambu-guia]
@@ -3986,12 +3991,14 @@ revisado: 2026-11
 
 | Uso | Material |
 |---|---|
-| Decoración, figuras, regalos | PLA |
+| Decoración, figuras, regalos | PLA o PETG |
 | Uso diario, se puede golpear | PETG |
 | Dentro de un coche | PETG o ABS |
 | Al sol o a la intemperie | ASA |
 | Flexible | TPU |
 | Cerca de motores o calor fuerte | PC o nylon con fibra |
+
+El PETG sirve para todo lo que sirve el PLA y aguanta más golpes y calor. Por eso en el taller imprimimos casi todo en PETG.
 
 ---
 
@@ -4338,7 +4345,7 @@ Cada término es una entrada del buscador. Formato: **Término** (inglés): defi
 - **Paredes** (walls, perimeters): líneas del contorno de cada capa. → laminado/paredes
 - **PC**: policarbonato; resistente a calor y golpes. → filamentos/pc
 - **PEI**: superficie de placa donde pegan bien la mayoría de los filamentos. → maquinas/placas
-- **PETG**: plástico de uso diario, más resistente que el PLA. → filamentos/petg
+- **PETG**: plástico que sirve para lo mismo que el PLA y aguanta más golpes y calor. → filamentos/petg
 - **Pie de elefante** (elephant foot): base más ancha que el resto de la pieza. → problemas/pie-de-elefante
 - **Placa** (build plate): lámina removible encima de la cama. → maquinas/placas
 - **Planchado** (ironing): pasada extra para alisar la tapa. → laminado/planchado

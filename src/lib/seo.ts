@@ -29,6 +29,54 @@ export function breadcrumbJsonLd(domain: string, crumbs: Crumb[]) {
   };
 }
 
+/** What the `Article` structured data of an Aprende page needs (docs/21 §12). */
+export interface ArticleSeoInput {
+  domain: string;
+  path: string;
+  headline: string;
+  description: string;
+  updatedAt: Date;
+}
+
+/** `Article` for sheets, articles and problems of Aprende, written by Quick Robot. */
+export function articleJsonLd(i: ArticleSeoInput) {
+  const org = { '@type': 'Organization', name: 'Quick Robot', url: absoluteUrl(i.domain, '/') };
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: i.headline,
+    description: i.description,
+    url: absoluteUrl(i.domain, i.path),
+    dateModified: i.updatedAt.toISOString(),
+    inLanguage: 'es-MX',
+    author: org,
+    publisher: org,
+  };
+}
+
+/** `DefinedTermSet` of the glossary: every term with its anchor (docs/21 §12). */
+export function definedTermSetJsonLd(
+  domain: string,
+  path: string,
+  name: string,
+  terms: { name: string; description: string; id: string }[],
+) {
+  const url = absoluteUrl(domain, path);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    name,
+    url,
+    inLanguage: 'es-MX',
+    hasDefinedTerm: terms.map((t) => ({
+      '@type': 'DefinedTerm',
+      name: t.name,
+      description: t.description,
+      url: `${url}#${t.id}`,
+    })),
+  };
+}
+
 /** What the `Product` structured data needs. */
 export interface ProductSeoInput {
   domain: string;

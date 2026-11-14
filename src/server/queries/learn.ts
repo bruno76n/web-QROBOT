@@ -11,6 +11,7 @@ import {
   type SearchConfig,
 } from '@/lib/learn/content';
 import type { LearnNode, MarkName } from '@/lib/learn/markdown';
+import { wordMatches, words as fuzzyWords } from '@/lib/learn/fuzzy';
 import { getDb, schema, type Db } from '../db/client';
 
 /** Reading Aprende (docs/21 §9). Only published pages ever leave this file. */
@@ -244,6 +245,7 @@ export async function getLearnTopic(
 export interface LearnHomeView {
   page: LearnPageView;
   /** `count` excludes the topic's own section page. */
+  /** Topics in order with their published answers (the glossary: its terms). */
   topics: { id: LearnTopicId; name: string; blurb: string; count: number }[];
   /** Rows of the filaments table for the "de un vistazo" block, with the levels of heat. */
   glance: { rows: FilamentsData['rows']; heatLevels: FilamentsData['heatLevels'] };
@@ -272,7 +274,7 @@ export async function getLearnHome(
   now: Date = new Date(),
   db: Db = getDb(),
 ): Promise<LearnHomeView | null> {
-  const [pages, counts, datasets] = await db.batch([
+  const [pages, counts, datasets, glossary] = await db.batch([
     db
       .select()
       .from(schema.learnPages)
@@ -286,10 +288,17 @@ export async function getLearnHome(
       .select()
       .from(schema.learnDatasets)
       .where(inArray(schema.learnDatasets.key, ['filamentos', 'datos-curiosos'])),
+    db
+      .select({ extra: schema.learnPages.extra })
+      .from(schema.learnPages)
+      .where(and(eq(schema.learnPages.slug, 'glosario'), eq(schema.learnPages.published, true))),
   ]);
   const row = pages[0];
   if (!row) return null;
   const counted = new Map(counts.map((c) => [c.topic, Number(c.n)]));
+  // The glossary counts its terms, not its pages.
+  const terms = json<{ terms?: unknown[] }>(glossary[0]?.extra ?? '{}', {}).terms;
+  if (terms) counted.set('glosario', terms.length);
   const filaments = datasets.find((d) => d.key === 'filamentos');
   const facts = datasets.find((d) => d.key === 'datos-curiosos');
   const fil = filaments ? json<FilamentsData | null>(filaments.data, null) : null;
@@ -331,65 +340,95 @@ export interface LearnSearchHit {
   text: string;
 }
 
+export interface LearnD1Search {
+  hits: LearnSearchHit[];
+  /** How many pages matched, before the limit. */
+  total: number;
+  /** The words looked for (query without stop words, plus synonyms), for highlighting. */
+  words: string[];
+}
+
 /** Maximum results of a search. */
 export const searchLimit = 8;
 
-/** Escapes `LIKE` wildcards so a word is matched literally. */
-const escapeLike = (w: string) => w.replace(/[\\%_]/g, (c) => `\\${c}`);
+type PageRowLite = Pick<
+  PageRow,
+  'slug' | 'topic' | 'title' | 'summary' | 'searchText' | 'sortOrder' | 'kind'
+>;
+
+/** A word in the title scores 3, in the tags 2 and in the rest 1 (`search_text` has those three lines). */
+function score(
+  row: PageRowLite,
+  words: readonly string[],
+  match: (w: string, line: string) => boolean,
+): number {
+  const [title = '', tags = '', rest = ''] = row.searchText.split('\n');
+  let total = 0;
+  for (const w of words) total += match(w, title) ? 3 : match(w, tags) ? 2 : match(w, rest) ? 1 : 0;
+  return total;
+}
 
 /**
- * Search without Meilisearch (docs/22 §8): the words and their synonyms, as `LIKE` over the
- * normalized text of each page. A word in the title ranks above one in the tags, above the rest.
- * It does not forgive typos.
+ * Search without Meilisearch (docs/22 §8). First the words and their synonyms, looked for inside the
+ * normalized text of each published page. When that finds nothing, the same words are compared
+ * with typo tolerance (src/lib/learn/fuzzy.ts) against the titles and tags of every published page,
+ * so «petj» still finds PETG. A word in the title ranks above one in the tags, above the rest;
+ * ties go by `sort_order`. Returns at most 8 pages.
  */
 export async function searchLearnD1(
   query: string,
   topic: string | undefined,
   db: Db = getDb(),
-): Promise<LearnSearchHit[]> {
+): Promise<LearnD1Search> {
   const [settings] = await db
     .select()
     .from(schema.learnDatasets)
     .where(eq(schema.learnDatasets.key, 'buscador'));
   const config = json<SearchConfig>(settings?.data ?? '', { synonyms: {}, stopWords: [] });
   const words = expandSynonyms(normalizeQuery(query), config);
-  if (words.length === 0) return [];
+  if (words.length === 0) return { hits: [], total: 0, words };
 
-  // A page matches when its search text contains any of the words.
-  const match = or(
-    ...words.map(
-      (w) => sql`${schema.learnPages.searchText} LIKE ${`%${escapeLike(w)}%`} ESCAPE '\\'`,
-    ),
+  const base = and(
+    eq(schema.learnPages.published, true),
+    ne(schema.learnPages.kind, 'home'),
+    topic ? eq(schema.learnPages.topic, topic) : undefined,
   );
-  const rows = await db
-    .select()
-    .from(schema.learnPages)
-    .where(
-      and(
-        eq(schema.learnPages.published, true),
-        ne(schema.learnPages.kind, 'home'),
-        topic ? eq(schema.learnPages.topic, topic) : undefined,
-        match,
-      ),
-    );
-  // `searchText` holds title, tags and the rest on three lines; each word scores 3, 2 or 1 by where it appears.
-  const scored = rows.map((r) => {
-    const [title = '', tags = '', rest = ''] = r.searchText.split('\n');
-    let score = 0;
-    for (const w of words)
-      score += title.includes(w) ? 3 : tags.includes(w) ? 2 : rest.includes(w) ? 1 : 0;
-    return { r, score };
-  });
+  // A page matches when its search text contains any of the words. `instr` takes the word as is:
+  // no wildcards to escape and no length limit (D1 caps `LIKE` patterns at 50 bytes).
+  const contains = or(...words.map((w) => sql`instr(${schema.learnPages.searchText}, ${w}) > 0`));
+  let rows: PageRowLite[] = await db.select().from(schema.learnPages).where(and(base, contains));
+  let scored = rows.map((r) => ({ r, s: score(r, words, (w, line) => line.includes(w)) }));
+
+  if (scored.length === 0) {
+    // Typo-tolerant pass: only titles and tags, word by word.
+    const typed = words.flatMap((w) => w.split(' ')).filter((w) => w.length >= 4);
+    if (typed.length > 0) {
+      rows = await db.select().from(schema.learnPages).where(base);
+      const near = (w: string, line: string) => fuzzyWords(line).some((x) => wordMatches(w, x));
+      scored = rows
+        .map((r) => {
+          const [title = '', tags = ''] = r.searchText.split('\n');
+          const lines = `${title}\n${tags}\n`;
+          return { r, s: score({ ...r, searchText: lines }, typed, near) };
+        })
+        .filter((x) => x.s > 0);
+      words.push(...typed.filter((w) => !words.includes(w)));
+    }
+  }
+
   scored.sort(
-    (a, b) =>
-      b.score - a.score || a.r.sortOrder - b.r.sortOrder || a.r.title.localeCompare(b.r.title),
+    (a, b) => b.s - a.s || a.r.sortOrder - b.r.sortOrder || a.r.title.localeCompare(b.r.title),
   );
-  return scored.slice(0, searchLimit).map(({ r }) => ({
-    type: 'page' as const,
-    url: learnUrl(r.slug),
-    topic: r.topic,
-    topicLabel: learnTopicName(r.topic),
-    title: r.title,
-    text: r.summary,
-  }));
+  return {
+    total: scored.length,
+    words,
+    hits: scored.slice(0, searchLimit).map(({ r }) => ({
+      type: 'page' as const,
+      url: learnUrl(r.slug),
+      topic: r.topic,
+      topicLabel: learnTopicName(r.topic),
+      title: r.title,
+      text: r.summary,
+    })),
+  };
 }

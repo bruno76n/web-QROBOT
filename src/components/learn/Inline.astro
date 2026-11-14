@@ -1,0 +1,37 @@
+---
+/**
+ * Paints inline nodes of the Aprende tree (text, bold, italics, code and links) with components:
+ * there is no `set:html`, so text from the database can never become markup (docs/21 §5, §14).
+ * External links (`https://`) open in another tab; the tree only holds links the allow-list let in.
+ */
+import type { InlineNode } from '@/lib/learn/markdown';
+
+interface Props {
+  nodes: InlineNode[];
+}
+const { nodes } = Astro.props;
+---
+
+{nodes.map((n) =>
+  n.t === 'text' ? (
+    n.v
+  ) : n.t === 'code' ? (
+    <code>{n.v}</code>
+  ) : n.t === 'strong' ? (
+    <strong>
+      <Astro.self nodes={n.c} />
+    </strong>
+  ) : n.t === 'em' ? (
+    <em>
+      <Astro.self nodes={n.c} />
+    </em>
+  ) : n.external ? (
+    <a href={n.href} target="_blank" rel="noopener">
+      <Astro.self nodes={n.c} />
+    </a>
+  ) : (
+    <a href={n.href}>
+      <Astro.self nodes={n.c} />
+    </a>
+  ),
+)}

@@ -9,7 +9,10 @@
         "http://localhost:4321/catalogo",
         "http://localhost:4321/producto/llaveros-con-nombre",
         "http://localhost:4321/privacidad",
-        "http://localhost:4321/catalogo/navidad"
+        "http://localhost:4321/catalogo/navidad",
+        "http://localhost:4321/aprende",
+        "http://localhost:4321/aprende/filamentos",
+        "http://localhost:4321/aprende/filamentos/pla"
       ],
       "numberOfRuns": 1,
       "settings": { "chromeFlags": "--no-sandbox --headless" }

@@ -1,0 +1,114 @@
+---
+/**
+ * Small behaviors shared by every Aprende page, in one script: «Copiar» on code blocks, the fade
+ * that says a table goes on to the right, closing «En esta página» on phones after a tap, and the
+ * chips that filter the list of a topic's pages. The texts come from es.ts through `data-*`
+ * attributes of the elements (a script cannot import them). Starts on `astro:page-load` and removes its
+ * listeners on `astro:before-swap` (View Transitions, docs/07 §1); Safari 14 rules of docs/24 §5.
+ */
+---
+
+<script>
+  import { fillText } from '@/lib/learn/tables';
+
+  let stop: AbortController | null = null;
+
+  /** Copies the code block; if the clipboard is not allowed, selects the text to copy by hand. */
+  function copyCode(button: HTMLButtonElement) {
+    const pre = button.parentElement ? button.parentElement.querySelector('pre') : null;
+    if (!pre) return;
+    const label = button.textContent || '';
+    const done = () => {
+      button.textContent = button.dataset.copied || label;
+      setTimeout(() => (button.textContent = label), 1600);
+    };
+    const select = () => {
+      const range = document.createRange();
+      range.selectNodeContents(pre);
+      const sel = window.getSelection();
+      if (!sel) return;
+      sel.removeAllRanges();
+      sel.addRange(range);
+      try {
+        if (document.execCommand('copy')) done();
+      } catch {
+        // stays selected so the person can copy it
+      }
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText)
+      navigator.clipboard.writeText(pre.textContent || '').then(done, select);
+    else select();
+  }
+
+  /** Marks a table box whose content goes on to the right (the edge fades). */
+  function hint(box: HTMLElement) {
+    box.classList.toggle('more', box.scrollLeft + box.clientWidth < box.scrollWidth - 2);
+  }
+
+  function setup() {
+    stop?.abort();
+    stop = new AbortController();
+    const signal = stop.signal;
+    const root = document.querySelector('.learn');
+    if (!root) return;
+
+    root
+      .querySelectorAll<HTMLButtonElement>('[data-copy]')
+      .forEach((b) => b.addEventListener('click', () => copyCode(b), { signal }));
+
+    const boxes = Array.prototype.slice.call(
+      root.querySelectorAll('[data-scroll-hint]'),
+    ) as HTMLElement[];
+    boxes.forEach((box) => {
+      hint(box);
+      box.addEventListener('scroll', () => hint(box), { passive: true, signal });
+    });
+    window.addEventListener('resize', () => boxes.forEach(hint), { passive: true, signal });
+
+    root.querySelectorAll<HTMLAnchorElement>('.ap-toc-m a').forEach((a) =>
+      a.addEventListener(
+        'click',
+        () => {
+          const details = a.closest('details');
+          if (details) details.open = false;
+        },
+        { signal },
+      ),
+    );
+
+    // Topic page: one chip at a time; each page row says its filters in `data-filters`.
+    root.querySelectorAll<HTMLElement>('[data-chips="pages"]').forEach((box) => {
+      const list = document.getElementById(box.getAttribute('aria-controls') || '');
+      const count = document.getElementById(box.getAttribute('data-count') || '');
+      box.addEventListener(
+        'click',
+        (e) => {
+          const b = (e.target as Element).closest('button');
+          if (!b || !list) return;
+          box
+            .querySelectorAll('button')
+            .forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+          const id = b.getAttribute('data-id') || '';
+          let n = 0;
+          list.querySelectorAll<HTMLElement>('li').forEach((li) => {
+            const filters = ' ' + (li.getAttribute('data-filters') || '') + ' ';
+            const show = id === 'todas' || filters.indexOf(' ' + id + ' ') > -1;
+            li.hidden = !show;
+            if (show) n++;
+          });
+          if (count)
+            count.textContent = fillText((n === 1 ? count.dataset.one : count.dataset.many) || '', {
+              n,
+            });
+        },
+        { signal },
+      );
+    });
+  }
+
+  document.addEventListener('astro:page-load', setup);
+  document.addEventListener('astro:before-swap', () => {
+    stop?.abort();
+    stop = null;
+  });
+</script>

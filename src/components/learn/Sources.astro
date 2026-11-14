@@ -1,0 +1,29 @@
+---
+/** «Fuentes» in small print: name and, when there is one, a link that opens in another tab. */
+import { es } from '@/i18n/es';
+import type { LearnSource } from '@/server/queries/learn';
+
+interface Props {
+  sources: LearnSource[];
+}
+const { sources } = Astro.props;
+---
+
+{sources.length > 0 && (
+  <div class="src">
+    <h2>{es.learn.sources}</h2>
+    <ul>
+      {sources.map((s) => (
+        <li>
+          {s.url ? (
+            <a href={s.url} target="_blank" rel="noopener">
+              {s.name}
+            </a>
+          ) : (
+            s.name
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+)}

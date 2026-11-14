@@ -1,0 +1,63 @@
+---
+/**
+ * Body of a topic, sheet, article or problem page (docs/21 §4.3–4.4): the content with «En esta
+ * página» and «También te puede servir» (folded on top and at the end on phones and tablets, in a
+ * fixed right column from 1100 px), the extra block of a topic (its list of pages) in the
+ * `after-body` slot, the questions, the sources and the closing call.
+ */
+import { es } from '@/i18n/es';
+import type { LearnPageView } from '@/server/queries/learn';
+import Content from './Content.astro';
+import Toc from './Toc.astro';
+import Related from './Related.astro';
+import Faqs from './Faqs.astro';
+import Sources from './Sources.astro';
+import Cta from './Cta.astro';
+
+interface Props {
+  page: LearnPageView;
+  /** Extra entries for «En esta página» after the headings of the body (e.g. «Respuestas»). */
+  extraToc?: { id: string; text: string }[];
+}
+const { page, extraToc = [] } = Astro.props;
+const toc = [...page.toc, ...extraToc];
+---
+
+<div class="wrap ap-main">
+  <div class="prose">
+    {toc.length > 0 && (
+      <details class="ap-toc-m">
+        <summary>{es.learn.onThisPage}</summary>
+        <Toc items={toc} />
+      </details>
+    )}
+    <slot name="before-body" />
+    <Content ast={page.ast} data={page.data} />
+    <slot name="after-body" />
+    <Faqs faqs={page.faqs} />
+    {page.related.length > 0 && (
+      <div class="ap-rel-m">
+        <h2>{es.learn.related}</h2>
+        <Related items={page.related} />
+      </div>
+    )}
+    <Sources sources={page.sources} />
+  </div>
+  {(toc.length > 0 || page.related.length > 0) && (
+    <aside class="ap-aside" aria-label={es.learn.onThisPage}>
+      {toc.length > 0 && (
+        <>
+          <h2>{es.learn.onThisPage}</h2>
+          <Toc items={toc} />
+        </>
+      )}
+      {page.related.length > 0 && (
+        <>
+          <h2>{es.learn.related}</h2>
+          <Related items={page.related} />
+        </>
+      )}
+    </aside>
+  )}
+</div>
+<Cta cta={page.cta} ctaText={page.ctaText} title={page.title} />
