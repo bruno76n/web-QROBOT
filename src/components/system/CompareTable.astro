@@ -1,0 +1,171 @@
+---
+/**
+ * «Qué trae cada plan» (docs/25 §7.2, mockup `.cmp`): the full comparison of the plans, by groups.
+ * Rows and groups come from `compareGroups` (src/config/system.ts); limit rows read the plan from
+ * `site.system.plans` (a number, or «Sin límite» for `null`). Included and not included are ✓ and —
+ * with their words for screen readers. The recommended plan's column is highlighted. On a phone the
+ * three plan columns stay narrow and the table still fits.
+ */
+import SectionHead from '@/components/system/SectionHead.astro';
+import { site } from '@/config/site';
+import { compareGroups, type CompareCell, type CompareRow } from '@/config/system';
+import { es } from '@/i18n/es';
+import type { Plan } from '@/lib/system/plans';
+
+const t = es.system.pricing.compare;
+const { plans } = site.system;
+
+/** What a cell shows: its text or mark, the words read aloud for a mark, and its class. */
+interface Cell {
+  text: string;
+  sr?: string;
+  kind?: 'y' | 'no';
+}
+
+/** The cell of one plan in one row. */
+function cell(row: CompareRow, plan: Plan): Cell {
+  if ('limit' in row) {
+    const v = plan[row.limit];
+    return { text: v === null ? t.noLimit : String(v) };
+  }
+  const c: CompareCell = row.cells[plan.id];
+  if (c === true) return { text: '✓', sr: t.included, kind: 'y' };
+  if (c === false) return { text: '—', sr: t.notIncluded, kind: 'no' };
+  return { text: t.values[c] };
+}
+---
+
+<section class="pt0" aria-labelledby="cmp-h">
+  <div class="wrap">
+    <SectionHead id="cmp-h" title={t.title} />
+    <div class="tbl-wrap">
+      <table class="cmp">
+        <caption class="vh">{t.caption}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{t.feature}</th>
+            {plans.map((p) => (
+              <th scope="col" class:list={[p.recommended && 'hl']}>
+                {es.system.plans[p.id].name}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {compareGroups.map((g) => (
+            <Fragment>
+              <tr class="g">
+                <th scope="rowgroup" colspan={plans.length + 1}>
+                  {t.groups[g.id]}
+                </th>
+              </tr>
+              {g.rows.map((row) => (
+                <tr>
+                  <th scope="row">{t.rows[row.id]}</th>
+                  {plans.map((p) => {
+                    const c = cell(row, p);
+                    return (
+                      <td class:list={[c.kind, p.recommended && 'hl']}>
+                        {c.text}
+                        {c.sr && <span class="vh">{c.sr}</span>}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </Fragment>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Frame of the table: rounded border; it scrolls sideways only if it ever got wider than the page. */
+  .tbl-wrap {
+    position: relative;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+  .cmp {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 16px;
+  }
+  .cmp th,
+  .cmp td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+  }
+  .cmp tbody tr:last-child th,
+  .cmp tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  .cmp thead th {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    background: var(--soft);
+    white-space: nowrap;
+  }
+  .cmp thead th:first-child {
+    text-align: left;
+    font-weight: 500;
+    color: var(--ink-2);
+  }
+  .cmp thead th.hl {
+    background: var(--ink);
+    color: #fff;
+  }
+  .cmp td {
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .cmp td.hl {
+    background: #fafafb;
+  }
+  .cmp tbody th {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--ink);
+    background: #fff;
+    white-space: normal;
+    text-align: left;
+  }
+  /* Group rows: a soft band with the group name. */
+  .cmp tr.g th {
+    background: var(--soft);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-2);
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .cmp .y {
+    color: var(--green-d);
+    font-weight: 600;
+  }
+  .cmp .no {
+    color: var(--ink-3);
+  }
+  @media (max-width: 760px) {
+    .cmp {
+      font-size: 15px;
+    }
+    .cmp th,
+    .cmp td {
+      padding: 12px 8px;
+    }
+    .cmp tbody th {
+      padding-left: 12px;
+    }
+    .cmp thead th {
+      font-size: 14px;
+    }
+  }
+</style>

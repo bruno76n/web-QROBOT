@@ -1,0 +1,261 @@
+---
+/**
+ * ¿Qué plan te toca? (docs/25 §7.2, mockup `.finder`): three sliders (printers, people, sales and
+ * orders a month) and the plan that fits, with its price in the chosen period, why it fits and a
+ * button. The page renders the result for the starting numbers (the recommended plan, without
+ * reasons), so it reads right without JavaScript. The behavior is in src/scripts/system-finder.ts,
+ * which uses `recommendPlan` and `planReasons`; the plans and every text it may write travel in
+ * `data-finder-data` as JSON (plans from `site.system.plans`, texts from `es.system`).
+ */
+import Button from '@/components/site/Button.astro';
+import SectionHead from '@/components/system/SectionHead.astro';
+import { site } from '@/config/site';
+import { es } from '@/i18n/es';
+import { formatMoney } from '@/lib/money';
+import { recommendPlan, type Period, type Plan, type PlanId } from '@/lib/system/plans';
+
+const t = es.system.pricing.finder;
+const { plans, trialDays, appUrl, signUpPath } = site.system;
+const pesos = (n: number) => formatMoney(n * 100);
+
+/** The three sliders: range, step and starting value (the mockup's sample workshop). */
+const sliders = [
+  { name: 'printers', label: t.printers, min: 1, max: 20, step: 1, value: 3 },
+  { name: 'people', label: t.people, min: 1, max: 10, step: 1, value: 1 },
+  { name: 'orders', label: t.orders, min: 0, max: 100, step: 5, value: 30 },
+] as const;
+const maxPrinters = sliders[0].max;
+
+/** What a slider reads: the number, or «20 o más» at the top. */
+const reading = (s: (typeof sliders)[number], v: number) =>
+  v >= s.max ? t.orMore(s.max) : String(v);
+/** How full the track is, for the `--p` fill of the track. */
+const fill = (s: (typeof sliders)[number], v: number) =>
+  `${Math.round(((v - s.min) / (s.max - s.min)) * 10000) / 100}%`;
+
+/** Price line of a plan in each period. */
+function amounts(plan: Plan): Record<Period, string> {
+  if (plan.monthly === 0) return { monthly: t.free, yearly: t.free };
+  return {
+    monthly: t.amount(pesos(plan.monthly), es.system.plans.perMonth),
+    yearly: t.amount(pesos(plan.yearly), es.system.plans.perYear),
+  };
+}
+
+const free = plans[0];
+const last = plans[plans.length - 1];
+const printerReasons: Record<string, string> = {};
+for (let n = sliders[0].min; n <= maxPrinters; n++)
+  printerReasons[String(n)] = t.reasons.printers(n, n >= maxPrinters);
+
+/** Everything the script needs: plans, names, prices, reasons and button labels. */
+const data = {
+  plans,
+  maxPrinters,
+  names: Object.fromEntries(plans.map((p) => [p.id, es.system.plans[p.id].name])) as Record<
+    PlanId,
+    string
+  >,
+  amounts: Object.fromEntries(plans.map((p) => [p.id, amounts(p)])) as Record<
+    PlanId,
+    Record<Period, string>
+  >,
+  reasons: {
+    freeLimits: free
+      ? t.reasons.freeLimits({
+          printers: free.printers ?? 0,
+          people: free.people,
+          orders: free.orders ?? 0,
+        })
+      : '',
+    printers: printerReasons,
+    twoPeople: t.reasons.twoPeople,
+    roles: t.reasons.roles,
+    orders: free ? t.reasons.orders(free.orders ?? 0) : '',
+    contact: last ? t.reasons.contact(last.people) : '',
+  },
+  cta: { free: es.system.cta.startFree, paid: es.system.cta.tryDays(trialDays) },
+};
+
+const start = recommendPlan(
+  { printers: sliders[0].value, people: sliders[1].value, orders: sliders[2].value },
+  plans,
+).plan;
+const startCta = start.monthly === 0 ? data.cta.free : data.cta.paid;
+---
+
+<section class="band-soft" aria-labelledby="finder-h">
+  <div class="wrap">
+    <SectionHead id="finder-h" title={t.title} lead={t.lead} />
+    <div class="finder" data-finder-data={JSON.stringify(data)}>
+      <form class="f-in" data-finder>
+        {sliders.map((s) => (
+          <div class="rng">
+            <label for={`f-${s.name}`}>
+              {s.label}
+              <output for={`f-${s.name}`}>{reading(s, s.value)}</output>
+            </label>
+            <input
+              type="range"
+              id={`f-${s.name}`}
+              name={s.name}
+              min={s.min}
+              max={s.max}
+              step={s.step}
+              value={s.value}
+              data-max-label={t.orMore(s.max)}
+              style={`--p: ${fill(s, s.value)}`}
+            />
+            <div class="ends" aria-hidden="true">
+              <span>{s.min}</span>
+              <span>{t.orMore(s.max)}</span>
+            </div>
+          </div>
+        ))}
+      </form>
+      <div class="f-out" aria-live="polite">
+        <span class="k">{t.result}</span>
+        <b class="name" data-f-name>
+          {data.names[start.id]}
+        </b>
+        <span class="amt" data-f-amt>
+          {data.amounts[start.id].monthly}
+        </span>
+        <ul data-f-why></ul>
+        <Button href={`${appUrl}${signUpPath}`} rel="noopener" arrow>
+          <span data-f-cta>{startCta}</span>
+        </Button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '@/scripts/system-finder';
+</script>
+
+<style>
+  /* Sliders on the left; the result below (phone, tablet) or on the right and sticky (desktop). */
+  .finder {
+    display: grid;
+    gap: 28px;
+  }
+  .f-in {
+    display: grid;
+    gap: 26px;
+  }
+  .rng label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .rng output {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+  /* The track fills up to the thumb with `--p` (set by the script; WebKit) or `-moz-range-progress`. */
+  .rng input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 36px;
+    background: transparent;
+    margin: 0;
+    cursor: pointer;
+  }
+  .rng input::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--ink) var(--p, 0%), var(--line) var(--p, 0%));
+  }
+  .rng input::-moz-range-track {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--line);
+  }
+  .rng input::-moz-range-progress {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--ink);
+  }
+  .rng input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--ink);
+    margin-top: -10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  }
+  .rng input::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--ink);
+  }
+  .rng .ends {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--ink-2);
+    margin-top: 2px;
+  }
+  .f-out {
+    border-radius: var(--r-card);
+    background: var(--soft);
+    padding: 26px;
+    display: grid;
+    gap: 12px;
+    align-content: start;
+  }
+  .f-out .k {
+    font-size: 15px;
+    color: var(--ink-2);
+  }
+  .f-out .name {
+    font-size: clamp(40px, 5vw, 60px);
+    line-height: 1;
+    letter-spacing: -0.05em;
+    font-weight: 600;
+  }
+  .f-out .amt {
+    font-size: 20px;
+    font-variant-numeric: tabular-nums;
+  }
+  .f-out ul {
+    list-style: none;
+    margin: 4px 0 6px;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+    font-size: 16px;
+    color: var(--ink-2);
+  }
+  .f-out ul:empty {
+    display: none;
+  }
+  .f-out :global(li)::before {
+    content: '· ';
+  }
+  @media (min-width: 1100px) {
+    .finder {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      column-gap: 64px;
+      align-items: start;
+    }
+    .f-out {
+      position: -webkit-sticky;
+      position: sticky;
+      top: calc(var(--pbar) + 24px);
+    }
+  }
+</style>
