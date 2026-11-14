@@ -71,6 +71,24 @@ Trabajo en local y en la nube (sesión de Claude Code en la web); se unió en `m
 - **Código documentado (2026-11-13):** regla nueva en `CLAUDE.md` (16) y `docs/16 §2`: cada archivo y sección de código lleva arriba un comentario de para qué sirve y qué hace hoy, sin historia ni fases. Se documentaron ~150 archivos de `src/`, `scripts/`, `e2e/` y `tests/` (solo comentarios; el único cambio de código fue un reformateo de Prettier en `Footer.astro`). **Pruebas del panel estables:** ordenar con el teclado, centrar la foto y volver a la lista esperaban tiempos fijos o revisaban una sola vez; ahora esperan lo que se ve en la página (`moveDownWithKeyboard` en `e2e/admin-helpers.ts`, `backToList`). Suite del panel 63/63 y pública 154/154.
 - **Actualización de Aprende (2026-11-13):** 12 maquetas en `reference/mockups/aprende/`, `docs/24` (dispositivos y Safari), fases 7 y 8 nuevas; PETG y PETG-CF con `printer: enclosed-better` (el esquema lo acepta); glosario con mayúscula inicial. Contenido recargado en local con `--overwrite`.
 
+## 2026-11-14
+
+- **Fase 9 (Para talleres, plan v2) fusionada en `main`.** Las 3 páginas y las 10 pantallas del sistema en HTML; ocultas en producción. La versión con el plan v1 quedó en la rama `fase-9-v1` (no se fusiona).
+- **Fase 8 (pestaña Aprende del panel) fusionada en `main`.** Acciones, lista y editor con vista previa, preguntas, publicar, buscador y búsquedas sin resultado.
+- **Las dos se hicieron con agentes en paralelo**, cada uno en su rama y con sus archivos, y luego se integraron.
+- **Arreglos al revisar capturas:** en celular el panel muestra la pestaña activa (las pestañas se deslizan). Se borraron de la base **local** las búsquedas de prueba («xyzqw», «xyzq») que dejan las pruebas del buscador.
+- **Sin etiquetas arriba de los títulos en Para talleres** (lo pidió el dueño): se quitó el nombre del módulo con ícono en morado de las 10 secciones (`decisiones.md`).
+- **Contraste:** verde y gris de texto un tono más oscuros en las pantallas del sistema y en «2 meses gratis» (`--green-text`, `03 §2`).
+- **`pnpm size`:** la revisión de Safari 14 cubre ahora los scripts de página del build y el código fuente de todos los scripts del navegador.
+- **Texto del llamado de Aprende en `negocio/costo`:** ya no dice que el sistema lee el archivo del laminador.
+- **Pruebas en `main`:**
+  - 554 unitarias en verde.
+  - `pnpm security` 8/8.
+  - 247 del sitio público.
+  - 144 del panel, incluidas Aprende y Para talleres.
+  - `pnpm size` en verde.
+- **Pendiente en la Mac:** publicar Aprende, probar en WebKit y Safari, y las decisiones del dueño. Todo está en `docs/pendientes-en-local.md`.
+
 ## Aprende
 
 Plan y contenido aplicados el 2026-11-13 (`docs/21`–`23`, `content/aprende/`, fases 6–8).
@@ -79,7 +97,7 @@ Plan y contenido aplicados el 2026-11-13 (`docs/21`–`23`, `content/aprende/`, 
 |---|---|
 | 6 · Base de Aprende | **Terminada en local** (rama `fase-6`); ver `docs/informe-fase-6.md`. `pnpm learn:import` carga las 118 páginas en D1 local (116 publicadas, 2 ocultas a la espera del dueño), 66 preguntas, 4 tablas, 48 fuentes y la configuración del buscador. Migración `0007` (todavía no aplicada en producción) |
 | 7 · Páginas y buscador | **Terminada en local** (rama `fase-7`); ver `docs/informe-fase-7.md`. «Aprende» en el menú y el footer. Buscador en D1 hasta que el dueño elija dónde corre Meilisearch (`22 §2`) |
-| 8 · Panel y publicación | **Panel terminado en local** (rama `fase-8`, lista para fusionar); ver `docs/informe-fase-8.md`. Pestaña Aprende del panel (lista, editor con vista previa, preguntas, publicar, buscador y búsquedas sin resultado). **Publicación bloqueada:** sin credenciales de Cloudflare ni Meilisearch; los pasos exactos están en el informe |
+| 8 · Panel y publicación | **Panel terminado y fusionado en `main`** (2026-11-14); ver `docs/informe-fase-8.md`. Pestaña Aprende del panel (lista, editor con vista previa, preguntas, publicar, buscador y búsquedas sin resultado). **Publicación pendiente en la Mac:** sin credenciales de Cloudflare ni Meilisearch en la nube; pasos en `docs/pendientes-en-local.md` |
 
 Pantallas de Aprende frente a las maquetas (`reference/mockups/aprende/`), capturas de Playwright:
 
@@ -108,7 +126,7 @@ Plan v2 aplicado el 2026-11-14 (`docs/25`, `docs/fases/fase-9.md`, `reference/mo
 
 | Fase | Estado |
 |---|---|
-| 9 · Para talleres (oculta) | **Terminada en local** (rama `fase-9`, lista para fusionar); ver `docs/informe-fase-9.md`. Las 3 páginas completas con `pnpm dev`, con las 10 pantallas del sistema dibujadas en HTML; con `pnpm preview` responden 404 y nada las enlaza. `site.system.enabled` sigue en `false`. **Sin desplegar** (se hizo antes de la fase 8, por instrucción del dueño) |
+| 9 · Para talleres (oculta) | **Terminada y fusionada en `main`** (2026-11-14); ver `docs/informe-fase-9.md`. Las 3 páginas completas con `pnpm dev`, con las 10 pantallas del sistema dibujadas en HTML; con `pnpm preview` responden 404 y nada las enlaza. `site.system.enabled` sigue en `false`. **Sin desplegar** (se hizo antes de la fase 8, por instrucción del dueño) |
 
 Comparación con las maquetas (`reference/mockups/talleres/`, Chromium, alto de cada sección y capturas; sin scroll horizontal en ningún ancho):
 

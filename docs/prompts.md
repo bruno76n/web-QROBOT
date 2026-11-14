@@ -223,6 +223,26 @@ lighthouserc.json, corre todas las pruebas, pnpm security, pnpm size y Lighthous
 revísalo en vivo. Escribe lo que hiciste en docs/progreso.md.
 ```
 
+## Pendientes en local (después de las fases 8 y 9)
+
+En la Mac, con `main` al día y la sesión de Cloudflare abierta en `wrangler`:
+
+```
+Sigue docs/pendientes-en-local.md en orden. Lee CLAUDE.md, docs/informe-fase-8.md y
+docs/informe-fase-9.md antes de empezar.
+
+1. Publica Aprende (sección 1): pruebas en verde, respaldo de la base de producción, migración
+   0007, learn:import --remote --yes (nunca --overwrite en producción), deploy y la revisión en
+   vivo completa, incluido que /talleres siga dando 404. Si falta Meilisearch, sáltate ese paso:
+   el buscador usa D1.
+2. Instala WebKit y corre pnpm e2e (sección 2). Si algo falla solo en WebKit, corrígelo en una
+   rama y dime qué fue.
+3. No hagas la sección 3 (slugify) salvo que te lo pida.
+
+Antes de cada comando que escriba en producción, dime cuál es y espera mi «sí». Al terminar
+actualiza docs/17 §8, docs/progreso.md e informe-fase-8.md con lo que se publicó y la versión.
+```
+
 ## 6. Integrar un componente externo después
 
 Cuando el dueño entregue un componente después de terminada la construcción:
