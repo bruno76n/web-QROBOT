@@ -79,7 +79,7 @@ Plan y contenido aplicados el 2026-11-13 (`docs/21`–`23`, `content/aprende/`, 
 |---|---|
 | 6 · Base de Aprende | **Terminada en local** (rama `fase-6`); ver `docs/informe-fase-6.md`. `pnpm learn:import` carga las 118 páginas en D1 local (116 publicadas, 2 ocultas a la espera del dueño), 66 preguntas, 4 tablas, 48 fuentes y la configuración del buscador. Migración `0007` (todavía no aplicada en producción) |
 | 7 · Páginas y buscador | **Terminada en local** (rama `fase-7`); ver `docs/informe-fase-7.md`. «Aprende» en el menú y el footer. Buscador en D1 hasta que el dueño elija dónde corre Meilisearch (`22 §2`) |
-| 8 · Panel y publicación | Pendiente |
+| 8 · Panel y publicación | **Panel terminado en local** (rama `fase-8`, lista para fusionar); ver `docs/informe-fase-8.md`. Pestaña Aprende del panel (lista, editor con vista previa, preguntas, publicar, buscador y búsquedas sin resultado). **Publicación bloqueada:** sin credenciales de Cloudflare ni Meilisearch; los pasos exactos están en el informe |
 
 Pantallas de Aprende frente a las maquetas (`reference/mockups/aprende/`), capturas de Playwright:
 
