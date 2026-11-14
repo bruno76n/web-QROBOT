@@ -150,4 +150,58 @@ export const demoPurchasesTotal = 1292;
 
 // ── docs-reportes: start (agent «docs-reportes»: UiQuote, UiReports) ──
 
+/**
+ * Quote C-0012 of the quote screen: the business data captured once in Ajustes, the customer, the
+ * items (quantity × unit price, in pesos), its validity in days and the footer of the business.
+ * The total is not written: it is the sum of the items (`demoQuoteTotal`).
+ */
+export const demoQuote = {
+  city: 'Guadalajara, Jal.',
+  phone: '33 1234 5678',
+  email: 'hola@ejez.mx',
+  folio: 'C-0012',
+  date: demoBusiness.today,
+  validDays: 15,
+  customer: { name: 'Cafetería Alma', phone: '33 3456 7890' },
+  items: [
+    { qty: 30, name: 'Portavasos con logo', detail: 'PETG Negro, logo en relieve', price: 45 },
+    { qty: 6, name: 'Servilletero con logo', detail: 'PETG Negro', price: 110 },
+  ],
+  footer: 'Precios en pesos mexicanos. Anticipo de 50 % para iniciar; saldo al entregar.',
+} as const;
+
+/** Amount of each item of the quote (quantity × unit price), rounded to cents. */
+export const demoQuoteAmounts: readonly number[] = demoQuote.items.map(
+  (i) => Math.round(i.qty * i.price * 100) / 100,
+);
+/** Total of the quote: the sum of its items. */
+export const demoQuoteTotal = demoQuoteAmounts.reduce((s, a) => s + Math.round(a * 100), 0) / 100;
+
+/** `iso` (YYYY-MM-DD) moved `days` days back, as YYYY-MM-DD (in UTC, so no time zone shifts). */
+function isoDaysBefore(iso: string, days: number): string {
+  return new Date(Date.parse(iso) - days * 86_400_000).toISOString().slice(0, 10);
+}
+/**
+ * Period of the reports: the last `demoSales.days` days up to today, and the same number of days
+ * before it, to compare with.
+ */
+export const demoReportPeriod = {
+  from: isoDaysBefore(demoBusiness.today, demoSales.days - 1),
+  to: demoBusiness.today,
+  prevFrom: isoDaysBefore(demoBusiness.today, demoSales.days * 2 - 1),
+  prevTo: isoDaysBefore(demoBusiness.today, demoSales.days),
+} as const;
+
+/** Period options of the reports, in days; `null` is the whole history. */
+export const demoReportRanges: readonly (number | null)[] = [7, 30, 90, null];
+
+/** Products with the most gross profit in the 30 days, largest first. */
+export const demoTopProducts: readonly { name: string; sold: number; gross: number }[] = [
+  { name: 'Dragón articulado', sold: 5, gross: 1013 },
+  { name: 'Figura de escritorio', sold: 4, gross: 792 },
+  { name: 'Maceta geométrica', sold: 4, gross: 751 },
+  { name: 'Llavero con nombre', sold: 19, gross: 700 },
+  { name: 'Servilletero con logo', sold: 8, gross: 666 },
+];
+
 // ── docs-reportes: end ──
