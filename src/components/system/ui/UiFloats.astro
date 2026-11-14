@@ -1,12 +1,41 @@
 ---
 /**
- * System screen «Avisos» (docs/25 §6.3), drawn in HTML with the sample data of `system-demo.ts` and
- * the labels of `es.system.ui`. Placeholder frame until the screen is drawn.
+ * The two notices that float over the screen of the hero (docs/25 §6.3, mockup `.ui-float`): order
+ * #2 ready to deliver, bottom left, and the net profit of 30 days with its change, top right.
+ * Decorative (`aria-hidden`): the screen description already says it. They are placed against the
+ * hero container (`position: relative`, mockup `.hero-shot`) and only show from 1240 px
+ * (`system-ui.css`).
  */
-import UiFrame from './UiFrame.astro';
-import { site } from '@/config/site';
+import Check from '@lucide/astro/icons/check';
+import ModuleIcon from '../ModuleIcon.astro';
+import { demoDeliveries, demoNetChange, demoSales } from '@/config/system-demo';
+import { formatMoney } from '@/lib/money';
+import { es } from '@/i18n/es';
+
+const c = es.system.ui.common;
+const t = es.system.ui.home.floats;
+/** The order ready to deliver: the first delivery whose state is «ready». */
+const ready = demoDeliveries.find((d) => d.state === 'ready');
 ---
 
-<UiFrame label={site.system.name}>
-  <div class="ui-panel">Avisos</div>
-</UiFrame>
+{ready && (
+  <div class="ui ui-float f1" aria-hidden="true">
+    <span class="fl-ic">
+      <Check class="ic" aria-hidden="true" />
+    </span>
+    <span>
+      <b>{t.ready(ready.order)}</b>
+      <span class="ui-meta">{t.readyMeta(ready.customer, ready.date)}</span>
+    </span>
+  </div>
+)}
+<div class="ui ui-float f2" aria-hidden="true">
+  <span class="fl-ic dk">
+    <ModuleIcon icon="reports" size={16} class="ic" />
+  </span>
+  <span>
+    <span class="ui-meta">{t.net(demoSales.days)}</span>
+    <b class="fl-big ui-num">{formatMoney(demoSales.net * 100)}</b>
+  </span>
+  <span class="fl-up">{c.up(String(demoNetChange))}</span>
+</div>

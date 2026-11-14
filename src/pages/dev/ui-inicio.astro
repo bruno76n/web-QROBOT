@@ -1,0 +1,51 @@
+---
+/**
+ * Test page `/dev/ui-inicio` of the screen «Inicio» of the page for workshops (docs/25 §6.3): the
+ * hero container of the mockup (`.hero-stage` with the lilac from 140 px, 90 px on phones, and
+ * `.hero-shot` holding the screen and its floating notices) so the screen gets the same width as in
+ * the mockup. Only exists in `astro dev` (404 otherwise); not linked anywhere.
+ */
+import SystemLayout from '@/layouts/SystemLayout.astro';
+import UiFloats from '@/components/system/ui/UiFloats.astro';
+import UiHome from '@/components/system/ui/UiHome.astro';
+
+// Development only (docs/10 §9).
+if (!import.meta.env.DEV) return new Response(null, { status: 404 });
+---
+
+<SystemLayout title="UI Inicio (dev)" description="Pantalla de Inicio (dev)" current="home">
+  <Fragment slot="head">
+    <meta name="robots" content="noindex" />
+  </Fragment>
+  <section class="s-hero">
+    <div class="wrap">
+      <p class="t-h2">Hero</p>
+    </div>
+    <div class="hero-stage">
+      <div class="wrap hero-shot">
+        <UiHome />
+        <UiFloats />
+      </div>
+    </div>
+  </section>
+</SystemLayout>
+
+<style>
+  /* Hero container of the mockup: the screen starts on white and ends on the lilac. */
+  .s-hero {
+    padding-bottom: 0;
+  }
+  .hero-shot {
+    position: relative;
+  }
+  .hero-stage {
+    margin-top: clamp(36px, 5vw, 64px);
+    padding-bottom: clamp(40px, 6vw, 96px);
+    background: linear-gradient(180deg, #fff 0, #fff 140px, var(--lilac) 140px, var(--lilac) 100%);
+  }
+  @media (max-width: 760px) {
+    .hero-stage {
+      background: linear-gradient(180deg, #fff 0, #fff 90px, var(--lilac) 90px, var(--lilac) 100%);
+    }
+  }
+</style>
