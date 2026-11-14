@@ -368,3 +368,9 @@ Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y pre
 - **Menú con tres ligas en 360 px:** con «Para talleres» (solo en `pnpm dev` mientras siga oculta) las ligas se encimaban con el logo. La maqueta lo resuelve aplastando el logo a 1 px; aquí, solo con tres ligas y ≤ 380 px, las ligas pierden relleno (4 px) y caben las tres junto al logo y Cotizar. Con dos ligas el header queda igual (`24 §3`).
 - **Fila de la comparación «Pedidos con anticipo y saldo»:** id `advances` (la de «Ventas y pedidos al mes» es `orders`).
 
+## 2026-11-14 · Fase 9 · Layout y piezas comunes de Para talleres
+- **Nombre del plan a 22 px en las dos páginas:** en la maqueta de precios el nombre es un `h2` sin tamaño propio (sale a 27 px, el del navegador) y en la principal un `h3` de 22 px. Se usa 22 px en ambas; precios sigue con `h2` porque la banda no tiene título (`PlanBand headingLevel`).
+- **Botones con `Button.astro`** (variantes `black`, `green`, `outline`, `outlineLight`) en lugar de la clase `.btn` de la maqueta: 1 px más de relleno por lado, el resto igual.
+- **Header de la web en Para talleres:** el de toda la web (ligas en negritas, sin flecha en Cotizar, ancho completo), no el de la maqueta; la barra del producto sí es la de la maqueta.
+- **`system.css` repite de `learn.css`** `.lead`, `.link` y el espacio de las secciones (cada uno con su prefijo, `.system` o `.learn`); se revisa al integrar la fase.
+

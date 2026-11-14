@@ -1,0 +1,27 @@
+---
+/**
+ * Layout of the pages for workshops (docs/25 §6): the site layout with a header that scrolls away,
+ * the product bar (SystemNav) that stays on top, and the common styles of `system.css` on the
+ * `.system` wrapper. Head tags of the page (the hero image preload) pass through the `head` slot.
+ */
+import BaseLayout from './BaseLayout.astro';
+import SystemNav, { type SystemPage } from '@/components/system/SystemNav.astro';
+import '@/styles/system.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Which link of the product bar is the current one. */
+  current: SystemPage;
+  jsonLd?: object[];
+}
+const { title, description, current, jsonLd = [] } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd} stickyHeader={false}>
+  <slot name="head" slot="head" />
+  <SystemNav current={current} />
+  <div class="system">
+    <slot />
+  </div>
+</BaseLayout>

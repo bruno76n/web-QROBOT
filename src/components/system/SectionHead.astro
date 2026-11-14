@@ -1,0 +1,29 @@
+---
+/**
+ * Header of a section of the page for workshops (mockup `.sec-h`): the `h2` and, if given, its lead
+ * sentence. No double rule on these pages (docs/25 §7).
+ */
+interface Props {
+  /** Id of the heading, for the section's `aria-labelledby`. */
+  id: string;
+  title: string;
+  lead?: string;
+}
+const { id, title, lead } = Astro.props;
+---
+
+<header class="sec-h">
+  <h2 class="t-h2" id={id}>
+    {title}
+  </h2>
+  {lead && <p class="lead">{lead}</p>}
+</header>
+
+<style>
+  .sec-h {
+    display: grid;
+    gap: 16px;
+    margin-bottom: clamp(32px, 4.4vw, 60px);
+    max-width: 860px;
+  }
+</style>

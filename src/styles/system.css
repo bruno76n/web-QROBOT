@@ -1,0 +1,96 @@
+/*
+ * Common styles of the page for workshops (docs/25 §6), taken from reference/mockups/talleres/
+ * (_base.css + _talleres.css): page tokens, headings, section spacing, lead and link text, colored
+ * bands and anchor margins under the product bar. Every rule is scoped to `.system` (the wrapper of
+ * SystemLayout.astro); each component keeps its own styles in its `<style>`. No double rule (§7).
+ * Breakpoints: ≤480 small phone · ≤760 phone · 761–1099 tablet · ≥1100 desktop (docs/24 §1).
+ */
+.system {
+  /* Height of the product bar; anchors land just below it. */
+  --pbar: 60px;
+  --r-card: 20px;
+  /* Data colors of the system (dark gray = cost, green = profit), the same as its reports. */
+  --c-mat: #2b2b31;
+  --c-maq: #8a8a94;
+  --c-fail: #e2a3b0;
+  --c-luz: #c9c9d1;
+  --c-ext: #e4e4ea;
+  --c-com: #3a7bd5;
+  --c-gas: #cbb085;
+  font-feature-settings: 'ss01';
+}
+@media (max-width: 760px) {
+  .system {
+    --pbar: 54px;
+  }
+}
+
+/* Sections: vertical rhythm of the mockup; `pt0` joins a section to the one above. */
+.system section {
+  padding: clamp(64px, 9vw, 128px) 0;
+}
+.system section.pt0 {
+  padding-top: 0;
+}
+.system section[id],
+.system [id].anchor {
+  scroll-margin-top: calc(var(--pbar) + 12px);
+}
+.system .band-soft {
+  background: var(--soft);
+}
+.system .band-lilac {
+  background: var(--lilac);
+}
+
+/* Headings and text. */
+.system h1,
+.system h2,
+.system h3 {
+  font-weight: 600;
+  text-wrap: balance;
+}
+.system .t-h1 {
+  font-size: clamp(44px, 6.6vw, 98px);
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+}
+.system .t-h2 {
+  font-size: clamp(34px, 4.4vw, 64px);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  max-width: 18ch;
+}
+.system .t-h3 {
+  font-size: 20px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+.system .lead {
+  font-size: clamp(19px, 1.7vw, 23px);
+  line-height: 1.45;
+  color: var(--ink-2);
+  max-width: 46ch;
+  text-wrap: pretty;
+}
+.system p {
+  text-wrap: pretty;
+}
+.system .link {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1.5px;
+}
+.system .link:hover {
+  text-decoration-color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .system *,
+  .system *::before,
+  .system *::after {
+    transition: none !important;
+  }
+}

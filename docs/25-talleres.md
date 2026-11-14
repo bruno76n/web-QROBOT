@@ -134,7 +134,7 @@ Y en `src/lib/cost.ts` (se mueve desde `src/lib/learn/`, §6): `profitAt(cost, p
 | `FeatureTour.astro` | Recorrido: pestañas en escritorio, acordeón en celular y tableta (+ script) | `.tour` |
 | `Flow.astro` | Del archivo a la entrega: 5 pasos con su cuadrito de la app | `.flow` |
 | `RolesTable.astro` | Qué ve cada rol | `.roles` |
-| `PlanBand.astro` | Los 3 planes en una banda (portada y precios) | `.plans` |
+| `PlanBand.astro` | Los 3 planes en una banda (portada y precios). Pinta el mensual con el anual debajo; cada precio (`[data-plan-price]`) lleva los textos de los dos periodos en `data-monthly-*` y `data-yearly-*` (`amount`, `per`, `note`), así `PeriodToggle` solo cambia texto | `.plans` |
 | `PeriodToggle.astro` | Mensual o anual (+ script; sin JavaScript se ve el mensual y la línea «o $1,490 al año») | `.seg` |
 | `PlanFinder.astro` | ¿Qué plan te toca? (+ script con `recommendPlan`) | `.finder` |
 | `CompareTable.astro` | Comparación completa | `.cmp` |

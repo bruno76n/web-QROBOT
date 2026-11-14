@@ -1,0 +1,76 @@
+---
+/**
+ * Dark closing band of the pages for workshops (mockup `.s-end`): title, sentence and one or two
+ * buttons (green main one, light outline for the second). Links outside the site get `noopener`.
+ */
+import Button from '@/components/site/Button.astro';
+
+interface Action {
+  label: string;
+  href: string;
+}
+interface Props {
+  /** Id of the heading. */
+  id: string;
+  title: string;
+  lead: string;
+  primary: Action;
+  secondary?: Action;
+}
+const { id, title, lead, primary, secondary } = Astro.props;
+/** `noopener` for links that leave the site (the system). */
+const rel = (href: string) => (/^https?:/.test(href) ? 'noopener' : undefined);
+---
+
+<section class="s-end" aria-labelledby={id}>
+  <div class="wrap s-end-in">
+    <h2 class="t-h2" id={id}>
+      {title}
+    </h2>
+    <p class="lead">{lead}</p>
+    <div class="end-cta">
+      <Button href={primary.href} rel={rel(primary.href)} variant="green" arrow class="end-btn">
+        {primary.label}
+      </Button>
+      {secondary && (
+        <Button
+          href={secondary.href}
+          rel={rel(secondary.href)}
+          variant="outlineLight"
+          class="end-btn"
+        >
+          {secondary.label}
+        </Button>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .s-end {
+    background: var(--ink);
+    color: #fff;
+  }
+  .s-end-in {
+    display: grid;
+    gap: 22px;
+  }
+  .s-end .t-h2 {
+    max-width: 16ch;
+  }
+  .s-end .lead {
+    color: #c9c9d1;
+  }
+  /* Spacing with margins, not `gap` in flex (Safari 14, docs/24 §5). */
+  .end-cta {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -6px;
+  }
+  .end-cta :global(.end-btn) {
+    margin: 6px;
+  }
+  .s-end :global(:focus-visible) {
+    outline-color: #b49af5;
+  }
+</style>

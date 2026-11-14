@@ -1,0 +1,234 @@
+---
+/**
+ * The 3 plans in one band (docs/25 §6–7, mockup `.plans`), shared by the main page and pricing.
+ * It renders the monthly prices with the yearly one below. Each price (`[data-plan-price]`) also
+ * carries the texts of both periods (`data-{monthly|yearly}-{amount|per|note}`), so the period
+ * toggle of pricing only swaps text and never formats money. Prices, limits and the trial days
+ * come from `site.system`; the recommended plan is the dark one with its badge.
+ */
+import Button from '@/components/site/Button.astro';
+import { site } from '@/config/site';
+import { es } from '@/i18n/es';
+import { formatMoney } from '@/lib/money';
+import { yearlyPerMonth, type Plan } from '@/lib/system/plans';
+
+interface Props {
+  /** `h3` under a section heading (main page), `h2` when the band has no heading (pricing). */
+  headingLevel?: 2 | 3;
+}
+const { headingLevel = 3 } = Astro.props;
+const Heading = headingLevel === 2 ? 'h2' : 'h3';
+const t = es.system.plans;
+const { plans, trialDays, appUrl, signUpPath } = site.system;
+const signUp = `${appUrl}${signUpPath}`;
+/** Whole pesos as the site writes them: `$1,490`. */
+const pesos = (n: number) => formatMoney(n * 100);
+
+/** Name, who it is for and what it brings, by plan. */
+function texts(plan: Plan) {
+  switch (plan.id) {
+    case 'free':
+      return {
+        ...t.free,
+        features: t.free.features({
+          people: plan.people,
+          printers: plan.printers ?? 0,
+          orders: plan.orders ?? 0,
+        }),
+      };
+    case 'shop':
+      return { ...t.shop, features: t.shop.features(plan) };
+    case 'business':
+      return { ...t.business, features: t.business.features(plan) };
+  }
+}
+
+/** Texts of a price in both periods; a free plan reads the same in both. */
+function price(plan: Plan) {
+  if (plan.monthly === 0) {
+    const free = { amount: pesos(0), per: t.forever, note: '' };
+    return { monthly: free, yearly: free };
+  }
+  return {
+    monthly: {
+      amount: pesos(plan.monthly),
+      per: t.perMonth,
+      note: t.orYearly(pesos(plan.yearly)),
+    },
+    yearly: {
+      amount: pesos(plan.yearly),
+      per: t.perYear,
+      note: t.perMonthEquals(pesos(yearlyPerMonth(plan))),
+    },
+  };
+}
+
+const cards = plans.map((plan) => ({
+  plan,
+  text: texts(plan),
+  price: price(plan),
+  cta: plan.monthly === 0 ? es.system.cta.startFree : es.system.cta.tryDays(trialDays),
+}));
+---
+
+<div class="plans">
+  {cards.map(({ plan, text, price, cta }) => (
+    <div class:list={['plan', plan.recommended && 'hl']}>
+      {plan.recommended && <span class="badge">{t.recommended}</span>}
+      <Heading class="plan-name">{text.name}</Heading>
+      <p class="for">{text.for}</p>
+      <p
+        class="price"
+        data-plan-price={plan.id}
+        data-monthly-amount={price.monthly.amount}
+        data-monthly-per={price.monthly.per}
+        data-monthly-note={price.monthly.note}
+        data-yearly-amount={price.yearly.amount}
+        data-yearly-per={price.yearly.per}
+        data-yearly-note={price.yearly.note}
+      >
+        <b>{price.monthly.amount}</b>
+        <span>{price.monthly.per}</span>
+      </p>
+      <p class="price-yr">{price.monthly.note}</p>
+      <Button
+        href={signUp}
+        rel="noopener"
+        variant="outline"
+        arrow
+        class:list={['plan-btn', plan.recommended && 'plan-btn-hl']}
+      >
+        {cta}
+      </Button>
+      <ul>
+        {text.features.map((f) => (
+          <li>{f}</li>
+        ))}
+      </ul>
+    </div>
+  ))}
+</div>
+<p class="plans-note">{t.note(trialDays)}</p>
+
+<style>
+  .plans {
+    display: grid;
+    border: 1px solid var(--line);
+    border-radius: var(--r-card);
+    overflow: hidden;
+    background: #fff;
+  }
+  .plan {
+    padding: 28px;
+    display: grid;
+    gap: 16px;
+    align-content: start;
+    position: relative;
+  }
+  .plan + .plan {
+    border-top: 1px solid var(--line);
+  }
+  /* Same size as `h2` (pricing) and `h3` (main page). */
+  .plan-name {
+    font-size: 22px;
+    line-height: 1.55;
+    letter-spacing: -0.025em;
+  }
+  .for {
+    font-size: 15px;
+    color: var(--ink-2);
+    margin-top: -10px;
+  }
+  .badge {
+    position: absolute;
+    top: 26px;
+    right: 24px;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 6px;
+    background: var(--green);
+    color: var(--ink);
+  }
+  .price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+  .price b {
+    font-size: 52px;
+    letter-spacing: -0.045em;
+    line-height: 1;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    margin-right: 8px;
+  }
+  .price span {
+    font-size: 15px;
+    color: var(--ink-2);
+  }
+  .price-yr {
+    font-size: 14px;
+    color: var(--ink-2);
+    min-height: 20px;
+    margin-top: -8px;
+  }
+  .plan ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+    font-size: 16px;
+  }
+  .plan li {
+    display: flex;
+  }
+  .plan li::before {
+    content: '';
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin: 3px 10px 0 0;
+    border-radius: 50%;
+    background: var(--green-l)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300873a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12 4 4 8-8'/%3E%3C/svg%3E")
+      center / 12px no-repeat;
+  }
+  .plan.hl {
+    background: var(--ink);
+    color: #fff;
+  }
+  .plan.hl .for,
+  .plan.hl .price span,
+  .plan.hl .price-yr {
+    color: #c9c9d1;
+  }
+  .plan.hl li::before {
+    background-color: rgba(0, 174, 66, 0.22);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233ddc7a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12 4 4 8-8'/%3E%3C/svg%3E");
+  }
+  .plan :global(.plan-btn-hl) {
+    border-color: #fff;
+  }
+  .plan.hl :global(:focus-visible) {
+    outline-color: #b49af5;
+  }
+  @media (min-width: 900px) {
+    .plans {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .plan + .plan {
+      border-top: 0;
+      border-left: 1px solid var(--line);
+    }
+    .plan.hl + .plan {
+      border-left-color: var(--ink);
+    }
+  }
+  .plans-note {
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+</style>

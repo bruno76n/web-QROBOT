@@ -1,7 +1,9 @@
 ---
-// The page for workshops: pricing. Hidden until the system is out (docs/25 §2): the middleware locks
-// `/talleres` and this page locks itself too; never prerendered.
-import BaseLayout from '@/layouts/BaseLayout.astro';
+// The page for workshops: pricing (docs/25 §7.2). Hidden until the system is out (docs/25 §2):
+// the middleware locks `/talleres` and this page locks itself too; never prerendered.
+import SystemLayout from '@/layouts/SystemLayout.astro';
+import PlanBand from '@/components/system/PlanBand.astro';
+import EndCta from '@/components/system/EndCta.astro';
 import { site } from '@/config/site';
 import { systemVisible } from '@/config/system';
 import { es } from '@/i18n/es';
@@ -9,11 +11,31 @@ import { es } from '@/i18n/es';
 export const prerender = false;
 if (!systemVisible) return Astro.rewrite('/404');
 
-const seo = es.system.seo.pricing(site.system.name);
+const { name, trialDays, appUrl, signUpPath } = site.system;
+const t = es.system.pricing;
+const seo = es.system.seo.pricing(name);
 ---
 
-<BaseLayout title={seo.title} description={seo.description} stickyHeader={false}>
-  <div class="wrap py-16">
-    <h1>{es.system.pricing.title}</h1>
-  </div>
-</BaseLayout>
+<SystemLayout title={seo.title} description={seo.description} current="pricing">
+  <section aria-labelledby="h1">
+    <div class="wrap">
+      <h1 class="t-h1" id="h1">
+        {t.title}
+      </h1>
+      <p class="lead">{t.lead}</p>
+    </div>
+  </section>
+
+  <section class="pt0" aria-label={t.plansLabel}>
+    <div class="wrap">
+      <PlanBand headingLevel={2} />
+    </div>
+  </section>
+
+  <EndCta
+    id="end-h"
+    title={t.end.title(trialDays)}
+    lead={t.end.lead}
+    primary={{ label: es.system.cta.tryFree, href: `${appUrl}${signUpPath}` }}
+  />
+</SystemLayout>
