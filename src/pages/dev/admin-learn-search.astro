@@ -1,0 +1,15 @@
+---
+// Development-only page `/dev/admin-learn-search`: the search block of the panel's «Aprende» tab
+// on its own, to build and test it before the tab exists. 404 outside `astro dev`; not linked.
+import AdminLayout from '@/layouts/AdminLayout.astro';
+import LearnSearchDevApp from '@/components/admin/learn/LearnSearchDevApp';
+
+export const prerender = false;
+
+// Development only (docs/10 §9).
+if (!import.meta.env.DEV) return new Response(null, { status: 404 });
+---
+
+<AdminLayout title="Buscador · Panel de Quick Robot (dev)">
+  <LearnSearchDevApp client:only="react" />
+</AdminLayout>
