@@ -8,10 +8,11 @@ import { ConfirmProvider } from './ConfirmDialog';
 import { ProductsView } from './ProductsView';
 import { HeroEditor } from './HeroEditor';
 import { CategoriesView } from './CategoriesView';
+import { LearnView } from './learn/LearnView';
 
 /** The panel page being shown; each Astro admin page mounts this island with its own view. */
 interface Props {
-  view: 'products' | 'categories' | 'hero';
+  view: 'products' | 'categories' | 'hero' | 'learn';
 }
 
 /**
@@ -34,6 +35,8 @@ export default function AdminApp({ view }: Props) {
             <ProductsView />
           ) : view === 'categories' ? (
             <CategoriesView />
+          ) : view === 'learn' ? (
+            <LearnView />
           ) : (
             <HeroEditor />
           )}
