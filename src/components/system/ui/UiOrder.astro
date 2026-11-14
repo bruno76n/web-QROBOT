@@ -1,12 +1,161 @@
 ---
 /**
- * System screen «Pedido» (docs/25 §6.3), drawn in HTML with the sample data of `system-demo.ts` and
- * the labels of `es.system.ui`. Placeholder frame until the screen is drawn.
+ * System screen «Pedido» (docs/25 §6.3), drawn in HTML with order #3 (`demoOrder3` and
+ * `demoOrder3Detail`) and the labels of `es.system.ui.order`: customer and state, the states with
+ * their dates, total, paid, balance and due date; the items with where they come from (stock or to
+ * print), the printer, its progress and time left; the estimated end, the payments and the drawn
+ * actions. On phones the figures go 2 × 2 and the dates of the states hide (`system-ui.css`).
  */
+import Check from '@lucide/astro/icons/check';
+import Clock from '@lucide/astro/icons/clock';
+import Copy from '@lucide/astro/icons/copy';
+import FileText from '@lucide/astro/icons/file-text';
+import Printer from '@lucide/astro/icons/printer';
+import UiButton from './UiButton.astro';
 import UiFrame from './UiFrame.astro';
+import UiMeter from './UiMeter.astro';
+import UiPill from './UiPill.astro';
 import { site } from '@/config/site';
+import { demoOrder3 as o, demoOrder3Detail as d } from '@/config/system-demo';
+import { es } from '@/i18n/es';
+import { formatPesos } from '@/lib/learn/cost';
+import { formatMoney } from '@/lib/money';
+
+const t = es.system.ui.order;
+const duration = es.system.ui.piece.duration;
+
+// States: the ones before the current one are done; the current one is marked.
+const currentIndex = d.steps.findIndex((s) => s.id === d.current);
+const steps = d.steps.map((s, i) => ({
+  ...s,
+  state: i < currentIndex ? 'done' : i === currentIndex ? 'cur' : '',
+}));
+
+const pieces = d.items.reduce((sum, i) => sum + i.qty, 0);
+
+// Where each item comes from: finished stock, then what is left to print.
+const origin = (i: (typeof d.items)[number]) =>
+  [i.fromStock > 0 ? t.fromStock(i.fromStock) : '', i.toPrint > 0 ? t.toPrint(i.toPrint) : '']
+    .filter(Boolean)
+    .join(' · ');
+
+const label = t.label(
+  site.system.name,
+  o.number,
+  t.steps[d.current],
+  formatMoney(o.total * 100),
+  formatMoney(o.paid * 100),
+  formatMoney(o.balance * 100),
+  t.itemCount(d.items.length),
+);
 ---
 
-<UiFrame label={site.system.name}>
-  <div class="ui-panel">Pedido</div>
+<UiFrame label={label} kind="card" inner="ui-ped">
+  <div class="ui-ph">
+    <span>
+      <span class="ui-meta">{t.number(o.number)}</span>
+      <b class="ui-t">{o.customer}</b>
+    </span>
+    <UiPill tone="info">{t.steps[d.current]}</UiPill>
+  </div>
+
+  {/* States with their dates. */}
+  <ol class="ui-steps">
+    {steps.map((s) => (
+      <li class={s.state}>
+        <span class="dot">{s.state === 'done' && <Check class="ic" aria-hidden="true" />}</span>
+        <b>{t.steps[s.id]}</b>
+        <small>{s.date}</small>
+      </li>
+    ))}
+  </ol>
+
+  {/* Total, paid, balance and due date. */}
+  <dl class="ui-figs">
+    <div>
+      <dt>{t.total}</dt>
+      <dd class="ui-num">{formatPesos(o.total)}</dd>
+    </div>
+    <div>
+      <dt>{t.paid}</dt>
+      <dd class="ui-num">{formatPesos(o.paid)}</dd>
+    </div>
+    <div class="due">
+      <dt>{t.balance}</dt>
+      <dd class="ui-num">{formatPesos(o.balance)}</dd>
+    </div>
+    <div>
+      <dt>{t.due}</dt>
+      <dd>{o.due}</dd>
+    </div>
+  </dl>
+
+  {/* Items: amount, origin, printer, progress and time left; then the estimated end. */}
+  <div class="ped-sec">
+    <div class="ui-ph">
+      <b>{t.items}</b>
+      <span class="ui-meta">{t.pieces(pieces)}</span>
+    </div>
+    <ul class="ped-items">
+      {d.items.map((i) => (
+        <li>
+          <div class="it-a">
+            <b>{t.item(i.qty, i.name)}</b>
+            <span class="ui-num">{formatPesos(i.amount)}</span>
+          </div>
+          <div class="it-b">
+            <span class="ui-meta">{origin(i)}</span>
+            {/* Icon and name together, without a space in between (it would wrap). */}
+            <span class="ui-meta">
+              <Printer class="ic" aria-hidden="true" />
+              {i.printer}
+            </span>
+          </div>
+          <div class="it-c">
+            <UiMeter value={i.progress} />
+            <span class="ui-meta ui-num">{t.progress(i.progress, duration(i.minutesLeft))}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+    <p class="ped-end">
+      <Clock class="ic" aria-hidden="true" />
+      {t.end(d.end)}
+    </p>
+  </div>
+
+  {/* Payments. */}
+  <div class="ped-sec">
+    <div class="ui-ph">
+      <b>{t.payments}</b>
+    </div>
+    {d.payments.map((pay) => (
+      <div class="ped-pay">
+        <span>{t.payment(t.paymentKinds[pay.kind], pay.date)}</span>
+        <span class="ui-num">{formatPesos(pay.amount)}</span>
+      </div>
+    ))}
+  </div>
+
+  {/* Drawn actions. */}
+  <div class="ui-acts">
+    <UiButton pri>{t.actions.markReady}</UiButton>
+    <UiButton>{t.actions.addPayment}</UiButton>
+    <UiButton>
+      <FileText slot="icon" class="ic" aria-hidden="true" />
+      {t.actions.quote}
+    </UiButton>
+    <UiButton>
+      <Copy slot="icon" class="ic" aria-hidden="true" />
+      {t.actions.copy}
+    </UiButton>
+  </div>
 </UiFrame>
+
+<style>
+  /* The printer icon sits inline with its name, as in the mockup: the global reset of the site
+     makes every svg a block, which would push the name to its own line. */
+  .ped-items :global(.ui-meta .ic) {
+    display: inline-block;
+  }
+</style>
