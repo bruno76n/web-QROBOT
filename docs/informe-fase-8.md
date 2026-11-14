@@ -8,7 +8,7 @@ El panel ya tiene la pestaña **Aprende**:
 
 Guardar una página rehace su texto de búsqueda y la actualiza en Meilisearch si está configurado. Todo funciona y está probado en local.
 
-**La publicación en producción (8.4) no se hizo:** este entorno no tiene credenciales de Cloudflare ni Meilisearch. Abajo están los pasos exactos para hacerla desde la Mac.
+**La publicación en producción (8.4) se hizo el 2026-11-14** desde la Mac, versión `7bb37de2`: migración `0007`, 118 páginas cargadas (116 publicadas) y revisión en vivo. El buscador de producción usa D1 porque Meilisearch sigue sin decidirse (`22 §2`).
 
 La fase se hizo después de la 9 (Para talleres), sobre `main` con la 9 fusionada. Primero se hicieron las acciones (8.1). Después trabajaron dos agentes en paralelo, cada uno con sus archivos: la lista y el editor (8.2), y el bloque del buscador (8.3).
 
@@ -18,7 +18,7 @@ La fase se hizo después de la 9 (Para talleres), sobre `main` con la 9 fusionad
 | 8.1 Acciones del panel | Listo | `68067e8`, `d42387c`, `fe436f4`, `7626061` | 6 acciones con `guard`. Funciones del importador compartidas (`pageSearchText`, `faqRecords`, `unknownMarks`). `updateLearnPageIndex` actualiza una página en Meilisearch. Si Meilisearch falla, la página queda guardada y el panel lo avisa (`SEARCH_NOT_UPDATED`) |
 | 8.2 Lista y editor | Listo | `9ee27c3`, `55443dc`, `597b6f8`, `3a3274c` | `/admin/aprende`. Vista previa con el árbol de `markdown.ts`, sin `dangerouslySetInnerHTML`. En celular, lista y editor en pantallas separadas |
 | 8.3 Buscador | Listo | `dea3f92`, `d0d955c`, `4ce48cf` | Estado del índice, «Actualizar buscador» y búsquedas sin resultado (sin IP ni fecha por búsqueda) |
-| 8.4 Producción | **Bloqueado** | — | Sin credenciales de Cloudflare ni Meilisearch (ver «Bloqueado o dudoso») |
+| 8.4 Producción | Listo | — (no es código) | Desplegado el 2026-11-14 desde la Mac, versión `7bb37de2`. Migración `0007`, 118 páginas cargadas y revisión en vivo. Sin Meilisearch: el buscador usa D1 |
 | 8.5 Cierre | Listo | `18794dd` y este informe | Integración: barra del panel en celular, revisión de Safari de `pnpm size`, axe en la pestaña |
 
 ## Pruebas
@@ -54,7 +54,7 @@ La pestaña Aprende usa los componentes y estilos de Productos (`reference/mocku
 - **Credenciales de Cloudflare** para publicar (`progreso.md › Bloqueos`).
 
 ## Bloqueado o dudoso
-**8.4 Producción:** se hace desde la Mac, con `wrangler` autenticado. Aprende todavía no está en producción, así que el importador solo agrega páginas.
+**8.4 Producción: hecho** el 2026-11-14 desde la Mac (versión `7bb37de2`). Lo único que quedó fuera es Meilisearch, que depende del dueño (`22 §2`); el buscador funciona con D1 y tolera errores de dedo. Así se hizo:
 1. Si hay Meilisearch: en `wrangler.jsonc`, poner `MEILI_HOST` con la dirección. Correr `pnpm learn:search-setup` con `MEILI_MASTER_KEY` en la terminal, y después `pnpm exec wrangler secret put MEILI_SEARCH_KEY` y `pnpm exec wrangler secret put MEILI_WRITE_KEY` con las llaves que imprime. Sin Meilisearch, se omite este paso: el buscador usa D1.
 2. `pnpm exec wrangler d1 migrations apply quick-robot-web --remote` (aplica la `0007`; la fase 8 no agrega migraciones).
 3. `pnpm learn:import --remote --yes` (agrega `--sync` si hay Meilisearch). **Sin `--overwrite`:** solo agrega páginas y no toca las editadas en el panel.

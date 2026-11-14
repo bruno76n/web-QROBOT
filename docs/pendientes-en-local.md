@@ -7,13 +7,15 @@ Al 2026-11-14 las **9 fases del plan están construidas y fusionadas en `main`**
 | Parte | En `main` | En producción (`quickrobot.centerdiv.mx`) |
 |---|---|---|
 | Web (inicio, catálogo, producto, privacidad) y panel (Productos, Categorías, Portada) | Sí | Sí (desplegada a mano desde la Mac) |
-| Aprende (fases 6–7): 118 páginas, buscador, menú y footer | Sí | **No**: falta la migración `0007`, cargar el contenido y desplegar |
-| Pestaña **Aprende** del panel (fase 8) | Sí | **No** (sale con el mismo despliegue) |
-| Para talleres (fase 9), **oculta** (`site.system.enabled = false`) | Sí | **No**: sale con el mismo despliegue y debe responder 404 |
+| Aprende (fases 6–7): 118 páginas, buscador, menú y footer | Sí | Sí (2026-11-14, versión `7bb37de2`) |
+| Pestaña **Aprende** del panel (fase 8) | Sí | Sí (mismo despliegue) |
+| Para talleres (fase 9), **oculta** (`site.system.enabled = false`) | Sí | Sí, oculta: responde 404 y nada la enlaza (revisado en vivo) |
 
-Desplegar `main` publica las tres últimas filas juntas. Para talleres sigue oculta: responde 404 y nada la enlaza.
+Todo `main` está en producción. Falta Meilisearch (paso 1.3, lo decide el dueño): mientras tanto el buscador usa D1.
 
-## 1. Publicar Aprende (paso 8.4 de `fases/fase-8.md`)
+## 1. Publicar Aprende (paso 8.4 de `fases/fase-8.md`) — **hecho el 2026-11-14**
+
+Versión `7bb37de2`. Se hizo todo menos el paso 3 (Meilisearch), que espera la decisión del dueño. Queda como registro de cómo se hace; lo anotado está en `17 §8`, `progreso.md` e `informe-fase-8.md`.
 
 Requisitos: `wrangler` con la sesión de la cuenta de Cloudflare (`pnpm exec wrangler whoami`) y `main` al día (`git pull`, `pnpm install`).
 

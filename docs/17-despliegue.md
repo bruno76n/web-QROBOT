@@ -72,7 +72,7 @@ Cuenta de Cloudflare `bruno76n@gmail.com`; la zona `centerdiv.mx` ya estaba ahí
 |---|---|
 | Web | `https://quickrobot.centerdiv.mx` (`routes` con `custom_domain: true` en `wrangler.jsonc`; Cloudflare crea el DNS y el certificado solo) |
 | Worker | `quick-robot-web` |
-| D1 | `quick-robot-web`, `database_id` en `wrangler.jsonc`; migraciones 0000–0006 aplicadas con `--remote` |
+| D1 | `quick-robot-web`, `database_id` en `wrangler.jsonc`; migraciones 0000–0007 aplicadas con `--remote` |
 | R2 | `quick-robot-photos`, dominio `fotos-quickrobot.centerdiv.mx` (lectura pública) |
 | Access | App "Panel Quick Robot" con destinos `quickrobot.centerdiv.mx/admin`, `/api/admin` y `/_actions/admin.*`; política `dueño` (Allow, correo del dueño); login con código al correo |
 | Variables | `PUBLIC_IMG_BASE` y `ACCESS_TEAM_DOMAIN` en `wrangler.jsonc`; secretos `ACCESS_AUD` y `ADMIN_EMAILS` con `wrangler secret put` |
@@ -83,3 +83,5 @@ Cuenta de Cloudflare `bruno76n@gmail.com`; la zona `centerdiv.mx` ya estaba ahí
 - Desplegar a mano: `pnpm build && pnpm exec wrangler deploy`. El CI de GitHub sigue pausado por facturación (`progreso.md`).
 - **2026-11-08:** segundo despliegue a mano (publicar con categoría opcional, video del timelapse a 0.5× en `/media/timelapse.mp4`). Sin migraciones nuevas.
 - **2026-11-08 (tercer despliegue):** el video queda solo con el ícono de play (sin etiqueta, textos ni datos). Sin migraciones nuevas.
+- **2026-11-14 (cuarto despliegue, Aprende):** versión `7bb37de2`. Migración `0007` aplicada con `--remote` (5 tablas de Aprende: `learn_pages`, `learn_faqs`, `learn_datasets`, `learn_sources`, `learn_search_misses`), contenido cargado con `pnpm learn:import --remote --yes` (118 páginas, 116 publicadas, 68 preguntas, 5 conjuntos de datos, 48 fuentes) y despliegue a mano. Respaldo previo de la base en `backups/antes-de-aprende.sql` (40 KB, 10 tablas). Salen juntas Aprende (fases 6–7), la pestaña Aprende del panel (fase 8) y Para talleres (fase 9) **oculta**. Migraciones aplicadas: 0000–0007.
+- **Meilisearch sin configurar:** `MEILI_HOST` sigue vacío en `wrangler.jsonc`, así que el buscador de producción usa D1 (`source: "d1"` en la respuesta de `/api/aprende/buscar`) y tolera errores de dedo. Encenderlo es el paso 1.3 de `pendientes-en-local.md`.
