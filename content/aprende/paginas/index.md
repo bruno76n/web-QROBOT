@@ -4,7 +4,7 @@ kind: home
 topic: ''
 title: Aprende
 subtitle: Respuestas sobre impresión 3D, del taller de Quick Robot.
-summary: Escribe tu duda o el problema que ves en la pieza. Si no lo encuentras, mándanos foto por WhatsApp.
+summary: Escribe tu duda o el problema que ves en la pieza.
 filters: []
 tags: []
 related: []

@@ -147,7 +147,7 @@ tipo: portada
 tema: todos
 titulo: Aprende
 subtitulo: Respuestas sobre impresión 3D, del taller de Quick Robot.
-en_corto: Escribe tu duda o el problema que ves en la pieza. Si no lo encuentras, mándanos foto por WhatsApp.
+en_corto: Escribe tu duda o el problema que ves en la pieza.
 publico: todos
 revisado: 2026-11
 ```
