@@ -1693,3 +1693,32 @@ textarea.in.learn-md {
     min-height: 320px;
   }
 }
+
+/* Top bar on phones: the tabs slide sideways inside their pill instead of pushing the page wider;
+   «Ver catálogo ↗» goes away (the brand already links to the catalog), and on small phones the
+   brand keeps only the head of Q-404 (its name stays for screen readers). */
+@media (max-width: 860px) {
+  .bar {
+    gap: 8px;
+    padding: 0 10px;
+  }
+  .views {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+    margin-left: 0;
+  }
+  .views .vbtn {
+    padding: 0 10px;
+    flex: 0 0 auto;
+  }
+  .bar > a.b.ghost {
+    display: none;
+  }
+}
+@media (max-width: 480px) {
+  .brand {
+    font-size: 0;
+    gap: 0;
+  }
+}

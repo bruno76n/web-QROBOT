@@ -87,7 +87,13 @@ export const es = {
   admin: {
     pageTitle: 'Panel de Quick Robot',
     brand: 'Quick Robot',
-    tabs: { products: 'Productos', categories: 'Categorías', hero: 'Portada', label: 'Sección' },
+    tabs: {
+      products: 'Productos',
+      categories: 'Categorías',
+      hero: 'Portada',
+      learn: 'Aprende',
+      label: 'Sección',
+    },
     viewCatalog: 'Ver catálogo ↗',
     moreOptions: 'Más opciones',
     backup: { label: 'Descargar respaldo', note: 'Todos los productos en un archivo .json' },
@@ -317,11 +323,10 @@ export const es = {
     tooLong: (max: number) => `Máximo ${max} caracteres.`,
     badPrice: 'Escribe un precio, por ejemplo 50 o 1,250.',
     badSlug: 'Solo minúsculas, números y guiones.',
-    /** Tab «Aprende» of the panel (docs/12, docs/fases/fase-8.md 8.2–8.3). */
+    /** Tab «Aprende» of the panel (docs/12 §5c, docs/22 §10). */
     learn: {
-      // ── editor: start (agent «editor»: list and editor of the pages, 8.2) ──
+      // ── List and editor of the pages (docs/12 §5c) ──
       editor: {
-        tab: 'Aprende',
         pageTitle: 'Aprende · Panel de Quick Robot',
         list: {
           aria: 'Páginas de Aprende',
@@ -419,9 +424,8 @@ export const es = {
         saved: 'Guardado',
         viewPage: 'Ver página ↗',
       },
-      // ── editor: end ──
 
-      // ── buscador: start (agent «buscador»: search block and searches without a result, 8.3) ──
+      // ── Search block and searches without a result (docs/22 §10) ──
       search: {
         title: 'Buscador',
         loading: 'Cargando el buscador',
@@ -444,7 +448,6 @@ export const es = {
           'Nadie se quedó sin respuesta en los últimos 30 días. Cuando alguien busque algo que no está, aparece aquí.',
         times: (n: number) => (n === 1 ? '1 vez' : `${n} veces`),
       },
-      // ── buscador: end ──
     },
   },
   catalog: {

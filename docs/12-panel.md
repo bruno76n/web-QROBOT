@@ -4,7 +4,7 @@ Referencia visual y de comportamiento: `reference/mockups/admin.html`. Rutas `/a
 
 ## 1. Estructura
 
-- **Barra superior:** "Quick Robot", pestañas **Productos**, **Categorías** y **Portada**, "Ver catálogo ↗" y menú **•••** (Descargar respaldo).
+- **Barra superior:** "Quick Robot", pestañas **Productos**, **Categorías**, **Portada** y **Aprende**, "Ver catálogo ↗" y menú **•••** (Descargar respaldo). En celular las pestañas se deslizan dentro de su recuadro, "Ver catálogo ↗" se quita (el nombre ya liga al catálogo) y en ≤ 480 px de la marca queda solo la cabeza de Q-404.
 - Al abrir: se llama `admin.cleanupPending` en segundo plano.
 - Si hay cambios sin guardar y se intenta salir, cambiar de producto o de pestaña: "Tienes cambios sin guardar. ¿Salir sin guardar?" (Salir / Seguir editando).
 
@@ -81,6 +81,7 @@ Edita las páginas de Aprende que ya existen (crear y borrar páginas se hace co
 - **Lista:** `admin.listLearnPages` trae todas las páginas (publicadas u ocultas) con título, tema, tipo, si está publicada y si se editó aquí. El interruptor de cada fila usa `admin.setLearnPublished`: muestra u oculta la página en Aprende y en el buscador al momento.
 - **Editor:** `admin.getLearnPage` trae el Markdown, las listas, las preguntas en orden y las fuentes que se pueden citar. «Guardar» llama `admin.saveLearnPage` con los campos editables (título, subtítulo, en corto, cuerpo, etiquetas, relacionadas, fuentes, preguntas, llamado y publicado). El servidor convierte el Markdown, rehace el texto de búsqueda y marca la página como **editada aquí**: desde entonces el importador ya no la toca, salvo con `--overwrite`. La dirección, el tema y el tipo no se editan.
 - **Errores al guardar:** una relacionada que ya no existe (`UNKNOWN_RELATED`, nombra cuáles), un bloque `[[…]]` que no existe (`UNKNOWN_BLOCK`, nombra cuál) o una fuente que no existe (`VALIDATION`). Si se guardó pero el buscador no se pudo actualizar, la respuesta es éxito con `search: 'failed'` y el panel muestra «Se guardó, pero el buscador no se actualizó. Toca «Actualizar buscador» en un rato.».
+- **Pantalla:** como Productos: lista a la izquierda (búsqueda por título o dirección, filtros por tema y por estado: Todas · Publicadas · Ocultas · Editadas aquí) y editor a la derecha; la página abierta queda en `?p=<id>`; en celular, lista y editor en pantallas separadas. El interruptor «Publicada» (en la fila y en el editor) guarda solo, aparte de «Guardar», y se deshace si el servidor falla. Relacionadas y Fuentes se eligen con un selector y se quitan de la lista de elegidas; etiquetas como fichas. Cuerpo con «Texto | Vista previa»: la vista previa pinta el mismo árbol de `markdown.ts` (una marca `[[…]]` desconocida sale en rojo). Preguntas: agregar, quitar y ordenar (dnd-kit, también con teclado). «Ver página ↗» solo si está publicada. El bloque del buscador va debajo de la lista, en su mismo scroll.
 - **Buscador y búsquedas sin resultado** (`22 §10`): `admin.learnSearchMisses` da las búsquedas sin resultado de los últimos días (de más a menos) y el estado del buscador (si hay Meilisearch, última sincronización y documentos); «Actualizar buscador» llama `admin.syncLearnIndex` (`SEARCH_UNAVAILABLE` si Meilisearch no responde).
 
 ## 6. Clics a WhatsApp (fase 5)

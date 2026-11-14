@@ -141,8 +141,11 @@ test('un bloque [[…]] que no existe se ve en la vista previa y no se guarda', 
   const body = page.getByLabel('Cuerpo', { exact: true });
   await body.fill(`${await body.inputValue()}\n\n[[desconocida]]\n`);
 
-  await page.getByRole('button', { name: 'Vista previa' }).click();
-  await expect(page.getByTestId('learn-preview')).toBeVisible({ timeout: 30_000 });
+  // The preview loads its own chunk: a click that lands before the editor is ready is repeated.
+  await expect(async () => {
+    await page.getByRole('button', { name: 'Vista previa' }).click();
+    await expect(page.getByTestId('learn-preview')).toBeVisible({ timeout: 5_000 });
+  }).toPass({ timeout: 45_000 });
   await expect(page.getByText('Este bloque no existe: [[desconocida]]')).toBeVisible();
   await expect(page.getByText('Aquí va el bloque [[tabla:filamentos]]')).toHaveCount(0);
   await expectNoSeriousA11y(page);

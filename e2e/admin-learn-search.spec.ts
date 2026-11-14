@@ -8,7 +8,7 @@ import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { spawnSync } from 'node:child_process';
 
-const PAGE = '/dev/admin-learn-search';
+const PAGE = '/admin/aprende';
 
 /** Prefix of every query this spec searches, so they can be told apart from real ones. */
 const PREFIX = 'zzq';

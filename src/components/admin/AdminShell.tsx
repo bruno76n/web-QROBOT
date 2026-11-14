@@ -113,7 +113,7 @@ export function AdminShell({ view, children }: Props) {
             aria-current={view === 'learn' ? 'page' : undefined}
             onClick={(e) => void go(e, '/admin/aprende')}
           >
-            {t.learn.editor.tab}
+            {t.tabs.learn}
           </a>
         </nav>
         <span className="sp" />
