@@ -9,8 +9,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../_base.css">
 <link rel="stylesheet" href="_talleres.css">
+<link rel="stylesheet" href="_ui.css">
 </head>
-<body class="sys">
+<body>
 <header class="site-h" id="siteH">
   <div class="wrap">
     <a class="brand" href="#" aria-label="Quick Robot, ir al inicio"><img src="../../../assets/logo-cabeza.svg" alt="" width="34" height="30"><span>Quick Robot</span></a>
@@ -21,47 +22,55 @@
 <div class="pbar">
   <div class="wrap">
     <a class="pname" href="talleres.html"><span class="picon"><img src="../../../assets/logo-cabeza.svg" alt="" width="22" height="19"></span>Quick Cerebro</a>
-    <nav class="plinks" aria-label="Quick Cerebro"><a href="talleres.html#funciones">Funciones</a><a href="precios.html">Precios</a><a href="descargar.html" aria-current="page">Descargar</a></nav>
-    <details class="pmenu"><summary aria-label="Más de Quick Cerebro"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><nav class="pmenu-list" aria-label="Quick Cerebro"><a href="talleres.html#funciones">Funciones</a><a href="precios.html">Precios</a><a href="descargar.html" aria-current="page">Descargar</a><a href="#entrar">Entrar</a></nav></details>
-    <div class="pright"><a class="enter" href="#entrar">Entrar</a><a class="btn sm" href="#probar">Probar gratis</a></div>
+    <nav class="plinks" aria-label="Quick Cerebro"><a href="talleres.html#modulos">Módulos</a><a href="precios.html">Precios</a><a href="descargar.html" aria-current="page">Descargar</a></nav>
+    <details class="pmenu"><summary aria-label="Menú de Quick Cerebro"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><nav class="pmenu-list" aria-label="Quick Cerebro"><a href="talleres.html#modulos">Módulos</a><a href="precios.html">Precios</a><a href="descargar.html" aria-current="page">Descargar</a><a href="#entrar">Iniciar sesión</a></nav></details>
+    <div class="pright"><a class="enter" href="#entrar">Iniciar sesión</a><a class="btn sm" href="#probar">Probar gratis</a></div>
   </div>
 </div>
 <main id="inicio">
-<section class="s-ph" aria-labelledby="h1"><div class="wrap dl-top">
-  <div>
-
-    <h1 class="t-h1" id="h1">Úsalo donde trabajes.</h1>
-    <p class="lead">Una sola cuenta: lo que registras en la computadora aparece en el celular al momento.</p>
-    <div class="dl-main"><a class="btn" href="#mac" data-dl-main>Descargar para Mac <span class="ar" aria-hidden="true">→</span></a><a class="btn ghost" href="#other" data-dl-alt>Abrir en el navegador</a></div>
-    <p class="dl-req" data-dl-req="mac" hidden>macOS 12 o más nuevo. ¿Usas Windows? Está abajo.</p>
-    <p class="dl-req" data-dl-req="windows" hidden>Windows 10 u 11 de 64 bits. ¿Usas Mac? Está abajo.</p>
-    <p class="dl-req" data-dl-req="mobile" hidden>En el celular se usa desde el navegador. Agrégalo a tu pantalla de inicio.</p>
-    <p class="dl-req" data-dl-req="other" hidden>Funciona en cualquier navegador reciente.</p>
+<section class="s-ph dl" aria-labelledby="h1"><div class="wrap">
+  <h1 class="t-h1" id="h1">Descargar</h1>
+  <p class="lead">Tu taller en el Dock o en la barra de tareas. Misma cuenta y misma información que en el navegador y el celular.</p>
+  <div class="dl-main"><a class="btn" href="#mac" data-dl-main>Descargar para Mac <span class="ar" aria-hidden="true">→</span></a><a class="btn ghost" href="#other" data-dl-alt>Abrir en el navegador</a></div>
+  <p class="dl-req" data-dl-req="mac" hidden>macOS 12 o posterior. Para Windows, más abajo.</p>
+  <p class="dl-req" data-dl-req="windows" hidden>Windows 10 u 11 de 64 bits. Para Mac, más abajo.</p>
+  <p class="dl-req" data-dl-req="mobile" hidden>En el celular se usa desde el navegador y se puede agregar a la pantalla de inicio.</p>
+  <p class="dl-req" data-dl-req="other" hidden>Funciona en cualquier navegador actual.</p>
+</div>
+<div class="hero-stage"><div class="wrap"><figure class="ui-fig fig-app" role="img" aria-label="Pantalla de Inicio de Quick Cerebro: ventas de 30 días con ganancia bruta y neta, alertas con su acción, impresoras trabajando con su tiempo restante y próximas entregas"><div class="ui ui-win ui-app"><div class="ui-chrome" aria-hidden="true"><i></i><i></i><i></i></div><div class="ui-app-in"><div class="ui-side"><div class="ui-biz"><span class="ui-av">EZ</span><span><b>Eje Z</b><small>Impresión 3D</small></span></div><div class="ui-search"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20 20l-4-4"/></svg><span>Buscar</span><kbd>⌘K</kbd></div><nav class="ui-nav"><span class="ui-ni on"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Inicio</span><span class="ui-ng">Vender</span><span class="ui-ni"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8 12 3 3 8v8l9 5 9-5zM3 8l9 5 9-5M12 13v8"/></svg>Productos</span><span class="ui-ni"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6"/></svg>Ventas</span><span class="ui-ni"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6v3H9zM7 4.5H5V21h14V4.5h-2M9 11h6M9 15h4"/></svg>Pedidos<em>6</em></span><span class="ui-ng">Taller</span><span class="ui-ni"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>Filamentos</span><span class="ui-ni"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 13H6zM9 8V6a3 3 0 0 1 6 0v2"/></svg>Insumos</span><span class="ui-ni"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4v-9h16v9h-2M7 14h10v7H7z"/></svg>Impresoras</span><span class="ui-ni"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 8l10 5 10-5zM2 13l10 5 10-5"/></svg>Producción</span><span class="ui-ni"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18v4H3zM5 8v12h14V8M10 12h4"/></svg>Existencias</span><span class="ui-ni"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 11h11L21 7H6M9 20.5h.01M18 20.5h.01"/></svg>Compras<em>4</em></span><span class="ui-ng">Negocio</span><span class="ui-ni"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 20v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg>Clientes</span><span class="ui-ni"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h16v14H3zM3 6l12-3v3M15 13h2"/></svg>Gastos</span><span class="ui-ni"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11M10 20V4M16 20v-7M3 20h18"/></svg>Reportes</span><span class="ui-ni"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg>Ajustes</span></nav></div><div class="ui-main"><div class="ui-mtop"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><b>Inicio</b><span class="ui-btn pri sq"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></div>
+  <div class="ui-top"><div><b class="ui-h">Inicio</b><span class="ui-meta">Viernes 13 de noviembre</span></div>
+    <div class="ui-acts"><span class="ui-btn">Registrar venta</span><span class="ui-btn">Nuevo pedido</span><span class="ui-btn pri"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Nueva pieza</span></div></div>
+  <div class="ui-panel ui-sum">
+    <div class="sum-a"><span class="ui-lbl">Ventas · últimos 30 días</span><b class="sum-big ui-num">$6,270</b>
+      <span class="ui-meta"><span class="up">▲ 14.6 %</span> contra el periodo anterior · 13 ventas</span>
+      <dl class="kps"><div class="kp up"><dt>Ganancia bruta</dt><dd>$5,077<small>▲ 17.6 %</small></dd></div><div class="kp"><dt>Gastos</dt><dd>$2,707</dd></div><div class="kp net"><dt>Ganancia neta</dt><dd>$2,370</dd></div><div class="kp"><dt>Por cobrar</dt><dd>$8,110</dd></div></dl></div>
+    <div class="sum-b"><span class="ui-lbl">Ventas por semana</span><div class="cc"><div class="cc-col"><span class="cc-v">$50</span><svg class="cc-svg" viewBox="0 0 40 100" preserveAspectRatio="none" aria-hidden="true"><rect class="s" x="9" y="97.50" width="22" height="2.50"/><rect class="g" x="9" y="98.00" width="22" height="2.00"/></svg><span class="cc-l">13 oct</span></div><div class="cc-col"><span class="cc-v">$1,550</span><svg class="cc-svg" viewBox="0 0 40 100" preserveAspectRatio="none" aria-hidden="true"><rect class="s" x="9" y="22.50" width="22" height="77.50"/><rect class="g" x="9" y="37.25" width="22" height="62.75"/></svg><span class="cc-l">20 oct</span></div><div class="cc-col"><span class="cc-v">$1,690</span><svg class="cc-svg" viewBox="0 0 40 100" preserveAspectRatio="none" aria-hidden="true"><rect class="s" x="9" y="15.50" width="22" height="84.50"/><rect class="g" x="9" y="31.50" width="22" height="68.50"/></svg><span class="cc-l">27 oct</span></div><div class="cc-col"><span class="cc-v">$1,630</span><svg class="cc-svg" viewBox="0 0 40 100" preserveAspectRatio="none" aria-hidden="true"><rect class="s" x="9" y="18.50" width="22" height="81.50"/><rect class="g" x="9" y="34.00" width="22" height="66.00"/></svg><span class="cc-l">3 nov</span></div><div class="cc-col"><span class="cc-v">$1,350</span><svg class="cc-svg" viewBox="0 0 40 100" preserveAspectRatio="none" aria-hidden="true"><rect class="s" x="9" y="32.50" width="22" height="67.50"/><rect class="g" x="9" y="45.40" width="22" height="54.60"/></svg><span class="cc-l">10 nov</span></div></div><div class="ui-leg"><span><i class="s"></i>Ventas</span><span><i class="g"></i>Ganancia bruta</span></div></div>
   </div>
-  <figure class="win"><div class="win-bar" aria-hidden="true"><i></i><i></i><i></i></div><div class="shot crop" data-shot="pedidos"><img src="../../../assets/talleres/pedidos.webp" alt="Tablero de pedidos de Quick Cerebro: pendientes, en producción, listos y entregados, con saldos" width="1440" height="900" loading="lazy" decoding="async"></div></figure>
+  <div class="ui-row2">
+    <div class="ui-panel"><div class="ui-ph"><b>Alertas</b><span class="ui-count">5</span></div><ul class="al-list"><li class="al"><span class="al-ic bad"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20zM12 10v4M12 17h.01"/></svg></span><span class="al-t"><b>Pedido #5 · Tacos El Güero</b><span>Filamento insuficiente: PLA Negro, faltan 125 g</span></span><span class="ui-btn">Agregar rollo</span></li><li class="al"><span class="al-ic warn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2"/></svg></span><span class="al-t"><b>Pedido #2 · Mariana R.</b><span>Fecha de entrega: mañana, 14 nov</span></span><span class="ui-btn">Abrir pedido</span></li><li class="al"><span class="al-ic warn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg></span><span class="al-t"><b>PLA Silk Morado</b><span>Stock crítico: 85 g disponibles</span></span><span class="ui-btn">Ver filamento</span></li><li class="al ui-hide-sm"><span class="al-ic info"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v12H3zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM6 9v.01M18 15v.01"/></svg></span><span class="al-t"><b>Venta del 31 oct · Mariana R.</b><span>Saldo por cobrar: $500.00</span></span><span class="ui-btn">Registrar abono</span></li><li class="al ui-hide-sm"><span class="al-ic info"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6.5a4 4 0 0 0 5 5L12 19a2.1 2.1 0 0 1-3-3l7.5-7.5a4 4 0 0 0-2-2z"/></svg></span><span class="al-t"><b>Bambu Lab P1S</b><span>Mantenimiento próximo: boquilla en 14 h</span></span><span class="ui-btn">Ver impresora</span></li></ul></div>
+    <div class="ui-stack">
+      <div class="ui-panel"><div class="ui-ph"><b>En impresión</b><span class="ui-meta">2 de 3 impresoras</span></div><ul class="pp"><li><div class="pp-h"><b>Bambu Lab P1S</b><span class="ui-num">62 %</span></div><span class="ui-meta">3 × Letrero de taquería · Pedido #3</span><svg class="ui-meter" width="100%" height="6" aria-hidden="true"><rect class="t" width="100%" height="6" rx="3"/><rect class="v" width="62%" height="6" rx="3"/></svg><span class="ui-meta"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2"/></svg>Tiempo restante: 6 h 50 min</span></li><li><div class="pp-h"><b>Ender 3 V3 SE</b><span class="ui-num">30 %</span></div><span class="ui-meta">10 × Servilletero con logo · Pedido #3</span><svg class="ui-meter" width="100%" height="6" aria-hidden="true"><rect class="t" width="100%" height="6" rx="3"/><rect class="v" width="30%" height="6" rx="3"/></svg><span class="ui-meta"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2"/></svg>Tiempo restante: 17 h 30 min</span></li></ul></div>
+      <div class="ui-panel ui-hide-sm"><div class="ui-ph"><b>Próximas entregas</b></div><ul class="du"><li><span class="du-d ui-num">14 nov</span><span class="du-c"><b>Mariana R.</b><span class="ui-meta">Pedido #2</span></span><span class="ui-pill ok">Listo</span></li><li><span class="du-d ui-num">15 nov</span><span class="du-c"><b>Taquería Los Compadres</b><span class="ui-meta">Pedido #3</span></span><span class="ui-pill info">En producción</span></li><li><span class="du-d ui-num">19 nov</span><span class="du-c"><b>Tacos El Güero</b><span class="ui-meta">Pedido #7</span></span><span class="ui-pill">Aceptado</span></li></ul></div>
+    </div>
+  </div>
+</div></div></div></figure></div></div></section>
+
+<section aria-labelledby="plats-h"><div class="wrap">
+  <header class="sec-h"><h2 class="t-h2" id="plats-h">Plataformas</h2></header>
+  <ul class="plats"><li data-os="mac"><div><span class="rec" hidden>Tu equipo</span><span class="p-n">Mac</span><span class="p-r">macOS 12 o posterior</span></div><p class="p-w">App de escritorio con ícono en el Dock.</p><a class="btn" href="#mac">Descargar para Mac (.dmg)</a></li><li data-os="windows"><div><span class="rec" hidden>Tu equipo</span><span class="p-n">Windows</span><span class="p-r">Windows 10 u 11 de 64 bits</span></div><p class="p-w">App de escritorio con ícono en la barra de tareas.</p><a class="btn" href="#windows">Descargar para Windows (.exe)</a></li><li data-os="other"><div><span class="rec" hidden>Tu equipo</span><span class="p-n">Navegador</span><span class="p-r">Chrome, Safari, Edge o Firefox actuales</span></div><p class="p-w">Sin instalación, desde cualquier computadora.</p><a class="btn ghost" href="#other">Abrir en el navegador</a></li><li data-os="mobile"><div><span class="rec" hidden>Tu equipo</span><span class="p-n">Celular</span><span class="p-r">iPhone o Android</span></div><p class="p-w">Desde el navegador; se puede agregar a la pantalla de inicio.</p><a class="btn ghost" href="#mobile">Abrir en el celular</a></li></ul>
 </div></section>
 
-<section class="pt0" aria-labelledby="plats-h"><div class="wrap">
-  <header class="sec-h"><h2 class="t-h2" id="plats-h">Mac, Windows, navegador y celular</h2></header>
-  <ul class="plats"><li data-os="mac"><div><span class="rec" hidden>Para tu equipo</span><span class="p-n">Mac</span><span class="p-r">macOS 12 o más nuevo</span></div><p class="p-w">App en el Dock que abre al encender la computadora.</p><a class="btn" href="#mac">Descargar para Mac (.dmg)</a></li><li data-os="windows"><div><span class="rec" hidden>Para tu equipo</span><span class="p-n">Windows</span><span class="p-r">Windows 10 u 11 de 64 bits</span></div><p class="p-w">App en la barra de tareas que abre al encender la computadora.</p><a class="btn" href="#windows">Descargar para Windows (.exe)</a></li><li data-os="other"><div><span class="rec" hidden>Para tu equipo</span><span class="p-n">Navegador</span><span class="p-r">Chrome, Safari, Edge o Firefox recientes</span></div><p class="p-w">Sin instalar nada, en cualquier computadora.</p><a class="btn ghost" href="#other">Abrir en el navegador</a></li><li data-os="mobile"><div><span class="rec" hidden>Para tu equipo</span><span class="p-n">Celular</span><span class="p-r">iPhone o Android, desde el navegador</span></div><p class="p-w">Agrégalo a tu pantalla de inicio y ábrelo como una app.</p><a class="btn ghost" href="#mobile">Abrir en el celular</a></li></ul>
-</div></section>
-
-<section class="band-soft" aria-labelledby="adds-h"><div class="wrap">
-  <header class="sec-h"><h2 class="t-h2" id="adds-h">Lo que suma la app</h2><p class="lead">Es lo mismo que la web, con cosas de computadora.</p></header>
-  <ul class="adds"><li>Ícono en el Dock o en la barra de tareas</li><li>Abre sola al encender la computadora</li><li>Avisos cuando algo necesita atención</li><li>Notas y cotizaciones impresas sin la barra del navegador</li><li>Arrastras el archivo del laminador sobre la ventana</li><li>Misma cuenta y mismos datos que la web</li></ul>
-</div></section>
-
-<section aria-labelledby="inst-h"><div class="wrap">
-  <header class="sec-h"><h2 class="t-h2" id="inst-h">Instalar</h2></header>
+<section class="soft" aria-labelledby="inst-h"><div class="wrap">
+  <header class="sec-h"><h2 class="t-h2" id="inst-h">Instalación</h2></header>
   <div class="steps2">
-    <div><h3 class="t-h3">En Mac</h3><ol><li>Abre el archivo .dmg que descargaste.</li><li>Arrastra Quick Cerebro a Aplicaciones.</li><li>Ábrelo y entra con tu cuenta.</li></ol></div>
-    <div><h3 class="t-h3">En Windows</h3><ol><li>Abre el archivo .exe que descargaste.</li><li>Sigue los pasos del instalador.</li><li>Ábrelo desde el menú Inicio y entra con tu cuenta.</li></ol></div>
+    <div><h3 class="t-h3">Mac</h3><ol><li>Abre el archivo .dmg.</li><li>Arrastra Quick Cerebro a Aplicaciones.</li><li>Abre la app e inicia sesión.</li></ol></div>
+    <div><h3 class="t-h3">Windows</h3><ol><li>Abre el archivo .exe.</li><li>Sigue los pasos del instalador.</li><li>Abre la app desde el menú Inicio e inicia sesión.</li></ol></div>
   </div>
 </div></section>
 
 <section class="s-end" aria-labelledby="end-h"><div class="wrap">
-  <h2 class="t-h2" id="end-h">¿Todavía no tienes cuenta?</h2><p class="lead">Crea una y prueba el plan Negocio 14 días gratis, sin tarjeta.</p>
-  <div class="end-cta"><a class="btn" href="#probar">Probar gratis <span class="ar" aria-hidden="true">→</span></a></div>
+  <h2 class="t-h2" id="end-h">Tu taller merece un cerebro.</h2><p class="lead">14 días del plan Negocio, gratis y sin tarjeta. Al terminar eliges plan o continúas en Gratis.</p>
+  <div class="end-cta"><a class="btn" href="#probar">Crear cuenta <span class="ar" aria-hidden="true">→</span></a></div>
 </div></section>
 </main>
 <footer class="site-f">
@@ -71,8 +80,8 @@
     <div class="f-bottom"><span>© 2026 Quick Robot · Impresión 3D</span><a class="link" href="#">Aviso de privacidad</a></div>
   </div>
 </footer>
-<div class="mk-note"><button type="button" aria-label="Cerrar nota">×</button><b>Maqueta · Descargar · Quick Cerebro.</b> Descargar. <ul><li>El botón principal cambia según el equipo (aquí lo decide el navegador; en la web, el servidor con el User-Agent).</li><li>La fila del equipo se marca «Para tu equipo».</li><li>Los archivos y requisitos salen de la configuración (docs/25 §4).</li></ul></div>
-<script>window.PLANES = [{"id": "free", "name": "Gratis", "monthly": 0, "yearly": 0, "people": 1, "printers": 2, "orders": 15}, {"id": "shop", "name": "Taller", "monthly": 149, "yearly": 1490, "people": 2, "printers": null, "orders": null}, {"id": "business", "name": "Negocio", "monthly": 299, "yearly": 2990, "people": 8, "printers": null, "orders": null}];</script>
+<div class="mk-note"><button type="button" aria-label="Cerrar nota">×</button><b>Maqueta · Descargar · Quick Cerebro.</b> Descargar. <ul><li>El botón principal cambia según el equipo (aquí lo decide el navegador; en la web, el servidor con el User-Agent).</li><li>La fila del equipo se marca «Tu equipo».</li><li>Archivos y requisitos salen de la configuración (docs/25 §4).</li></ul></div>
+<script>window.PLANES = [{"id": "free", "monthly": 0, "yearly": 0}, {"id": "shop", "monthly": 149, "yearly": 1490}, {"id": "business", "monthly": 299, "yearly": 2990}];</script>
 <script src="../_base.js"></script>
 <script src="_talleres.js"></script>
 </body>

@@ -68,7 +68,7 @@ Casi todos llegan desde el **celular**, por un link compartido en WhatsApp o en 
 | W14 | El mockup HTML es **referencia de diseño y comportamiento**, no código a copiar | `02` |
 | W15 | Construcción **autónoma** por fases, una carpeta de instrucciones por fase | `20`, `fases/` |
 | W16 | Los textos de la web hablan de **tú**, invitan y no describen; nada genérico | `05 §1` |
-| W18 | **Para talleres** se construye y se publica **oculta**: un solo interruptor (`site.system.enabled`), cerrojo en el middleware y en cada página, sin ligas ni sitemap hasta encenderla; reutiliza la calculadora, las preguntas y los tokens de Aprende (se mueven a piezas compartidas) | `25` |
+| W18 | **Para talleres** se construye y se publica **oculta**: un solo interruptor (`site.system.enabled`), cerrojo en el middleware y en cada página, sin ligas ni sitemap hasta encenderla; reutiliza las preguntas y los tokens de Aprende (se mueven a piezas compartidas); las pantallas del sistema se dibujan en HTML, sin calculadora | `25` |
 | W17 | **Aprende**: contenido en D1 (carga inicial desde `content/aprende/`, edición en el panel); Markdown convertido a un árbol propio al guardar (sin `set:html`); buscador con **Meilisearch detrás del Worker** y respaldo en D1 | `21`, `22` |
 
 ## Pendientes del dueño
@@ -89,10 +89,9 @@ Datos que todavía no existen. Mientras falten, Claude Code usa el **valor provi
 | Anticipo, envíos, urgentes, política de personajes (Aprende › Si vas a encargar) | Páginas ocultas o líneas quitadas | `content/aprende/README.md` |
 | Fotos de cada falla (Aprende › Cuando algo sale mal) | Sin fotos | `21 §16` |
 | Nombre final del sistema | «Quick Cerebro» | `25 §4` |
-| Precios y límites de los planes (después de la beta) | Gratis $0 · Taller $149 · Negocio $299 al mes; anual = 10 meses | `25 §4` |
+| Precios y límites de los planes (después de la beta) | Gratis $0 (1 usuario, 2 impresoras, 15 ventas y pedidos al mes) · Taller $149 (2 usuarios, ilimitado) · Negocio $299 (8 usuarios con roles) al mes; anual = 10 meses | `25 §4` |
 | Dirección del sistema y sus rutas de registro y entrar | `https://sistema.quickrobot.example`, `/crear-cuenta`, `/entrar` | `25 §4` |
 | Archivos de descarga (Mac y Windows) y requisitos | Sin archivos; macOS 12, Windows 10 u 11 | `25 §4` |
-| Capturas reales del sistema al lanzarlo | Las de `assets/talleres/` (maquetas del sistema) | `25 §4` |
 | Si se da factura de la suscripción | Sin la pregunta «¿Dan factura?» | `25 §13` |
 | Imagen al compartir de Para talleres | La de la web | `25 §10` |
 | Repositorio privado (para que nada de Para talleres se vea antes de tiempo) | Público | `25 §2` |

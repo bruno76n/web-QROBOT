@@ -9,8 +9,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../_base.css">
 <link rel="stylesheet" href="_talleres.css">
+<link rel="stylesheet" href="_ui.css">
 </head>
-<body class="sys">
+<body>
 <header class="site-h" id="siteH">
   <div class="wrap">
     <a class="brand" href="#" aria-label="Quick Robot, ir al inicio"><img src="../../../assets/logo-cabeza.svg" alt="" width="34" height="30"><span>Quick Robot</span></a>
@@ -21,73 +22,54 @@
 <div class="pbar">
   <div class="wrap">
     <a class="pname" href="talleres.html"><span class="picon"><img src="../../../assets/logo-cabeza.svg" alt="" width="22" height="19"></span>Quick Cerebro</a>
-    <nav class="plinks" aria-label="Quick Cerebro"><a href="talleres.html#funciones">Funciones</a><a href="precios.html" aria-current="page">Precios</a><a href="descargar.html">Descargar</a></nav>
-    <details class="pmenu"><summary aria-label="Más de Quick Cerebro"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><nav class="pmenu-list" aria-label="Quick Cerebro"><a href="talleres.html#funciones">Funciones</a><a href="precios.html" aria-current="page">Precios</a><a href="descargar.html">Descargar</a><a href="#entrar">Entrar</a></nav></details>
-    <div class="pright"><a class="enter" href="#entrar">Entrar</a><a class="btn sm" href="#probar">Probar gratis</a></div>
+    <nav class="plinks" aria-label="Quick Cerebro"><a href="talleres.html#modulos">Módulos</a><a href="precios.html" aria-current="page">Precios</a><a href="descargar.html">Descargar</a></nav>
+    <details class="pmenu"><summary aria-label="Menú de Quick Cerebro"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><nav class="pmenu-list" aria-label="Quick Cerebro"><a href="talleres.html#modulos">Módulos</a><a href="precios.html" aria-current="page">Precios</a><a href="descargar.html">Descargar</a><a href="#entrar">Iniciar sesión</a></nav></details>
+    <div class="pright"><a class="enter" href="#entrar">Iniciar sesión</a><a class="btn sm" href="#probar">Probar gratis</a></div>
   </div>
 </div>
 <main id="inicio">
 <section class="s-ph" aria-labelledby="h1"><div class="wrap">
-
-  <h1 class="t-h1" id="h1">Un precio por taller, no por impresora.</h1>
-  <p class="lead">Agrega impresoras sin pagar más. Empieza gratis y cambia de plan cuando quieras.</p>
-  <div class="seg" role="group" aria-label="Forma de pago"><button type="button" data-period="monthly" aria-pressed="true">Mensual</button><button type="button" data-period="yearly" aria-pressed="false">Anual<small>2 meses gratis</small></button></div>
+  <h1 class="t-h1" id="h1">Precios</h1>
+  <p class="lead">Paga por taller, no por impresora. El plan Gratis no vence.</p>
+  <div class="seg" role="group" aria-label="Periodo de pago"><button type="button" data-period="monthly" aria-pressed="true">Mensual</button><button type="button" data-period="yearly" aria-pressed="false">Anual<small>2 meses gratis</small></button></div>
 </div></section>
 
 <section class="pt0" aria-label="Planes"><div class="wrap">
   <div class="plans"><div class="plan">
-  <h2>Gratis</h2><p class="for">Para empezar con una o dos impresoras.</p>
-  <p class="price" data-plan-price="free"><b>$0</b><span>siempre</span></p><p class="price-yr"></p>
-  <a class="btn ghost" href="#probar">Empezar gratis <span class="ar" aria-hidden="true">→</span></a>
-  <ul><li>1 persona</li><li>Hasta 2 impresoras</li><li>15 ventas y pedidos al mes</li><li>Costos, existencias y producción completos</li><li>Web, Mac, Windows y celular</li></ul>
+  <h2>Gratis</h2><p class="for">Una persona con hasta 2 impresoras.</p>
+  <p class="price" data-plan-price="free"><b>$0</b><span>sin vencimiento</span></p><p class="price-yr"></p>
+  <a class="btn ghost" href="#probar">Crear cuenta gratis</a>
+  <ul><li>1 usuario</li><li>Hasta 2 impresoras</li><li>15 ventas y pedidos al mes</li><li>Todos los módulos</li><li>Copias de seguridad diarias</li></ul>
 </div><div class="plan hl"><span class="badge">Recomendado</span>
-  <h2>Taller</h2><p class="for">Para el taller de una o dos personas.</p>
+  <h2>Taller</h2><p class="for">Más impresoras y pedidos, sin límites.</p>
   <p class="price" data-plan-price="shop"><b>$149</b><span>al mes</span></p><p class="price-yr">o $1,490 al año</p>
-  <a class="btn" href="#probar">Probar 14 días gratis <span class="ar" aria-hidden="true">→</span></a>
-  <ul><li>Todo lo de Gratis</li><li>2 personas</li><li>Impresoras, ventas y pedidos sin límite</li><li>Tu logo en cotizaciones y notas</li><li>Ayuda por WhatsApp</li></ul>
+  <a class="btn" href="#probar">Probar 14 días gratis</a>
+  <ul><li>Todo lo de Gratis</li><li>2 usuarios</li><li>Impresoras ilimitadas</li><li>Ventas y pedidos ilimitados</li><li>Soporte por WhatsApp</li></ul>
 </div><div class="plan">
-  <h2>Negocio</h2><p class="for">Para el taller con empleados.</p>
+  <h2>Negocio</h2><p class="for">Taller con empleados.</p>
   <p class="price" data-plan-price="business"><b>$299</b><span>al mes</span></p><p class="price-yr">o $2,990 al año</p>
-  <a class="btn ghost" href="#probar">Probar 14 días gratis <span class="ar" aria-hidden="true">→</span></a>
-  <ul><li>Todo lo de Taller</li><li>8 personas con roles</li><li>Empleados que no ven costos ni ganancia</li><li>Bitácora de quién hizo qué</li><li>Hasta 3 talleres en una cuenta</li><li>Ayuda prioritaria por WhatsApp</li></ul>
+  <a class="btn ghost" href="#probar">Probar 14 días gratis</a>
+  <ul><li>Todo lo de Taller</li><li>8 usuarios con roles</li><li>Ventas sin acceso a costos ni ganancia</li><li>Soporte prioritario por WhatsApp</li></ul>
 </div></div>
-  <p class="plans-note">Precios en pesos mexicanos, con IVA. Los 14 días de prueba son del plan Negocio, sin tarjeta.</p>
+  <p class="plans-note">Precios en pesos mexicanos, IVA incluido.</p>
 </div></section>
 
-<section class="band-soft" aria-labelledby="finder-h"><div class="wrap">
-  <header class="sec-h"><h2 class="t-h2" id="finder-h">¿Qué plan te toca?</h2><p class="lead">Mueve los números de tu taller.</p></header>
-  <div class="finder">
-    <form class="f-in" data-finder onsubmit="return false">
-      <div class="rng"><label for="r-printers">Impresoras<output for="r-printers">3</output></label><input type="range" id="r-printers" name="printers" min="1" max="20" step="1" value="3"><div class="ends" aria-hidden="true"><span>1</span><span>20 o más</span></div></div>
-      <div class="rng"><label for="r-people">Personas que lo usan<output for="r-people">1</output></label><input type="range" id="r-people" name="people" min="1" max="10" step="1" value="1"><div class="ends" aria-hidden="true"><span>1</span><span>10 o más</span></div></div>
-      <div class="rng"><label for="r-orders">Ventas y pedidos al mes<output for="r-orders">30</output></label><input type="range" id="r-orders" name="orders" min="0" max="100" step="5" value="30"><div class="ends" aria-hidden="true"><span>0</span><span>100 o más</span></div></div>
-    </form>
-    <div class="f-out" aria-live="polite">
-      <span class="k">Te toca</span>
-      <b class="name" data-f-name>Taller</b>
-      <span class="amt" data-f-amt>$149 al mes</span>
-      <ul data-f-why></ul>
-      <a class="btn" href="#probar" data-f-cta>Probar 14 días gratis <span class="ar" aria-hidden="true">→</span></a>
-    </div>
-  </div>
+<section class="pt0" aria-label="Prueba y precio de fundador"><div class="wrap terms">
+  <div><h2 class="t-h3">Prueba</h2><p>14 días del plan Negocio, sin tarjeta. Al terminar, la cuenta pasa a Gratis o al plan que elijas.</p></div>
+  <div><h2 class="t-h3">Precio de fundador</h2><p>Los primeros 50 talleres con suscripción conservan su precio mientras la suscripción siga activa.</p></div>
 </div></section>
 
-<section aria-label="Precio de fundador"><div class="wrap"><div class="founder">
-  <b>Precio de fundador</b>
-  <p>Los primeros 50 talleres que paguen conservan su precio mientras sigan suscritos, aunque después suba.</p>
-</div></div></section>
-
-<section class="pt0" aria-labelledby="cmp-h"><div class="wrap">
-  <header class="sec-h"><h2 class="t-h2" id="cmp-h">Qué trae cada plan</h2></header>
+<section class="soft" aria-labelledby="cmp-h"><div class="wrap">
+  <header class="sec-h"><h2 class="t-h2" id="cmp-h">Comparación</h2></header>
   <div class="tbl-wrap"><table class="cmp"><caption class="sr">Comparación de los planes Gratis, Taller y Negocio</caption>
-    <thead><tr><th scope="col">Función</th><th scope="col">Gratis</th><th scope="col" class="hl">Taller</th><th scope="col">Negocio</th></tr></thead><tbody><tr class="g"><th scope="rowgroup" colspan="4">Límites</th></tr><tr><th scope="row">Personas</th><td>1</td><td class="hl">2</td><td>8</td></tr><tr><th scope="row">Impresoras</th><td>2</td><td class="hl">Sin límite</td><td>Sin límite</td></tr><tr><th scope="row">Ventas y pedidos al mes</th><td>15</td><td class="hl">Sin límite</td><td>Sin límite</td></tr><tr><th scope="row">Talleres en una cuenta</th><td>1</td><td class="hl">1</td><td>3</td></tr><tr class="g"><th scope="rowgroup" colspan="4">El taller</th></tr><tr><th scope="row">Costo real al gramo y precio por valor</th><td class="y">✓<span class="sr">Incluido</span></td><td class="y hl">✓<span class="sr">Incluido</span></td><td class="y">✓<span class="sr">Incluido</span></td></tr><tr><th scope="row">Leer el archivo del laminador</th><td class="y">✓<span class="sr">Incluido</span></td><td class="y hl">✓<span class="sr">Incluido</span></td><td class="y">✓<span class="sr">Incluido</span></td></tr><tr><th scope="row">Pedidos con anticipo y saldo</th><td class="y">✓<span class="sr">Incluido</span></td><td class="y hl">✓<span class="sr">Incluido</span></td><td class="y">✓<span class="sr">Incluido</span></td></tr><tr><th scope="row">Existencias, filamento e insumos</th><td class="y">✓<span class="sr">Incluido</span></td><td class="y hl">✓<span class="sr">Incluido</span></td><td class="y">✓<span class="sr">Incluido</span></td></tr><tr><th scope="row">Producción por impresora y mantenimiento</th><td class="y">✓<span class="sr">Incluido</span></td><td class="y hl">✓<span class="sr">Incluido</span></td><td class="y">✓<span class="sr">Incluido</span></td></tr><tr><th scope="row">Reportes y ganancia real</th><td class="y">✓<span class="sr">Incluido</span></td><td class="y hl">✓<span class="sr">Incluido</span></td><td class="y">✓<span class="sr">Incluido</span></td></tr><tr><th scope="row">Tu logo en cotizaciones y notas</th><td class="no">—<span class="sr">No incluido</span></td><td class="y hl">✓<span class="sr">Incluido</span></td><td class="y">✓<span class="sr">Incluido</span></td></tr><tr><th scope="row">Cargar desde Excel</th><td class="y">✓<span class="sr">Incluido</span></td><td class="y hl">✓<span class="sr">Incluido</span></td><td class="y">✓<span class="sr">Incluido</span></td></tr><tr class="g"><th scope="rowgroup" colspan="4">Equipo</th></tr><tr><th scope="row">Roles: Administración, Ventas y Taller</th><td class="no">—<span class="sr">No incluido</span></td><td class="no hl">—<span class="sr">No incluido</span></td><td class="y">✓<span class="sr">Incluido</span></td></tr><tr><th scope="row">Empleados que no ven costos ni ganancia</th><td class="no">—<span class="sr">No incluido</span></td><td class="no hl">—<span class="sr">No incluido</span></td><td class="y">✓<span class="sr">Incluido</span></td></tr><tr><th scope="row">Bitácora de quién hizo qué</th><td class="no">—<span class="sr">No incluido</span></td><td class="no hl">—<span class="sr">No incluido</span></td><td class="y">✓<span class="sr">Incluido</span></td></tr><tr class="g"><th scope="rowgroup" colspan="4">Dónde y ayuda</th></tr><tr><th scope="row">Web, Mac, Windows y celular</th><td class="y">✓<span class="sr">Incluido</span></td><td class="y hl">✓<span class="sr">Incluido</span></td><td class="y">✓<span class="sr">Incluido</span></td></tr><tr><th scope="row">Descargar toda tu información</th><td class="y">✓<span class="sr">Incluido</span></td><td class="y hl">✓<span class="sr">Incluido</span></td><td class="y">✓<span class="sr">Incluido</span></td></tr><tr><th scope="row">Ayuda por WhatsApp</th><td class="no">—<span class="sr">No incluido</span></td><td class="hl">Sí</td><td>Prioritaria</td></tr></tbody></table></div>
+    <thead><tr><th scope="col">Función</th><th scope="col">Gratis</th><th scope="col" class="hl">Taller</th><th scope="col">Negocio</th></tr></thead><tbody><tr class="g"><th scope="rowgroup" colspan="4">Límites</th></tr><tr><th scope="row">Usuarios</th><td>1</td><td class="hl">2</td><td>8</td></tr><tr><th scope="row">Impresoras</th><td>2</td><td class="hl">Ilimitadas</td><td>Ilimitadas</td></tr><tr><th scope="row">Ventas y pedidos al mes</th><td>15</td><td class="hl">Ilimitados</td><td>Ilimitados</td></tr><tr class="g"><th scope="rowgroup" colspan="4">Módulos</th></tr><tr><th scope="row">Costo por pieza y precios</th><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y hl"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td></tr><tr><th scope="row">Pedidos con anticipo y saldo</th><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y hl"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td></tr><tr><th scope="row">Producción e impresoras</th><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y hl"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td></tr><tr><th scope="row">Filamento, insumos y compras</th><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y hl"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td></tr><tr><th scope="row">Existencias</th><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y hl"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td></tr><tr><th scope="row">Cotizaciones y notas de venta</th><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y hl"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td></tr><tr><th scope="row">Reportes y gastos</th><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y hl"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td></tr><tr class="g"><th scope="rowgroup" colspan="4">Equipo</th></tr><tr><th scope="row">Roles: Administración, Ventas y Taller</th><td class="no">—<span class="sr">No incluido</span></td><td class="no hl">—<span class="sr">No incluido</span></td><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td></tr><tr><th scope="row">Ventas sin acceso a costos ni ganancia</th><td class="no">—<span class="sr">No incluido</span></td><td class="no hl">—<span class="sr">No incluido</span></td><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td></tr><tr class="g"><th scope="rowgroup" colspan="4">Plataformas y datos</th></tr><tr><th scope="row">Web, Mac y Windows</th><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y hl"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td></tr><tr><th scope="row">Copias de seguridad diarias</th><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y hl"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td></tr><tr><th scope="row">Exportación a Excel</th><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y hl"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td><td class="y"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span class="sr">Incluido</span></td></tr><tr class="g"><th scope="rowgroup" colspan="4">Soporte</th></tr><tr><th scope="row">Soporte por WhatsApp</th><td class="no">—<span class="sr">No incluido</span></td><td class="hl">Sí</td><td>Prioritario</td></tr></tbody></table></div>
 </div></section>
 
-<section aria-labelledby="pay-h"><div class="wrap"><header class="sec-h"><h2 class="t-h2" id="pay-h">Sobre el pago</h2></header><div class="faq"><details><summary>¿Qué pasa al terminar los 14 días?</summary><p>Pasas a Gratis. No se cobra nada porque no pedimos tarjeta. Si quieres seguir con Taller o Negocio, eliges plan y pagas.</p></details><details><summary>¿Cómo pago?</summary><p>Con tarjeta de crédito o débito. El cobro es automático cada mes o cada año.</p></details><details><summary>¿Puedo cambiar de plan?</summary><p>Sí, cuando quieras. La diferencia se ajusta en tu siguiente cobro.</p></details><details><summary>¿Qué pasa si no pasa un cobro?</summary><p>Te avisamos por correo y lo intentamos otra vez. Si no se paga, tu cuenta queda en solo lectura hasta que pagues; no se borra nada.</p></details><details><summary>¿Puedo cancelar?</summary><p>Sí, desde Ajustes, sin llamadas. Sigues en tu plan hasta el final del periodo pagado y después pasas a Gratis.</p></details></div></div></section>
+<section class="s-faq" aria-labelledby="pay-h"><div class="wrap faq-in"><h2 class="t-h2" id="pay-h">Pago</h2><div class="faq"><details><summary>¿Qué formas de pago aceptan?</summary><p>Tarjeta de crédito o débito. El cargo es automático cada mes o cada año.</p></details><details><summary>¿Puedo cambiar de plan?</summary><p>Sí, en cualquier momento. La diferencia se ajusta en el siguiente cargo.</p></details><details><summary>¿Qué pasa al terminar la prueba?</summary><p>La cuenta pasa a Gratis. No hay cargo porque no se pidió tarjeta.</p></details><details><summary>¿Qué pasa si un cargo no se completa?</summary><p>Recibes un aviso por correo y se intenta de nuevo. Si no se completa, la cuenta queda en solo lectura hasta el pago; no se borra información.</p></details><details><summary>¿Cómo cancelo?</summary><p>Desde Ajustes. El plan sigue activo hasta el final del periodo pagado y después pasa a Gratis.</p></details></div></div></section>
 
 <section class="s-end" aria-labelledby="end-h"><div class="wrap">
-  <h2 class="t-h2" id="end-h">Empieza con el plan Negocio, 14 días gratis.</h2><p class="lead">Sin tarjeta. Al terminar eliges plan o te quedas en Gratis.</p>
-  <div class="end-cta"><a class="btn" href="#probar">Probar gratis <span class="ar" aria-hidden="true">→</span></a></div>
+  <h2 class="t-h2" id="end-h">Tu taller merece un cerebro.</h2><p class="lead">14 días del plan Negocio, gratis y sin tarjeta. Al terminar eliges plan o continúas en Gratis.</p>
+  <div class="end-cta"><a class="btn" href="#probar">Crear cuenta <span class="ar" aria-hidden="true">→</span></a></div>
 </div></section>
 </main>
 <footer class="site-f">
@@ -97,8 +79,8 @@
     <div class="f-bottom"><span>© 2026 Quick Robot · Impresión 3D</span><a class="link" href="#">Aviso de privacidad</a></div>
   </div>
 </footer>
-<div class="mk-note"><button type="button" aria-label="Cerrar nota">×</button><b>Maqueta · Precios · Quick Cerebro.</b> Precios. <ul><li>Mensual o anual cambia los precios de los planes y del «¿Qué plan te toca?».</li><li>«¿Qué plan te toca?»: el plan más barato cuyos límites cubren impresoras, personas y ventas y pedidos (docs/25 §5).</li><li>Celular: los planes uno debajo del otro; la tabla queda en tres columnas angostas.</li><li>Precios y límites provisionales: se confirman con la beta.</li></ul></div>
-<script>window.PLANES = [{"id": "free", "name": "Gratis", "monthly": 0, "yearly": 0, "people": 1, "printers": 2, "orders": 15}, {"id": "shop", "name": "Taller", "monthly": 149, "yearly": 1490, "people": 2, "printers": null, "orders": null}, {"id": "business", "name": "Negocio", "monthly": 299, "yearly": 2990, "people": 8, "printers": null, "orders": null}];</script>
+<div class="mk-note"><button type="button" aria-label="Cerrar nota">×</button><b>Maqueta · Precios · Quick Cerebro.</b> Precios. <ul><li>Mensual o anual cambia los precios de los planes.</li><li>Celular: planes uno debajo de otro; la comparación en tres columnas angostas.</li><li>Precios y límites provisionales: se confirman con la beta.</li></ul></div>
+<script>window.PLANES = [{"id": "free", "monthly": 0, "yearly": 0}, {"id": "shop", "monthly": 149, "yearly": 1490}, {"id": "business", "monthly": 299, "yearly": 2990}];</script>
 <script src="../_base.js"></script>
 <script src="_talleres.js"></script>
 </body>

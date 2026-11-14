@@ -30,7 +30,7 @@ Muestrario con precios y página por producto; los pedidos van por WhatsApp. Con
 | [22 · Buscador](22-buscador.md) | Meilisearch detrás del Worker, índice, sincronización, respaldo en D1, interfaz |
 | [23 · Aprende · Contenido](23-aprende-contenido.md) | Investigación y texto de cada página, reglas de redacción, datos curiosos, sinónimos, fuentes |
 | [24 · Aprende · Dispositivos y navegadores](24-aprende-dispositivos.md) | Celular, tableta y escritorio por componente; Safari y Chrome; reglas para que los filtros funcionen en Safari |
-| [25 · Para talleres](25-talleres.md) | Página de venta del sistema para talleres: oculta hasta que el sistema salga, rutas, datos, componentes que se reutilizan, pantallas, pruebas, cómo encenderla |
+| [25 · Para talleres](25-talleres.md) | Página de venta del sistema para talleres: oculta hasta que el sistema salga, rutas, datos, componentes que se reutilizan, pantallas del sistema en HTML, pruebas, cómo encenderla |
 | [fases/](fases/) | **Un archivo por fase** con pasos, qué consultar y cuándo está listo |
 | [prompts](prompts.md) | Un prompt por fase, cómo integrar componentes después, qué hacer entre fases |
 | [continuar en local](continuar-en-local.md) | **Empieza aquí para seguir:** cómo arrancar, probar y dónde cambiar cada dato |
@@ -46,10 +46,10 @@ Muestrario con precios y página por producto; los pedidos van por WhatsApp. Con
 | `reference/seed-photos/` | Fotos de ejemplo de los 14 productos (para la semilla) |
 | `reference/hero/` | Portada por defecto (escritorio y celular) |
 | `reference/mockups/aprende/` | Maquetas de Aprende: una por tipo de pantalla (`index.html`) |
-| `reference/mockups/talleres/` | Maquetas de Para talleres: principal, precios y descargar (`index.html`) |
-| `reference/mockups/_base.css`, `_base.js` | Base compartida de las maquetas de Aprende y Para talleres (header, footer, botones, tablas, preguntas, calculadora) |
+| `reference/mockups/talleres/` | Maquetas de Para talleres: principal, precios y descargar (`index.html`), con las pantallas del sistema dibujadas en HTML |
+| `reference/mockups/_base.css`, `_base.js` | Base compartida de las maquetas de Aprende y Para talleres (header, footer, botones, tablas, preguntas) |
 | `content/aprende/` | Contenido de Aprende para importar (`21 §8`) |
-| `assets/` | Logo (cabeza de Q-404), renders finales de Q-404, fotos de las ideas, capturas del sistema (`talleres/`) |
+| `assets/` | Logo (cabeza de Q-404), renders finales de Q-404, fotos de las ideas |
 
 ## Por dónde empezar
 

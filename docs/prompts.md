@@ -194,12 +194,13 @@ lee solo lo que indica "Consultar". Compara con reference/mockups/talleres/ en 3
 1440.
 
 La página se construye y se publica oculta: site.system.enabled se queda en false. Reutiliza lo
-que ya existe (25 §6): la calculadora, las preguntas y los tokens se mueven a piezas compartidas
-sin cambiar nada de lo que se ve en Aprende. Nada de código copiado.
+que ya existe (25 §6.1): las preguntas y los tokens se mueven a piezas compartidas sin cambiar nada
+de lo que se ve en Aprende; la calculadora se queda en Aprende. Las pantallas del sistema son
+componentes en HTML (25 §6.3), no capturas. Nada de código copiado.
 
 La fase termina cuando, con pnpm preview, /talleres y sus páginas responden 404 sin ninguna liga
-que lleve a ellas, y con pnpm dev las 3 páginas son iguales a las maquetas y pasan los flujos M a
-P en Chromium y WebKit.
+que lleve a ellas, y con pnpm dev las 3 páginas son iguales a las maquetas y pasan los flujos M,
+N y P en Chromium y WebKit.
 
 No hagas nada fuera de la fase 9. No me hagas preguntas salvo los casos de parada de CLAUDE.md.
 Al terminar escribe docs/informe-fase-9.md y actualiza docs/progreso.md.
@@ -207,16 +208,17 @@ Al terminar escribe docs/informe-fase-9.md y actualiza docs/progreso.md.
 
 ## Para talleres · Encender (cuando el sistema salga)
 
-Primero llena los datos de `docs/25 §13` (nombre, precios, dirección del sistema, archivos de descarga, capturas, factura, imagen al compartir).
+Primero llena los datos de `docs/25 §13` (nombre, precios, dirección del sistema, archivos de descarga, factura, imagen al compartir).
 
 ```
 Enciende Para talleres siguiendo docs/25 §13 paso por paso, en una rama encender-talleres desde
 main. Estos son los datos: <nombre> · <precios y límites> · <dirección del sistema y rutas> ·
-<archivos de descarga y requisitos> · <factura sí o no>. Las capturas nuevas (si hay) están en
-assets/talleres/ y la imagen al compartir en assets/talleres/og.jpg.
+<archivos de descarga y requisitos> · <factura sí o no>. La imagen al compartir está en
+assets/og-talleres.jpg.
 
-Antes de poner site.system.enabled = true, revisa cada cosa que promete la página contra el
-sistema (25 §13 punto 6) y quita del texto lo que no exista. Agrega las 3 rutas a e2e/urls.ts y a
+Antes de poner site.system.enabled = true, revisa lo que dice la página contra el sistema
+(25 §13 punto 5): quita lo que no exista y ajusta las pantallas del sistema (25 §6.3) si el
+diseño del sistema cambió. Agrega las 3 rutas a e2e/urls.ts y a
 lighthouserc.json, corre todas las pruebas, pnpm security, pnpm size y Lighthouse, despliega y
 revísalo en vivo. Escribe lo que hiciste en docs/progreso.md.
 ```

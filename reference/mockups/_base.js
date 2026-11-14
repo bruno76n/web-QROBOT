@@ -62,34 +62,4 @@
   function more(w) { w.classList.toggle('more', w.scrollLeft + w.clientWidth < w.scrollWidth - 2); }
   $$('.tbl-wrap').forEach(function (w) { more(w); w.addEventListener('scroll', function () { more(w); }, { passive: true }); });
   window.addEventListener('resize', function () { $$('.tbl-wrap').forEach(more); });
-
-  /* ---------- calculadora de costo (misma fórmula que la web: src/lib/cost.ts) ----------
-     Con el campo «Precio de venta» (#c-price, solo en Para talleres) muestra también la ganancia
-     y cuántas veces el costo. */
-  var cf = document.getElementById('calc-f');
-  if (cf) {
-    var v = function (id) { var i = document.getElementById(id); var n = i ? num(i.value) : 0; return isFinite(n) && n >= 0 ? n : 0; };
-    var put = function (id, text) { var e = document.getElementById(id); if (e) e.textContent = text; };
-    var calc = function () {
-      var perGram = v('c-roll') / Math.max(v('c-rollg'), 1);
-      var M = v('c-g') * perGram * (1 + v('c-purge') / 100);
-      var L = v('c-h') * (v('c-w') / 1000) * v('c-kwh');
-      var Q = v('c-h') * (v('c-printer') / Math.max(v('c-life'), 1) + v('c-maint'));
-      var E = v('c-extra');
-      var sub = M + L + Q + E;
-      var fail = Math.min(v('c-fail'), 90);
-      var total = sub / (1 - fail / 100);
-      [['r-m', M], ['r-l', L], ['r-q', Q], ['r-e', E], ['r-s', sub], ['r-t', total], ['r-tb', total]].forEach(function (p) { put(p[0], money(p[1])); });
-      var gain = document.getElementById('r-gain-box');
-      if (gain) {
-        var price = v('c-price');
-        var has = price > 0 && total > 0;
-        gain.classList.toggle('neg', has && price < total);
-        put('r-gain', has ? money(price - total) : '—');
-        put('r-x', has ? (price / total).toFixed(1).replace(/\.0$/, '') + ' veces el costo' : 'Escribe un precio');
-      }
-    };
-    cf.addEventListener('input', function () { ric(calc); });
-    calc();
-  }
 })();

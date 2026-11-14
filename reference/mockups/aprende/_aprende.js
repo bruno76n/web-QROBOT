@@ -1,10 +1,10 @@
-/* Aprende · scripts de las maquetas, sobre ../_base.js (utilidades, header, copiar, tablas y calculadora
+/* Aprende · scripts de las maquetas, sobre ../_base.js (utilidades, header, copiar y tablas
    son compartidos). Mismas reglas de navegadores que _base.js (docs/24 §5).
    En la web real cada parte vive en su componente y arranca en astro:page-load (docs/07 §1). */
 (function () {
   'use strict';
 
-  var Q = window.QRM, onMedia = Q.onMedia, num = Q.num, norm = Q.norm, el = Q.el, $ = Q.$, $$ = Q.$$;
+  var Q = window.QRM, ric = Q.ric, money = Q.money, onMedia = Q.onMedia, num = Q.num, norm = Q.norm, el = Q.el, $ = Q.$, $$ = Q.$$;
   var D = window.APRENDE || {};
 
   /* ---------- índice de la página en celular: cerrar al tocar una liga ---------- */
@@ -134,6 +134,27 @@
     var id = b.getAttribute('data-id');
     $$('section', cal).forEach(function (s) { s.hidden = !(id === 'todas' || s.getAttribute('data-f') === id); });
   });
+
+  /* ---------- calculadora de costo (misma fórmula que la web: src/lib/learn/cost.ts) ---------- */
+  var cf = document.getElementById('calc-f');
+  if (cf) {
+    var v = function (id) { var n = num(document.getElementById(id).value); return isFinite(n) && n >= 0 ? n : 0; };
+    var calc = function () {
+      var perGram = v('c-roll') / Math.max(v('c-rollg'), 1);
+      var M = v('c-g') * perGram * (1 + v('c-purge') / 100);
+      var L = v('c-h') * (v('c-w') / 1000) * v('c-kwh');
+      var Q = v('c-h') * (v('c-printer') / Math.max(v('c-life'), 1) + v('c-maint'));
+      var E = v('c-extra');
+      var sub = M + L + Q + E;
+      var fail = Math.min(v('c-fail'), 90);
+      var total = sub / (1 - fail / 100);
+      [['r-m', M], ['r-l', L], ['r-q', Q], ['r-e', E], ['r-s', sub], ['r-t', total], ['r-tb', total]].forEach(function (p) {
+        var e = document.getElementById(p[0]); if (e) e.textContent = money(p[1]);
+      });
+    };
+    cf.addEventListener('input', function () { ric(calc); });
+    calc();
+  }
 
   /* ---------- buscador ---------- */
   var SYN = D.synonyms || {}, STOP = D.stopWords || [];
