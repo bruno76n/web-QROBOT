@@ -1417,3 +1417,279 @@ textarea.in {
   font-size: 13px;
   color: var(--ink);
 }
+
+/* ---------- Aprende: lista y editor de páginas (/admin/aprende) ---------- */
+/* List column: the list and the search block scroll together under the filters. */
+.learn-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+.learn-scroll .list {
+  overflow: visible;
+  flex: none;
+}
+.side-h .learn-topic {
+  min-height: 38px;
+  padding: 0 8px;
+}
+.side-h .learn-seg button,
+.learn-body-h .seg button {
+  white-space: nowrap;
+  padding: 0 8px;
+}
+/* A page row: title and topic on the left, the publish switch on the right. */
+.it.learn-it {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+}
+.it.learn-it .row-main {
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 40px;
+}
+.learn-edited {
+  font-style: normal;
+  color: var(--purple);
+}
+/* Fixed facts of the page (address, topic, kind). */
+.learn-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin: 0 0 4px;
+  font-size: 13px;
+}
+.learn-facts dt {
+  color: var(--ink-3);
+}
+.learn-facts dd {
+  margin: 0;
+  font-weight: 500;
+}
+.learn-facts code {
+  font: inherit;
+  word-break: break-all;
+}
+.learn-facts-hint {
+  margin: 0 0 14px;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+/* Body: heading with the Texto / Vista previa switch, a tall text area and the preview. */
+.learn-body-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.learn-body-h h2 {
+  margin: 0;
+}
+textarea.in.learn-md {
+  min-height: 420px;
+  font-size: 14px;
+}
+.learn-prev-empty {
+  color: var(--ink-3);
+  font-size: 14px;
+}
+.learn-prev {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 4px 16px;
+  max-height: 70vh;
+  overflow: auto;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.learn-prev h2 {
+  font-size: 19px;
+  margin: 20px 0 8px;
+}
+.learn-prev h3 {
+  font-size: 16px;
+  margin: 16px 0 6px;
+}
+.learn-prev p,
+.learn-prev ul,
+.learn-prev ol {
+  margin: 0 0 12px;
+}
+.learn-prev a {
+  color: var(--purple);
+}
+.learn-prev code {
+  background: #f2f2f4;
+  border-radius: 4px;
+  padding: 0 4px;
+  font-size: 0.92em;
+}
+.learn-prev pre {
+  background: #f2f2f4;
+  border-radius: 8px;
+  padding: 10px 12px;
+  overflow: auto;
+  font-size: 13px;
+}
+.learn-prev blockquote {
+  margin: 0 0 12px;
+  padding-left: 12px;
+  border-left: 3px solid var(--line);
+  color: var(--ink-2);
+}
+.learn-tbl {
+  overflow-x: auto;
+  margin: 0 0 12px;
+}
+.learn-tbl table {
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 100%;
+}
+.learn-tbl th,
+.learn-tbl td {
+  border: 1px solid var(--line);
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+.learn-tbl th {
+  background: #f7f7f8;
+  font-weight: 600;
+}
+.learn-callout {
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin: 0 0 12px;
+  background: #e3f5e9;
+}
+.learn-callout.tip {
+  background: var(--purple-l);
+}
+.learn-callout.careful {
+  background: #fff4d1;
+}
+.learn-callout p:last-child {
+  margin-bottom: 0;
+}
+.learn-mark {
+  border: 1px dashed var(--ink-3);
+  border-radius: 8px;
+  padding: 14px;
+  margin: 0 0 12px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-2);
+  background: #fafafb;
+}
+.learn-mark.bad {
+  border-color: var(--red);
+  color: var(--red);
+  background: #fdf1f0;
+}
+/* Questions: sortable rows with grip, fields and «Quitar». */
+.learn-faqs {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.learn-faq {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: start;
+  padding: 12px 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+}
+.learn-faq.drag {
+  opacity: 0.6;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+.learn-faq .grip {
+  background: none;
+  border: 0;
+  padding: 10px 0;
+  cursor: grab;
+  touch-action: none;
+  color: var(--ink-3);
+}
+.learn-faq textarea.in {
+  min-height: 72px;
+}
+.learn-faq .f {
+  margin-bottom: 8px;
+}
+/* Tags, related pages and sources. */
+.learn-picks {
+  display: grid;
+  gap: 8px;
+}
+.learn-tags {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.learn-tags li {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 30px;
+  padding: 0 4px 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  font-size: 13px;
+  background: #fff;
+}
+.learn-tags button {
+  border: 0;
+  background: none;
+  min-width: 26px;
+  min-height: 26px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--ink-2);
+}
+.learn-tags button:hover {
+  background: #f2f2f4;
+}
+.learn-picked {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.learn-picked li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 2px 4px 2px 12px;
+  font-size: 14px;
+}
+.learn-picked li + li {
+  border-top: 1px solid var(--line);
+}
+.learn-picked li.bad span {
+  color: var(--red);
+}
+.learn-picked .b {
+  min-height: 32px;
+  font-size: 13px;
+}
+@media (max-width: 860px) {
+  .learn-body-h {
+    flex-wrap: wrap;
+  }
+  textarea.in.learn-md {
+    min-height: 320px;
+  }
+}

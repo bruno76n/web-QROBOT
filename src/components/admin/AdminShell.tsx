@@ -13,7 +13,7 @@ const t = es.admin;
 
 /** `view` marks the current tab; `children` is the page content rendered under the bar. */
 interface Props {
-  view: 'products' | 'categories' | 'hero';
+  view: 'products' | 'categories' | 'hero' | 'learn';
   children: ReactNode;
 }
 
@@ -106,6 +106,14 @@ export function AdminShell({ view, children }: Props) {
             onClick={(e) => void go(e, '/admin/portada')}
           >
             {t.tabs.hero}
+          </a>
+          <a
+            className="vbtn"
+            href="/admin/aprende"
+            aria-current={view === 'learn' ? 'page' : undefined}
+            onClick={(e) => void go(e, '/admin/aprende')}
+          >
+            {t.learn.editor.tab}
           </a>
         </nav>
         <span className="sp" />

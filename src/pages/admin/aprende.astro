@@ -1,0 +1,13 @@
+---
+// Panel page `/admin/aprende`: mounts the admin React app on its «Aprende» view (pages of the learning section).
+// Rendered on demand and client-only, like every panel page; the middleware requires an admin session.
+import AdminLayout from '@/layouts/AdminLayout.astro';
+import AdminApp from '@/components/admin/AdminApp';
+import { es } from '@/i18n/es';
+
+export const prerender = false;
+---
+
+<AdminLayout title={es.admin.learn.editor.pageTitle}>
+  <AdminApp view="learn" client:only="react" />
+</AdminLayout>
