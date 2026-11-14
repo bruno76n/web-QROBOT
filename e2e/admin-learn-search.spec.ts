@@ -6,13 +6,42 @@
  */
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { spawnSync } from 'node:child_process';
 
 const PAGE = '/dev/admin-learn-search';
+
+/** Prefix of every query this spec searches, so they can be told apart from real ones. */
+const PREFIX = 'zzq';
+
+/**
+ * Removes this spec's searches from the LOCAL D1 (the one `pnpm dev` uses), so they never pile up
+ * past the 100 rows the panel shows. Real searches are left alone.
+ */
+function forgetTestSearches() {
+  const r = spawnSync(
+    'pnpm',
+    [
+      'exec',
+      'wrangler',
+      'd1',
+      'execute',
+      'DB',
+      '--local',
+      '--command',
+      `DELETE FROM learn_search_misses WHERE query LIKE '${PREFIX}%'`,
+    ],
+    { stdio: 'ignore' },
+  );
+  if (r.status !== 0) throw new Error('could not clean the local searches without a result');
+}
+
+test.beforeAll(() => forgetTestSearches());
+test.afterAll(() => forgetTestSearches());
 
 /** A query no page can match: letters only, different on every run and width. */
 function nonsense() {
   const letters = 'bcdfghjklmnpqrstvwxz';
-  let s = 'zzq';
+  let s = PREFIX;
   for (let i = 0; i < 10; i++) s += letters[Math.floor(Math.random() * letters.length)];
   return s;
 }
