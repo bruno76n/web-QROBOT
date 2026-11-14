@@ -18,8 +18,9 @@ Cada página, cada sección y qué pasa al tocar cada cosa. Los textos exactos e
 | `/aprende/buscar` | Resultados del buscador sin JavaScript | En el servidor, `noindex` (`22 §8`) |
 | `/api/aprende/buscar` | JSON del buscador | Worker (`22 §7`) |
 | `/sitemap.xml`, `/robots.txt` | Para buscadores | En el servidor (`14 §3`) |
+| `/talleres`, `/talleres/precios`, `/talleres/descargar` | Para talleres: principal, precios y descargar (`25 §3`) | En el servidor. **Ocultas** mientras `site.system.enabled` sea `false`: fuera de `pnpm dev`, ellas y cualquier ruta bajo `/talleres` responden la página 404 y nada las enlaza (`25 §2`) |
 
-Todas las páginas públicas comparten **header** y **footer** (`03 §4`). En el header, "Navidad", "Ideas" y "Q-404" llevan a su sección del inicio (`/#navidad`, `/#ideas`, `/#q404`); "Catálogo" a `/catalogo`; "Aprende" a `/aprende`; **Cotizar** a `/#pedido`. El footer repite Catálogo y Aprende.
+Todas las páginas públicas comparten **header** y **footer** (`03 §4`). En el header, "Navidad", "Ideas" y "Q-404" llevan a su sección del inicio (`/#navidad`, `/#ideas`, `/#q404`); "Catálogo" a `/catalogo`; "Aprende" a `/aprende`; **Cotizar** a `/#pedido`. El footer repite Catálogo y Aprende. «Para talleres» (corto: «Talleres») se suma al menú y al footer solo con la página visible (`siteNav`, `25 §2`).
 
 ## 2. Inicio (`/`)
 
