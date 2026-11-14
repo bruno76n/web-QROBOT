@@ -1,0 +1,57 @@
+---
+/**
+ * Side bar of the system (docs/25 §6.3, mockup `.ui-side`): the sample workshop with its avatar,
+ * name and kind, the drawn search box with its shortcut, «Inicio» and the 13 modules under their 3
+ * groups, in the order of the system menu, with the counters of `demoMenuCounts`. Drawn, not
+ * navigation: it lives inside a `UiFrame` (`role="img"`), so it has no links. Desktop only
+ * (`system-ui.css` hides it under 1100 px).
+ */
+import Search from '@lucide/astro/icons/search';
+import ModuleIcon from '../ModuleIcon.astro';
+import { moduleGroups, modules, type ModuleId } from '@/config/system';
+import { demoBusiness, demoMenuCounts } from '@/config/system-demo';
+import { es } from '@/i18n/es';
+
+interface Props {
+  /** The highlighted entry of the menu. */
+  current?: 'home' | ModuleId;
+}
+const { current = 'home' } = Astro.props;
+const t = es.system;
+const counts: Partial<Record<ModuleId, number>> = demoMenuCounts;
+---
+
+<div class="ui-side">
+  <div class="ui-biz">
+    <span class="ui-av">{demoBusiness.initials}</span>
+    <span>
+      <b>{demoBusiness.name}</b>
+      <small>{demoBusiness.kind}</small>
+    </span>
+  </div>
+  <div class="ui-search">
+    <Search class="ic" aria-hidden="true" />
+    <span>{t.ui.home.search}</span>
+    <kbd>{t.ui.home.searchKey}</kbd>
+  </div>
+  <div class="ui-nav">
+    <span class:list={['ui-ni', { on: current === 'home' }]}>
+      <ModuleIcon icon="home" size={16} class="ic" />
+      {t.ui.home.title}
+    </span>
+    {moduleGroups.map((group) => (
+      <>
+        <span class="ui-ng">{t.groups[group]}</span>
+        {modules
+          .filter((m) => m.group === group)
+          .map((m) => (
+            <span class:list={['ui-ni', { on: current === m.id }]}>
+              <ModuleIcon icon={m.id} size={16} class="ic" />
+              {t.modules[m.id].name}
+              {counts[m.id] !== undefined && <em>{counts[m.id]}</em>}
+            </span>
+          ))}
+      </>
+    ))}
+  </div>
+</div>

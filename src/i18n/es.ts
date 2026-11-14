@@ -837,7 +837,72 @@ export const es = {
       },
 
       // ── inicio: start (agent «inicio»: UiSidebar, UiHome, UiFloats) ──
-      home: {},
+      home: {
+        /** Description of the whole screen for screen readers (`UiFrame`). */
+        label: (p: {
+          name: string;
+          days: number;
+          total: string;
+          gross: string;
+          net: string;
+          alerts: number;
+          printing: number;
+          printers: number;
+        }) =>
+          `Pantalla de Inicio de ${p.name}: ventas de ${p.days} días por ${p.total} con ganancia bruta de ${p.gross} y ganancia neta de ${p.net}, ${p.alerts} alertas con su acción, ${p.printing} de ${p.printers} impresoras trabajando con su tiempo restante y próximas entregas`,
+        title: 'Inicio',
+        /** Side bar: search box and its shortcut. */
+        search: 'Buscar',
+        searchKey: '⌘K',
+        /** Drawn actions of the header. */
+        actions: { sale: 'Registrar venta', order: 'Nuevo pedido', piece: 'Nueva pieza' },
+        salesOf: (days: number) => `Ventas · últimos ${days} días`,
+        /** After «▲ 14.6 %». */
+        vsPrevious: (count: number) => ` contra el periodo anterior · ${count} ventas`,
+        alerts: 'Alertas',
+        /** Each alert: its title, its line and its action. */
+        alert: {
+          filament: {
+            title: (order: number, customer: string) => `Pedido #${order} · ${customer}`,
+            text: (filament: string, grams: number) =>
+              `Filamento insuficiente: ${filament}, faltan ${grams} g`,
+            action: 'Agregar rollo',
+          },
+          due: {
+            title: (order: number, customer: string) => `Pedido #${order} · ${customer}`,
+            text: (due: string) => `Fecha de entrega: mañana, ${due}`,
+            action: 'Abrir pedido',
+          },
+          stock: {
+            text: (grams: number) => `Stock crítico: ${grams} g disponibles`,
+            action: 'Ver filamento',
+          },
+          balance: {
+            title: (date: string, customer: string) => `Venta del ${date} · ${customer}`,
+            text: (amount: string) => `Saldo por cobrar: ${amount}`,
+            action: 'Registrar abono',
+          },
+          maintenance: {
+            text: (part: string, hours: number) => `Mantenimiento próximo: ${part} en ${hours} h`,
+            action: 'Ver impresora',
+          },
+        },
+        printing: 'En impresión',
+        printersOf: (n: number, total: number) => `${n} de ${total} impresoras`,
+        job: (qty: number, piece: string, order: number) => `${qty} × ${piece} · Pedido #${order}`,
+        /** After «Tiempo restante: ». */
+        duration: (h: number, min: number) => `${h} h ${min} min`,
+        deliveries: 'Próximas entregas',
+        order: (n: number) => `Pedido #${n}`,
+        /** Order state not in `common.states`. */
+        accepted: 'Aceptado',
+        /** Floating notices of the hero (`UiFloats`). */
+        floats: {
+          ready: (order: number) => `Pedido #${order} listo para entregar`,
+          readyMeta: (customer: string, due: string) => `${customer} · fecha de entrega: ${due}`,
+          net: (days: number) => `Ganancia neta · ${days} días`,
+        },
+      },
       // ── inicio: end ──
 
       // ── costo-pedidos: start (agent «costo-pedidos»: UiPiece, UiOrder) ──
