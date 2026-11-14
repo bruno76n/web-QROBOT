@@ -1,0 +1,231 @@
+---
+/**
+ * «Del archivo a la entrega» (docs/25 §7.1, mockup `.flow`): the 5 numbered steps of an order,
+ * each with its title, sentence and a small card of the app (file, price, order, printer,
+ * delivery), joined by a 2 px gray line. Phone and tablet: a column with the line on the left;
+ * desktop (≥ 1100 px): a row of 5 with the line on top. The progress bars are SVG with their
+ * width as an attribute (no `style`). Texts from `es.system.home.flow.steps`.
+ */
+import { es } from '@/i18n/es';
+
+const steps = es.system.home.flow.steps;
+const [file, price, order, print, deliver] = steps;
+/** Filled part of the progress bars of the sample order: advance paid and plate printed, in %. */
+const bars = { order: 50, print: 62 };
+---
+
+<ol class="flow">
+  {steps.map((s, i) => (
+    <li>
+      <h3 class="t-h3">{s.title}</h3>
+      <p>{s.text}</p>
+      <div class="mini">
+        {i === 0 && (
+          <>
+            <div class="file">
+              <svg width="28" height="32" viewBox="0 0 28 32" aria-hidden="true">
+                <path
+                  d="M3 1h15l9 9v19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2z"
+                  fill="#f1ecfd"
+                  stroke="#6b3fd4"
+                  stroke-width="1.5"
+                />
+                <path d="M18 1v9h9" fill="none" stroke="#6b3fd4" stroke-width="1.5" />
+              </svg>
+              {file.file}
+            </div>
+            <span>{file.facts[0]}</span>
+            <span class="sub">{file.facts[1]}</span>
+          </>
+        )}
+        {i === 1 &&
+          price.rows.map(([k, v], r) => (
+            <div class="row">
+              <span class="k">{k}</span>
+              <span class:list={[r === 1 && 'big', r === 2 && 'gain']}>{v}</span>
+            </div>
+          ))}
+        {i === 2 && (
+          <>
+            <b>{order.head}</b>
+            <span class="sub">{order.sub}</span>
+            <svg class="bar g" width="100%" height="6" aria-hidden="true">
+              <rect width="100%" height="6" rx="3" />
+              <rect class="on" width={`${bars.order}%`} height="6" rx="3" />
+            </svg>
+            {order.rows.map(([k, v]) => (
+              <div class="row">
+                <span class="k">{k}</span>
+                <span>{v}</span>
+              </div>
+            ))}
+          </>
+        )}
+        {i === 3 && (
+          <>
+            <b>{print.head}</b>
+            <span class="sub">{print.sub}</span>
+            <svg class="bar" width="100%" height="6" aria-hidden="true">
+              <rect width="100%" height="6" rx="3" />
+              <rect class="on" width={`${bars.print}%`} height="6" rx="3" />
+            </svg>
+            <span class="sub">{print.progress}</span>
+          </>
+        )}
+        {i === 4 &&
+          deliver.rows.map(([k, v], r) => (
+            <div class="row">
+              <span class="k">{k}</span>
+              <span class:list={[r === 1 && 'gain']}>{v}</span>
+            </div>
+          ))}
+      </div>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .flow {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    counter-reset: step;
+    position: relative;
+  }
+  .flow > li {
+    position: relative;
+    display: grid;
+    gap: 10px;
+    padding: 0 0 36px 52px;
+    counter-increment: step;
+    min-width: 0;
+  }
+  /* The line that joins the steps. */
+  .flow > li::before {
+    content: '';
+    position: absolute;
+    left: 17px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--line);
+  }
+  .flow > li:last-child::before {
+    bottom: auto;
+    height: 18px;
+  }
+  /* The step number. */
+  .flow > li::after {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--ink);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .flow h3 {
+    padding-top: 6px;
+  }
+  .flow p {
+    font-size: 16px;
+    color: var(--ink-2);
+  }
+  /* Small card of the app. */
+  .mini {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+    padding: 14px 16px;
+    display: grid;
+    gap: 6px;
+    font-size: 15px;
+    max-width: 360px;
+    min-width: 0;
+    box-shadow: 0 16px 30px -24px rgba(18, 18, 20, 0.3);
+  }
+  .mini .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    font-variant-numeric: tabular-nums;
+  }
+  .mini .row > * + * {
+    margin-left: 10px;
+  }
+  .mini .sub {
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+  .mini .k {
+    color: var(--ink-2);
+  }
+  .mini .big {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+  }
+  .mini .gain {
+    color: var(--green-d);
+    font-weight: 600;
+  }
+  .mini .file {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+  }
+  .mini .file svg {
+    margin-right: 10px;
+    flex: none;
+  }
+  .mini .bar {
+    display: block;
+  }
+  .mini .bar rect {
+    fill: var(--line);
+  }
+  .mini .bar rect.on {
+    fill: var(--ink);
+  }
+  .mini .bar.g rect.on {
+    fill: var(--green);
+  }
+  @media (min-width: 1100px) {
+    .flow {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      column-gap: 20px;
+    }
+    .flow > li {
+      padding: 56px 0 0;
+      align-content: start;
+    }
+    .flow > li::before {
+      left: 0;
+      right: -20px;
+      top: 17px;
+      bottom: auto;
+      width: auto;
+      height: 2px;
+    }
+    /* The last step keeps the 2 px line up to its own edge (not the 18 px stub of the column). */
+    .flow > li:last-child::before {
+      right: 0;
+      height: 2px;
+    }
+    .flow h3 {
+      padding-top: 0;
+    }
+    .mini {
+      margin-top: 6px;
+    }
+  }
+</style>

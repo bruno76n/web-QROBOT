@@ -1,0 +1,169 @@
+---
+/**
+ * «De cada $100» (docs/25 §7.1, mockup `.money`): where each peso of a sale goes in a sample
+ * workshop. An SVG bar whose parts take their start and width from `splitSegments` (written as
+ * attributes, never as `style`), with white separators, the amounts of the wide parts written on
+ * the bar, and an accessible name with every part and its amount. Below, the legend (hidden from
+ * screen readers, the bar already says it) and the caption. Dark gray is cost, green is profit.
+ * Legend: one column on phones (≤ 560 px), two from there.
+ */
+import { moneyExample, moneyOnBar } from '@/config/system';
+import { es } from '@/i18n/es';
+import { formatPesos } from '@/lib/cost';
+import { formatMoney } from '@/lib/money';
+import { pct, splitSegments } from '@/lib/system/money-split';
+
+const t = es.system.home.money;
+const segments = splitSegments(moneyExample);
+/** Height of the bar, in px. */
+const h = 72;
+/** Parts dark enough to carry white text on the bar. */
+const darkParts = ['mat', 'com', 'gan'];
+const label = t.barLabel(
+  moneyExample.map((p) => `${t.parts[p.id]} ${formatPesos(p.amount)}`).join(', '),
+);
+---
+
+<figure class="money">
+  <svg class="money-bar" width="100%" height={h} role="img" aria-label={label}>
+    {segments.map((s) => (
+      <rect
+        class={`mb-${s.id}`}
+        x={pct(s.start)}
+        y="0"
+        width={pct(s.width)}
+        height={h}
+        rx="4"
+      />
+    ))}
+    <g class="mb-sep">
+      {segments.slice(1).map((s) => (
+        <line x1={pct(s.start)} x2={pct(s.start)} y1="0" y2={h} />
+      ))}
+    </g>
+    {segments
+      .filter((s) => moneyOnBar.includes(s.id))
+      .map((s) => (
+        <text
+          class:list={['mb-t', darkParts.includes(s.id) && 'on']}
+          x={pct(s.start + s.width / 2)}
+          y="42"
+        >
+          {formatMoney(Math.round(s.amount) * 100)}
+        </text>
+      ))}
+  </svg>
+  <ul class="money-leg" aria-hidden="true">
+    {moneyExample.map((p) => (
+      <li class={p.id}>
+        <i class={`mb-${p.id}`} />
+        {t.parts[p.id]}
+        <b>{formatPesos(p.amount)}</b>
+      </li>
+    ))}
+  </ul>
+  <figcaption class="money-cap">{t.caption}</figcaption>
+</figure>
+
+<style>
+  .money {
+    margin: 0;
+    display: grid;
+    gap: 22px;
+    min-width: 0;
+  }
+  .money-bar {
+    display: block;
+    overflow: visible;
+  }
+  .money-bar .mb-sep line {
+    stroke: #fff;
+    stroke-width: 2;
+  }
+  .mb-t {
+    font-size: 16px;
+    font-weight: 600;
+    text-anchor: middle;
+    fill: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .mb-t.on {
+    fill: #fff;
+  }
+  .money-leg {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 32px;
+    font-size: 16px;
+  }
+  .money-leg li {
+    display: flex;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .money-leg li i {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    margin-right: 10px;
+    flex: none;
+  }
+  .money-leg li b {
+    margin-left: auto;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .money-leg li.gan {
+    color: var(--green-d);
+    font-weight: 600;
+  }
+  /* Colors of the parts: the same in the bar (fill) and in the legend (background). */
+  .mb-mat {
+    fill: var(--c-mat);
+    background: var(--c-mat);
+  }
+  .mb-maq {
+    fill: var(--c-maq);
+    background: var(--c-maq);
+  }
+  .mb-fail {
+    fill: var(--c-fail);
+    background: var(--c-fail);
+  }
+  .mb-luz {
+    fill: var(--c-luz);
+    background: var(--c-luz);
+  }
+  .mb-ext {
+    fill: var(--c-ext);
+    background: var(--c-ext);
+  }
+  .mb-com {
+    fill: var(--c-com);
+    background: var(--c-com);
+  }
+  .mb-gas {
+    fill: var(--c-gas);
+    background: var(--c-gas);
+  }
+  .mb-gan {
+    fill: var(--green);
+    background: var(--green);
+  }
+  .money-cap {
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+  @media (max-width: 560px) {
+    .money-leg {
+      grid-template-columns: 1fr;
+    }
+    .mb-t {
+      font-size: 14px;
+    }
+  }
+</style>

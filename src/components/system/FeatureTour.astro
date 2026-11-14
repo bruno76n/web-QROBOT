@@ -1,0 +1,161 @@
+---
+/**
+ * Tour of the system (docs/25 §7.1, mockup `.tour`): 5 topics, each one a button (title and
+ * sentence) followed by its panel (screenshot in the app window and 3 points). Desktop (≥ 1100 px):
+ * tabs, the list on the left with one topic always open and its screenshot on the right; ↑ ↓ move
+ * between topics. Phone and tablet: accordion, one open at a time, and the open one can be closed.
+ * Behavior in src/scripts/system-tour.ts. Without JavaScript every panel is visible, one after the
+ * other under its title (the script marks the tour `data-ready` and only then the tabs layout and
+ * the closed panels apply), so nothing stays out of reach.
+ */
+import AppWindow from '@/components/system/AppWindow.astro';
+import { site } from '@/config/site';
+import { tour } from '@/config/system';
+import { es } from '@/i18n/es';
+
+const { name } = site.system;
+const t = es.system.home.tour;
+/** Alternative text of a tour screenshot (all of them take the system's name). */
+const alt = (shot: (typeof tour)[number]['shot']) => es.system.shots[shot](name);
+---
+
+<div class="tour" data-tour>
+  {tour.map((topic) => (
+    <>
+      <button
+        class="t-item"
+        type="button"
+        id={`tb-${topic.id}`}
+        aria-expanded="true"
+        aria-controls={`tp-${topic.id}`}
+      >
+        <b>{t.items[topic.id].title}</b>
+        <span>{t.items[topic.id].text}</span>
+      </button>
+      <div class="t-panel" id={`tp-${topic.id}`} role="region" aria-labelledby={`tb-${topic.id}`}>
+        <AppWindow
+          shot={topic.shot}
+          alt={alt(topic.shot)}
+          sizes="(max-width: 1099px) 100vw, 800px"
+          crop
+        />
+        <ul class="t-points">
+          {t.items[topic.id].points.map((p) => (
+            <li>{p}</li>
+          ))}
+        </ul>
+      </div>
+    </>
+  ))}
+</div>
+
+<script>
+  import '@/scripts/system-tour';
+</script>
+
+<style>
+  .tour {
+    display: grid;
+    border-top: 1px solid var(--line);
+  }
+  .t-item {
+    display: grid;
+    gap: 6px;
+    width: 100%;
+    margin: 0;
+    padding: 20px 0;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    background: none;
+    color: var(--ink);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .t-item b {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+  .t-item b::after {
+    content: '+';
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--ink-2);
+  }
+  .t-item[aria-expanded='true'] b::after {
+    content: '−';
+  }
+  .t-item span {
+    font-size: 16px;
+    color: var(--ink-2);
+    max-width: 46ch;
+  }
+  .t-panel {
+    padding: 4px 0 28px;
+    border-bottom: 1px solid var(--line);
+    min-width: 0;
+  }
+  .t-points {
+    list-style: none;
+    margin: 18px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+    font-size: 16px;
+  }
+  .t-points li {
+    display: flex;
+  }
+  .t-points li::before {
+    content: '';
+    flex: none;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--purple);
+    margin: 10px 12px 0 2px;
+  }
+  /* Tabs on desktop, once the script runs (without it the topics stay one under the other). */
+  @media (min-width: 1100px) {
+    .tour[data-ready] {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      grid-template-rows: repeat(5, auto) 1fr;
+      column-gap: 56px;
+      border-top: 0;
+      align-items: start;
+    }
+    .tour[data-ready] .t-item {
+      grid-column: 1;
+      padding: 20px 0 20px 20px;
+      border-bottom: 0;
+      border-left: 2px solid var(--line);
+    }
+    .tour[data-ready] .t-item[aria-expanded='true'] {
+      border-left-color: var(--ink);
+    }
+    .tour[data-ready] .t-item b::after {
+      content: none;
+    }
+    .tour[data-ready] .t-item span {
+      display: none;
+    }
+    .tour[data-ready] .t-item[aria-expanded='true'] span {
+      display: block;
+    }
+    .tour[data-ready] .t-panel {
+      grid-column: 2;
+      grid-row: 1 / 7;
+      padding: 0;
+      border-bottom: 0;
+    }
+    .t-points {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      column-gap: 28px;
+    }
+  }
+</style>
