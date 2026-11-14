@@ -138,6 +138,82 @@ export const demoPurchasesTotal = 1292;
 
 // ── inicio: start (agent «inicio»: UiSidebar, UiHome, UiFloats) ──
 
+/** Change of the net profit against the previous period, in % (floating notice of the hero). */
+export const demoNetChange = 17.6;
+
+/** The day of the «Inicio» screen (`demoBusiness.today`), as its header writes it. */
+export const demoTodayLabel = 'Viernes 13 de noviembre';
+
+/** Counters of the system menu: open orders and suggested purchases (one per item to buy). */
+export const demoMenuCounts: Partial<Record<'orders' | 'purchases', number>> = {
+  orders: 6,
+  purchases: demoPurchases.reduce((n, s) => n + s.items.length, 0),
+};
+
+/**
+ * The 5 alerts of «Inicio», most urgent first (texts in `es.system.ui.home.alerts[kind]`); the
+ * phone version shows the first 3.
+ */
+export type DemoAlert =
+  | { kind: 'filament'; order: number; customer: string; filament: string; missingGrams: number }
+  | { kind: 'due'; order: number; customer: string; due: string }
+  | { kind: 'stock'; filament: string; grams: number }
+  | { kind: 'balance'; date: string; customer: string; amount: number }
+  | { kind: 'maintenance'; printer: string; part: string; hours: number };
+export const demoAlerts: readonly DemoAlert[] = [
+  {
+    kind: 'filament',
+    order: 5,
+    customer: 'Tacos El Güero',
+    filament: demoPiece.filament,
+    missingGrams: 125,
+  },
+  { kind: 'due', order: 2, customer: 'Mariana R.', due: '14 nov' },
+  { kind: 'stock', filament: 'PLA Silk Morado', grams: 85 },
+  { kind: 'balance', date: '31 oct', customer: 'Mariana R.', amount: 500 },
+  { kind: 'maintenance', printer: demoPiece.printer, part: 'boquilla', hours: 14 },
+];
+
+/** Printers of the workshop and the jobs printing now (both for order #3). */
+export const demoPrinting = {
+  printers: 3,
+  jobs: [
+    {
+      printer: demoPiece.printer,
+      qty: 3,
+      piece: 'Letrero de taquería',
+      order: demoOrder3.number,
+      progress: 62,
+      left: { h: 6, min: 50 },
+    },
+    {
+      printer: 'Ender 3 V3 SE',
+      qty: 10,
+      piece: demoPiece.name,
+      order: demoOrder3.number,
+      progress: 30,
+      left: { h: 17, min: 30 },
+    },
+  ],
+} as const;
+
+/** Next deliveries by date: the order, its customer and its state. */
+export const demoDeliveries: readonly {
+  date: string;
+  customer: string;
+  order: number;
+  state: 'ready' | 'inProduction' | 'accepted';
+}[] = [
+  { date: '14 nov', customer: 'Mariana R.', order: 2, state: 'ready' },
+  {
+    date: demoOrder3.due,
+    customer: demoOrder3.customer,
+    order: demoOrder3.number,
+    state: 'inProduction',
+  },
+  { date: '19 nov', customer: 'Tacos El Güero', order: 7, state: 'accepted' },
+];
+
 // ── inicio: end ──
 
 // ── costo-pedidos: start (agent «costo-pedidos»: UiPiece, UiOrder) ──
