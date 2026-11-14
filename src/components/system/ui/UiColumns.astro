@@ -1,0 +1,40 @@
+---
+/**
+ * Columns by week of a system screen (docs/25 §6.3, mockup `.cc`): each week with its value written
+ * on top, its column (sales in gray and, if given, gross profit in green in front) and its label.
+ * Heights and positions as SVG attributes from `columns` (never `style`).
+ */
+import { formatMoney } from '@/lib/money';
+import { columns } from '@/lib/system/bars';
+
+interface Props {
+  points: readonly { label: string; sales: number; gross?: number }[];
+  /** Top value of the chart. */
+  cap: number;
+  class?: string | undefined;
+}
+const { points, cap, class: className } = Astro.props;
+const sales = columns(
+  points.map((p) => ({ v: p.sales })),
+  cap,
+);
+const gross = columns(
+  points.map((p) => ({ v: p.gross ?? 0 })),
+  cap,
+);
+---
+
+<div class:list={['cc', className]}>
+  {points.map((p, i) => (
+    <div class="cc-col">
+      <span class="cc-v">{formatMoney(p.sales * 100)}</span>
+      <svg class="cc-svg" viewBox="0 0 40 100" preserveAspectRatio="none" aria-hidden="true">
+        <rect class="s" x="9" y={sales[i]?.y} width="22" height={sales[i]?.h}></rect>
+        {p.gross !== undefined && (
+          <rect class="g" x="9" y={gross[i]?.y} width="22" height={gross[i]?.h}></rect>
+        )}
+      </svg>
+      <span class="cc-l">{p.label}</span>
+    </div>
+  ))}
+</div>

@@ -23,6 +23,8 @@ interface Props {
   priceFromCents?: number | null;
   /** JSON-LD objects (docs/14 §2). */
   jsonLd?: object[];
+  /** The header stays on top while scrolling (default); the page for workshops turns it off. */
+  stickyHeader?: boolean;
 }
 
 // Complete head: canonical, Open Graph, Twitter and structured data (docs/14 §1).
@@ -34,6 +36,7 @@ const {
   ogImage = '/brand/og-default.jpg',
   priceFromCents = null,
   jsonLd = [],
+  stickyHeader = true,
 } = Astro.props;
 // Canonical URL and share image are absolute, built from the site domain.
 const canonical = absoluteUrl(site.domain, Astro.url.pathname);
@@ -86,7 +89,7 @@ const image = absoluteUrl(site.domain, ogImage);
     >
       {es.a11y.skipToContent}
     </a>
-    <Header />
+    <Header sticky={stickyHeader} />
     <main id="main">
       <slot />
     </main>

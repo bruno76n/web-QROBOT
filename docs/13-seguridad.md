@@ -42,6 +42,8 @@ form-action 'self'
 - `frame-ancestors` no funciona en `<meta>`: va **aparte**, como cabecera.
 - Si la versión instalada de Astro no tiene CSP integrada estable: un script de build (`scripts/csp-hashes.mjs`) calcula los hashes de los scripts en línea de `dist/` y el middleware manda la misma política como cabecera. Se registra en `decisiones.md`.
 
+**Páginas ocultas (Para talleres, `25 §2`).** Mientras `site.system.enabled` sea `false`, el middleware responde la página 404 a `/talleres` y a todo lo que cuelga de ella (comparando la ruta ya decodificada, por `/%74alleres`), después de la redirección de la barra final y antes de todo lo demás; cada página de `src/pages/talleres/` repite el cerrojo y nunca se prerenderiza.
+
 Cabeceras en `src/middleware.ts`, para todas las respuestas HTML:
 
 | Cabecera | Valor |
@@ -109,6 +111,8 @@ Script (`scripts/security.mjs`) que corre:
    - `upload.test.ts`: archivo con extensión `.jpg` pero bytes de otra cosa → `415`; SVG → `415`; 26 MB → `413`.
    - `injection.test.ts`: nombre y descripción con `<script>`, `"><img onerror>` y `'; DROP TABLE` se guardan como texto y se muestran escapados.
    - `click.test.ts`: `source` inválido → `400`; no guarda IP.
+   - `system-hidden.spec.ts` (build de producción): las rutas de Para talleres de `25 §12` → 404 con la página 404 de la web; el HTML de las páginas públicas, el sitemap y `robots.txt` no mencionan `/talleres`.
+5. Para talleres sigue oculta (`25 §2`): ningún archivo de `src/pages/talleres/` exporta `prerender = true`, cada uno lleva `prerender = false` y su cerrojo, ningún componente de `src/components/system/` lleva atributo `style`, y `dist/` no tiene ningún `.html` que nombre `/talleres`.
 
 Cada prueba corre **sobre lo que ya existe**: una prueba de una fase posterior todavía no está escrita, no falla. Debe pasar para cerrar cualquier fase.
 

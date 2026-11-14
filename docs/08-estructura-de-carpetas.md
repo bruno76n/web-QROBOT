@@ -51,12 +51,15 @@ quick-robot-web/
    │  └─ img/[...key].ts          SOLO en desarrollo: sirve fotos desde R2 local
    ├─ layouts/
    │  ├─ BaseLayout.astro         <head> (SEO, `14`), header, footer, ClientRouter
-   │  └─ LearnLayout.astro        Aprende: estilos (`src/styles/learn.css`), barra del buscador y scripts comunes
+   │  ├─ LearnLayout.astro        Aprende: estilos (`src/styles/learn.css`), barra del buscador y scripts comunes
+   │  └─ SystemLayout.astro       Para talleres: header que se va con el scroll, barra del producto, `system.css` y `system-ui.css`
    ├─ lib/learn/                  lógica pura de Aprende: markdown, content, import, fit, cost, heat, tables, glossary, fuzzy, search-docs (`21`, `22`)
+   ├─ lib/system/                 lógica pura de Para talleres: visibility, plans, platform, bars, guard (`25 §5`, `§12`); en `lib/` también `nav.ts` (menú del sitio)
    ├─ scripts/                    scripts de navegador compartidos de Aprende: learn-search.ts (buscador), learn-printers.ts (¿Cabe mi pieza? e impresoras)
    ├─ components/
    │  ├─ learn/                   Aprende: Content, Node, Inline, Callout, Mark, PageHead, Article, TopicPages, Glossary, Search, Marked, tablas (FilamentTable, PrinterTable, MaintenanceCalendar), FitTool, CostCalculator, LearnScripts
-   │  ├─ site/                    Header, Footer, Logo, ProductCard, Price, Breadcrumbs (Astro)
+   │  ├─ site/                    Header, Footer, Logo, ProductCard, Price, Breadcrumbs, Faqs (compartidas por Aprende y Para talleres)
+   │  ├─ system/                  Para talleres: barra del producto, piezas de la página (`25 §6.2`) y `ui/` con las pantallas del sistema en HTML (`25 §6.3`)
    │  ├─ sections/                una por sección del inicio: Hero, Navidad, Ideas, Video,
    │  │                           Imprimiendo, Q404, Alberca, Pedido (Astro + su isla si hace falta)
    │  ├─ product/                 Gallery, ProductOptions (islas)
@@ -92,7 +95,9 @@ quick-robot-web/
 │  ├─ result.ts                Result<T> de las acciones (`10 §3`)
    │  └─ *.test.ts
    ├─ config/
-   │  ├─ site.ts                  dominio, WhatsApp, redes, fecha límite, imagen por defecto
+   │  ├─ site.ts                  dominio, WhatsApp, redes, fecha límite, imagen por defecto, `system` (`25 §4`)
+   │  ├─ system.ts                Para talleres: `systemVisible`, módulos, fórmula, alertas, roles, comparación, plataformas
+   │  ├─ system-demo.ts           Para talleres: datos de ejemplo de las pantallas del sistema (taller «Eje Z»)
    │  ├─ categories.ts
    │  ├─ colors.ts
    │  ├─ ideas.ts                 las 7 ideas (`05 §3`)

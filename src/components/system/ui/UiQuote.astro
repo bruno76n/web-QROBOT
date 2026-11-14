@@ -1,0 +1,101 @@
+---
+/**
+ * System screen «Cotización» (docs/25 §6.3, mockup `#documentos`): the quote sheet as the system
+ * prints it, with the business data of the sample workshop, folio, date, validity, customer, the
+ * items with quantity, unit price and amount, the total (the sum of the items) and the footer of
+ * the business. A white sheet of at most 560 px, centered on its stage; on the phone the header
+ * stacks. Sample data from `system-demo.ts`, labels from `es.system.ui.quote`.
+ */
+import UiFrame from './UiFrame.astro';
+import { demoBusiness, demoQuote, demoQuoteAmounts, demoQuoteTotal } from '@/config/system-demo';
+import { site } from '@/config/site';
+import { es } from '@/i18n/es';
+import { formatPesos } from '@/lib/learn/cost';
+
+const t = es.system.ui.quote;
+
+/** «13 nov 2026» from `2026-11-13`. */
+const [year, month, day] = demoQuote.date.split('-').map(Number);
+const date = `${day ?? ''} ${t.months[(month ?? 1) - 1] ?? ''} ${year ?? ''}`;
+
+const total = formatPesos(demoQuoteTotal);
+const label = t.label({
+  system: site.system.name,
+  business: demoBusiness.name,
+  items: demoQuote.items.length,
+  total,
+});
+---
+
+<UiFrame label={label} kind="card" class="fig-doc" inner="ui-doc">
+  {/* Business data on the left, kind of document, folio, date and validity on the right. */}
+  <div class="doc-h">
+    <span>
+      <b class="doc-biz">{demoBusiness.name}</b>
+      <span class="ui-meta">{t.kindCity(demoBusiness.kind, demoQuote.city)}</span>
+      <span class="ui-meta">{t.contact(demoQuote.phone, demoQuote.email)}</span>
+    </span>
+    <span class="doc-k">
+      <b>{t.title}</b>
+      <span class="ui-meta">{t.folio(demoQuote.folio)}</span>
+      <span class="ui-meta">{t.date(date)}</span>
+      <span class="ui-meta">{t.validity(demoQuote.validDays)}</span>
+    </span>
+  </div>
+
+  {/* Customer. */}
+  <div class="doc-c">
+    <span class="ui-lbl">{t.customer}</span>
+    <b>{demoQuote.customer.name}</b>
+    <span class="ui-meta">{demoQuote.customer.phone}</span>
+  </div>
+
+  {/* Items: quantity, description, unit price and amount. */}
+  <table class="ui-tbl doc-t">
+    <thead>
+      <tr>
+        <th>{t.qty}</th>
+        <th>{t.description}</th>
+        <th class="r">{t.unitPrice}</th>
+        <th class="r">{t.amount}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {demoQuote.items.map((item, i) => (
+        <tr>
+          <td class="ui-num">{item.qty}</td>
+          <td>
+            <b>{item.name}</b>
+            <span class="ui-meta">{item.detail}</span>
+          </td>
+          <td class="r ui-num">{formatPesos(item.price)}</td>
+          <td class="r ui-num">{formatPesos(demoQuoteAmounts[i] ?? 0)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+
+  {/* Total and footer of the business. */}
+  <dl class="doc-tot">
+    <div>
+      <dt>{t.total}</dt>
+      <dd class="ui-num">{total}</dd>
+    </div>
+  </dl>
+  <p class="doc-f">{demoQuote.footer}</p>
+</UiFrame>
+
+<style>
+  /*
+   * The sheet: full width of its stage up to 560 px; a plain sheet with the corners of a page,
+   * without the border and the phone corners of the card.
+   */
+  :global(.ui-fig.fig-doc) {
+    width: 100%;
+    max-width: 560px;
+  }
+  :global(.ui-card.ui-doc) {
+    border: 0;
+    border-radius: 6px;
+  }
+</style>

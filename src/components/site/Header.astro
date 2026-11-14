@@ -1,10 +1,25 @@
 ---
-// Sticky site header: logo, main navigation and quote button. On the home page, while the hero
-// is on screen, the logo gives way to an invitation to follow on Instagram (see the script).
+// Site header: logo, main navigation (from `siteNav`) and quote button. Sticky by default; the
+// page for workshops lets it scroll away so its own bar stays on top (`sticky={false}`). On the home
+// page, while the hero is on screen, the logo gives way to an invitation to follow on Instagram (see
+// the script).
 import { es } from '@/i18n/es';
 import { site } from '@/config/site';
 import Logo from './Logo.astro';
 import Button from './Button.astro';
+import { systemVisible } from '@/config/system';
+import { siteNav } from '@/lib/nav';
+
+interface Props {
+  /** Stays on top while scrolling (default); `false` lets it scroll away with the page. */
+  sticky?: boolean;
+}
+const { sticky = true } = Astro.props;
+// Menu links; «Para talleres» joins only while the page for workshops is visible (docs/25 §2).
+const nav = siteNav(systemVisible);
+// With three links, on the narrowest phones (≤ 380 px) they lose some padding so they fit next to
+// the logo and Cotizar (docs/24 §3).
+const crowded = nav.length > 2;
 
 const current = Astro.url.pathname;
 // A nav item is current when the path starts with its `href`; links with a hash never are.
@@ -14,7 +29,10 @@ const isCurrent = (href: string) => !href.includes('#') && current.startsWith(hr
 <header
   id="top"
   data-top
-  class="group/top sticky top-0 z-50 bg-white shadow-[0_1px_0_var(--line)] transition-shadow duration-300 data-[over-hero]:shadow-none"
+  class:list={[
+    'group/top top-0 z-50 bg-white shadow-[0_1px_0_var(--line)] transition-shadow duration-300 data-[over-hero]:shadow-none',
+    sticky ? 'sticky' : 'relative',
+  ]}
 >
   <div class="wrap grid min-h-[var(--top)] max-w-none grid-cols-[1fr_auto_auto] items-center gap-x-1 min-[901px]:grid-cols-[1fr_auto_1fr] min-[901px]:gap-x-0">
     <div class="col-start-1 grid min-w-0 items-center *:[grid-area:1/1]">
@@ -46,15 +64,31 @@ const isCurrent = (href: string) => !href.includes('#') && current.startsWith(hr
 
     <nav
       aria-label={es.a11y.mainNav}
-      class="col-start-2 flex items-center gap-1 min-[901px]:min-h-[54px] min-[901px]:self-start min-[901px]:rounded-b-[16px] min-[901px]:bg-ink min-[901px]:px-3.5"
+      class:list={[
+        'col-start-2 flex items-center gap-1 min-[901px]:min-h-[54px] min-[901px]:self-start min-[901px]:rounded-b-[16px] min-[901px]:bg-ink min-[901px]:px-3.5',
+        crowded && 'max-[380px]:gap-0',
+      ]}
     >
-      {es.header.nav.map((item) => (
+      {nav.map((item) => (
         <a
           href={item.href}
           aria-current={isCurrent(item.href) ? 'page' : undefined}
-          class="inline-flex min-h-11 items-center px-2.5 text-[15px] text-ink max-[480px]:px-[7px] min-[901px]:px-3.5 no-underline transition-colors duration-200 min-[901px]:text-[#c3c3cc] min-[901px]:hover:text-white aria-[current]:font-semibold min-[901px]:aria-[current]:text-white"
+          class:list={[
+            'inline-flex min-h-11 items-center px-2.5 text-[15px] text-ink max-[480px]:px-[7px] min-[901px]:px-3.5 no-underline transition-colors duration-200 min-[901px]:text-[#c3c3cc] min-[901px]:hover:text-white aria-[current]:font-semibold min-[901px]:aria-[current]:text-white',
+            crowded && 'max-[380px]:px-1',
+          ]}
         >
-          {item.label}
+          {item.short ? (
+            <>
+              {/* ≤ 480 px shows the short name; screen readers always get the full one. */}
+              <span class="max-[480px]:sr-only">{item.label}</span>
+              <span class="hidden max-[480px]:inline" aria-hidden="true">
+                {item.short}
+              </span>
+            </>
+          ) : (
+            item.label
+          )}
         </a>
       ))}
     </nav>

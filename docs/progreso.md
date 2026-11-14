@@ -102,12 +102,40 @@ En todas: header y footer reales de la web (`21 §11`), etiqueta «Dato curioso�
 
 Pendientes del dueño para Aprende: dónde corre Meilisearch (mientras no exista, el buscador usa D1); anticipo y formas de pago, envíos, urgentes y personajes con licencia (`encargar/pago` y `encargar/personajes` siguen ocultas); fotos de fallas.
 
+## Para talleres
+
+Plan v2 aplicado el 2026-11-14 (`docs/25`, `docs/fases/fase-9.md`, `reference/mockups/talleres/`). La versión hecha con el plan v1 quedó en la rama `fase-9-v1` (no se fusiona).
+
+| Fase | Estado |
+|---|---|
+| 9 · Para talleres (oculta) | **Terminada en local** (rama `fase-9`, lista para fusionar); ver `docs/informe-fase-9.md`. Las 3 páginas completas con `pnpm dev`, con las 10 pantallas del sistema dibujadas en HTML; con `pnpm preview` responden 404 y nada las enlaza. `site.system.enabled` sigue en `false`. **Sin desplegar** (se hizo antes de la fase 8, por instrucción del dueño) |
+
+Comparación con las maquetas (`reference/mockups/talleres/`, Chromium, alto de cada sección y capturas; sin scroll horizontal en ningún ancho):
+
+| Página o pantalla | 360 | 390 | 820 | 1440 | Notas |
+|---|---|---|---|---|---|
+| Principal `/talleres` (15 secciones) | igual | igual | diferencia aceptada | igual | A 820 la sección Reportes mide 513 px más: sus paneles van en una columna de 761 a 959 px porque en la maqueta la tabla «Por canal» se sale de su panel |
+| Precios `/talleres/precios` | igual | igual | igual | igual | Mensual y anual |
+| Descargar `/talleres/descargar` | igual | igual | igual | igual | Revisado con Mac, Windows e iPhone (el botón lo elige el servidor) |
+| Inicio (`UiHome` + `UiFloats`) | igual | igual | igual | igual | En celular, su versión de celular; avisos solo desde 1240 px |
+| Costo por pieza y pedido (`UiPiece`, `UiOrder`) | igual | igual | igual | igual | |
+| Impresoras, filamentos, compras, existencias | diferencia aceptada | igual | igual | igual | A 360 las tablas de filamentos y existencias aprietan sus celdas para no salirse de la tarjeta (en la maqueta se salen ~30 px); misma altura |
+| Cotización y reportes (`UiQuote`, `UiReports`) | igual | igual | diferencia aceptada | igual | Reportes en una columna de 761 a 959 px (ver arriba) |
+| Llamado `system` en `/aprende/negocio/costo` (con `pnpm dev`) | igual | igual | igual | igual | Mismo bloque que el llamado de WhatsApp, botón negro; ninguna maqueta lo trae |
+
+En todas: header de la web (no el de la maqueta), íconos de lucide (`25 §14`), botones de `Button.astro` (2–4 px más anchos), verde y gris de texto un tono más oscuros por contraste (ver `decisiones.md`).
+
 ## Valores provisionales en uso (`01 › Pendientes del dueño`)
 
 | Dato | Valor provisional | Desde |
 |---|---|---|
 | Dominio | `https://quickrobot.example` | Fase 1 (`src/config/site.ts`) |
 | Fecha límite de Navidad | 12 de diciembre | Fase 1 |
+| Nombre del sistema para talleres | Quick Cerebro | Fase 9 (`site.system.name`) |
+| Dirección del sistema | `https://sistema.quickrobot.example`, rutas `/crear-cuenta` y `/entrar` | Fase 9 (`site.system`) |
+| Instaladores de Mac y Windows | Sin archivo (`url: ''`; los botones llevan a su fila de `/talleres/descargar`); requisitos «macOS 12 o posterior» y «Windows 10 u 11 de 64 bits» | Fase 9 |
+| Prueba gratis y precio de fundador | 14 días del plan Negocio; 50 talleres | Fase 9 |
+| Planes | Gratis $0 · Taller $149/$1,490 · Negocio $299/$2,990, con los límites de `25 §4` | Fase 9 (`site.system.plans`) |
 
 ## Bloqueos
 

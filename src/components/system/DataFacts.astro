@@ -1,0 +1,48 @@
+---
+/**
+ * What happens with the workshop's data (docs/25 §6.2, mockup `.facts3`): backups, export to
+ * Excel and separate information, each under a dark rule. One column on phones and tablets, three
+ * from 900 px.
+ */
+import { es } from '@/i18n/es';
+
+const facts = es.system.home.data.facts;
+---
+
+<dl class="facts3">
+  {facts.map((f) => (
+    <div>
+      <dt>{f.name}</dt>
+      <dd>{f.text}</dd>
+    </div>
+  ))}
+</dl>
+
+<style>
+  /* Grid gaps with their Safari 14 alias. */
+  .facts3 {
+    display: grid;
+    margin: 0;
+    grid-gap: 0 48px;
+    gap: 0 48px;
+  }
+  @media (min-width: 900px) {
+    .facts3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .facts3 > div {
+    border-top: 2px solid var(--ink);
+    padding: 18px 0 28px;
+  }
+  .facts3 dt {
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+  .facts3 dd {
+    margin: 8px 0 0;
+    color: var(--ink-2);
+    max-width: 40ch;
+  }
+</style>

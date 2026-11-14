@@ -1,0 +1,247 @@
+---
+/**
+ * System screen «Reportes» (docs/25 §6.3, mockup `#reportes`): the period with the one it is
+ * compared with, the drawn period selector and «Copiar resumen», the 5 figures (sales, gross
+ * profit, expenses, net profit and net margin), sales by week with gross profit, what is left of
+ * each $100 sold (costs and expenses against net profit, then each cost), the products with the
+ * most gross profit and the sales by channel with their total. The screen of the dark section, in
+ * a window full width. On ≤480 the channel table hides the count and fee columns (`hide-xs`).
+ * Sample data from `system-demo.ts`, labels from `es.system.ui`.
+ */
+import Copy from '@lucide/astro/icons/copy';
+import UiBar from './UiBar.astro';
+import UiColumns from './UiColumns.astro';
+import UiFrame from './UiFrame.astro';
+import {
+  demoChannels,
+  demoPer100,
+  demoReportPeriod,
+  demoReportRanges,
+  demoSales,
+  demoTopProducts,
+  demoWeeks,
+  demoWeeksCap,
+} from '@/config/system-demo';
+import { site } from '@/config/site';
+import { es } from '@/i18n/es';
+import { formatPesos } from '@/lib/learn/cost';
+import { formatMoney } from '@/lib/money';
+import { pct } from '@/lib/system/bars';
+
+const c = es.system.ui.common;
+const t = es.system.ui.reports;
+const money = (pesos: number) => formatMoney(Math.round(pesos * 100));
+
+/** «15 oct» (with the year when `withYear`) from `2026-10-15`. */
+function shortDate(iso: string, withYear = false): string {
+  const [year, month, day] = iso.split('-').map(Number);
+  const text = `${day ?? ''} ${es.system.ui.quote.months[(month ?? 1) - 1] ?? ''}`;
+  return withYear ? `${text} ${year ?? ''}` : text;
+}
+const p = demoReportPeriod;
+const period = t.period(
+  shortDate(p.from),
+  shortDate(p.to, true),
+  shortDate(p.prevFrom),
+  shortDate(p.prevTo),
+);
+
+/** The 5 figures; the net margin is the net profit over the sales. */
+const netMargin = ((demoSales.net / demoSales.total) * 100).toFixed(1);
+const figures = [
+  { name: c.sales, value: money(demoSales.total), change: demoSales.change },
+  { name: c.gross, value: money(demoSales.gross), change: demoSales.grossChange },
+  { name: c.expenses, value: money(demoSales.expenses) },
+  { name: c.net, value: money(demoSales.net), net: true },
+  { name: t.netMargin, value: t.percent(netMargin) },
+];
+
+/** «De cada $100»: net profit against the rest (costs and expenses), then each cost. */
+const netPer100 = demoPer100.find((x) => x.id === 'net')?.amount ?? 0;
+const costs = demoPer100.filter((x) => x.id !== 'net');
+const costsPer100 = costs.reduce((s, x) => s + Math.round(x.amount * 100), 0) / 100;
+const costsMax = Math.max(...costs.map((x) => x.amount));
+const costsW = pct(costsPer100, 100);
+
+/** Products: bars against the first (the largest). */
+const topMax = Math.max(...demoTopProducts.map((x) => x.gross));
+
+/** Channels and their total. */
+const channelTotal = {
+  count: demoChannels.reduce((s, x) => s + x.count, 0),
+  total: demoChannels.reduce((s, x) => s + x.total, 0),
+  fee: demoChannels.reduce((s, x) => s + x.fee, 0),
+  gross: demoChannels.reduce((s, x) => s + x.gross, 0),
+};
+
+const label = t.label({
+  system: site.system.name,
+  days: demoSales.days,
+  sales: money(demoSales.total),
+  gross: money(demoSales.gross),
+  expenses: money(demoSales.expenses),
+  net: money(demoSales.net),
+  netPer100: formatPesos(netPer100),
+});
+---
+
+<UiFrame label={label} inner="ui-rep">
+  <div class="ui-main">
+    {/* Title, period and its comparison; period selector and copy the summary. */}
+    <div class="ui-top">
+      <div>
+        <b class="ui-h">{t.title}</b>
+        <span class="ui-meta">{period}</span>
+      </div>
+      <div class="ui-acts">
+        <span class="ui-seg">
+          {demoReportRanges.map((days) => (
+            <span class:list={{ on: days === demoSales.days }}>{t.range(days)}</span>
+          ))}
+        </span>
+        <span class="ui-btn">
+          <Copy class="ic" aria-hidden="true" />
+          {t.copySummary}
+        </span>
+      </div>
+    </div>
+
+    {/* The 5 figures. */}
+    <dl class="kps kps-row">
+      {figures.map((f) => (
+        <div class:list={['kp', { net: f.net }]}>
+          <dt>{f.name}</dt>
+          <dd class="ui-num">
+            {f.value}
+            {f.change !== undefined && <small>{c.up(f.change.toFixed(1))}</small>}
+          </dd>
+        </div>
+      ))}
+    </dl>
+
+    <div class="rp-grid">
+      {/* Sales by week with gross profit. */}
+      <div class="ui-panel">
+        <div class="ui-ph">
+          <b>{c.salesByWeek}</b>
+        </div>
+        <UiColumns points={demoWeeks} cap={demoWeeksCap} />
+        <div class="ui-leg">
+          <span>
+            <i class="s"></i>
+            {c.sales}
+          </span>
+          <span>
+            <i class="g"></i>
+            {c.gross}
+          </span>
+        </div>
+      </div>
+
+      {/* Each $100 sold: costs and expenses against net profit (green), then each cost. */}
+      <div class="ui-panel">
+        <div class="ui-ph">
+          <b>{t.per100}</b>
+        </div>
+        <svg class="sp-bar" width="100%" height="28" aria-hidden="true">
+          <rect class="c" width={`${costsW}%`} height="28" rx="4"></rect>
+          <rect
+            class="n"
+            x={`${costsW}%`}
+            width={`${pct(netPer100, 100)}%`}
+            height="28"
+            rx="4"
+          ></rect>
+        </svg>
+        <div class="sp-k">
+          <span>
+            <i class="c"></i>
+            {t.costsAndExpenses} <b class="ui-num">{formatPesos(costsPer100)}</b>
+          </span>
+          <span class="n">
+            <i class="n"></i>
+            {c.per100.net} <b class="ui-num">{formatPesos(netPer100)}</b>
+          </span>
+        </div>
+        <ul class="sp-list">
+          {costs.map((x) => (
+            <li>
+              <span>{c.per100[x.id]}</span>
+              <UiBar value={x.amount} max={costsMax} />
+              <b class="ui-num">{formatPesos(x.amount)}</b>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Products with the most gross profit. */}
+      <div class="ui-panel">
+        <div class="ui-ph">
+          <b>{t.topProducts}</b>
+        </div>
+        <ul class="tp">
+          {demoTopProducts.map((x) => (
+            <li>
+              <span class="tp-n">
+                <b>{x.name}</b>
+                <span class="ui-meta">{t.sold(x.sold)}</span>
+              </span>
+              <UiBar value={x.gross} max={topMax} green />
+              <b class="ui-num">{money(x.gross)}</b>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Sales by channel with their total; count and fee hide on ≤480. */}
+      <div class="ui-panel">
+        <div class="ui-ph">
+          <b>{t.byChannel}</b>
+        </div>
+        <table class="ui-tbl">
+          <thead>
+            <tr>
+              <th>{t.channel}</th>
+              <th class="r hide-xs">{t.count}</th>
+              <th class="r">{t.amount}</th>
+              <th class="r hide-xs">{t.fee}</th>
+              <th class="r">{t.profit}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {demoChannels.map((x) => (
+              <tr>
+                <td>{x.name}</td>
+                <td class="r ui-num hide-xs">{x.count}</td>
+                <td class="r ui-num">{money(x.total)}</td>
+                <td class="r ui-num hide-xs">{money(x.fee)}</td>
+                <td class="r ui-num g">{money(x.gross)}</td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>{t.total}</td>
+              <td class="r ui-num hide-xs">{channelTotal.count}</td>
+              <td class="r ui-num">{money(channelTotal.total)}</td>
+              <td class="r ui-num hide-xs">{money(channelTotal.fee)}</td>
+              <td class="r ui-num g">{money(channelTotal.gross)}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</UiFrame>
+
+<style>
+  /*
+   * Narrow tablets (761–959): the four panels go one under the other, as on the phone, so the
+   * channel table keeps its five columns inside its panel (side by side it does not fit there).
+   */
+  @media (min-width: 761px) and (max-width: 959px) {
+    .rp-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

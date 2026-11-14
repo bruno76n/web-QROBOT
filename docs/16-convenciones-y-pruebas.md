@@ -30,6 +30,11 @@
 | tabla de datos | `dataset` |
 | búsqueda sin resultado | `searchMiss` |
 | ¿Cabe mi pieza? | `fit` |
+| Para talleres (página del sistema) | `system` (rutas en español: `/talleres`) |
+| plan | `plan` |
+| mensual / anual | `period` (`monthly` / `yearly`) |
+| pantalla del sistema (dibujada en HTML) | `ui` (`Ui*`) |
+| datos de ejemplo | `demo` (`system-demo.ts`) |
 
 ## 2. Estilo de código
 

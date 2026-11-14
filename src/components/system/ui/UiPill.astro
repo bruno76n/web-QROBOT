@@ -1,0 +1,15 @@
+---
+/**
+ * State with a dot (docs/25 §6.3): always with its text; the color only reinforces it. `ok` green,
+ * `warn` amber, `bad` red, `info` gray-dark, none gray.
+ */
+interface Props {
+  tone?: 'ok' | 'warn' | 'bad' | 'info' | undefined;
+  class?: string | undefined;
+}
+const { tone, class: className } = Astro.props;
+---
+
+<span class:list={['ui-pill', tone, className]}>
+  <slot />
+</span>

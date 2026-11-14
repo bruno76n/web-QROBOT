@@ -1,0 +1,265 @@
+---
+/**
+ * System screen «Inicio» (docs/25 §6.3, mockup hero of `talleres.html` and `descargar.html`), drawn
+ * in HTML with the sample data of `system-demo.ts` and the labels of `es.system.ui`: header with the
+ * date and drawn actions; sales of the last 30 days with gross profit, expenses, net profit and
+ * receivable, and sales by week; the 5 alerts with their action; what is printing now; next
+ * deliveries. Desktop (≥ 1100) with the side bar; tablet without it; phone (≤ 760) its phone
+ * version from `system-ui.css`: top bar with menu, figures in 2 × 2, 3 alerts without button and
+ * what is printing (no side bar, no next deliveries: `ui-hide-sm`).
+ */
+import Banknote from '@lucide/astro/icons/banknote';
+import Clock from '@lucide/astro/icons/clock';
+import Menu from '@lucide/astro/icons/menu';
+import Plus from '@lucide/astro/icons/plus';
+import TriangleAlert from '@lucide/astro/icons/triangle-exclamation-point';
+import Wrench from '@lucide/astro/icons/wrench';
+import ModuleIcon from '../ModuleIcon.astro';
+import UiButton from './UiButton.astro';
+import UiColumns from './UiColumns.astro';
+import UiFrame from './UiFrame.astro';
+import UiMeter from './UiMeter.astro';
+import UiPill from './UiPill.astro';
+import UiSidebar from './UiSidebar.astro';
+import { site } from '@/config/site';
+import {
+  demoAlerts,
+  demoDeliveries,
+  demoPrinting,
+  demoSales,
+  demoTodayLabel,
+  demoWeeks,
+  demoWeeksCap,
+  type DemoAlert,
+} from '@/config/system-demo';
+import { formatPesos } from '@/lib/learn/cost';
+import { formatMoney } from '@/lib/money';
+import { es } from '@/i18n/es';
+
+const c = es.system.ui.common;
+const t = es.system.ui.home;
+const money = (pesos: number) => formatMoney(pesos * 100);
+
+/** Phone version: how many alerts it shows (the rest carry `ui-hide-sm`). */
+const PHONE_ALERTS = 3;
+
+/** What each alert shows: tone of its icon, title, line and drawn action. */
+function alertView(a: DemoAlert): {
+  tone: 'bad' | 'warn' | 'info';
+  title: string;
+  text: string;
+  action: string;
+} {
+  switch (a.kind) {
+    case 'filament':
+      return {
+        tone: 'bad',
+        title: t.alert.filament.title(a.order, a.customer),
+        text: t.alert.filament.text(a.filament, a.missingGrams),
+        action: t.alert.filament.action,
+      };
+    case 'due':
+      return {
+        tone: 'warn',
+        title: t.alert.due.title(a.order, a.customer),
+        text: t.alert.due.text(a.due),
+        action: t.alert.due.action,
+      };
+    case 'stock':
+      return {
+        tone: 'warn',
+        title: a.filament,
+        text: t.alert.stock.text(a.grams),
+        action: t.alert.stock.action,
+      };
+    case 'balance':
+      return {
+        tone: 'info',
+        title: t.alert.balance.title(a.date, a.customer),
+        text: t.alert.balance.text(formatPesos(a.amount)),
+        action: t.alert.balance.action,
+      };
+    case 'maintenance':
+      return {
+        tone: 'info',
+        title: a.printer,
+        text: t.alert.maintenance.text(a.part, a.hours),
+        action: t.alert.maintenance.action,
+      };
+  }
+}
+
+/** State of a delivery: its label and the tone of its pill. */
+const deliveryState = {
+  ready: { label: c.states.ready, tone: 'ok' },
+  inProduction: { label: c.states.inProduction, tone: 'info' },
+  accepted: { label: t.accepted, tone: undefined },
+} as const;
+
+const label = t.label({
+  name: site.system.name,
+  days: demoSales.days,
+  total: money(demoSales.total),
+  gross: money(demoSales.gross),
+  net: money(demoSales.net),
+  alerts: demoAlerts.length,
+  printing: demoPrinting.jobs.length,
+  printers: demoPrinting.printers,
+});
+---
+
+<UiFrame label={label} class="fig-app" inner="ui-app">
+  <div class="ui-app-in">
+    <UiSidebar />
+    <div class="ui-main">
+      {/* Phone top bar: menu, title and the main action. */}
+      <div class="ui-mtop">
+        <Menu class="ic" aria-hidden="true" />
+        <b>{t.title}</b>
+        <UiButton pri sq>
+          <Plus slot="icon" class="ic" aria-hidden="true" />
+        </UiButton>
+      </div>
+
+      {/* Header: title, date and drawn actions (tablet and desktop). */}
+      <div class="ui-top">
+        <div>
+          <b class="ui-h">{t.title}</b>
+          <span class="ui-meta">{demoTodayLabel}</span>
+        </div>
+        <div class="ui-acts">
+          <UiButton>{t.actions.sale}</UiButton>
+          <UiButton>{t.actions.order}</UiButton>
+          <UiButton pri>
+            <Plus slot="icon" class="ic" aria-hidden="true" />
+            {t.actions.piece}
+          </UiButton>
+        </div>
+      </div>
+
+      {/* Summary of the last 30 days and sales by week. */}
+      <div class="ui-panel ui-sum">
+        <div class="sum-a">
+          <span class="ui-lbl">{t.salesOf(demoSales.days)}</span>
+          <b class="sum-big ui-num">{money(demoSales.total)}</b>
+          <span class="ui-meta">
+            <span class="up">{c.up(String(demoSales.change))}</span>
+            {t.vsPrevious(demoSales.count)}
+          </span>
+          <dl class="kps">
+            <div class="kp up">
+              <dt>{c.gross}</dt>
+              <dd>
+                {money(demoSales.gross)}
+                <small>{c.up(String(demoSales.grossChange))}</small>
+              </dd>
+            </div>
+            <div class="kp">
+              <dt>{c.expenses}</dt>
+              <dd>{money(demoSales.expenses)}</dd>
+            </div>
+            <div class="kp net">
+              <dt>{c.net}</dt>
+              <dd>{money(demoSales.net)}</dd>
+            </div>
+            <div class="kp">
+              <dt>{c.receivable}</dt>
+              <dd>{money(demoSales.receivable)}</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="sum-b">
+          <span class="ui-lbl">{c.salesByWeek}</span>
+          <UiColumns points={demoWeeks} cap={demoWeeksCap} />
+          <div class="ui-leg">
+            <span>
+              <i class="s"></i>
+              {c.sales}
+            </span>
+            <span>
+              <i class="g"></i>
+              {c.gross}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ui-row2">
+        {/* Alerts with their action; the phone shows the first 3, without button. */}
+        <div class="ui-panel">
+          <div class="ui-ph">
+            <b>{t.alerts}</b>
+            <span class="ui-count">{demoAlerts.length}</span>
+          </div>
+          <ul class="al-list">
+            {demoAlerts.map((a, i) => {
+              const v = alertView(a);
+              return (
+                <li class:list={['al', { 'ui-hide-sm': i >= PHONE_ALERTS }]}>
+                  <span class:list={['al-ic', v.tone]}>
+                    {a.kind === 'filament' && <TriangleAlert class="ic" aria-hidden="true" />}
+                    {a.kind === 'due' && <Clock class="ic" aria-hidden="true" />}
+                    {a.kind === 'stock' && <ModuleIcon icon="filaments" size={16} class="ic" />}
+                    {a.kind === 'balance' && <Banknote class="ic" aria-hidden="true" />}
+                    {a.kind === 'maintenance' && <Wrench class="ic" aria-hidden="true" />}
+                  </span>
+                  <span class="al-t">
+                    <b>{v.title}</b>
+                    <span>{v.text}</span>
+                  </span>
+                  <UiButton>{v.action}</UiButton>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
+        <div class="ui-stack">
+          {/* Printing now: each job with its progress and time left. */}
+          <div class="ui-panel">
+            <div class="ui-ph">
+              <b>{t.printing}</b>
+              <span class="ui-meta">
+                {t.printersOf(demoPrinting.jobs.length, demoPrinting.printers)}
+              </span>
+            </div>
+            <ul class="pp">
+              {demoPrinting.jobs.map((j) => (
+                <li>
+                  <div class="pp-h">
+                    <b>{j.printer}</b>
+                    <span class="ui-num">{j.progress} %</span>
+                  </div>
+                  <span class="ui-meta">{t.job(j.qty, j.piece, j.order)}</span>
+                  <UiMeter value={j.progress} />
+                  {/* prettier-ignore */}
+                  <span class="ui-meta"><Clock class="ic" aria-hidden="true" />{`${c.timeLeft}: ${t.duration(j.left.h, j.left.min)}`}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Next deliveries (tablet and desktop). */}
+          <div class="ui-panel ui-hide-sm">
+            <div class="ui-ph">
+              <b>{t.deliveries}</b>
+            </div>
+            <ul class="du">
+              {demoDeliveries.map((d) => (
+                <li>
+                  <span class="du-d ui-num">{d.date}</span>
+                  <span class="du-c">
+                    <b>{d.customer}</b>
+                    <span class="ui-meta">{t.order(d.order)}</span>
+                  </span>
+                  <UiPill tone={deliveryState[d.state].tone}>{deliveryState[d.state].label}</UiPill>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</UiFrame>
+

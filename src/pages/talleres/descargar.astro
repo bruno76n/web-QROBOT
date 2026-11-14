@@ -1,0 +1,154 @@
+---
+// The page for workshops: download (docs/25 §7.3). Hidden until the system is out (docs/25 §2):
+// the middleware locks `/talleres` and this page locks itself too; never prerendered.
+// The server picks the main button from the `User-Agent` (Mac, Windows, or the browser for phones
+// and anything else) and answers with `Vary: User-Agent`; the header is not stored. No scripts.
+import SystemLayout from '@/layouts/SystemLayout.astro';
+import Button from '@/components/site/Button.astro';
+import EndCta from '@/components/system/EndCta.astro';
+import PlatformList from '@/components/system/PlatformList.astro';
+import SectionHead from '@/components/system/SectionHead.astro';
+import UiHome from '@/components/system/ui/UiHome.astro';
+import { site } from '@/config/site';
+import { systemVisible } from '@/config/system';
+import { es } from '@/i18n/es';
+import { detectPlatform } from '@/lib/system/platform';
+import { systemBase } from '@/lib/system/visibility';
+
+export const prerender = false;
+if (!systemVisible) return Astro.rewrite('/404');
+
+const seo = es.system.seo.download(site.system.name);
+const t = es.system.download;
+const { appUrl, downloads, name } = site.system;
+
+// The page changes with the device: caches keep one copy per `User-Agent`.
+Astro.response.headers.append('Vary', 'User-Agent');
+const platform = detectPlatform(Astro.request.headers.get('user-agent'));
+
+// Main button: the installer of a Mac or a Windows PC (its own row while there is no file), or the
+// system in the browser; desktops also get «Abrir en el navegador» next to it.
+const desktop = platform === 'mac' || platform === 'windows' ? platform : null;
+const main = desktop
+  ? {
+      label: t.main[desktop],
+      href: downloads[desktop].url || `${systemBase}/descargar#${desktop}`,
+      rel: undefined,
+    }
+  : { label: t.main.browser, href: appUrl, rel: 'noopener' };
+const req =
+  platform === 'mac' || platform === 'windows'
+    ? t.req[platform](downloads[platform].minOs)
+    : t.req[platform];
+---
+
+<SystemLayout title={seo.title} description={seo.description} current="download">
+  {/* Header: title, sentence, the button for this device and the Inicio screen on lilac. */}
+  <section class="s-ph" aria-labelledby="h1">
+    <div class="wrap s-ph-in">
+      <h1 class="t-h1" id="h1">
+        {t.title}
+      </h1>
+      <p class="lead">{t.lead}</p>
+      <div class="dl-main">
+        <Button href={main.href} rel={main.rel} arrow class="dl-btn">
+          {main.label}
+        </Button>
+        {desktop && (
+          <Button href={appUrl} rel="noopener" variant="outline" class="dl-btn">
+            {t.main.browser}
+          </Button>
+        )}
+      </div>
+      <p class="dl-req">{req}</p>
+    </div>
+    <div class="hero-stage">
+      <div class="wrap">
+        <UiHome />
+      </div>
+    </div>
+  </section>
+
+  {/* Every platform, with the visitor's one marked. */}
+  <section aria-labelledby="plats-h">
+    <div class="wrap">
+      <SectionHead id="plats-h" title={t.platforms.title} />
+      <PlatformList current={platform} />
+    </div>
+  </section>
+
+  {/* Installation steps on Mac and on Windows. */}
+  <section class="soft" aria-labelledby="inst-h">
+    <div class="wrap">
+      <SectionHead id="inst-h" title={t.install.title} />
+      <div class="steps2">
+        <div>
+          <h3 class="t-h3">{t.install.mac.title}</h3>
+          <ol>
+            {t.install.mac.steps(name).map((s) => (
+              <li>{s}</li>
+            ))}
+          </ol>
+        </div>
+        <div>
+          <h3 class="t-h3">{t.install.windows.title}</h3>
+          <ol>
+            {t.install.windows.steps.map((s) => (
+              <li>{s}</li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <EndCta />
+</SystemLayout>
+
+<style>
+  /* Page header without bottom padding: the screen's lilac band closes it. Grid gaps with their
+     Safari 14 alias. */
+  .s-ph {
+    padding: clamp(40px, 6vw, 88px) 0 0;
+  }
+  .s-ph-in {
+    display: grid;
+    grid-gap: 20px;
+    gap: 20px;
+  }
+  /* Buttons spaced with margins, not `gap` in flex (Safari 14, docs/24 §5). */
+  .dl-main {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 6px -6px -6px;
+  }
+  .dl-main :global(.dl-btn) {
+    margin: 6px;
+  }
+  .dl-req {
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+  /* Installation: two columns from 761 px. */
+  .steps2 {
+    display: grid;
+    grid-gap: 32px;
+    gap: 32px;
+  }
+  .steps2 ol {
+    margin: 12px 0 0;
+    padding-left: 1.3em;
+    display: grid;
+    grid-gap: 8px;
+    gap: 8px;
+    color: var(--ink-2);
+    list-style: decimal;
+  }
+  @media (min-width: 761px) {
+    .steps2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-column-gap: 48px;
+      column-gap: 48px;
+    }
+  }
+</style>

@@ -1,0 +1,183 @@
+---
+/**
+ * Full comparison of the plans (docs/25 §6.2, mockup `.cmp`): one column per plan of
+ * `site.system.plans`, the recommended one highlighted, and the groups of rows of
+ * `compareGroups` (`config/system.ts`). Limits read the plan (a number, «Ilimitadas» or
+ * «Ilimitados»); included features show a check and «—» otherwise, each with its text for screen
+ * readers. On phones the three plan columns get narrow so the table fits without sliding sideways.
+ */
+import Check from '@lucide/astro/icons/check';
+import { site } from '@/config/site';
+import { compareGroups, type CompareRow } from '@/config/system';
+import { es } from '@/i18n/es';
+import { limitLabel, type Plan } from '@/lib/system/plans';
+
+const t = es.system.pricing.compare;
+const p = es.system.plans;
+const { plans } = site.system;
+const names = plans.map((plan) => p[plan.id].name);
+
+/** What a cell shows: a text, or a check / dash that only screen readers read as words. */
+type Cell = { kind: 'text'; text: string } | { kind: 'yes' } | { kind: 'no' };
+
+/** The cell of a row for a plan. */
+function cell(row: CompareRow, plan: Plan): Cell {
+  switch (row.kind) {
+    case 'limit':
+      return {
+        kind: 'text',
+        text: limitLabel(plan[row.id], row.unlimited === 'f' ? p.unlimitedF : p.unlimitedM),
+      };
+    case 'check':
+      return row.in === 'all' || plan.roles ? { kind: 'yes' } : { kind: 'no' };
+    case 'support': {
+      const level = row.plans[plan.id];
+      if (level === null) return { kind: 'no' };
+      return { kind: 'text', text: level === 'yes' ? t.yes : t.priority };
+    }
+  }
+}
+---
+
+<div class="tbl-wrap">
+  <table class="cmp">
+    <caption class="sr-only">{t.caption(names)}</caption>
+    <thead>
+      <tr>
+        <th scope="col">{t.feature}</th>
+        {plans.map((plan, i) => (
+          <th scope="col" class:list={[plan.recommended && 'hl']}>
+            {names[i]}
+          </th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {compareGroups.map((group) => (
+        <Fragment>
+          <tr class="g">
+            <th scope="rowgroup" colspan={plans.length + 1}>
+              {t.groups[group.id]}
+            </th>
+          </tr>
+          {group.rows.map((row) => (
+            <tr>
+              <th scope="row">{t.rows[row.id]}</th>
+              {plans.map((plan) => {
+                const c = cell(row, plan);
+                return (
+                  <td
+                    class:list={[
+                      c.kind === 'yes' && 'y',
+                      c.kind === 'no' && 'no',
+                      plan.recommended && 'hl',
+                    ]}
+                  >
+                    {c.kind === 'text' && c.text}
+                    {c.kind === 'yes' && (
+                      <Fragment>
+                        <Check size={20} stroke-width={2.6} aria-hidden="true" class="ok" />
+                        <span class="sr-only">{t.included}</span>
+                      </Fragment>
+                    )}
+                    {c.kind === 'no' && (
+                      <Fragment>
+                        <span aria-hidden="true">—</span>
+                        <span class="sr-only">{t.notIncluded}</span>
+                      </Fragment>
+                    )}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </Fragment>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .cmp {
+    background: #fff;
+  }
+  .cmp th,
+  .cmp td {
+    vertical-align: middle;
+  }
+  .cmp thead th {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .cmp thead th:first-child {
+    text-align: left;
+    font-weight: 500;
+    color: var(--ink-2);
+  }
+  .cmp thead th.hl {
+    background: var(--ink);
+    color: #fff;
+  }
+  .cmp td {
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .cmp td.hl {
+    background: #fafafb;
+  }
+  .cmp tbody th {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--ink);
+    background: #fff;
+    white-space: normal;
+    text-align: left;
+  }
+  .cmp tr.g th {
+    background: var(--soft);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-2);
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .cmp .no {
+    color: var(--ink-3);
+  }
+  /* Inline, as in the mockup (the base styles make every svg a block). */
+  .cmp :global(.ok) {
+    display: inline;
+    width: 20px;
+    height: 20px;
+    stroke: var(--green-d);
+    vertical-align: middle;
+  }
+  /* Phones: three narrow plan columns, no sideways scroll down to 360 px. */
+  @media (max-width: 760px) {
+    .cmp th,
+    .cmp td {
+      padding: 12px 8px;
+    }
+    .cmp tbody th {
+      padding-left: 12px;
+    }
+    .cmp thead th {
+      font-size: 14px;
+    }
+  }
+  @media (max-width: 400px) {
+    .cmp th,
+    .cmp td {
+      padding: 10px 5px;
+    }
+    .cmp tbody th {
+      font-size: 14px;
+      padding-left: 10px;
+    }
+    .cmp thead th {
+      font-size: 13px;
+    }
+  }
+</style>

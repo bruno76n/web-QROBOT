@@ -1,0 +1,32 @@
+---
+/**
+ * Lilac rounded background where a system screen sits (docs/25 §6.2, mockup `.stage`). In a dark
+ * section (`FeatureSection dark`) it turns dark gray; `center` centers a narrower screen (the
+ * quote sheet).
+ */
+interface Props {
+  center?: boolean;
+  class?: string | undefined;
+}
+const { center = false, class: className } = Astro.props;
+---
+
+<div class:list={['stage', center && 'center', className]}>
+  <slot />
+</div>
+
+<style>
+  .stage {
+    background: var(--lilac);
+    border-radius: 24px;
+    padding: clamp(14px, 3.2vw, 44px);
+    min-width: 0;
+  }
+  .stage.center {
+    display: flex;
+    justify-content: center;
+  }
+  :global(.feat.dark) .stage {
+    background: #202027;
+  }
+</style>

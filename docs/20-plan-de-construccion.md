@@ -30,7 +30,7 @@ Se trabaja **una fase a la vez**, en modo autónomo (`CLAUDE.md`). Cada fase en 
 1. Leer `CLAUDE.md`, el informe de la fase anterior y el archivo de la fase. **Solo** los documentos que el archivo de la fase indica en cada paso.
 2. Lógica pura en `src/lib/` con su prueba **antes** que la pantalla que la usa.
 3. Cada acción del panel con su prueba (camino feliz, cada error, fallo a la mitad).
-4. Cada pantalla comparada con el mockup en 390, 820 y 1440.
+4. Cada pantalla comparada con el mockup en 390, 820 y 1440 (Aprende y Para talleres también en 360, `24 §1`).
 5. Nada fuera del alcance de `01`; ideas nuevas en "Después" de `01`.
 6. Textos solo en `src/i18n/es.ts`; datos del negocio solo en `src/config/site.ts`.
 7. Un cambio de comportamiento actualiza su documento en el mismo commit.

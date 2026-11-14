@@ -1,0 +1,143 @@
+/*
+ * Common styles of the page for workshops (docs/25 §6.2), from reference/mockups/talleres/
+ * (_base.css + _talleres.css): page tokens, body text, headings, section spacing and anchors under
+ * the product bar, lead and link text, the gray band, and the frame of the tables (alerts, roles,
+ * comparison). Every rule is scoped to `.system` (the wrapper of SystemLayout.astro); each
+ * component keeps its own styles in its `<style>`, and the system screens theirs in
+ * system-ui.css. No double rule (§7). Breakpoints: ≤480 · ≤760 · 761–1099 · ≥1100 (docs/24 §1).
+ * Safari 14: grid gaps with their `grid-gap` alias, `-webkit-` prefixes (docs/24 §5, docs/25 §8).
+ */
+.system {
+  /* Height of the product bar; anchors land just below it. */
+  --pbar: 60px;
+  --r-card: 20px;
+  font-feature-settings: 'ss01';
+}
+/* Phones: shorter bar and the 17 px body text of the mockups. */
+@media (max-width: 760px) {
+  .system {
+    --pbar: 54px;
+    font-size: 17px;
+  }
+}
+
+/* Sections: vertical rhythm of the mockup; `pt0` joins a section to the one above. */
+.system section {
+  padding: clamp(64px, 9vw, 128px) 0;
+}
+.system section.pt0 {
+  padding-top: 0;
+}
+.system section[id],
+.system [id].anchor {
+  scroll-margin-top: calc(var(--pbar) + 12px);
+}
+.system .soft {
+  background: var(--soft);
+}
+
+/* Hero stage of the main page and of Descargar: the home screen starts on white and ends on
+   lilac; the floating notes sit on its frame. */
+.system .hero-stage {
+  margin-top: clamp(36px, 5vw, 64px);
+  padding-bottom: clamp(40px, 6vw, 96px);
+  background: linear-gradient(180deg, #fff 0, #fff 140px, var(--lilac) 140px, var(--lilac) 100%);
+}
+@media (max-width: 760px) {
+  .system .hero-stage {
+    background: linear-gradient(180deg, #fff 0, #fff 90px, var(--lilac) 90px, var(--lilac) 100%);
+  }
+}
+.system .hero-shot {
+  position: relative;
+}
+
+/* Headings and text. */
+.system h1,
+.system h2,
+.system h3,
+.system h4 {
+  font-weight: 600;
+  text-wrap: balance;
+}
+.system .t-h1 {
+  font-size: clamp(44px, 6.6vw, 98px);
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+}
+.system .t-h2 {
+  font-size: clamp(36px, 4.6vw, 66px);
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+.system .t-h3 {
+  font-size: 20px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+.system .lead {
+  font-size: clamp(19px, 1.7vw, 23px);
+  line-height: 1.45;
+  color: var(--ink-2);
+  max-width: 46ch;
+  text-wrap: pretty;
+}
+.system p {
+  text-wrap: pretty;
+}
+.system .link {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1.5px;
+}
+.system .link:hover {
+  text-decoration-color: var(--ink);
+}
+
+/* Frame of a table (alerts, roles, comparison): rounded border; it slides sideways if it is wider
+   than the page. Cells of the mockup's shared table. */
+.system .tbl-wrap {
+  position: relative;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.system .tbl-wrap table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 16px;
+}
+.system .tbl-wrap th,
+.system .tbl-wrap td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.system .tbl-wrap th {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-2);
+  background: var(--soft);
+  white-space: nowrap;
+}
+.system .tbl-wrap tr:last-child td,
+.system .tbl-wrap tbody tr:last-child th {
+  border-bottom: 0;
+}
+@media (max-width: 760px) {
+  .system .tbl-wrap table {
+    font-size: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .system *,
+  .system *::before,
+  .system *::after {
+    transition: none !important;
+  }
+}

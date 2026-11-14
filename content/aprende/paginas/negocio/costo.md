@@ -27,7 +27,7 @@ published: true
 order: 1
 reviewed: 2026-11
 cta: system
-ctaText: Quick Cerebro lee el archivo del laminador (gramos, horas, colores) y hace este cálculo solo, con tus precios.
+ctaText: Quick Cerebro hace este cálculo en cada pieza con tus precios de filamento, luz y máquina.
 ---
 
 ## Fórmula

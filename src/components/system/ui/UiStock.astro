@@ -1,0 +1,111 @@
+---
+/**
+ * System screen «Existencias» (docs/25 §6.3): finished pieces with their stock, reserved for
+ * orders, available (in bold) and state; a piece with color variants shows them indented under it.
+ * Under the table, a set with how many can be put together and the piece that is missing. At
+ * ≤480 px the state column hides (`hide-xs`, docs/25 §8). Sample data from `system-demo.ts`
+ * (`demoStock`, `demoStockRows`, `demoSet`), labels from `es.system.ui.stock`.
+ */
+import Plus from '@lucide/astro/icons/plus';
+import UiButton from './UiButton.astro';
+import UiFrame from './UiFrame.astro';
+import UiPill from './UiPill.astro';
+import { site } from '@/config/site';
+import { demoSet, demoStock, demoStockRows, type DemoStockRow } from '@/config/system-demo';
+import { es } from '@/i18n/es';
+
+const t = es.system.ui.stock;
+const states = es.system.ui.common.states;
+/** Color of the pill of each state: green, amber or gray. */
+const tones = { available: 'ok', lowStock: 'warn', reserved: undefined } as const;
+
+/** The rows of the table in order: each piece, then its variants (`sub`) when it has them. */
+type Row = DemoStockRow & { kind: '' | 'par' | 'sub'; meta?: string };
+const rows = demoStockRows.flatMap((r): Row[] =>
+  r.variants
+    ? [
+        { ...r, kind: 'par', meta: t.variants(r.variants.length) },
+        ...r.variants.map((v): Row => ({ ...v, kind: 'sub' })),
+      ]
+    : [{ ...r, kind: '' }],
+);
+---
+
+<UiFrame label={t.label(site.system.name)} kind="card" inner="ui-exi">
+  <div class="ui-ph">
+    <span>
+      <b class="ui-t">{t.title}</b>
+      <span class="ui-meta">
+        {t.summary(demoStock.pieces, demoStock.reserved, demoStock.available)}
+      </span>
+    </span>
+    <UiButton pri>
+      <Plus slot="icon" class="ic" aria-hidden="true" />
+      {t.register}
+    </UiButton>
+  </div>
+
+  {/* One row per piece and per variant. */}
+  <table class="ui-tbl">
+    <thead>
+      <tr>
+        <th>{t.product}</th>
+        <th class="r">{t.stock}</th>
+        <th class="r">{t.reserved}</th>
+        <th class="r">{t.available}</th>
+        <th class="r hide-xs">{t.state}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((r) => (
+        <tr class:list={[r.kind]}>
+          <td>
+            <b>{r.name}</b>
+            {r.meta && <span class="ui-meta">{r.meta}</span>}
+          </td>
+          <td class="r ui-num">{r.stock}</td>
+          <td class="r ui-num">{r.reserved}</td>
+          <td class="r ui-num lib">{r.stock - r.reserved}</td>
+          <td class="r hide-xs">
+            <UiPill tone={tones[r.state]}>{states[r.state]}</UiPill>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+
+  {/* The set: name, pieces and the missing one, and how many can be put together (red at 0). */}
+  <div class="ex-set">
+    <span class="ui-lbl">{t.sets}</span>
+    <div class="ex-set-r">
+      <b>{demoSet.name}</b>
+      <span class="ui-meta">{t.setInfo(demoSet.pieces, demoSet.missing)}</span>
+      <span class="ex-n">
+        <b class="ui-num">{demoSet.buildable}</b> {t.buildable}
+      </span>
+    </div>
+  </div>
+</UiFrame>
+
+<style>
+  /* Narrowest phones (≤380 px): tighter cells so the four number columns fit in the card. */
+  @media (max-width: 380px) {
+    .ui-tbl th,
+    .ui-tbl td {
+      padding-left: 4px;
+      padding-right: 4px;
+    }
+    .ui-tbl th:first-child,
+    .ui-tbl td:first-child {
+      padding-left: 0;
+    }
+    .ui-tbl th:last-child,
+    .ui-tbl td:last-child {
+      padding-right: 0;
+    }
+    /* The variants keep their indent. */
+    .ui-tbl tr.sub td:first-child {
+      padding-left: 16px;
+    }
+  }
+</style>

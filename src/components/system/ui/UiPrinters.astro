@@ -1,0 +1,111 @@
+---
+/**
+ * System screen «Impresoras» (docs/25 §6.3, section «Producción e impresoras»): each printer with
+ * its state, the current job with its progress bar and time left, the next job in the queue, hours
+ * of use, maintenance and investment recovered; under them, the production of the last 30 days.
+ * Sample data from `system-demo.ts` (`demoPrinters`, `demoProduction`), labels from
+ * `es.system.ui.printers`.
+ */
+import Clock from '@lucide/astro/icons/clock';
+import ModuleIcon from '../ModuleIcon.astro';
+import UiFrame from './UiFrame.astro';
+import UiMeter from './UiMeter.astro';
+import UiPill from './UiPill.astro';
+import { site } from '@/config/site';
+import { demoPrinters, demoProduction } from '@/config/system-demo';
+import { es } from '@/i18n/es';
+
+const t = es.system.ui.printers;
+const states = es.system.ui.common.states;
+const printing = demoPrinters.filter((p) => p.current).length;
+---
+
+<UiFrame label={t.label(site.system.name)} kind="card" inner="ui-prn">
+  <div class="ui-ph">
+    <b class="ui-t">{t.title}</b>
+    <span class="ui-meta">{t.printing(printing, demoPrinters.length)}</span>
+  </div>
+
+  {/* One block per printer: name and state, the job and the queue, then its numbers. */}
+  <ul class="pr-list">
+    {demoPrinters.map((p) => (
+      <li>
+        <div class="pr-h">
+          <span class="pr-ic">
+            <ModuleIcon icon="printers" size={16} class="ic" />
+          </span>
+          <b>{p.name}</b>
+          {p.current ? (
+            <UiPill tone="ok">{states.printing}</UiPill>
+          ) : (
+            <UiPill>{states.available}</UiPill>
+          )}
+        </div>
+        <div class="pr-body">
+          {p.current ? (
+            <>
+              <div class="pr-job">
+                <span>{t.job(p.current.qty, p.current.piece, p.current.order)}</span>
+                <span class="ui-num">{t.percent(p.current.progress)}</span>
+              </div>
+              <UiMeter value={p.current.progress} />
+              <span class="ui-meta">
+                <Clock class="ic" aria-hidden="true" />
+                {t.timeLeft(p.current.left.h, p.current.left.min)}
+              </span>
+            </>
+          ) : (
+            <span class="ui-meta pr-idle">{t.idle}</span>
+          )}
+          <span class="ui-meta pr-next">
+            {p.next ? t.next(t.job(p.next.qty, p.next.piece, p.next.order)) : t.emptyQueue}
+          </span>
+        </div>
+        <dl class="pr-st">
+          <div>
+            <dt>{t.hours}</dt>
+            <dd class="ui-num">{t.hoursValue(p.hours)}</dd>
+          </div>
+          <div>
+            <dt>{t.maintenance}</dt>
+            <dd>
+              {p.maintenance ? (
+                <UiPill tone="warn">{t.due[p.maintenance.part](p.maintenance.inHours)}</UiPill>
+              ) : (
+                <UiPill tone="ok">{states.upToDate}</UiPill>
+              )}
+            </dd>
+          </div>
+          <div>
+            <dt>{t.recovered}</dt>
+            <dd class="ui-num">{t.percent(p.recoveredPct)}</dd>
+          </div>
+        </dl>
+      </li>
+    ))}
+  </ul>
+
+  {/* Production of the last 30 days; the failed prints in red. */}
+  <div class="pr-log">
+    <span class="ui-lbl">{t.production}</span>
+    <dl class="pr-logs">
+      <div>
+        <dt>{t.prints}</dt>
+        <dd class="ui-num">{demoProduction.prints}</dd>
+      </div>
+      <div>
+        <dt>{t.good}</dt>
+        <dd class="ui-num">{demoProduction.good}</dd>
+      </div>
+      <div class="bad">
+        <dt>{t.failed}</dt>
+        <dd class="ui-num">{demoProduction.failed}</dd>
+      </div>
+      <div>
+        <dt>{t.filament}</dt>
+        <dd class="ui-num">{t.grams(demoProduction.grams.toLocaleString('en-US'))}</dd>
+      </div>
+    </dl>
+  </div>
+</UiFrame>
+

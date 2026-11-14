@@ -1,0 +1,125 @@
+---
+/**
+ * Platforms of the download page (docs/25 §6.2, mockup `.plats`): Mac, Windows, browser and phone,
+ * in the order of `platforms` (`config/system.ts`). Each row has its name, requirement, what it is
+ * and its button; the row of the visitor's device (chosen by the server) gets a lilac fade and
+ * «Tu equipo». Rows carry their platform id as anchor (`#mac`, `#windows`, `#other`, `#mobile`).
+ * Installers link to `site.system.downloads.*.url`, or to their own row while it is empty; browser
+ * and phone open the system (`appUrl`, `noopener`). One block per platform up to 899 px; from 900,
+ * one line with name, what it is and button.
+ */
+import Button from '@/components/site/Button.astro';
+import { site } from '@/config/site';
+import { platforms } from '@/config/system';
+import { es } from '@/i18n/es';
+import type { Platform } from '@/lib/system/platform';
+import { systemBase } from '@/lib/system/visibility';
+
+interface Props {
+  /** The visitor's device, from `detectPlatform`. */
+  current: Platform;
+}
+const { current } = Astro.props;
+const t = es.system.download.platforms;
+const { appUrl, downloads } = site.system;
+
+// Each row with its texts, requirement and link.
+const rows = platforms.map((p) => {
+  const text = t[p.id];
+  if (p.download) {
+    const file = downloads[p.download];
+    return {
+      id: p.id,
+      name: text.name,
+      req: file.minOs,
+      what: text.what,
+      button: text.button,
+      href: file.url || `${systemBase}/descargar#${p.id}`,
+      rel: undefined,
+      variant: 'black' as const,
+    };
+  }
+  const browser = t[p.id === 'mobile' ? 'mobile' : 'other'];
+  return {
+    id: p.id,
+    name: browser.name,
+    req: browser.req,
+    what: browser.what,
+    button: browser.button,
+    href: appUrl,
+    rel: 'noopener',
+    variant: 'outline' as const,
+  };
+});
+---
+
+<ul class="plats">
+  {rows.map((r) => (
+    <li id={r.id} class:list={['anchor', r.id === current && 'on']}>
+      <div>
+        {r.id === current && <span class="rec">{t.yours}</span>}
+        <span class="p-n">{r.name}</span>
+        <span class="p-r">{r.req}</span>
+      </div>
+      <p class="p-w">{r.what}</p>
+      <Button href={r.href} rel={r.rel} variant={r.variant} class="p-btn">
+        {r.button}
+      </Button>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .plats {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+  /* Grid gaps with their Safari 14 alias. */
+  .plats li {
+    display: grid;
+    grid-gap: 6px 24px;
+    gap: 6px 24px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: center;
+  }
+  /* The visitor's device. */
+  .plats li.on {
+    background: linear-gradient(90deg, var(--lilac), rgba(241, 236, 253, 0));
+  }
+  .p-n {
+    display: block;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+  }
+  .p-r {
+    display: block;
+    font-size: 15px;
+    color: var(--ink-2);
+  }
+  .p-w {
+    font-size: 16px;
+  }
+  .rec {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--purple);
+  }
+  .plats :global(.p-btn) {
+    justify-self: start;
+  }
+  /* From 900 px: name, what it is and button on one line. */
+  @media (min-width: 900px) {
+    .plats li {
+      grid-template-columns: 240px minmax(0, 1fr) auto;
+      padding: 22px 16px;
+    }
+    .plats :global(.p-btn) {
+      justify-self: end;
+    }
+  }
+</style>

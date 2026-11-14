@@ -1,0 +1,20 @@
+---
+/**
+ * Progress bar of a system screen (docs/25 §6.3): a track and its value, the width as an SVG
+ * attribute from `pct` (never `style`). `tone` colors the value for states (`ok`, `warn`, `bad`).
+ */
+import { pct } from '@/lib/system/bars';
+
+interface Props {
+  value: number;
+  max?: number;
+  tone?: 'ok' | 'warn' | 'bad' | undefined;
+  class?: string | undefined;
+}
+const { value, max = 100, tone, class: className } = Astro.props;
+---
+
+<svg class:list={['ui-meter', tone, className]} width="100%" height="6" aria-hidden="true">
+  <rect class="t" width="100%" height="6" rx="3"></rect>
+  <rect class="v" width={`${pct(value, max)}%`} height="6" rx="3"></rect>
+</svg>

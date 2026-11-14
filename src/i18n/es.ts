@@ -20,6 +20,8 @@ export const es = {
     /** Over the hero the header shows this instead of the logo (docs/03 §5). */
     social: { lead: 'Visita nuestras redes:', button: 'Instagram' },
     quoteHref: '/#pedido',
+    /** Menu link of the page for workshops, only while it is visible (docs/25 §2, §6.1). */
+    system: { label: 'Para talleres', short: 'Talleres', href: '/talleres' },
   },
   footer: {
     navLabel: 'Secciones',
@@ -530,6 +532,13 @@ export const es = {
     cta: {
       text: '¿Necesitas una pieza? Dinos qué necesitas y te decimos material, precio y fecha.',
       button: 'Cotizar por WhatsApp',
+      /** Call to the page for workshops (`cta: system`, only while it is visible, docs/21 §4.6). */
+      system: {
+        /** Used when the page has no `ctaText`. */
+        text: (name: string) =>
+          `${name} lleva costos, pedidos, impresoras y filamento de tu taller en un solo lugar.`,
+        button: (name: string) => `Conocer ${name}`,
+      },
     },
     filaments: {
       label: 'Tabla de filamentos',
@@ -639,6 +648,954 @@ export const es = {
       heading: 'Buscar en Aprende',
       crumb: 'Buscar',
       resultsFor: { one: '1 resultado para «{q}»', many: '{n} resultados para «{q}»' },
+    },
+  },
+  /**
+   * The page for workshops («Para talleres», docs/25), from the mockups in
+   * reference/mockups/talleres/, with the vocabulary of a system (docs/25 §1). The system's name,
+   * days, limits and prices come in as arguments. Each page and each group of system screens has its
+   * own section, with a `── … ──` title.
+   */
+  system: {
+    seo: {
+      home: (name: string) => ({
+        title: `${name} · Sistema para talleres de impresión 3D`,
+        description:
+          'Costo por pieza, pedidos con anticipo, impresoras, filamento, existencias y reportes en un solo sistema para tu taller de impresión 3D.',
+      }),
+      pricing: (name: string) => ({
+        title: `Precios · ${name}`,
+        description: 'Paga por taller, no por impresora. El plan Gratis no vence.',
+      }),
+      download: (name: string) => ({
+        title: `Descargar · ${name}`,
+        description: 'Web, Mac, Windows y celular, con la misma cuenta.',
+      }),
+    },
+    /** Product bar (`SystemNav`). */
+    nav: {
+      modules: 'Módulos',
+      pricing: 'Precios',
+      download: 'Descargar',
+      signIn: 'Iniciar sesión',
+      tryFree: 'Probar gratis',
+      /** Label of the phone menu of the product bar. */
+      menu: (name: string) => `Menú de ${name}`,
+    },
+    /** Shared calls to action. */
+    cta: {
+      tryDays: (days: number) => `Probar ${days} días gratis`,
+      tryFree: 'Probar gratis',
+      signUp: 'Crear cuenta',
+      signUpFree: 'Crear cuenta gratis',
+      seePricing: 'Ver precios',
+      downloadApp: 'Descargar app',
+      comparePlans: 'Comparar planes',
+    },
+    /** The 13 modules of the system, by group, in the order of its menu (`config/system.ts`). */
+    groups: { sell: 'Vender', shop: 'Taller', business: 'Negocio' },
+    modules: {
+      products: {
+        name: 'Productos',
+        text: 'Piezas y colecciones con costo, precio de lista, ganancia y disponibles.',
+      },
+      sales: { name: 'Ventas', text: 'Registro por canal, con comisión, abonos y devoluciones.' },
+      orders: {
+        name: 'Pedidos',
+        text: 'Cotizado, aceptado, en producción, listo y entregado, con anticipo y saldo.',
+      },
+      filaments: { name: 'Filamentos', text: 'Rollos, gramos disponibles y costo por gramo.' },
+      supplies: { name: 'Insumos', text: 'Argollas, imanes y empaques, con existencia mínima.' },
+      printers: {
+        name: 'Impresoras',
+        text: 'Cola de trabajos, horas de uso, mantenimiento e inversión recuperada.',
+      },
+      production: {
+        name: 'Producción',
+        text: 'Registro de cada impresión: resultado, horas y filamento usado.',
+      },
+      stock: {
+        name: 'Existencias',
+        text: 'Piezas terminadas: en existencia, apartadas y disponibles.',
+      },
+      purchases: {
+        name: 'Compras',
+        text: 'Compras sugeridas por proveedor, con cantidad y costo estimado.',
+      },
+      customers: { name: 'Clientes', text: 'Historial de pedidos y ventas, y saldo por cobrar.' },
+      expenses: {
+        name: 'Gastos',
+        text: 'Fijos y variables; los recurrentes se prorratean por día.',
+      },
+      reports: {
+        name: 'Reportes',
+        text: 'Ventas, ganancia bruta y ganancia neta por periodo, canal y producto.',
+      },
+      settings: {
+        name: 'Ajustes',
+        text: 'Tarifa de luz, margen mínimo, canales de venta y datos de tus cotizaciones.',
+      },
+    },
+    /** The 3 plans (`PlanBand`): name, who it is for and what it brings (limits as arguments). */
+    plans: {
+      label: 'Planes',
+      recommended: 'Recomendado',
+      perMonth: 'al mes',
+      perYear: 'al año',
+      noExpiry: 'sin vencimiento',
+      /** Line under a monthly price: the yearly one. */
+      orYearly: (amount: string) => `o ${amount} al año`,
+      /** Line under a yearly price: what it comes to per month. */
+      perMonthEquals: (amount: string) => `Equivale a ${amount} al mes`,
+      note: (days: number) =>
+        `Precios en pesos mexicanos, IVA incluido. Prueba de ${days} días del plan Negocio, sin tarjeta.`,
+      noteShort: 'Precios en pesos mexicanos, IVA incluido.',
+      /** «Ilimitadas» impresoras, «Ilimitados» pedidos (`limitLabel`). */
+      unlimitedF: 'Ilimitadas',
+      unlimitedM: 'Ilimitados',
+      free: {
+        name: 'Gratis',
+        for: (printers: number) => `Una persona con hasta ${printers} impresoras.`,
+        features: (p: { users: number; printers: number; orders: number }) => [
+          p.users === 1 ? '1 usuario' : `${p.users} usuarios`,
+          `Hasta ${p.printers} impresoras`,
+          `${p.orders} ventas y pedidos al mes`,
+          'Todos los módulos',
+          'Copias de seguridad diarias',
+        ],
+      },
+      shop: {
+        name: 'Taller',
+        for: 'Más impresoras y pedidos, sin límites.',
+        features: (p: { users: number }) => [
+          'Todo lo de Gratis',
+          `${p.users} usuarios`,
+          'Impresoras ilimitadas',
+          'Ventas y pedidos ilimitados',
+          'Soporte por WhatsApp',
+        ],
+      },
+      business: {
+        name: 'Negocio',
+        for: 'Taller con empleados.',
+        features: (p: { users: number }) => [
+          'Todo lo de Taller',
+          `${p.users} usuarios con roles`,
+          'Ventas sin acceso a costos ni ganancia',
+          'Soporte prioritario por WhatsApp',
+        ],
+      },
+    },
+    /** Dark closing band of the 3 pages (`EndCta`). */
+    end: {
+      title: 'Tu taller merece un cerebro.',
+      lead: (days: number) =>
+        `${days} días del plan Negocio, gratis y sin tarjeta. Al terminar eliges plan o continúas en Gratis.`,
+    },
+
+    // ── Main page /talleres (docs/25 §7.1) ──
+    home: {
+      /** Hero: under the big name. */
+      hero: {
+        sub: 'El cerebro de tu taller de impresión 3D.',
+        lead: 'Sabe cuánto te cuesta cada gramo, qué imprime cada máquina, qué pedido se entrega mañana y cuánto ganaste este mes.',
+        facts: (days: number) => [`${days} días gratis`, 'Sin tarjeta', 'Web, Mac y Windows'],
+      },
+      /** Modules (`ModuleIndex`). */
+      modules: {
+        title: '13 módulos. Cero libretas.',
+        lead: 'Del primer gramo a la última entrega, en el mismo orden que el menú del sistema.',
+      },
+      /** Sections of the modules: name above, title, sentence and details. */
+      cost: {
+        kick: 'Costo por pieza',
+        title: 'Sabes cuánto ganas antes de imprimir.',
+        lead: 'Material, luz, desgaste de la impresora y piezas fallidas, al centavo y con los datos de tu taller.',
+        specs: [
+          {
+            name: 'Costo por gramo',
+            text: 'Promedio de tus rollos del mismo filamento, según lo disponible en cada uno.',
+          },
+          {
+            name: 'Precio de lista',
+            text: 'Por valor (lo escribes tú) o por fórmula (margen sobre el costo).',
+          },
+          {
+            name: 'Precio mínimo',
+            text: 'Alerta cuando un precio queda debajo de tu margen mínimo.',
+          },
+          {
+            name: 'Ganancia por canal',
+            text: 'Descuenta la comisión de cada canal, como Mercado Libre.',
+          },
+          {
+            name: 'Variantes y colecciones',
+            text: 'Colores agrupados bajo la misma pieza; sets con su propio precio.',
+          },
+        ],
+        /** The cost formula (`CostFormula`, terms of `costTerms`). */
+        formula: {
+          material: { name: 'Material', text: 'Gramos × costo por gramo × (1 + % de purga)' },
+          power: { name: 'Luz', text: 'Horas × consumo de la impresora (kW) × tarifa del kWh' },
+          machine: {
+            name: 'Máquina',
+            text: 'Horas × (precio de la impresora ÷ horas de vida + mantenimiento por hora)',
+          },
+          extras: { name: 'Extras', text: 'Extras + insumos de la pieza' },
+          total: { name: 'Costo', text: '(Material + Luz + Máquina + Extras) ÷ (1 − % de fallos)' },
+        },
+      },
+      orders: {
+        kick: 'Pedidos',
+        title: 'Ningún pedido se te escapa.',
+        lead: 'Del anticipo a la entrega, con el saldo y la fecha de entrega siempre a la vista.',
+        specs: [
+          {
+            name: 'Anticipo y abonos',
+            text: 'El saldo se cobra al entregar y la venta se registra automáticamente.',
+          },
+          {
+            name: 'Apartado de existencias',
+            text: 'Al aceptar, aparta las piezas terminadas; el resto pasa a producción.',
+          },
+          {
+            name: 'Asignación de impresoras',
+            text: 'Reparte los artículos entre tus impresoras y calcula la hora de término.',
+          },
+          { name: 'Filamento insuficiente', text: 'Alerta antes de iniciar la producción.' },
+          { name: 'Vistas', text: 'Tablero, lista y calendario de entregas.' },
+        ],
+      },
+      production: {
+        kick: 'Producción e impresoras',
+        title: 'Tus impresoras no descansan. Tú sí.',
+        lead: 'Cola por impresora, tiempo restante de cada trabajo y mantenimiento antes de la falla.',
+        specs: [
+          {
+            name: 'Cola automática',
+            text: 'Al terminar un trabajo inicia el siguiente; al terminar el último de un pedido, el pedido pasa a Listo.',
+          },
+          {
+            name: 'Registro de impresiones',
+            text: 'Pieza, cantidad, resultado, horas y filamento por rollo. Las fallidas también descuentan filamento.',
+          },
+          {
+            name: 'Mantenimiento por horas de uso',
+            text: 'Boquilla cada 300 h, ejes cada 200 h y cama cada 100 h, editables. Al completarlo se registra el gasto.',
+          },
+          {
+            name: 'Inversión recuperada',
+            text: 'La ganancia neta se reparte entre tus impresoras según sus horas de uso.',
+          },
+        ],
+      },
+      filament: {
+        kick: 'Filamento, insumos y compras',
+        title: 'Ningún rollo vacío a mitad de un pedido.',
+        lead: 'Cada impresión descuenta su filamento. El sistema avisa antes de que se acabe y arma la lista de compras.',
+        specs: [
+          {
+            name: 'Estados',
+            text: 'Nuevo, Normal, Stock bajo (300 g o menos), Crítico (150 g o menos) y Agotado.',
+          },
+          { name: 'Historial por rollo', text: 'Consumo y purga por separado, mermas y ajustes.' },
+          { name: 'Insumos', text: 'Argollas, imanes, cajas y bolsas, con existencia mínima.' },
+          {
+            name: 'Compras sugeridas',
+            text: 'Por proveedor, con cantidad y costo estimado. Se copian como texto para enviarlas por WhatsApp.',
+          },
+        ],
+      },
+      stock: {
+        kick: 'Existencias',
+        title: 'Lo que ya imprimiste también es dinero.',
+        lead: 'Piezas hechas, apartadas y disponibles, sin contar a mano.',
+        specs: [
+          {
+            name: 'Movimientos automáticos',
+            text: 'Cada impresión, venta, entrega y devolución suma o resta.',
+          },
+          { name: 'Ajustes', text: 'Corrección con nota si el conteo físico no coincide.' },
+          { name: 'Variantes', text: 'Existencia por color dentro de la misma pieza.' },
+          { name: 'Sets', text: 'Cuántos se pueden armar con las piezas disponibles.' },
+        ],
+      },
+      documents: {
+        kick: 'Cotizaciones y notas de venta',
+        title: 'Cotiza como empresa grande.',
+        lead: 'Con los datos de tu negocio, en PDF o lista para pegar en WhatsApp.',
+        specs: [
+          { name: 'PDF o impresión', text: 'Desde el pedido o la venta.' },
+          {
+            name: 'Texto para WhatsApp',
+            text: 'La misma cotización, lista para pegar en el chat.',
+          },
+          { name: 'Datos del negocio', text: 'Se capturan una vez en Ajustes.' },
+        ],
+      },
+      reports: {
+        kick: 'Reportes',
+        title: 'Ganancia real, no la de la libreta.',
+        lead: 'Ventas, gastos y ganancia neta por semana, canal y producto, contra el periodo anterior.',
+        specs: [
+          {
+            name: 'Distribución de cada $100',
+            text: 'Material, máquina, luz, comisiones, gastos y ganancia neta.',
+          },
+          {
+            name: 'Por canal y por producto',
+            text: 'Las colecciones se reparten entre sus piezas.',
+          },
+          { name: 'Gastos', text: 'Fijos y variables; los recurrentes se prorratean por día.' },
+          { name: 'Resumen', text: 'Para copiar y compartir.' },
+        ],
+      },
+      /** Alerts (`AlertsTable`, ids of `alerts`). */
+      alerts: {
+        kick: 'Alertas',
+        title: 'Te avisa antes de que sea problema.',
+        lead: 'Inicio junta lo que requiere atención, con el botón para resolverlo.',
+        caption: 'Alertas de Inicio',
+        head: { alert: 'Alerta', when: 'Cuándo aparece', action: 'Acción' },
+        items: {
+          filamentShort: {
+            name: 'Filamento insuficiente',
+            when: 'Un pedido aceptado requiere más filamento del disponible',
+            action: 'Agregar rollo',
+          },
+          criticalStock: {
+            name: 'Stock crítico',
+            when: 'Un filamento llega a 150 g o menos',
+            action: 'Ver filamento',
+          },
+          dueSoon: {
+            name: 'Entrega próxima',
+            when: 'Fecha de entrega en 2 días o menos, o vencida',
+            action: 'Abrir pedido',
+          },
+          balanceDue: {
+            name: 'Saldo por cobrar',
+            when: 'Una venta o un pedido tiene saldo',
+            action: 'Registrar abono',
+          },
+          priceBelowMin: {
+            name: 'Precio bajo el mínimo',
+            when: 'Un precio de lista queda debajo del margen mínimo',
+            action: 'Editar precio',
+          },
+          maintenance: {
+            name: 'Mantenimiento',
+            when: 'Una tarea está próxima o vencida',
+            action: 'Ver impresora',
+          },
+          lowSupply: {
+            name: 'Insumo bajo',
+            when: 'Un insumo llega a su mínimo o se agota',
+            action: 'Registrar compra',
+          },
+        },
+      },
+      /** Team (`RolesTable`, roles and areas of `roleMatrix`). */
+      team: {
+        kick: 'Equipo',
+        title: 'Tu equipo trabaja. Tus números quedan contigo.',
+        lead: 'Roles para administración, ventas y taller en el plan Negocio. Ventas no ve costos ni ganancia.',
+        caption: 'Módulos que ve cada rol',
+        areasHead: 'Módulos',
+        /** Full name and, for narrow phones, a short one (`null` = the same). */
+        roles: {
+          owner: { name: 'Dueño', short: null },
+          admin: { name: 'Administración', short: 'Admin.' },
+          sales: { name: 'Ventas', short: null },
+          shop: { name: 'Taller', short: null },
+        },
+        areas: {
+          selling: 'Ventas, pedidos y clientes',
+          workshop: 'Producción, existencias y filamento',
+          money: 'Costos, ganancia y reportes',
+          expenses: 'Gastos',
+          account: 'Usuarios y suscripción',
+        },
+        yes: 'sí',
+        no: 'no',
+      },
+      /** Data (`DataFacts`). */
+      data: {
+        kick: 'Datos',
+        title: 'Respaldado todos los días.',
+        facts: [
+          {
+            name: 'Copias de seguridad',
+            text: 'Automáticas, una por día. Se conservan las últimas 7 y se restaura cualquiera.',
+          },
+          {
+            name: 'Exportación a Excel',
+            text: 'Ventas, pedidos, clientes, productos y costos, filamentos, insumos y gastos, en CSV.',
+          },
+          {
+            name: 'Información separada',
+            text: 'Cada taller tiene su cuenta; ningún otro taller tiene acceso a tu información.',
+          },
+        ],
+      },
+      /** Pricing band. */
+      price: {
+        title: 'Paga por taller, no por impresora.',
+        lead: 'Empieza gratis: el plan Gratis no vence.',
+      },
+      /** Questions (`Faqs`). */
+      faq: {
+        title: 'Preguntas',
+        items: (name: string, days: number) => [
+          {
+            question: '¿Necesito tarjeta para la prueba?',
+            answer: `No. Son ${days} días del plan Negocio sin tarjeta. Al terminar, la cuenta pasa al plan Gratis sin perder información.`,
+          },
+          {
+            question: '¿Es compatible con mi impresora?',
+            answer: `Sí, con cualquier marca. ${name} no se conecta a la impresora: los gramos y el tiempo de impresión se capturan desde tu laminador (Bambu Studio, OrcaSlicer, PrusaSlicer o Cura).`,
+          },
+          {
+            question: '¿Emite facturas (CFDI)?',
+            answer:
+              'No. Genera cotizaciones y notas de venta. El CFDI se emite en tu sistema de facturación.',
+          },
+          {
+            question: '¿Funciona sin internet?',
+            answer:
+              'No. La información se guarda en tu cuenta para consultarla igual en la computadora y en el celular.',
+          },
+          {
+            question: '¿El costo incluye mi tiempo de trabajo?',
+            answer:
+              'No. El costo incluye material, luz, máquina, extras y reserva por fallos. El precio de venta lo defines tú.',
+          },
+          {
+            question: '¿Puedo exportar mi información?',
+            answer:
+              'Sí. Copia de seguridad completa o exportación a Excel (CSV), en cualquier momento.',
+          },
+          { question: '¿Puedo cancelar?', answer: 'Sí, desde Ajustes, sin llamadas.' },
+        ],
+      },
+    },
+
+    // ── Pricing page /talleres/precios (docs/25 §7.2) ──
+    pricing: {
+      title: 'Precios',
+      lead: 'Paga por taller, no por impresora. El plan Gratis no vence.',
+      /** Monthly or yearly (`PeriodToggle`). */
+      period: {
+        label: 'Periodo de pago',
+        monthly: 'Mensual',
+        yearly: 'Anual',
+        yearlyNote: '2 meses gratis',
+      },
+      /** Trial and founder price, two blocks under the plans. */
+      terms: {
+        label: 'Prueba y precio de fundador',
+        trial: 'Prueba',
+        trialText: (days: number) =>
+          `${days} días del plan Negocio, sin tarjeta. Al terminar, la cuenta pasa a Gratis o al plan que elijas.`,
+        founder: 'Precio de fundador',
+        founderText: (seats: number) =>
+          `Los primeros ${seats} talleres con suscripción conservan su precio mientras la suscripción siga activa.`,
+      },
+      /** Plan comparison (`CompareTable`, rows in `config/system.ts`). */
+      compare: {
+        title: 'Comparación',
+        /** Caption for screen readers: the plan names, «A, B y C». */
+        caption: (names: string[]) =>
+          `Comparación de los planes ${names.slice(0, -1).join(', ')} y ${names[names.length - 1] ?? ''}`,
+        feature: 'Función',
+        included: 'Incluido',
+        notIncluded: 'No incluido',
+        yes: 'Sí',
+        priority: 'Prioritario',
+        groups: {
+          limits: 'Límites',
+          modules: 'Módulos',
+          team: 'Equipo',
+          platforms: 'Plataformas y datos',
+          support: 'Soporte',
+        },
+        rows: {
+          users: 'Usuarios',
+          printers: 'Impresoras',
+          orders: 'Ventas y pedidos al mes',
+          cost: 'Costo por pieza y precios',
+          deposits: 'Pedidos con anticipo y saldo',
+          production: 'Producción e impresoras',
+          materials: 'Filamento, insumos y compras',
+          stock: 'Existencias',
+          documents: 'Cotizaciones y notas de venta',
+          reports: 'Reportes y gastos',
+          roles: 'Roles: Administración, Ventas y Taller',
+          salesView: 'Ventas sin acceso a costos ni ganancia',
+          platforms: 'Web, Mac y Windows',
+          backups: 'Copias de seguridad diarias',
+          excel: 'Exportación a Excel',
+          support: 'Soporte por WhatsApp',
+        },
+      },
+      /** Payment questions (`Faqs`). */
+      pay: {
+        title: 'Pago',
+        faqs: [
+          {
+            question: '¿Qué formas de pago aceptan?',
+            answer: 'Tarjeta de crédito o débito. El cargo es automático cada mes o cada año.',
+          },
+          {
+            question: '¿Puedo cambiar de plan?',
+            answer: 'Sí, en cualquier momento. La diferencia se ajusta en el siguiente cargo.',
+          },
+          {
+            question: '¿Qué pasa al terminar la prueba?',
+            answer: 'La cuenta pasa a Gratis. No hay cargo porque no se pidió tarjeta.',
+          },
+          {
+            question: '¿Qué pasa si un cargo no se completa?',
+            answer:
+              'Recibes un aviso por correo y se intenta de nuevo. Si no se completa, la cuenta queda en solo lectura hasta el pago; no se borra información.',
+          },
+          {
+            question: '¿Cómo cancelo?',
+            answer:
+              'Desde Ajustes. El plan sigue activo hasta el final del periodo pagado y después pasa a Gratis.',
+          },
+        ],
+      },
+    },
+
+    // ── Download page /talleres/descargar (docs/25 §7.3) ──
+    download: {
+      title: 'Descargar',
+      lead: 'Tu taller en el Dock o en la barra de tareas. Misma cuenta y misma información que en el navegador y el celular.',
+      /** Main button by the visitor's device (the server reads the `User-Agent`). */
+      main: {
+        mac: 'Descargar para Mac',
+        windows: 'Descargar para Windows',
+        browser: 'Abrir en el navegador',
+      },
+      /** Line under the buttons, by device; desktop ones get the requirement of the installer. */
+      req: {
+        mac: (minOs: string) => `${minOs}. Para Windows, más abajo.`,
+        windows: (minOs: string) => `${minOs}. Para Mac, más abajo.`,
+        mobile:
+          'En el celular se usa desde el navegador y se puede agregar a la pantalla de inicio.',
+        other: 'Funciona en cualquier navegador actual.',
+      },
+      /** `PlatformList`: one row per platform of `config/system.ts`. */
+      platforms: {
+        title: 'Plataformas',
+        yours: 'Tu equipo',
+        mac: {
+          name: 'Mac',
+          what: 'App de escritorio con ícono en el Dock.',
+          button: 'Descargar para Mac (.dmg)',
+        },
+        windows: {
+          name: 'Windows',
+          what: 'App de escritorio con ícono en la barra de tareas.',
+          button: 'Descargar para Windows (.exe)',
+        },
+        other: {
+          name: 'Navegador',
+          req: 'Chrome, Safari, Edge o Firefox actuales',
+          what: 'Sin instalación, desde cualquier computadora.',
+          button: 'Abrir en el navegador',
+        },
+        mobile: {
+          name: 'Celular',
+          req: 'iPhone o Android',
+          what: 'Desde el navegador; se puede agregar a la pantalla de inicio.',
+          button: 'Abrir en el celular',
+        },
+      },
+      install: {
+        title: 'Instalación',
+        mac: {
+          title: 'Mac',
+          steps: (name: string) => [
+            'Abre el archivo .dmg.',
+            `Arrastra ${name} a Aplicaciones.`,
+            'Abre la app e inicia sesión.',
+          ],
+        },
+        windows: {
+          title: 'Windows',
+          steps: [
+            'Abre el archivo .exe.',
+            'Sigue los pasos del instalador.',
+            'Abre la app desde el menú Inicio e inicia sesión.',
+          ],
+        },
+      },
+      /** Closing call `system` of an Aprende page (`learn/Cta.astro`, docs/21 §4.6). */
+    },
+
+    /** Labels of the system screens drawn in HTML (docs/25 §6.3), with the vocabulary of a system. */
+    ui: {
+      /** Shared by several screens. */
+      common: {
+        /** States with a dot (`UiPill`). */
+        states: {
+          available: 'Disponible',
+          lowStock: 'Stock bajo',
+          critical: 'Crítico',
+          urgent: 'Urgente',
+          inProduction: 'En producción',
+          ready: 'Listo',
+          printing: 'Imprimiendo',
+          upToDate: 'Al día',
+          reserved: 'Apartado',
+          normal: 'Normal',
+        },
+        /** «De cada $100 vendidos» (keys of `demoPer100`). */
+        per100: {
+          expenses: 'Gastos del negocio',
+          material: 'Material',
+          machine: 'Máquina',
+          extras: 'Extras e insumos',
+          fees: 'Comisiones',
+          failures: 'Reserva por fallos',
+          power: 'Luz',
+          net: 'Ganancia neta',
+        },
+        sales: 'Ventas',
+        gross: 'Ganancia bruta',
+        expenses: 'Gastos',
+        net: 'Ganancia neta',
+        receivable: 'Por cobrar',
+        salesByWeek: 'Ventas por semana',
+        /** «▲ 14.6 %». */
+        up: (pct: string) => `▲ ${pct} %`,
+        timeLeft: 'Tiempo restante',
+      },
+
+      // ── Home screen (UiSidebar, UiHome, UiFloats) ──
+      home: {
+        /** Description of the whole screen for screen readers (`UiFrame`). */
+        label: (p: {
+          name: string;
+          days: number;
+          total: string;
+          gross: string;
+          net: string;
+          alerts: number;
+          printing: number;
+          printers: number;
+        }) =>
+          `Pantalla de Inicio de ${p.name}: ventas de ${p.days} días por ${p.total} con ganancia bruta de ${p.gross} y ganancia neta de ${p.net}, ${p.alerts} alertas con su acción, ${p.printing} de ${p.printers} impresoras trabajando con su tiempo restante y próximas entregas`,
+        title: 'Inicio',
+        /** Side bar: search box and its shortcut. */
+        search: 'Buscar',
+        searchKey: '⌘K',
+        /** Drawn actions of the header. */
+        actions: { sale: 'Registrar venta', order: 'Nuevo pedido', piece: 'Nueva pieza' },
+        salesOf: (days: number) => `Ventas · últimos ${days} días`,
+        /** After «▲ 14.6 %». */
+        vsPrevious: (count: number) => ` contra el periodo anterior · ${count} ventas`,
+        alerts: 'Alertas',
+        /** Each alert: its title, its line and its action. */
+        alert: {
+          filament: {
+            title: (order: number, customer: string) => `Pedido #${order} · ${customer}`,
+            text: (filament: string, grams: number) =>
+              `Filamento insuficiente: ${filament}, faltan ${grams} g`,
+            action: 'Agregar rollo',
+          },
+          due: {
+            title: (order: number, customer: string) => `Pedido #${order} · ${customer}`,
+            text: (due: string) => `Fecha de entrega: mañana, ${due}`,
+            action: 'Abrir pedido',
+          },
+          stock: {
+            text: (grams: number) => `Stock crítico: ${grams} g disponibles`,
+            action: 'Ver filamento',
+          },
+          balance: {
+            title: (date: string, customer: string) => `Venta del ${date} · ${customer}`,
+            text: (amount: string) => `Saldo por cobrar: ${amount}`,
+            action: 'Registrar abono',
+          },
+          maintenance: {
+            text: (part: string, hours: number) => `Mantenimiento próximo: ${part} en ${hours} h`,
+            action: 'Ver impresora',
+          },
+        },
+        printing: 'En impresión',
+        printersOf: (n: number, total: number) => `${n} de ${total} impresoras`,
+        job: (qty: number, piece: string, order: number) => `${qty} × ${piece} · Pedido #${order}`,
+        /** After «Tiempo restante: ». */
+        duration: (h: number, min: number) => `${h} h ${min} min`,
+        deliveries: 'Próximas entregas',
+        order: (n: number) => `Pedido #${n}`,
+        /** Order state not in `common.states`. */
+        accepted: 'Aceptado',
+        /** Floating notices of the hero (`UiFloats`). */
+        floats: {
+          ready: (order: number) => `Pedido #${order} listo para entregar`,
+          readyMeta: (customer: string, due: string) => `${customer} · fecha de entrega: ${due}`,
+          net: (days: number) => `Ganancia neta · ${days} días`,
+        },
+      },
+
+      // ── Cost of a piece and order (UiPiece, UiOrder) ──
+      /** Cost of a piece (`UiPiece`). */
+      piece: {
+        /** Description of the whole screen for screen readers. */
+        label: (system: string, piece: string, cost: string, price: string, profit: string) =>
+          `Costo de una pieza en ${system}: ${piece.toLowerCase()}, costo de ${cost} desglosado en material, máquina, reserva por fallos y luz; precio de ${price}, ganancia de ${profit} y ganancia por canal`,
+        /** Minutes as «2 h 30 min» (also the time left of `UiOrder`). */
+        duration: (minutes: number) => {
+          const h = Math.floor(minutes / 60);
+          const m = Math.round(minutes % 60);
+          return h > 0 ? (m > 0 ? `${h} h ${m} min` : `${h} h`) : `${m} min`;
+        },
+        grams: (n: number) => `${n} g`,
+        breakdown: 'Desglose del costo',
+        /** Rows of the breakdown. */
+        rows: {
+          material: 'Material',
+          machine: 'Máquina',
+          failures: 'Reserva por fallos',
+          power: 'Luz',
+          extras: 'Extras',
+        },
+        /** How each row is worked out, under its name. */
+        how: {
+          material: (grams: number, perGram: string, factor: string) =>
+            `${grams} g × ${perGram} × ${factor}`,
+          machine: (hours: string, perHour: string) => `${hours} h × ${perHour}`,
+          failures: (pct: number) => `${pct} %`,
+          power: (hours: string, kw: string, kwhPrice: string) =>
+            `${hours} h × ${kw} kW × ${kwhPrice}`,
+        },
+        /** «63.6 %». */
+        pct: (n: string) => `${n} %`,
+        cost: 'Costo',
+        byValue: 'Por valor',
+        byFormula: 'Por fórmula',
+        listPrice: 'Precio de lista',
+        profit: 'Ganancia',
+        margin: 'Margen',
+        times: 'Veces el costo',
+        /** «4.5×». */
+        timesValue: (n: string) => `${n}×`,
+        floor: (price: string, pct: number) =>
+          `Arriba del precio mínimo: ${price} (margen ${pct} %)`,
+        byChannel: 'Ganancia por canal',
+        channel: 'Canal',
+        fee: 'Comisión',
+      },
+      /** An order (`UiOrder`). */
+      order: {
+        /** Description of the whole screen for screen readers. */
+        label: (
+          system: string,
+          n: number,
+          state: string,
+          total: string,
+          paid: string,
+          balance: string,
+          items: string,
+        ) =>
+          `Pedido #${n} en ${system}: estado ${state}, total ${total}, pagado ${paid} y saldo ${balance}; ${items} con su impresora, avance y tiempo restante, y fin estimado de producción`,
+        /** Number of items in words for the description: «dos artículos». */
+        itemCount: (n: number) =>
+          n === 1
+            ? 'un artículo'
+            : `${['', '', 'dos', 'tres', 'cuatro', 'cinco'][n] || n} artículos`,
+        number: (n: number) => `Pedido #${n}`,
+        /** States of an order, in order (keys of `demoOrder3Detail.steps`). */
+        steps: {
+          quoted: 'Cotizado',
+          accepted: 'Aceptado',
+          production: 'En producción',
+          ready: 'Listo',
+          delivered: 'Entregado',
+        },
+        total: 'Total',
+        paid: 'Pagado',
+        balance: 'Saldo',
+        due: 'Fecha de entrega',
+        items: 'Artículos',
+        pieces: (n: number) => `${n} piezas`,
+        item: (qty: number, name: string) => `${qty} × ${name}`,
+        fromStock: (n: number) => `Existencias: ${n}`,
+        toPrint: (n: number) => `Por imprimir: ${n}`,
+        /** Progress and time left of the printer: «62 % · 6 h 50 min». */
+        progress: (pct: number, left: string) => `${pct} % · ${left}`,
+        end: (when: string) => `Fin estimado de producción: ${when}`,
+        payments: 'Pagos',
+        /** Kinds of payment (keys of `demoOrder3Detail.payments`). */
+        paymentKinds: { deposit: 'Anticipo', partial: 'Abono' },
+        payment: (kind: string, date: string) => `${kind} · ${date}`,
+        actions: {
+          markReady: 'Marcar listo',
+          addPayment: 'Registrar pago',
+          quote: 'Cotización',
+          copy: 'Copiar',
+        },
+      },
+
+      // ── Printers, filaments, purchases and stock (UiPrinters, UiFilaments, UiPurchases, UiStock) ──
+      /** «Impresoras» (`UiPrinters`). */
+      printers: {
+        label: (name: string) =>
+          `Impresoras en ${name}: dos imprimiendo con su avance, tiempo restante y siguiente trabajo en cola, una disponible; horas de uso, estado de mantenimiento e inversión recuperada de cada una`,
+        title: 'Impresoras',
+        /** Units next to the numbers: «286 h», «62 %», «570 g». */
+        hoursValue: (n: number) => `${n} h`,
+        percent: (n: number) => `${n} %`,
+        grams: (n: string) => `${n} g`,
+        printing: (n: number, of: number) => `${n} de ${of} imprimiendo`,
+        /** «3 × Letrero de taquería · Pedido #3». */
+        job: (qty: number, piece: string, order: number) => `${qty} × ${piece} · Pedido #${order}`,
+        timeLeft: (h: number, min: number) => `Tiempo restante: ${h} h ${min} min`,
+        next: (job: string) => `Siguiente en cola: ${job}`,
+        emptyQueue: 'Cola vacía',
+        idle: 'Sin trabajo en curso',
+        hours: 'Horas de uso',
+        maintenance: 'Mantenimiento',
+        /** Maintenance due: «Boquilla en 14 h». */
+        due: { nozzle: (h: number) => `Boquilla en ${h} h` },
+        recovered: 'Inversión recuperada',
+        production: 'Producción · últimos 30 días',
+        prints: 'Impresiones',
+        good: 'Correctas',
+        failed: 'Fallidas',
+        filament: 'Filamento',
+      },
+      /** «Filamentos» (`UiFilaments`). */
+      filaments: {
+        label: (name: string) =>
+          `Filamentos en ${name}: siete filamentos con su costo por gramo, gramos disponibles y estado; TPU 95A Azul en stock bajo y PLA Silk Morado en crítico`,
+        title: 'Filamentos',
+        summary: (filaments: number, rolls: number, kg: string) =>
+          `${filaments} filamentos · ${rolls} rollos · ${kg} kg disponibles`,
+        addRoll: 'Agregar rollo',
+        filament: 'Filamento',
+        perGram: 'Costo/g',
+        available: 'Disponible',
+        state: 'Estado',
+        /** «2 rollos · Sunlu». */
+        rolls: (n: number, brand: string) => `${n} ${n === 1 ? 'rollo' : 'rollos'} · ${brand}`,
+        grams: (n: string) => `${n} g`,
+      },
+      /** «Compras sugeridas» (`UiPurchases`). */
+      purchases: {
+        label: (name: string, total: string) =>
+          `Compras sugeridas en ${name}: cuatro artículos agrupados por proveedor con cantidad y costo estimado de ${total}; el rollo de PLA Negro es urgente porque un pedido requiere más de lo disponible`,
+        title: 'Compras sugeridas',
+        summary: (items: number, total: string) => `${items} artículos · costo estimado ${total}`,
+        copy: 'Copiar pedido',
+        available: (grams: string) => `Disponible: ${grams} g`,
+        /** «Pedido #5 requiere 535 g · disponible: 410 g». */
+        needs: (order: number, needs: string, grams: string) =>
+          `Pedido #${order} requiere ${needs} g · disponible: ${grams} g`,
+        stock: (stock: number, min: number) => `Existencia: ${stock} · mínimo: ${min}`,
+        rolls: (n: number) => `${n} ${n === 1 ? 'rollo' : 'rollos'}`,
+        pieces: (n: number) => `${n} pzas`,
+        /** Estimated cost: «≈ $470». */
+        about: (amount: string) => `≈ ${amount}`,
+      },
+      /** «Existencias» (`UiStock`). */
+      stock: {
+        label: (name: string) =>
+          `Existencias en ${name}: piezas terminadas con existencia, apartadas para pedidos, disponibles y estado; variantes de color del dragón articulado y sets armables`,
+        title: 'Existencias',
+        summary: (pieces: number, reserved: number, available: number) =>
+          `${pieces} piezas · ${reserved} apartadas · ${available} disponibles`,
+        register: 'Registrar impresión',
+        product: 'Producto',
+        stock: 'Existencia',
+        reserved: 'Apartadas',
+        available: 'Disponibles',
+        state: 'Estado',
+        variants: (n: number) => `${n} variantes`,
+        sets: 'Sets',
+        /** «4 piezas · Falta: Figura de escritorio». */
+        setInfo: (pieces: number, missing: string) => `${pieces} piezas · Falta: ${missing}`,
+        buildable: 'armables',
+      },
+
+      // ── Quote and reports (UiQuote, UiReports) ──
+      /** Quote sheet (`UiQuote`). */
+      quote: {
+        /** Description of the whole screen for screen readers. */
+        label: (p: { system: string; business: string; items: number; total: string }) =>
+          `Cotización de ${p.system} con los datos del negocio ${p.business}, folio, vigencia, cliente, ${
+            ['un artículo', 'dos artículos', 'tres artículos', 'cuatro artículos'][p.items - 1] ??
+            `${p.items} artículos`
+          } y total de ${p.total}`,
+        title: 'Cotización',
+        /** «Impresión 3D · Guadalajara, Jal.». */
+        kindCity: (kind: string, city: string) => `${kind} · ${city}`,
+        /** «33 1234 5678 · hola@ejez.mx». */
+        contact: (phone: string, email: string) => `${phone} · ${email}`,
+        folio: (folio: string) => `Folio ${folio}`,
+        date: (date: string) => `Fecha: ${date}`,
+        validity: (days: number) => `Vigencia: ${days} días`,
+        customer: 'Cliente',
+        qty: 'Cant.',
+        description: 'Descripción',
+        unitPrice: 'P. unitario',
+        amount: 'Importe',
+        total: 'Total',
+        /** Short months of the dates of the screens («13 nov 2026»). */
+        months: [
+          'ene',
+          'feb',
+          'mar',
+          'abr',
+          'may',
+          'jun',
+          'jul',
+          'ago',
+          'sep',
+          'oct',
+          'nov',
+          'dic',
+        ],
+      },
+      /** Reports (`UiReports`). */
+      reports: {
+        /** Description of the whole screen for screen readers. */
+        label: (p: {
+          system: string;
+          days: number;
+          sales: string;
+          gross: string;
+          expenses: string;
+          net: string;
+          netPer100: string;
+        }) =>
+          `Reportes de ${p.system}, últimos ${p.days} días: ventas de ${p.sales}, ganancia bruta de ${p.gross}, gastos de ${p.expenses} y ganancia neta de ${p.net}; ventas por semana, distribución de cada $100 vendidos (ganancia neta ${p.netPer100}), productos con más ganancia y ventas por canal`,
+        title: 'Reportes',
+        /** «15 oct – 13 nov 2026 · comparado con 15 sep – 14 oct». */
+        period: (from: string, to: string, prevFrom: string, prevTo: string) =>
+          `${from} – ${to} · comparado con ${prevFrom} – ${prevTo}`,
+        /** An option of the period selector: «30 días», or «Todo» for the whole history. */
+        range: (days: number | null) => (days === null ? 'Todo' : `${days} días`),
+        copySummary: 'Copiar resumen',
+        netMargin: 'Margen neto',
+        /** «37.8 %». */
+        percent: (n: string) => `${n} %`,
+        per100: 'Distribución de cada $100 vendidos',
+        costsAndExpenses: 'Costos y gastos',
+        topProducts: 'Productos con más ganancia',
+        sold: (n: number) => (n === 1 ? '1 vendida' : `${n} vendidas`),
+        byChannel: 'Por canal',
+        channel: 'Canal',
+        count: 'Ventas',
+        amount: 'Importe',
+        fee: 'Comisión',
+        profit: 'Ganancia',
+        total: 'Total',
+      },
     },
   },
   underConstruction: {
