@@ -412,3 +412,6 @@ Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y pre
 - **Revisión de Safari de `pnpm size`:** revisa los scripts de página del build y lo que importan, más el código fuente de todo `<script>` de componentes y páginas y de `src/scripts/`. Los scripts de páginas que se pintan en el servidor (como las de Para talleres) pueden quedar dentro del HTML y no como archivo del build; por eso la parte del código fuente. Las islas React del panel no entran: la vista previa del editor trae el convertidor de Markdown, que usa *lookbehind*, y el panel no está en las reglas de `24`.
 - **Prueba de la vista previa:** el clic se repite hasta que la vista previa aparece (un clic antes de que el editor esté listo se perdía en la primera corrida de `pnpm dev`).
 
+## 2026-11-14 · Para talleres sin etiquetas arriba de los títulos (lo pidió el dueño)
+- Se quitó la etiqueta en morado con ícono que iba arriba de cada título de sección («Costo por pieza», «Pedidos», «Alertas», «Equipo», «Datos»…): el dueño la ve como un recurso de relleno típico. Las secciones quedan con su título y su frase. Se borró `ModuleKick.astro` y sus textos; `ModuleIcon` queda para el índice de Módulos y la barra lateral de las pantallas. Diferencia con la maqueta, anotada en `25 §14`. En el resto del sitio no había etiquetas así.
+

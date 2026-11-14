@@ -1,17 +1,13 @@
 ---
 /**
- * Icon of a module of the system or of a section of the page (docs/25 §6.1): the lucide icon of
+ * Icon of a module of the system (docs/25 §6.1): the lucide icon of
  * the system menu for each key of `config/system.ts`. Decorative (`aria-hidden`): the module name
  * is always written next to it. Size and color come from the parent (`currentColor`).
  */
 import Archive from '@lucide/astro/icons/archive';
-import Bell from '@lucide/astro/icons/bell';
-import Calculator from '@lucide/astro/icons/calculator';
 import ChartColumn from '@lucide/astro/icons/chart-column';
 import ClipboardList from '@lucide/astro/icons/clipboard-list';
-import Database from '@lucide/astro/icons/database';
 import Disc from '@lucide/astro/icons/disc';
-import FileText from '@lucide/astro/icons/file-text';
 import House from '@lucide/astro/icons/house';
 import Layers from '@lucide/astro/icons/layers';
 import Package from '@lucide/astro/icons/package';
@@ -20,7 +16,6 @@ import Receipt from '@lucide/astro/icons/receipt';
 import Settings from '@lucide/astro/icons/settings';
 import ShoppingBag from '@lucide/astro/icons/shopping-bag';
 import ShoppingCart from '@lucide/astro/icons/shopping-cart';
-import UserCog from '@lucide/astro/icons/user-cog';
 import Users from '@lucide/astro/icons/users';
 import Wallet from '@lucide/astro/icons/wallet';
 import type { IconKey } from '@/config/system';
@@ -48,11 +43,6 @@ const icons = {
   expenses: Wallet,
   reports: ChartColumn,
   settings: Settings,
-  cost: Calculator,
-  documents: FileText,
-  alerts: Bell,
-  team: UserCog,
-  data: Database,
 } satisfies Record<IconKey, unknown>;
 const Icon = icons[icon];
 ---

@@ -14,7 +14,7 @@ Maquetas: `reference/mockups/talleres/` (empieza por `index.html`). Reglas de ce
 | **Qué tiene que lograr** | Que entiendan qué hace cada módulo del sistema, vean el precio sin buscarlo y empiecen la prueba de 14 días |
 | **Marca** | Quick Robot es la marca madre (como Adobe con sus programas). La página lleva el estilo de la web (`03`) con el nombre del sistema en grande, como el del footer. Las **pantallas del sistema se dibujan en HTML** (§6.3), con interfaz neutra (sin morado): son la referencia del diseño del sistema que se distribuye (ronda 3 del sistema). Q-404 no aparece: solo el logo en el header y en el ícono de la barra |
 | **Qué dice** | Solo lo que el sistema hace: cada frase sale de sus reglas (`qr-sys/docs/04` y `06`). Nada de leer el archivo del laminador, logo en cotizaciones, importar desde Excel ni varios talleres por cuenta: el sistema no lo tiene |
-| **Tono** | Página de producto grande: cada sección lleva arriba el **nombre del módulo** (con su ícono del menú) y como título una **frase de impacto** concreta del taller 3D («Sabes cuánto ganas antes de imprimir.», «Tus impresoras no descansan. Tú sí.»); debajo, los detalles concretos. Nada de frases de relleno («lleva tu negocio al siguiente nivel») |
+| **Tono** | Página de producto grande: cada sección lleva como título una **frase de impacto** concreta del taller 3D, **sin etiqueta arriba del título** (ni nombre del módulo ni ícono: el dueño las quitó, `decisiones.md`) («Sabes cuánto ganas antes de imprimir.», «Tus impresoras no descansan. Tú sí.»); debajo, los detalles concretos. Nada de frases de relleno («lleva tu negocio al siguiente nivel») |
 | **Vocabulario** | En tablas, pantallas y detalles, el de un sistema: Fecha de entrega, Estado, Folio, Saldo, Disponible, Stock bajo, Crítico, Vencido, Tiempo restante, Ganancia bruta, Ganancia neta. Nada coloquial («para cuándo», «lo que debe», «se acaba») |
 | **Qué no hace** | Cuentas, registro, inicio de sesión, pagos ni descargas propias. Todo eso vive en el sistema; la web solo **enlaza** a `site.system.appUrl` y a los archivos de `site.system.downloads` (§4) |
 
@@ -123,11 +123,10 @@ En `src/components/system/`, cada uno con sus estilos en su `<style>`:
 | `SystemLayout.astro` (`src/layouts/`) | `BaseLayout` con `stickyHeader={false}`, `SystemNav`, `<main class="system">`, `src/styles/system.css` (solo lo común: títulos `t-h1`/`t-h2`, bandas, márgenes de ancla bajo la barra) y `src/styles/system-ui.css` (§6.3) | Todas |
 | `SystemNav.astro` | Barra del producto (ícono, nombre, Módulos · Precios · Descargar, Iniciar sesión, Probar gratis); en celular las ligas van en un `<details>` (sin script) | `.pbar` |
 | `Wordmark.astro` | El nombre del sistema en grande (`h1`), en una línea | `.wordmark` |
-| `ModuleKick.astro` | Nombre del módulo con su ícono del menú, arriba del título de una sección | `.kick` |
 | `ModuleIcon.astro` | El ícono de lucide de cada módulo o sección (claves de `config/system.ts`); decorativo | `.ic` |
-| `SectionHead.astro` | `ModuleKick` opcional, `h2` y frase | `.sec-h` |
+| `SectionHead.astro` | `h2` y frase | `.sec-h` |
 | `ModuleIndex.astro` | Los 13 módulos en 3 grupos (Vender, Taller, Negocio) con ícono, nombre y qué hace | `.mods` |
-| `FeatureSection.astro` | Sección de un módulo: `ModuleKick`, título, frase, `Specs` y la pantalla del sistema sobre su fondo lila (`Stage`); variantes `rev` (pantalla a la izquierda en escritorio), `soft` (fondo gris), `wide` (texto arriba, pantalla a todo lo ancho), `dark` (fondo negro, fondo de la pantalla gris oscuro) | `.feat` |
+| `FeatureSection.astro` | Sección de un módulo: título, frase, `Specs` y la pantalla del sistema sobre su fondo lila (`Stage`); variantes `rev` (pantalla a la izquierda en escritorio), `soft` (fondo gris), `wide` (texto arriba, pantalla a todo lo ancho), `dark` (fondo negro, fondo de la pantalla gris oscuro) | `.feat` |
 | `Specs.astro` | Lista de detalles: nombre en negritas y qué hace | `.specs` |
 | `Stage.astro` | Fondo lila redondeado donde va una pantalla | `.stage` |
 | `CostFormula.astro` | La fórmula del costo (4 filas y el total en negro) | `.formula` |
@@ -173,25 +172,25 @@ No son capturas: son HTML y CSS con los datos de `system-demo.ts`. Así se ven n
 
 ## 7. Pantallas
 
-**Sin doble filete** (las dos líneas morada y verde de `03 §4`): el dueño lo quitó de estas páginas. El color de marca queda en el fondo lila de las pantallas, el nombre de cada módulo arriba de su título, los grupos de Módulos y los marcadores de los detalles (morado), y el botón del cierre y el plan recomendado (verde).
+**Sin doble filete** (las dos líneas morada y verde de `03 §4`): el dueño lo quitó de estas páginas. **Sin etiqueta arriba de los títulos** (nombre del módulo con su ícono en morado): el dueño también la quitó. El color de marca queda en el fondo lila de las pantallas, los grupos de Módulos y los marcadores de los detalles (morado), y el botón del cierre y el plan recomendado (verde).
 
 ### 7.1 Principal (`/talleres`)
 
-| Sección | Módulo arriba · título | Contenido | Comportamiento |
+| Sección | Título | Contenido | Comportamiento |
 |---|---|---|---|
 | Barra del producto | — | Ícono (cabeza de Q-404 sobre cuadro negro) y nombre; Módulos · Precios · Descargar; Iniciar sesión; **Probar gratis** | Fija arriba (`position: sticky; top: 0`); el header de la web se va con el scroll. Liga actual subrayada |
 | Hero | **Quick Cerebro** (en grande) · «El cerebro de tu taller de impresión 3D.» | Frase «Sabe cuánto te cuesta cada gramo, qué imprime cada máquina, qué pedido se entrega mañana y cuánto ganaste este mes.»; **Probar 14 días gratis** y Ver precios; 14 días gratis · Sin tarjeta · Web, Mac y Windows; `UiHome` a todo lo ancho con `UiFloats` | La pantalla empieza sobre blanco y termina sobre el lila |
 | Módulos (`#modulos`) | «13 módulos. Cero libretas.» | `ModuleIndex` | Tres columnas en escritorio; una en celular |
-| Costo (`#costo`) | Costo por pieza · «Sabes cuánto ganas antes de imprimir.» | `CostFormula`, 5 detalles y `UiPiece` | — |
-| Pedidos (`#pedidos`) | Pedidos · «Ningún pedido se te escapa.» | 5 detalles y `UiOrder` | `rev soft` |
-| Producción (`#produccion`) | Producción e impresoras · «Tus impresoras no descansan. Tú sí.» | 4 detalles y `UiPrinters` | — |
-| Filamento (`#filamento`) | Filamento, insumos y compras · «Ningún rollo vacío a mitad de un pedido.» | 4 detalles arriba; `UiFilaments` y `UiPurchases` lado a lado | `wide soft` |
-| Existencias (`#existencias`) | Existencias · «Lo que ya imprimiste también es dinero.» | 4 detalles y `UiStock` | `rev` |
-| Documentos (`#documentos`) | Cotizaciones y notas de venta · «Cotiza como empresa grande.» | 3 detalles y `UiQuote` (hoja de máximo 560 px) | `soft` |
-| Reportes (`#reportes`) | Reportes · «Ganancia real, no la de la libreta.» | 4 detalles arriba y `UiReports` a todo lo ancho | `wide dark` |
-| Alertas (`#alertas`) | Alertas · «Te avisa antes de que sea problema.» | `AlertsTable` con las 7 alertas de Inicio | En celular, filas apiladas con la acción a la derecha |
-| Equipo (`#equipo`) | Equipo · «Tu equipo trabaja. Tus números quedan contigo.» | `RolesTable` | Fondo lila |
-| Datos (`#datos`) | Datos · «Respaldado todos los días.» | `DataFacts` | Tres columnas con línea arriba |
+| Costo (`#costo`) | «Sabes cuánto ganas antes de imprimir.» | `CostFormula`, 5 detalles y `UiPiece` | — |
+| Pedidos (`#pedidos`) | «Ningún pedido se te escapa.» | 5 detalles y `UiOrder` | `rev soft` |
+| Producción (`#produccion`) | «Tus impresoras no descansan. Tú sí.» | 4 detalles y `UiPrinters` | — |
+| Filamento (`#filamento`) | «Ningún rollo vacío a mitad de un pedido.» | 4 detalles arriba; `UiFilaments` y `UiPurchases` lado a lado | `wide soft` |
+| Existencias (`#existencias`) | «Lo que ya imprimiste también es dinero.» | 4 detalles y `UiStock` | `rev` |
+| Documentos (`#documentos`) | «Cotiza como empresa grande.» | 3 detalles y `UiQuote` (hoja de máximo 560 px) | `soft` |
+| Reportes (`#reportes`) | «Ganancia real, no la de la libreta.» | 4 detalles arriba y `UiReports` a todo lo ancho | `wide dark` |
+| Alertas (`#alertas`) | «Te avisa antes de que sea problema.» | `AlertsTable` con las 7 alertas de Inicio | En celular, filas apiladas con la acción a la derecha |
+| Equipo (`#equipo`) | «Tu equipo trabaja. Tus números quedan contigo.» | `RolesTable` | Fondo lila |
+| Datos (`#datos`) | «Respaldado todos los días.» | `DataFacts` | Tres columnas con línea arriba |
 | Precios | «Paga por taller, no por impresora.» | `PlanBand`, nota y «Comparar planes» | Fondo gris; mensual |
 | Preguntas | «Preguntas» | `Faqs` con 7 preguntas; título a la izquierda en escritorio | `<details>` |
 | Cierre | «Tu taller merece un cerebro.» | 14 días del plan Negocio, gratis y sin tarjeta · Crear cuenta · Descargar app | Banda oscura |
@@ -294,6 +293,7 @@ Lo hace Claude Code con el prompt «Para talleres · Encender» (`prompts.md`), 
 | Pantallas armadas por `talleres/ui.py` (generador de las maquetas) | Componentes de `src/components/system/ui/` con `system-demo.ts` |
 | Base compartida en `reference/mockups/_base.css` y `_base.js` | `global.css`, los componentes compartidos y sus estilos |
 | `_ui.css` | `src/styles/system-ui.css` |
+| Etiqueta morada con ícono arriba de cada título (`.kick`) | Sin etiqueta: solo título y frase (lo pidió el dueño) |
 
 ## 15. Después
 

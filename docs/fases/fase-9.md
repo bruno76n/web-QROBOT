@@ -39,8 +39,8 @@
 - **Listo cuando:** con `pnpm preview` las rutas de la lista responden 404 con la página 404 de la web; con `pnpm dev`, 200; `pnpm security` en verde.
 
 ### 9.5 Layout, barra del producto y piezas de la página
-- **Hacer:** `SystemLayout.astro`, `SystemNav.astro`, `Wordmark.astro`, `ModuleKick.astro`, `SectionHead.astro`, `Stage.astro`, `Specs.astro`, `FeatureSection.astro`, `EndCta.astro` y `src/styles/system.css` (solo lo común de `25 §6.2`). Sin doble filete (`25 §7`).
-- **Consultar:** `25 §6.2, §7, §8`, `reference/mockups/talleres/` (`.pbar`, `.wordmark`, `.kick`, `.sec-h`, `.feat`, `.stage`, `.specs`, `.s-end`), `24 §1–2`.
+- **Hacer:** `SystemLayout.astro`, `SystemNav.astro`, `Wordmark.astro`, `SectionHead.astro`, `Stage.astro`, `Specs.astro`, `FeatureSection.astro`, `EndCta.astro` y `src/styles/system.css` (solo lo común de `25 §6.2`). Sin doble filete (`25 §7`).
+- **Consultar:** `25 §6.2, §7, §8`, `reference/mockups/talleres/` (`.pbar`, `.wordmark`, `.sec-h`, `.feat`, `.stage`, `.specs`, `.s-end`), `24 §1–2`.
 - **Listo cuando:** header + barra + una sección de ejemplo + cierre iguales a las maquetas en 360, 390, 820 y 1440; el header de la web se va con el scroll y la barra se queda arriba; en celular el menú de la barra abre y cierra con el teclado.
 
 ### 9.6 Pantallas del sistema

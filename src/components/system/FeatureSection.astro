@@ -1,21 +1,17 @@
 ---
 /**
- * Section of one module (docs/25 §6.2, mockup `.feat`): the module name with its icon, the title,
- * the sentence, its details (`Specs`) and the system screen on its lilac background (`Stage`).
+ * Section of one module (docs/25 §6.2, mockup `.feat`): the title, the sentence, its details (`Specs`) and the system screen on its lilac background (`Stage`).
  * Variants: `rev` puts the screen on the left on desktop, `soft` gray background, `wide` text on
  * top (title on the left, details on the right) and the screen full width, `dark` black background
  * with a dark gray stage, `center` centers a narrower screen. The `text` slot goes under the
  * sentence, before the details (the cost formula); the default slot is the screen.
  */
-import ModuleKick from './ModuleKick.astro';
 import Specs from './Specs.astro';
 import Stage from './Stage.astro';
-import type { IconKey } from '@/config/system';
 
 interface Props {
   /** Id of the section (anchor); the heading is `<id>-h`. */
   id: string;
-  kick: { icon: IconKey; label: string };
   title: string;
   lead: string;
   specs: readonly { name: string; text: string }[];
@@ -29,7 +25,6 @@ interface Props {
 }
 const {
   id,
-  kick,
   title,
   lead,
   specs,
@@ -48,7 +43,6 @@ const headingId = `${id}-h`;
     <div class="wrap">
       <div class="feat-top">
         <div>
-          <ModuleKick icon={kick.icon} label={kick.label} />
           <h2 class="t-h2" id={headingId}>
             {title}
           </h2>
@@ -64,7 +58,6 @@ const headingId = `${id}-h`;
   ) : (
     <div class="wrap feat-in">
       <div class="feat-t">
-        <ModuleKick icon={kick.icon} label={kick.label} />
         <h2 class="t-h2" id={headingId}>
           {title}
         </h2>

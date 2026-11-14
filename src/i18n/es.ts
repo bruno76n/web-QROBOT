@@ -947,7 +947,6 @@ export const es = {
       },
       /** Sections of the modules: name above, title, sentence and details. */
       cost: {
-        kick: 'Costo por pieza',
         title: 'Sabes cuánto ganas antes de imprimir.',
         lead: 'Material, luz, desgaste de la impresora y piezas fallidas, al centavo y con los datos de tu taller.',
         specs: [
@@ -985,7 +984,6 @@ export const es = {
         },
       },
       orders: {
-        kick: 'Pedidos',
         title: 'Ningún pedido se te escapa.',
         lead: 'Del anticipo a la entrega, con el saldo y la fecha de entrega siempre a la vista.',
         specs: [
@@ -1006,7 +1004,6 @@ export const es = {
         ],
       },
       production: {
-        kick: 'Producción e impresoras',
         title: 'Tus impresoras no descansan. Tú sí.',
         lead: 'Cola por impresora, tiempo restante de cada trabajo y mantenimiento antes de la falla.',
         specs: [
@@ -1029,7 +1026,6 @@ export const es = {
         ],
       },
       filament: {
-        kick: 'Filamento, insumos y compras',
         title: 'Ningún rollo vacío a mitad de un pedido.',
         lead: 'Cada impresión descuenta su filamento. El sistema avisa antes de que se acabe y arma la lista de compras.',
         specs: [
@@ -1046,7 +1042,6 @@ export const es = {
         ],
       },
       stock: {
-        kick: 'Existencias',
         title: 'Lo que ya imprimiste también es dinero.',
         lead: 'Piezas hechas, apartadas y disponibles, sin contar a mano.',
         specs: [
@@ -1060,7 +1055,6 @@ export const es = {
         ],
       },
       documents: {
-        kick: 'Cotizaciones y notas de venta',
         title: 'Cotiza como empresa grande.',
         lead: 'Con los datos de tu negocio, en PDF o lista para pegar en WhatsApp.',
         specs: [
@@ -1073,7 +1067,6 @@ export const es = {
         ],
       },
       reports: {
-        kick: 'Reportes',
         title: 'Ganancia real, no la de la libreta.',
         lead: 'Ventas, gastos y ganancia neta por semana, canal y producto, contra el periodo anterior.',
         specs: [
@@ -1091,7 +1084,6 @@ export const es = {
       },
       /** Alerts (`AlertsTable`, ids of `alerts`). */
       alerts: {
-        kick: 'Alertas',
         title: 'Te avisa antes de que sea problema.',
         lead: 'Inicio junta lo que requiere atención, con el botón para resolverlo.',
         caption: 'Alertas de Inicio',
@@ -1136,7 +1128,6 @@ export const es = {
       },
       /** Team (`RolesTable`, roles and areas of `roleMatrix`). */
       team: {
-        kick: 'Equipo',
         title: 'Tu equipo trabaja. Tus números quedan contigo.',
         lead: 'Roles para administración, ventas y taller en el plan Negocio. Ventas no ve costos ni ganancia.',
         caption: 'Módulos que ve cada rol',
@@ -1160,7 +1151,6 @@ export const es = {
       },
       /** Data (`DataFacts`). */
       data: {
-        kick: 'Datos',
         title: 'Respaldado todos los días.',
         facts: [
           {

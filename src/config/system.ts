@@ -13,7 +13,7 @@ export const systemVisible = isSystemVisible({
   dev: import.meta.env.DEV,
 });
 
-/** Icons of the system menu and of the page sections (`ModuleIcon.astro` draws them with lucide). */
+/** Icons of the system menu (`ModuleIcon.astro` draws them with lucide). */
 export type IconKey =
   | 'home'
   | 'products'
@@ -28,19 +28,14 @@ export type IconKey =
   | 'customers'
   | 'expenses'
   | 'reports'
-  | 'settings'
-  | 'cost'
-  | 'documents'
-  | 'alerts'
-  | 'team'
-  | 'data';
+  | 'settings';
 
 /** Groups of the system menu, in order. */
 export type ModuleGroup = 'sell' | 'shop' | 'business';
 export const moduleGroups: readonly ModuleGroup[] = ['sell', 'shop', 'business'];
 
 /** The 13 modules of the system, in the order of its menu (texts in `es.system.modules`). */
-export type ModuleId = Exclude<IconKey, 'home' | 'cost' | 'documents' | 'alerts' | 'team' | 'data'>;
+export type ModuleId = Exclude<IconKey, 'home'>;
 export const modules: readonly { id: ModuleId; group: ModuleGroup }[] = [
   { id: 'products', group: 'sell' },
   { id: 'sales', group: 'sell' },
@@ -95,7 +90,6 @@ export const roleMatrix: readonly { area: RoleArea; roles: readonly Role[] }[] =
   { area: 'expenses', roles: ['owner', 'admin'] },
   { area: 'account', roles: ['owner'] },
 ];
-
 
 // ── Pricing page /talleres/precios (docs/25 §4, §7.2) ──
 
@@ -181,7 +175,6 @@ export const compareGroups: readonly {
   },
 ];
 
-
 // ── Download page /talleres/descargar (docs/25 §4, §7.3) ──
 
 /**
@@ -200,4 +193,3 @@ export const platforms: readonly {
   { id: 'other', download: null },
   { id: 'mobile', download: null },
 ];
-

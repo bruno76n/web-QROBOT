@@ -88,20 +88,13 @@ const signUp = `${appUrl}${signUpPath}`;
   </section>
 
   {/* Sections of the modules, each with its system screen. */}
-  <FeatureSection
-    id="costo"
-    kick={{ icon: 'cost', label: t.cost.kick }}
-    title={t.cost.title}
-    lead={t.cost.lead}
-    specs={t.cost.specs}
-  >
+  <FeatureSection id="costo" title={t.cost.title} lead={t.cost.lead} specs={t.cost.specs}>
     <CostFormula slot="text" />
     <UiPiece />
   </FeatureSection>
 
   <FeatureSection
     id="pedidos"
-    kick={{ icon: 'orders', label: t.orders.kick }}
     title={t.orders.title}
     lead={t.orders.lead}
     specs={t.orders.specs}
@@ -113,7 +106,6 @@ const signUp = `${appUrl}${signUpPath}`;
 
   <FeatureSection
     id="produccion"
-    kick={{ icon: 'printers', label: t.production.kick }}
     title={t.production.title}
     lead={t.production.lead}
     specs={t.production.specs}
@@ -123,7 +115,6 @@ const signUp = `${appUrl}${signUpPath}`;
 
   <FeatureSection
     id="filamento"
-    kick={{ icon: 'filaments', label: t.filament.kick }}
     title={t.filament.title}
     lead={t.filament.lead}
     specs={t.filament.specs}
@@ -137,7 +128,6 @@ const signUp = `${appUrl}${signUpPath}`;
 
   <FeatureSection
     id="existencias"
-    kick={{ icon: 'stock', label: t.stock.kick }}
     title={t.stock.title}
     lead={t.stock.lead}
     specs={t.stock.specs}
@@ -148,7 +138,6 @@ const signUp = `${appUrl}${signUpPath}`;
 
   <FeatureSection
     id="documentos"
-    kick={{ icon: 'documents', label: t.documents.kick }}
     title={t.documents.title}
     lead={t.documents.lead}
     specs={t.documents.specs}
@@ -160,7 +149,6 @@ const signUp = `${appUrl}${signUpPath}`;
 
   <FeatureSection
     id="reportes"
-    kick={{ icon: 'reports', label: t.reports.kick }}
     title={t.reports.title}
     lead={t.reports.lead}
     specs={t.reports.specs}
@@ -173,12 +161,7 @@ const signUp = `${appUrl}${signUpPath}`;
   {/* Alerts of the home screen, with the action that resolves each one. */}
   <section id="alertas" aria-labelledby="al-h">
     <div class="wrap">
-      <SectionHead
-        id="al-h"
-        kick={{ icon: 'alerts', label: t.alerts.kick }}
-        title={t.alerts.title}
-        lead={t.alerts.lead}
-      />
+      <SectionHead id="al-h" title={t.alerts.title} lead={t.alerts.lead} />
       <AlertsTable />
     </div>
   </section>
@@ -186,12 +169,7 @@ const signUp = `${appUrl}${signUpPath}`;
   {/* Team: which areas each role sees, on lilac. */}
   <section class="s-team" id="equipo" aria-labelledby="team-h">
     <div class="wrap">
-      <SectionHead
-        id="team-h"
-        kick={{ icon: 'team', label: t.team.kick }}
-        title={t.team.title}
-        lead={t.team.lead}
-      />
+      <SectionHead id="team-h" title={t.team.title} lead={t.team.lead} />
       <RolesTable />
     </div>
   </section>
@@ -199,7 +177,7 @@ const signUp = `${appUrl}${signUpPath}`;
   {/* Data: backups, export and separate information. */}
   <section id="datos" aria-labelledby="data-h">
     <div class="wrap">
-      <SectionHead id="data-h" kick={{ icon: 'data', label: t.data.kick }} title={t.data.title} />
+      <SectionHead id="data-h" title={t.data.title} />
       <DataFacts />
     </div>
   </section>
