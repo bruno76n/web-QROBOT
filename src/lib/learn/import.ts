@@ -141,6 +141,40 @@ function zodFail(file: string, issues: { path: PropertyKey[]; message: string }[
 const norm = normalizeQuery;
 
 /**
+ * The `search_text` of a page (docs/22 §8): normalized title, tags, and subtitle with summary and
+ * questions, one group per line. The importer and the panel build it the same way.
+ */
+export function pageSearchText(page: {
+  title: string;
+  tags: readonly string[];
+  subtitle: string;
+  summary: string;
+  faqs: readonly { q: string }[];
+}): string {
+  return [
+    norm(page.title),
+    norm(page.tags.join(' ')),
+    norm([page.subtitle, page.summary, ...page.faqs.map((q) => q.q)].join(' ')),
+  ].join('\n');
+}
+
+/** The question rows of a page, in order: ids `<page>-q1`, `<page>-q2`… and positions from 1. */
+export function faqRecords(pageId: string, list: readonly { q: string; a: string }[]): FaqRecord[] {
+  return list.map((q, i) => ({
+    id: `${pageId}-q${i + 1}`,
+    pageId,
+    position: i + 1,
+    question: q.q,
+    answer: q.a,
+  }));
+}
+
+/** The `[[name]]` marks of a body that are not known interactive blocks, without repeats. */
+export function unknownMarks(body: string): string[] {
+  return [...new Set(findMarks(body).filter((m) => !isMarkName(m)))];
+}
+
+/**
  * Validates all files and builds the plan. A broken file, a duplicated slug, an unknown `related`
  * page, source or `[[mark]]` throws `ImportError`; links to missing pages and unknown sources in
  * the data tables only add warnings.
@@ -216,9 +250,9 @@ export function buildImportPlan(files: LearnFiles): ImportPlan {
     for (const id of fm.sources)
       if (!sourceIds.has(id))
         throw new ImportError(file.path, 'sources', `la fuente «${id}» no existe`);
-    for (const mark of findMarks(body))
-      if (!isMarkName(mark))
-        throw new ImportError(file.path, 'cuerpo', `la marca [[${mark}]] no se conoce`);
+    const [badMark] = unknownMarks(body);
+    if (badMark !== undefined)
+      throw new ImportError(file.path, 'cuerpo', `la marca [[${badMark}]] no se conoce`);
 
     const parsed = parseMarkdown(body);
     for (const href of astLinks(parsed.ast)) checkHref(file.path, 'cuerpo', href);
@@ -227,14 +261,8 @@ export function buildImportPlan(files: LearnFiles): ImportPlan {
 
     const id = pageIdFor(slug);
     const faqList = fm.faqs ?? [];
-    faqList.forEach((q, i) =>
-      faqs.push({ id: `${id}-q${i + 1}`, pageId: id, position: i + 1, question: q.q, answer: q.a }),
-    );
-    const searchText = [
-      norm(fm.title),
-      norm(fm.tags.join(' ')),
-      norm([fm.subtitle, fm.summary, ...faqList.map((q) => q.q)].join(' ')),
-    ].join('\n');
+    faqs.push(...faqRecords(id, faqList));
+    const searchText = pageSearchText({ ...fm, faqs: faqList });
     const extra: Record<string, unknown> = {};
     if (fm.featured) extra.featured = fm.featured;
     if (fm.suggestions) extra.suggestions = fm.suggestions;

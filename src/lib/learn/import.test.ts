@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { fixtureFiles, withFile } from '../../../tests/fixtures/learn/load';
-import { buildImportPlan, ImportError, pageIdFor, slugFromPath } from './import';
+import {
+  buildImportPlan,
+  faqRecords,
+  ImportError,
+  pageIdFor,
+  pageSearchText,
+  slugFromPath,
+  unknownMarks,
+} from './import';
 
 const fail = (files: ReturnType<typeof fixtureFiles>): ImportError => {
   try {
@@ -126,5 +134,35 @@ describe('slugFromPath', () => {
     expect(slugFromPath('paginas/index.md')).toBe('');
     expect(slugFromPath('paginas/filamentos.md')).toBe('filamentos');
     expect(slugFromPath('paginas/filamentos/pla.md')).toBe('filamentos/pla');
+  });
+});
+
+describe('helpers shared with the panel', () => {
+  it('pageSearchText: title, tags and the rest, normalized, one line each', () => {
+    expect(
+      pageSearchText({
+        title: 'Ácido',
+        tags: ['PLA', 'almidón'],
+        subtitle: 'Uno.',
+        summary: 'Dos.',
+        faqs: [{ q: '¿Tres?' }],
+      }),
+    ).toBe('acido\npla almidon\nuno. dos. ¿tres?');
+  });
+  it('faqRecords: ids and positions from 1, in order', () => {
+    expect(
+      faqRecords('learn-x', [
+        { q: 'A', a: '1' },
+        { q: 'B', a: '2' },
+      ]),
+    ).toEqual([
+      { id: 'learn-x-q1', pageId: 'learn-x', position: 1, question: 'A', answer: '1' },
+      { id: 'learn-x-q2', pageId: 'learn-x', position: 2, question: 'B', answer: '2' },
+    ]);
+    expect(faqRecords('learn-x', [])).toEqual([]);
+  });
+  it('unknownMarks: only the unknown ones, once', () => {
+    expect(unknownMarks('[[cabe-mi-pieza]]\n\n[[x]]\n\ntexto [[y]] no\n\n[[x]]')).toEqual(['x']);
+    expect(unknownMarks('Sin marcas.')).toEqual([]);
   });
 });
