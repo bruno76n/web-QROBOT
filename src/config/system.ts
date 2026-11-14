@@ -57,7 +57,7 @@ export const modules: readonly { id: ModuleId; group: ModuleGroup }[] = [
   { id: 'settings', group: 'business' },
 ];
 
-// ── principal: start (agent «principal»: cost formula, alerts, roles; docs/25 §4, §7.1) ──
+// ── Main page /talleres (docs/25 §4, §7.1) ──
 
 /** Terms of the cost of a piece, in the order of the formula (`CostFormula`); the total follows. */
 export type CostTerm = 'material' | 'power' | 'machine' | 'extras';
@@ -96,9 +96,8 @@ export const roleMatrix: readonly { area: RoleArea; roles: readonly Role[] }[] =
   { area: 'account', roles: ['owner'] },
 ];
 
-// ── principal: end ──
 
-// ── precios: start (agent «precios»: rows of the plan comparison; docs/25 §4, §7.2) ──
+// ── Pricing page /talleres/precios (docs/25 §4, §7.2) ──
 
 /** A limit of the plans that the comparison shows as a number or as its «no limit» word. */
 export type CompareLimit = 'users' | 'printers' | 'orders';
@@ -182,9 +181,8 @@ export const compareGroups: readonly {
   },
 ];
 
-// ── precios: end ──
 
-// ── descargar: start (agent «descargar»: download platforms; docs/25 §4, §7.3) ──
+// ── Download page /talleres/descargar (docs/25 §4, §7.3) ──
 
 /**
  * Rows of the download page (`PlatformList`), in order. `id` is the platform `detectPlatform` gives
@@ -203,4 +201,3 @@ export const platforms: readonly {
   { id: 'mobile', download: null },
 ];
 
-// ── descargar: end ──

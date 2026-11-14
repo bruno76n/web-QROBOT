@@ -23,7 +23,7 @@ test('Aprende · negocio/costo muestra el llamado a Para talleres', async ({ pag
   await expect(cta).toHaveCount(1);
   // Its `ctaText` (content/aprende/paginas/negocio/costo.md).
   await expect(cta).toContainText(
-    'Quick Cerebro lee el archivo del laminador (gramos, horas, colores) y hace este cálculo solo, con tus precios.',
+    'Quick Cerebro hace este cálculo en cada pieza con tus precios de filamento, luz y máquina.',
   );
   const button = cta.locator('a.btn');
   await expect(button).toHaveAttribute('href', '/talleres');

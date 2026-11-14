@@ -60,10 +60,9 @@ test('M · «Módulos» de la barra lleva a Módulos, justo debajo de la barra',
   expect(h?.y ?? -1).toBeGreaterThan((b?.y ?? 0) + (b?.height ?? 0));
 });
 
-// On phones the bar's links live in a `<details>` without script: after picking «Módulos» on this
-// same page the menu stays open over the section (the mockup closes it with `_talleres.js`). The
-// fix belongs to `SystemNav.astro` (docs/notas-fase-9/principal.md). Enable when it closes.
-test.fixme('M · en celular el menú de la barra se cierra al elegir «Módulos»', async ({ page }) => {
+// On phones the bar's links live in a `<details>`: picking «Módulos» on this same page closes it,
+// so it does not stay open over the section.
+test('M · en celular el menú de la barra se cierra al elegir «Módulos»', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(path);
   const menu = page.locator('.pbar .pmenu');
@@ -91,9 +90,8 @@ test('M · cada pantalla del sistema es una imagen con nombre accesible', async 
   }
 });
 
-// The home screen is still the placeholder frame drawn while its agent draws it (docs/25 §6.3):
-// it has neither side bar nor phone top bar yet. Enable when `UiHome` is the real screen.
-test.fixme('M · en 390 la pantalla de Inicio va sin barra lateral', async ({ page }) => {
+// On phones the home screen shows its phone version: top bar with menu, no side bar (docs/25 §8).
+test('M · en 390 la pantalla de Inicio va sin barra lateral', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(path);
   const home = page.locator('.hero-shot figure').first();

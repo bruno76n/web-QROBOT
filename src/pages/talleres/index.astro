@@ -204,15 +204,16 @@ const signUp = `${appUrl}${signUpPath}`;
     </div>
   </section>
 
-  {/* Pricing: the 3 plans (monthly) and the link to compare them, on gray. The link sits on the
-      line of the band's note, as in the mockup. */}
+  {/* Pricing: the 3 plans (monthly) on gray, with the link to compare them on the line of the
+      band's note, as in the mockup. */}
   <section class="soft" aria-labelledby="price-h">
-    <div class="wrap price-band">
+    <div class="wrap">
       <SectionHead id="price-h" title={t.price.title} lead={t.price.lead} />
-      <PlanBand />{' '}
-      <a class="link" href={`${systemBase}/precios`}>
-        {es.system.cta.comparePlans}
-      </a>
+      <PlanBand>
+        <a class="link" href={`${systemBase}/precios`}>
+          {es.system.cta.comparePlans}
+        </a>
+      </PlanBand>
     </div>
   </section>
 
@@ -296,52 +297,9 @@ const signUp = `${appUrl}${signUpPath}`;
     color: var(--green-d);
     flex: none;
   }
-  /* The home screen starts on white and ends on lilac; the floating notes sit on its frame. */
-  .hero-stage {
-    margin-top: clamp(36px, 5vw, 64px);
-    padding-bottom: clamp(40px, 6vw, 96px);
-    background: linear-gradient(180deg, #fff 0, #fff 140px, var(--lilac) 140px, var(--lilac) 100%);
-  }
-  @media (max-width: 760px) {
-    .hero-stage {
-      background: linear-gradient(180deg, #fff 0, #fff 90px, var(--lilac) 90px, var(--lilac) 100%);
-    }
-  }
-  .hero-shot {
-    position: relative;
-  }
 
   /* ---------- sections ---------- */
   .s-team {
     background: var(--lilac);
-  }
-  /* The quote sheet is at most 560 px wide. */
-  #documentos :global(.fig-doc) {
-    width: 100%;
-    max-width: 560px;
-  }
-  /* Pricing: the band's note and «Comparar planes» share one line, as in the mockup. The block takes
-     the note's size (so the shared line has the note's height) and the header and the band get back
-     the size of the body text. */
-  .price-band {
-    font-size: 14px;
-    text-wrap: pretty;
-  }
-  .price-band :global(.sec-h),
-  .price-band :global(.plans) {
-    font-size: 18px;
-    text-wrap: wrap;
-  }
-  .price-band :global(.plans) {
-    margin-bottom: 16px;
-  }
-  .price-band :global(.plans-note) {
-    display: inline;
-  }
-  @media (max-width: 760px) {
-    .price-band :global(.sec-h),
-    .price-band :global(.plans) {
-      font-size: 17px;
-    }
   }
 </style>

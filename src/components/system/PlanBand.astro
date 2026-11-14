@@ -16,8 +16,10 @@ import { yearlyPerMonth, type Plan } from '@/lib/system/plans';
 interface Props {
   /** `h3` under a section heading (main page), `h2` when the band has no heading (pricing). */
   headingLevel?: 2 | 3;
+  /** The note under the plans mentions the free trial (main page); pricing tells it apart. */
+  trialNote?: boolean;
 }
-const { headingLevel = 3 } = Astro.props;
+const { headingLevel = 3, trialNote = true } = Astro.props;
 const Heading = headingLevel === 2 ? 'h2' : 'h3';
 const t = es.system.plans;
 const { plans, trialDays, appUrl, signUpPath } = site.system;
@@ -104,7 +106,12 @@ const cards = plans.map((plan) => ({
     </div>
   ))}
 </div>
-<p class="plans-note">{t.note(trialDays)}</p>
+{/* The note under the plans; the slot (a link) follows it on the same line. */}
+<p class="plans-note">
+  {trialNote ? t.note(trialDays) : t.noteShort}
+  {Astro.slots.has('default') && ' '}
+  <slot />
+</p>
 
 <style>
   .plans {

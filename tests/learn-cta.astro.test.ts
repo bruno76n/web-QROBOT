@@ -44,13 +44,13 @@ describe('Aprende closing call', () => {
     expect(html).toContain(ctaText);
     expect(html).toMatch(/<a class="btn" href="\/talleres">/);
     expect(html).not.toContain('btn wa');
-    expect(html).toContain(es.system.download.learnCta.button(site.system.name));
+    expect(html).toContain(es.learn.cta.system.button(site.system.name));
   });
 
   it('system, visible, without ctaText: the default sentence', async () => {
     state.visible = true;
     const html = await render('system', '');
-    expect(html).toContain(es.system.download.learnCta.text(site.system.name));
+    expect(html).toContain(es.learn.cta.system.text(site.system.name));
   });
 
   it('whatsapp and none do not depend on the switch', async () => {

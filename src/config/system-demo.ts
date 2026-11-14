@@ -136,7 +136,7 @@ export const demoPurchases: readonly {
 ];
 export const demoPurchasesTotal = 1292;
 
-// ── inicio: start (agent «inicio»: UiSidebar, UiHome, UiFloats) ──
+// ── Home screen (UiSidebar, UiHome, UiFloats) ──
 
 /** Change of the net profit against the previous period, in % (floating notice of the hero). */
 export const demoNetChange = 17.6;
@@ -214,9 +214,8 @@ export const demoDeliveries: readonly {
   { date: '19 nov', customer: 'Tacos El Güero', order: 7, state: 'accepted' },
 ];
 
-// ── inicio: end ──
 
-// ── costo-pedidos: start (agent «costo-pedidos»: UiPiece, UiOrder) ──
+// ── Cost of a piece and order (UiPiece, UiOrder) ──
 
 /** States of an order, in order (keys of `es.system.ui.order.steps`). */
 type DemoOrderStep = 'quoted' | 'accepted' | 'production' | 'ready' | 'delivered';
@@ -281,9 +280,8 @@ export const demoOrder3Detail: {
   payments: [{ kind: 'deposit', date: '3 nov', amount: 1000 }],
 };
 
-// ── costo-pedidos: end ──
 
-// ── taller: start (agent «taller»: UiPrinters, UiFilaments, UiPurchases, UiStock) ──
+// ── Printers, filaments, purchases and stock (UiPrinters, UiFilaments, UiPurchases, UiStock) ──
 /** States of the screens of the workshop, as keys of `es.system.ui.common.states`. */
 type DemoState =
   'available' | 'lowStock' | 'critical' | 'printing' | 'upToDate' | 'reserved' | 'normal';
@@ -497,9 +495,8 @@ export const demoSet = {
   buildable: 0,
 } as const;
 
-// ── taller: end ──
 
-// ── docs-reportes: start (agent «docs-reportes»: UiQuote, UiReports) ──
+// ── Quote and reports (UiQuote, UiReports) ──
 
 /**
  * Quote C-0012 of the quote screen: the business data captured once in Ajustes, the customer, the
@@ -555,4 +552,3 @@ export const demoTopProducts: readonly { name: string; sold: number; gross: numb
   { name: 'Servilletero con logo', sold: 8, gross: 666 },
 ];
 
-// ── docs-reportes: end ──

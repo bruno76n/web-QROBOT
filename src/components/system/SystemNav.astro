@@ -3,7 +3,8 @@
  * Product bar of the page for workshops (docs/25 §7, mockup `.pbar`): icon and name, Módulos ·
  * Precios · Descargar, «Iniciar sesión» and «Probar gratis». It stays on top while the site header scrolls
  * away. On phones (≤ 760 px) the links and «Iniciar sesión» move into a `<details>` menu that opens and
- * closes with the keyboard, without scripts. «Iniciar sesión» and «Probar gratis» lead to the system.
+ * closes with the keyboard without scripts; a small script closes it when one of its links is
+ * chosen (a link to a section of the same page would leave it open over the section). «Iniciar sesión» and «Probar gratis» lead to the system.
  */
 import Button from '@/components/site/Button.astro';
 import Logo from '@/components/site/Logo.astro';
@@ -80,6 +81,26 @@ const signUp = `${appUrl}${signUpPath}`;
     </div>
   </div>
 </div>
+
+<script>
+  // Closes the phone menu of the product bar when one of its links is chosen. Starts on
+  // `astro:page-load` and removes its listeners on `astro:before-swap` (docs/07 §1).
+  let pmenuStop: AbortController | null = null;
+  document.addEventListener('astro:page-load', () => {
+    pmenuStop?.abort();
+    pmenuStop = new AbortController();
+    const signal = pmenuStop.signal;
+    document.querySelectorAll<HTMLDetailsElement>('.pmenu').forEach((menu) => {
+      menu.querySelectorAll('a').forEach((a) => {
+        a.addEventListener('click', () => (menu.open = false), { signal });
+      });
+    });
+  });
+  document.addEventListener('astro:before-swap', () => {
+    pmenuStop?.abort();
+    pmenuStop = null;
+  });
+</script>
 
 <style>
   .pbar {

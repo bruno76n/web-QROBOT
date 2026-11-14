@@ -532,6 +532,13 @@ export const es = {
     cta: {
       text: '¿Necesitas una pieza? Dinos qué necesitas y te decimos material, precio y fecha.',
       button: 'Cotizar por WhatsApp',
+      /** Call to the page for workshops (`cta: system`, only while it is visible, docs/21 §4.6). */
+      system: {
+        /** Used when the page has no `ctaText`. */
+        text: (name: string) =>
+          `${name} lleva costos, pedidos, impresoras y filamento de tu taller en un solo lugar.`,
+        button: (name: string) => `Conocer ${name}`,
+      },
     },
     filaments: {
       label: 'Tabla de filamentos',
@@ -646,8 +653,8 @@ export const es = {
   /**
    * The page for workshops («Para talleres», docs/25), from the mockups in
    * reference/mockups/talleres/, with the vocabulary of a system (docs/25 §1). The system's name,
-   * days, limits and prices come in as arguments. Each page and each system screen has its own
-   * block, marked with its start and end.
+   * days, limits and prices come in as arguments. Each page and each group of system screens has its
+   * own section, with a `── … ──` title.
    */
   system: {
     seo: {
@@ -742,6 +749,7 @@ export const es = {
       perMonthEquals: (amount: string) => `Equivale a ${amount} al mes`,
       note: (days: number) =>
         `Precios en pesos mexicanos, IVA incluido. Prueba de ${days} días del plan Negocio, sin tarjeta.`,
+      noteShort: 'Precios en pesos mexicanos, IVA incluido.',
       /** «Ilimitadas» impresoras, «Ilimitados» pedidos (`limitLabel`). */
       unlimitedF: 'Ilimitadas',
       unlimitedM: 'Ilimitados',
@@ -785,7 +793,7 @@ export const es = {
         `${days} días del plan Negocio, gratis y sin tarjeta. Al terminar eliges plan o continúas en Gratis.`,
     },
 
-    // ── principal: start (agent «principal»: texts of /talleres, docs/25 §7.1) ──
+    // ── Main page /talleres (docs/25 §7.1) ──
     home: {
       /** Hero: under the big name. */
       hero: {
@@ -1071,9 +1079,8 @@ export const es = {
         ],
       },
     },
-    // ── principal: end ──
 
-    // ── precios: start (agent «precios»: texts of /talleres/precios, docs/25 §7.2) ──
+    // ── Pricing page /talleres/precios (docs/25 §7.2) ──
     pricing: {
       title: 'Precios',
       lead: 'Paga por taller, no por impresora. El plan Gratis no vence.',
@@ -1160,9 +1167,8 @@ export const es = {
         ],
       },
     },
-    // ── precios: end ──
 
-    // ── descargar: start (agent «descargar»: texts of /talleres/descargar, docs/25 §7.3) ──
+    // ── Download page /talleres/descargar (docs/25 §7.3) ──
     download: {
       title: 'Descargar',
       lead: 'Tu taller en el Dock o en la barra de tareas. Misma cuenta y misma información que en el navegador y el celular.',
@@ -1227,14 +1233,7 @@ export const es = {
         },
       },
       /** Closing call `system` of an Aprende page (`learn/Cta.astro`, docs/21 §4.6). */
-      learnCta: {
-        /** Used when the page has no `ctaText`. */
-        text: (name: string) =>
-          `${name} lleva costos, pedidos, impresoras y filamento de tu taller en un solo lugar.`,
-        button: (name: string) => `Conocer ${name}`,
-      },
     },
-    // ── descargar: end ──
 
     /** Labels of the system screens drawn in HTML (docs/25 §6.3), with the vocabulary of a system. */
     ui: {
@@ -1275,7 +1274,7 @@ export const es = {
         timeLeft: 'Tiempo restante',
       },
 
-      // ── inicio: start (agent «inicio»: UiSidebar, UiHome, UiFloats) ──
+      // ── Home screen (UiSidebar, UiHome, UiFloats) ──
       home: {
         /** Description of the whole screen for screen readers (`UiFrame`). */
         label: (p: {
@@ -1342,9 +1341,8 @@ export const es = {
           net: (days: number) => `Ganancia neta · ${days} días`,
         },
       },
-      // ── inicio: end ──
 
-      // ── costo-pedidos: start (agent «costo-pedidos»: UiPiece, UiOrder) ──
+      // ── Cost of a piece and order (UiPiece, UiOrder) ──
       /** Cost of a piece (`UiPiece`). */
       piece: {
         /** Description of the whole screen for screen readers. */
@@ -1442,9 +1440,8 @@ export const es = {
           copy: 'Copiar',
         },
       },
-      // ── costo-pedidos: end ──
 
-      // ── taller: start (agent «taller»: UiPrinters, UiFilaments, UiPurchases, UiStock) ──
+      // ── Printers, filaments, purchases and stock (UiPrinters, UiFilaments, UiPurchases, UiStock) ──
       /** «Impresoras» (`UiPrinters`). */
       printers: {
         label: (name: string) =>
@@ -1524,9 +1521,8 @@ export const es = {
         setInfo: (pieces: number, missing: string) => `${pieces} piezas · Falta: ${missing}`,
         buildable: 'armables',
       },
-      // ── taller: end ──
 
-      // ── docs-reportes: start (agent «docs-reportes»: UiQuote, UiReports) ──
+      // ── Quote and reports (UiQuote, UiReports) ──
       /** Quote sheet (`UiQuote`). */
       quote: {
         /** Description of the whole screen for screen readers. */
@@ -1600,7 +1596,6 @@ export const es = {
         profit: 'Ganancia',
         total: 'Total',
       },
-      // ── docs-reportes: end ──
     },
   },
   underConstruction: {
