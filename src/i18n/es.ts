@@ -324,7 +324,28 @@ export const es = {
       // ── editor: end ──
 
       // ── buscador: start (agent «buscador»: search block and searches without a result, 8.3) ──
-      search: {},
+      search: {
+        title: 'Buscador',
+        loading: 'Cargando el buscador',
+        database:
+          'El buscador usa la base de datos. Configura Meilisearch para que tolere errores de dedo.',
+        never: 'Todavía no se ha actualizado. Toca «Actualizar buscador» para cargar las páginas.',
+        synced: (date: string, docs: number) =>
+          `Última actualización: ${date} · ${docs === 1 ? '1 documento' : `${docs} documentos`}.`,
+        syncHint: 'Vuelve a cargar todas las páginas publicadas. Tarda unos segundos.',
+        sync: 'Actualizar buscador',
+        syncing: 'Actualizando…',
+        syncedOk: (docs: number) =>
+          `Buscador actualizado: ${docs === 1 ? '1 documento' : `${docs} documentos`}.`,
+        skipped: 'No hacía falta: el buscador ya lee la base de datos.',
+        missesTitle: 'Búsquedas sin resultado (30 días)',
+        missesLead:
+          'Lo que la gente buscó en Aprende y no encontró, de lo más buscado a lo menos. Te sirve para decidir qué respuesta escribir.',
+        missesLoading: 'Cargando las búsquedas',
+        missesEmpty:
+          'Nadie se quedó sin respuesta en los últimos 30 días. Cuando alguien busque algo que no está, aparece aquí.',
+        times: (n: number) => (n === 1 ? '1 vez' : `${n} veces`),
+      },
       // ── buscador: end ──
     },
   },
