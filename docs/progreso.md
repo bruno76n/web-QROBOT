@@ -102,6 +102,25 @@ En todas: header y footer reales de la web (`21 §11`), etiqueta «Dato curioso�
 
 Pendientes del dueño para Aprende: dónde corre Meilisearch (mientras no exista, el buscador usa D1); anticipo y formas de pago, envíos, urgentes y personajes con licencia (`encargar/pago` y `encargar/personajes` siguen ocultas); fotos de fallas.
 
+## Para talleres
+
+Plan y maquetas aplicados el 2026-11-13 (`docs/25`, `docs/fases/fase-9.md`, `reference/mockups/talleres/`).
+
+| Fase | Estado |
+|---|---|
+| 9 · Para talleres (oculta) | **Hecha con el plan v1 y reemplazada: esta rama (`fase-9`) no se fusiona.** El plan v2 (sin calculadora, pantallas del sistema en HTML) está en `main` y la fase 9 se rehace desde ahí. Lo de abajo describe el estado de esta rama. Las 3 páginas completas con `pnpm dev`; con `pnpm preview` responden 404 y nada las enlaza. `site.system.enabled` sigue en `false`. **Sin desplegar** (se hizo antes de la fase 8, por instrucción del dueño) |
+
+Comparación con las maquetas (`reference/mockups/talleres/`, Chromium, alto de cada sección y capturas; sin scroll horizontal en ningún ancho):
+
+| Página | 360 | 390 | 820 | 1440 | Notas |
+|---|---|---|---|---|---|
+| Principal `/talleres` | igual | igual | igual | igual | Las 11 secciones con el mismo alto. Sin «−» en la pestaña abierta del recorrido y línea de 2 px tras el paso 5 (dos fallas de la maqueta corregidas) |
+| Precios `/talleres/precios` | diferencia aceptada | diferencia aceptada | diferencia aceptada | diferencia aceptada | Nombre del plan a 22 px como en la principal (−16, −16, −23 y −7 px en la banda); sin filete bajo la última fila de la comparación (−1 px); «2 meses gratis» más oscuro por contraste |
+| Descargar `/talleres/descargar` | igual | igual | igual | igual | Botón principal elegido en el servidor por `User-Agent` (`Vary`), revisado con Mac, Windows, iPhone y Linux |
+| Llamado `system` en `/aprende/negocio/costo` (con `pnpm dev`) | igual | igual | igual | igual | Mismo bloque que el llamado de WhatsApp con botón negro; ninguna maqueta trae el llamado `system` |
+
+En todas: header de la web (no el de la maqueta) y botones de `Button.astro` (2–4 px más anchos).
+
 ## Valores provisionales en uso (`01 › Pendientes del dueño`)
 
 | Dato | Valor provisional | Desde |

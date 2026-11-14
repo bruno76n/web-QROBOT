@@ -27,14 +27,7 @@ const label = t.barLabel(
 <figure class="money">
   <svg class="money-bar" width="100%" height={h} role="img" aria-label={label}>
     {segments.map((s) => (
-      <rect
-        class={`mb-${s.id}`}
-        x={pct(s.start)}
-        y="0"
-        width={pct(s.width)}
-        height={h}
-        rx="4"
-      />
+      <rect class={`mb-${s.id}`} x={pct(s.start)} y="0" width={pct(s.width)} height={h} rx="4" />
     ))}
     <g class="mb-sep">
       {segments.slice(1).map((s) => (

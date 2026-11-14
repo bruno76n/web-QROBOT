@@ -126,10 +126,10 @@ Y en `src/lib/cost.ts` (se mueve desde `src/lib/learn/`, §6): `profitAt(cost, p
 
 | Componente | Qué hace | Maqueta |
 |---|---|---|
-| `SystemLayout.astro` (`src/layouts/`) | `BaseLayout` con `stickyHeader={false}`, `SystemNav`, `<main class="system">` y `src/styles/system.css` (solo lo común: títulos `t-h1`/`t-h2`, bandas de color, márgenes de ancla bajo la barra) | Todas |
+| `SystemLayout.astro` (`src/layouts/`) | `BaseLayout` con `stickyHeader={false}`, `SystemNav`, `<main class="system">` y `src/styles/system.css` (solo lo común: títulos `t-h1`/`t-h2`, `.lead`, `.link`, bandas de color, márgenes de ancla bajo la barra, letra de 17 px en celular como las maquetas, el encabezado de sección `.sec-h`, el marco de tablas `.tbl-wrap` y la palomita `--check`) | Todas |
 | `SystemNav.astro` | Barra del producto (ícono, nombre, Funciones · Precios · Descargar, Entrar, Probar gratis); en celular las ligas van en un `<details>` (sin script) | `.pbar` |
 | `AppWindow.astro` | Ventana de la app con una captura (`Picture`), recorte con punto de interés por captura en celular, `priority` para el hero | `.win` |
-| `SectionHead.astro` | `h2` y frase (sin doble filete, §7) | `.sec-h` |
+| `SectionHead.astro` | `h2` y frase (sin doble filete, §7). Sus estilos están en `system.css`, porque `Faqs` con `wide` pinta el mismo encabezado | `.sec-h` |
 | `MoneySplit.astro` | «De cada $100»: barra en SVG (anchos como atributos, con `splitSegments`) y leyenda | `.money` |
 | `FeatureTour.astro` | Recorrido: pestañas en escritorio, acordeón en celular y tableta (+ script) | `.tour` |
 | `Flow.astro` | Del archivo a la entrega: 5 pasos con su cuadrito de la app | `.flow` |
@@ -221,7 +221,7 @@ Valen `24 §1, §2, §4, §5`. Lo propio:
 | `/talleres/precios` | ≤ 15 KB | Mensual o anual y buscador de plan |
 | `/talleres/descargar` | ≤ 8 KB | Sin scripts propios (el servidor elige el botón) |
 
-Hero: captura con `fetchpriority="high"` y precarga; las demás `loading="lazy"`. `sizes`: hero `(max-width: 760px) 100vw, 1232px`; recorrido `(max-width: 1099px) 100vw, 800px`. Lighthouse con las metas de `15 §1` al encender (las URLs entran a `lighthouserc.json` en ese momento).
+Hero: captura con `fetchpriority="high"` y precarga; las demás `loading="lazy"`. `sizes`: hero `(max-width: 760px) 100vw, 1232px`; recorrido `(max-width: 1099px) 100vw, 800px`; foto del taller `(max-width: 1099px) 100vw, 660px`; captura de Descargar (imagen principal de esa página, con precarga) `(min-width: 1100px) 700px, 100vw`. Lighthouse con las metas de `15 §1` al encender (las URLs entran a `lighthouserc.json` en ese momento).
 
 ## 12. Pruebas
 
@@ -231,9 +231,9 @@ Hero: captura con `fetchpriority="high"` y precarga; las demás `loading="lazy"`
 | Guardia de encendido | Si `site.system.enabled` es `true`: `appUrl` y `downloads.*.url` son `https://`, no están vacíos ni usan un dominio de ejemplo (`.example`, `.test`), `name` no está vacío (`src/lib/system/guard.ts`, `tests/system-data.test.ts`). Si no, la prueba falla y no se puede fusionar |
 | Seguridad (build de producción, `pnpm preview`) | `tests/security/system-hidden.spec.ts`: `/talleres`, `/talleres/`, `/talleres/precios`, `/talleres/descargar`, `/talleres/x`, `/%74alleres`, `/talleres%2Fprecios` → 404 con la página 404 de la web; el HTML de `/`, `/catalogo`, `/aprende` y `/aprende/negocio/costo` no contiene `/talleres`; ni el sitemap ni `robots.txt` |
 | `pnpm security` | Ningún `.html` con `talleres` en `dist/`; ningún archivo de `src/pages/talleres/` exporta `prerender = true`; cada uno contiene el cerrojo de §2 |
-| Flujos (Playwright con `pnpm dev`, `e2e/dev-talleres.spec.ts`, en Chromium y WebKit) | **M** recorrido: abrir Pedidos en escritorio (Costos se cierra), ↓ pasa a Producción; en 390, cerrar y abrir · **N** precios: Anual → Taller $1,490 y «Equivale a $124 al mes»; 1/1/10 → Gratis; 12 impresoras → Taller con «Con 12 impresoras…»; 3 personas → Negocio; 10 personas → «escríbenos» · **O** calculadora con precio $120 → ganancia $98.96 y 5.7 veces; precio $15 → ganancia negativa en rojo · **P** descargar con `User-Agent` de Mac, de Windows y de iPhone → su botón |
+| Flujos (Playwright con `pnpm dev`, en Chromium y WebKit; un archivo por página: `e2e/dev-talleres-principal.spec.ts` M y O, `dev-talleres-precios.spec.ts` N, `dev-talleres-descargar.spec.ts` P, y `dev-talleres-ligas.spec.ts` para el menú, el footer, el llamado de Aprende y el sitemap. WebKit con los proyectos `webkit-w390` y `webkit-w1440` de `playwright.admin.config.ts`, que se activan solo si WebKit está instalado) | **M** recorrido: abrir Pedidos en escritorio (Costos se cierra), ↓ pasa a Producción; en 390, cerrar y abrir · **N** precios: Anual → Taller $1,490 y «Equivale a $124 al mes»; 1/1/10 → Gratis; 12 impresoras → Taller con «Con 12 impresoras…»; 3 personas → Negocio; 10 personas → «escríbenos» · **O** calculadora con precio $120 → ganancia $98.96 y 5.7 veces; precio $15 → ganancia negativa en rojo · **P** descargar con `User-Agent` de Mac, de Windows y de iPhone → su botón |
 | Visual | Las 3 páginas contra las maquetas en 360, 390, 820 y 1440; sin scroll horizontal |
-| Accesibilidad | axe sin errores serios en las 3 páginas (con `pnpm dev`) |
+| Accesibilidad | axe sin errores serios en las 3 páginas (con `pnpm dev`, `e2e/dev-talleres-a11y.spec.ts`, en 390, 820 y 1440) |
 | Regresión de Aprende | Las pruebas de Aprende siguen pasando sin cambios después de mover calculadora, preguntas y tokens; capturas de `/aprende/negocio/costo` iguales |
 
 Las pruebas de cabeceras y CSP (`headers.spec.ts`) y Lighthouse solo corren sobre el build de producción: las 3 rutas se agregan a `e2e/urls.ts` y a `lighthouserc.json` **al encender** (§13), no antes (darían 404).
@@ -260,7 +260,10 @@ Lo hace Claude Code con el prompt «Para talleres · Encender» (`prompts.md`), 
 | «Quick Cerebro» escrito en el HTML | `site.system.name` |
 | Ligas a `#probar`, `#entrar`, `#mac` | `appUrl + …` y `downloads.*.url` |
 | El botón de Descargar lo elige el navegador | Lo elige el servidor con el `User-Agent` (§7.3) |
-| `window.PLANES` en un `<script>` del HTML | El script importa `site.system.plans` (se empaqueta) |
+| `window.PLANES` en un `<script>` del HTML | El servidor pasa los planes y los textos ya escritos en `data-finder-data` (JSON); el script no importa `site` ni `es` |
+| El periodo y el buscador comparten una variable | El periodo avisa con el evento `system:period`; `PlanBand` trae los textos de los dos periodos en `data-*` |
+| Recorrido: «−» en la pestaña abierta y banda gris tras el paso 5 en escritorio | Sin signo (en escritorio no se cierra) y línea de 2 px |
+| Nombre del plan en precios con el tamaño del navegador | 22 px, como en la principal |
 | La calculadora usa ids (`c-g`, `r-t`…) | La de Aprende con `data-*` (`CostCalculator`) |
 | `onsubmit="return false"` en los formularios | El script escucha `submit` |
 | Base compartida en `reference/mockups/_base.css` y `_base.js` | `global.css`, los componentes compartidos y sus estilos |

@@ -31,9 +31,7 @@ const seo = es.system.seo.home(name);
 const signUp = `${appUrl}${signUpPath}`;
 /** `sizes` of the hero screenshot (docs/25 §11); the preload uses the same. */
 const heroSizes = '(max-width: 760px) 100vw, 1232px';
-const heroSrcset = systemShotWidths
-  .map((w) => `/brand/talleres/inicio-${w}.webp ${w}w`)
-  .join(', ');
+const heroSrcset = systemShotWidths.map((w) => `/brand/talleres/inicio-${w}.webp ${w}w`).join(', ');
 ---
 
 <SystemLayout title={seo.title} description={seo.description} current="home">
@@ -214,15 +212,13 @@ const heroSrcset = systemShotWidths
   </section>
 
   {/* Questions (shared component, with the section header of these pages). */}
-  <div class="faqs">
-    <Faqs
-      wide
-      title={t.faq.title}
-      headingId="faq-h"
-      headingClass="t-h2"
-      faqs={t.faq.items(name, trialDays)}
-    />
-  </div>
+  <Faqs
+    wide
+    title={t.faq.title}
+    headingId="faq-h"
+    headingClass="t-h2"
+    faqs={t.faq.items(name, trialDays)}
+  />
 
   <EndCta
     id="end-h"
@@ -277,9 +273,7 @@ const heroSrcset = systemShotWidths
     margin-right: 8px;
     border-radius: 50%;
     flex: none;
-    background: var(--green-l)
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300873a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12 4 4 8-8'/%3E%3C/svg%3E")
-      center / 10px no-repeat;
+    background: var(--green-l) var(--check) center / 10px no-repeat;
   }
   .hero-shot {
     margin-top: clamp(36px, 5vw, 64px);
@@ -480,13 +474,5 @@ const heroSrcset = systemShotWidths
   /* ---------- plans ---------- */
   .plans-more {
     margin-top: 22px;
-  }
-
-  /* ---------- questions: the section header of the shared component ---------- */
-  .faqs :global(.sec-h) {
-    display: grid;
-    gap: 16px;
-    margin-bottom: clamp(32px, 4.4vw, 60px);
-    max-width: 860px;
   }
 </style>

@@ -139,11 +139,13 @@ const timesText = (x: number) => fillText(t.times, { x: x.toFixed(1).replace(/\.
     )}
     <p class="tiny calc-note">{t.note}</p>
   </div>
+  {/* Phone bar: a visual shortcut to the result, which is already above; hidden from screen
+      readers and out of the tab order. */}
   <div class="calc-bar" aria-hidden="true">
     <span>
       {t.total} <b data-r="cost">{formatPesos(first.cost)}</b>
     </span>
-    <a href={`#${idPrefix}calc-r`}>{t.detail}</a>
+    <a href={`#${idPrefix}calc-r`} tabindex="-1">{t.detail}</a>
   </div>
 </section>
 

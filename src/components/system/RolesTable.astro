@@ -1,9 +1,11 @@
 ---
+/* eslint-disable astro/jsx-a11y/no-noninteractive-tabindex -- the box slides sideways on phones and takes focus so the keyboard can scroll it (axe: scrollable-region-focusable). */
 /**
  * Who sees what, by role (docs/25 §7.1, mockup `.roles`): areas of the system in rows, roles in
  * columns, ✓ or — in each cell with its «sí» / «no» for screen readers. On phones (≤ 760 px) the
  * table slides sideways inside its box with the first column fixed (docs/24 §3), and the right
- * edge fades while there is more to the right (the small script below sets `more`).
+ * edge fades while there is more to the right (the small script below sets `more`). The box is a
+ * named region that takes focus, so it can be scrolled with the keyboard.
  */
 import { roles } from '@/config/system';
 import { es } from '@/i18n/es';
@@ -11,7 +13,7 @@ import { es } from '@/i18n/es';
 const t = es.system.home.team;
 ---
 
-<div class="tbl-wrap" data-roles>
+<div class="tbl-wrap" data-roles role="region" aria-label={t.caption} tabindex="0">
   <table class="roles">
     <caption class="vh">{t.caption}</caption>
     <thead>
@@ -68,17 +70,6 @@ const t = es.system.home.team;
 </script>
 
 <style>
-  .tbl-wrap {
-    position: relative;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-  }
-  .tbl-wrap.more {
-    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 36px), rgba(0, 0, 0, 0.25));
-    mask-image: linear-gradient(90deg, #000 calc(100% - 36px), rgba(0, 0, 0, 0.25));
-  }
   .roles {
     border-collapse: collapse;
     width: 100%;

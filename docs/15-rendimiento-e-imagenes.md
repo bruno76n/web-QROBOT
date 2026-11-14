@@ -27,6 +27,7 @@ Lo verifica `pnpm size` (`scripts/size-check.mjs`) leyendo el build.
 | Catálogo | ≤ 25 KB al abrir | Sin islas pesadas: pestañas y tarjetas son HTML |
 | Inicio | ≤ 90 KB al abrir | Sin contar islas `client:visible` de más abajo ni `matter-js` (se carga al tocar) |
 | Aprende (portada, tema, ficha, ¿Cabe mi pieza?, calculadora) | ≤ 25 KB al abrir | Buscador, filtros y herramientas son `<script>` sin React (`21 §13`); `pnpm size` revisa también que no lleven `requestIdleCallback(` directo ni *lookbehind* (`24 §5`) |
+| Para talleres (principal, precios, descargar) | ≤ 20, 15 y 8 KB al abrir (`25 §11`) | **Se mide al encender:** mientras esté oculta sus rutas dan 404 en el build y `pnpm size` las salta. La revisión de Safari 14 sí cubre sus scripts: `pnpm size` revisa todos los `.js` de `dist/client/_astro` (menos los del panel, `Admin*`) |
 | Privacidad, 404 | 0 KB de React (≤ 8 KB en total) | Solo los `<script>` del header y `ClientRouter` |
 | Panel | Sin límite estricto | Se carga solo para el dueño; las librerías pesadas (`heic2any`, recortador) con carga diferida |
 

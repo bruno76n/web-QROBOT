@@ -51,13 +51,15 @@ quick-robot-web/
    │  └─ img/[...key].ts          SOLO en desarrollo: sirve fotos desde R2 local
    ├─ layouts/
    │  ├─ BaseLayout.astro         <head> (SEO, `14`), header, footer, ClientRouter
-   │  └─ LearnLayout.astro        Aprende: estilos (`src/styles/learn.css`), barra del buscador y scripts comunes
+   │  ├─ LearnLayout.astro        Aprende: estilos (`src/styles/learn.css`), barra del buscador y scripts comunes
+   │  └─ SystemLayout.astro       Para talleres: header que se va con el scroll, barra del producto y `src/styles/system.css`
    ├─ lib/learn/                  lógica pura de Aprende: markdown, content, import, fit, heat, tables, glossary, fuzzy, search-docs (`21`, `22`)
-   ├─ lib/system/                 lógica pura de Para talleres: visibility, plans, platform, money-split (`25 §5`); en `lib/` también `nav.ts`, `cost.ts` y `number.ts`, compartidos
-   ├─ scripts/                    scripts de navegador compartidos de Aprende: learn-search.ts (buscador), learn-printers.ts (¿Cabe mi pieza? e impresoras)
+   ├─ lib/system/                 lógica pura de Para talleres: visibility, plans, platform, money-split, guard (`25 §5`, `§12`); en `lib/` también `nav.ts`, `cost.ts` y `number.ts`, compartidos
+   ├─ scripts/                    scripts de navegador: de Aprende learn-search.ts (buscador) y learn-printers.ts (¿Cabe mi pieza? e impresoras); de Para talleres system-tour.ts (recorrido), system-period.ts (mensual o anual) y system-finder.ts (¿Qué plan te toca?)
    ├─ components/
    │  ├─ learn/                   Aprende: Content, Node, Inline, Callout, Mark, PageHead, Article, TopicPages, Glossary, Search, Marked, tablas (FilamentTable, PrinterTable, MaintenanceCalendar), FitTool, LearnScripts
    │  ├─ site/                    Header, Footer, Logo, ProductCard, Price, Breadcrumbs, CostCalculator y Faqs (compartidos por Aprende y Para talleres)
+   │  ├─ system/                  Para talleres: SystemNav, AppWindow, SectionHead, EndCta, PlanBand, MoneySplit, FeatureTour, Flow, RolesTable, PeriodToggle, PlanFinder, CompareTable, PlatformList
    │  ├─ sections/                una por sección del inicio: Hero, Navidad, Ideas, Video,
    │  │                           Imprimiendo, Q404, Alberca, Pedido (Astro + su isla si hace falta)
    │  ├─ product/                 Gallery, ProductOptions (islas)
