@@ -1,0 +1,72 @@
+---
+/**
+ * The cost formula of a piece (docs/25 §6.2, mockup `.formula`): one row per term (material,
+ * power, machine, extras) and the total in black. On narrow phones (≤ 480 px) each formula goes
+ * under its name.
+ */
+import { costTerms } from '@/config/system';
+import { es } from '@/i18n/es';
+
+const f = es.system.home.cost.formula;
+const rows = costTerms.map((term) => f[term]);
+---
+
+<dl class="formula">
+  {rows.map((r) => (
+    <div>
+      <dt>{r.name}</dt>
+      <dd>{r.text}</dd>
+    </div>
+  ))}
+  <div class="tot">
+    <dt>{f.total.name}</dt>
+    <dd>{f.total.text}</dd>
+  </div>
+</dl>
+
+<style>
+  .formula {
+    margin: 0;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #fff;
+    overflow: hidden;
+  }
+  /* Name and formula side by side (column gap with its Safari 14 alias). */
+  .formula div {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    grid-column-gap: 14px;
+    column-gap: 14px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--line);
+    font-size: 15px;
+  }
+  .formula div:first-child {
+    border-top: 0;
+  }
+  .formula dt {
+    font-weight: 600;
+  }
+  .formula dd {
+    margin: 0;
+    color: var(--ink-2);
+  }
+  /* The total, in black. */
+  .formula .tot {
+    background: var(--ink);
+    color: #fff;
+    border-top: 0;
+  }
+  .formula .tot dd {
+    color: #fff;
+  }
+  @media (max-width: 480px) {
+    .formula div {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .formula dd {
+      margin-top: 2px;
+    }
+  }
+</style>

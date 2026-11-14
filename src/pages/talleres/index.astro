@@ -1,12 +1,32 @@
 ---
 // The page for workshops: main page (docs/25 §7.1). Hidden until the system is out (docs/25 §2):
-// the middleware locks `/talleres` and this page locks itself too; never prerendered.
+// the middleware locks `/talleres` and this page locks itself too; never prerendered. Sections in
+// the order of the mockup `talleres.html`: hero with the home screen, modules, the 7 sections of
+// modules with their screens, alerts, team, data, pricing, questions and the closing band.
 import SystemLayout from '@/layouts/SystemLayout.astro';
+import Button from '@/components/site/Button.astro';
+import Faqs from '@/components/site/Faqs.astro';
+import AlertsTable from '@/components/system/AlertsTable.astro';
+import CostFormula from '@/components/system/CostFormula.astro';
+import DataFacts from '@/components/system/DataFacts.astro';
 import EndCta from '@/components/system/EndCta.astro';
 import FeatureSection from '@/components/system/FeatureSection.astro';
+import ModuleIndex from '@/components/system/ModuleIndex.astro';
 import PlanBand from '@/components/system/PlanBand.astro';
+import RolesTable from '@/components/system/RolesTable.astro';
 import SectionHead from '@/components/system/SectionHead.astro';
 import Wordmark from '@/components/system/Wordmark.astro';
+import UiFilaments from '@/components/system/ui/UiFilaments.astro';
+import UiFloats from '@/components/system/ui/UiFloats.astro';
+import UiHome from '@/components/system/ui/UiHome.astro';
+import UiOrder from '@/components/system/ui/UiOrder.astro';
+import UiPiece from '@/components/system/ui/UiPiece.astro';
+import UiPrinters from '@/components/system/ui/UiPrinters.astro';
+import UiPurchases from '@/components/system/ui/UiPurchases.astro';
+import UiQuote from '@/components/system/ui/UiQuote.astro';
+import UiReports from '@/components/system/ui/UiReports.astro';
+import UiStock from '@/components/system/ui/UiStock.astro';
+import Check from '@lucide/astro/icons/check';
 import { site } from '@/config/site';
 import { systemVisible } from '@/config/system';
 import { es } from '@/i18n/es';
@@ -15,33 +35,313 @@ import { systemBase } from '@/lib/system/visibility';
 export const prerender = false;
 if (!systemVisible) return Astro.rewrite('/404');
 
-const seo = es.system.seo.home(site.system.name);
-const m = es.system.modules;
+const { name, appUrl, signUpPath, trialDays } = site.system;
+const seo = es.system.seo.home(name);
+const t = es.system.home;
+const signUp = `${appUrl}${signUpPath}`;
 ---
 
 <SystemLayout title={seo.title} description={seo.description} current="home">
-  <section class="pt-10" aria-labelledby="h1">
+  {/* Hero: the big name, the promise and the home screen, which starts on white and ends on lilac. */}
+  <section class="s-hero" aria-labelledby="h1">
     <div class="wrap">
       <Wordmark />
+      <div class="hero-row">
+        <p class="hero-sub">{t.hero.sub}</p>
+        <div class="hero-side">
+          <p class="lead">{t.hero.lead}</p>
+          <div class="hero-cta">
+            <Button href={signUp} rel="noopener" arrow class="hero-btn">
+              {es.system.cta.tryDays(trialDays)}
+            </Button>
+            <Button href={`${systemBase}/precios`} variant="outline" class="hero-btn">
+              {es.system.cta.seePricing}
+            </Button>
+          </div>
+          <ul class="facts">
+            {t.hero.facts(trialDays).map((fact) => (
+              <li>
+                <span class="fact-ic">
+                  <Check size={12} stroke-width={3} aria-hidden="true" />
+                </span>
+                {fact}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="hero-stage">
+      <div class="wrap hero-shot">
+        <UiHome />
+        <UiFloats />
+      </div>
     </div>
   </section>
+
+  {/* Modules: the system menu, with what each module does. */}
+  <section id="modulos" aria-labelledby="mod-h">
+    <div class="wrap">
+      <SectionHead id="mod-h" title={t.modules.title} lead={t.modules.lead} />
+      <ModuleIndex />
+    </div>
+  </section>
+
+  {/* Sections of the modules, each with its system screen. */}
+  <FeatureSection
+    id="costo"
+    kick={{ icon: 'cost', label: t.cost.kick }}
+    title={t.cost.title}
+    lead={t.cost.lead}
+    specs={t.cost.specs}
+  >
+    <CostFormula slot="text" />
+    <UiPiece />
+  </FeatureSection>
 
   <FeatureSection
     id="pedidos"
-    kick={{ icon: 'orders', label: m.orders.name }}
-    title={m.orders.name}
-    lead={m.orders.text}
-    specs={[{ name: m.orders.name, text: m.orders.text }]}
+    kick={{ icon: 'orders', label: t.orders.kick }}
+    title={t.orders.title}
+    lead={t.orders.lead}
+    specs={t.orders.specs}
     rev
     soft
-  />
+  >
+    <UiOrder />
+  </FeatureSection>
 
-  <section class="soft" aria-labelledby="price-h">
+  <FeatureSection
+    id="produccion"
+    kick={{ icon: 'printers', label: t.production.kick }}
+    title={t.production.title}
+    lead={t.production.lead}
+    specs={t.production.specs}
+  >
+    <UiPrinters />
+  </FeatureSection>
+
+  <FeatureSection
+    id="filamento"
+    kick={{ icon: 'filaments', label: t.filament.kick }}
+    title={t.filament.title}
+    lead={t.filament.lead}
+    specs={t.filament.specs}
+    wide
+    soft
+    stageClass="two-ui"
+  >
+    <UiFilaments />
+    <UiPurchases />
+  </FeatureSection>
+
+  <FeatureSection
+    id="existencias"
+    kick={{ icon: 'stock', label: t.stock.kick }}
+    title={t.stock.title}
+    lead={t.stock.lead}
+    specs={t.stock.specs}
+    rev
+  >
+    <UiStock />
+  </FeatureSection>
+
+  <FeatureSection
+    id="documentos"
+    kick={{ icon: 'documents', label: t.documents.kick }}
+    title={t.documents.title}
+    lead={t.documents.lead}
+    specs={t.documents.specs}
+    soft
+    center
+  >
+    <UiQuote />
+  </FeatureSection>
+
+  <FeatureSection
+    id="reportes"
+    kick={{ icon: 'reports', label: t.reports.kick }}
+    title={t.reports.title}
+    lead={t.reports.lead}
+    specs={t.reports.specs}
+    wide
+    dark
+  >
+    <UiReports />
+  </FeatureSection>
+
+  {/* Alerts of the home screen, with the action that resolves each one. */}
+  <section id="alertas" aria-labelledby="al-h">
     <div class="wrap">
-      <SectionHead id="price-h" title={es.system.plans.label} />
-      <PlanBand />
+      <SectionHead
+        id="al-h"
+        kick={{ icon: 'alerts', label: t.alerts.kick }}
+        title={t.alerts.title}
+        lead={t.alerts.lead}
+      />
+      <AlertsTable />
     </div>
   </section>
 
+  {/* Team: which areas each role sees, on lilac. */}
+  <section class="s-team" id="equipo" aria-labelledby="team-h">
+    <div class="wrap">
+      <SectionHead
+        id="team-h"
+        kick={{ icon: 'team', label: t.team.kick }}
+        title={t.team.title}
+        lead={t.team.lead}
+      />
+      <RolesTable />
+    </div>
+  </section>
+
+  {/* Data: backups, export and separate information. */}
+  <section id="datos" aria-labelledby="data-h">
+    <div class="wrap">
+      <SectionHead id="data-h" kick={{ icon: 'data', label: t.data.kick }} title={t.data.title} />
+      <DataFacts />
+    </div>
+  </section>
+
+  {/* Pricing: the 3 plans (monthly) and the link to compare them, on gray. The link sits on the
+      line of the band's note, as in the mockup. */}
+  <section class="soft" aria-labelledby="price-h">
+    <div class="wrap price-band">
+      <SectionHead id="price-h" title={t.price.title} lead={t.price.lead} />
+      <PlanBand />{' '}
+      <a class="link" href={`${systemBase}/precios`}>
+        {es.system.cta.comparePlans}
+      </a>
+    </div>
+  </section>
+
+  <Faqs
+    faqs={t.faq.items(name, trialDays)}
+    title={t.faq.title}
+    headingId="faq-h"
+    headingClass="t-h2"
+    side
+  />
+
   <EndCta secondary={{ label: es.system.cta.downloadApp, href: `${systemBase}/descargar` }} />
 </SystemLayout>
+
+<style>
+  /* ---------- hero ---------- */
+  .s-hero {
+    padding: clamp(36px, 5.5vw, 80px) 0 0;
+  }
+  /* Subtitle and side text in a column; side by side on desktop (gaps with their Safari 14 alias). */
+  .hero-row {
+    display: grid;
+    grid-gap: 22px;
+    gap: 22px;
+    margin-top: clamp(22px, 3vw, 40px);
+  }
+  .hero-sub {
+    font-size: clamp(26px, 3vw, 44px);
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+    font-weight: 600;
+    max-width: 14ch;
+  }
+  .hero-side .lead {
+    max-width: 44ch;
+  }
+  @media (min-width: 1100px) {
+    .hero-row {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      grid-column-gap: 64px;
+      column-gap: 64px;
+      align-items: start;
+    }
+    .hero-sub {
+      padding-top: 6px;
+    }
+  }
+  /* Buttons spaced with margins, not `gap` in flex (Safari 14, docs/24 §5). */
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 18px -6px -6px;
+  }
+  .hero-cta :global(.hero-btn) {
+    margin: 6px;
+  }
+  /* Three facts, each with a green check. */
+  .facts {
+    list-style: none;
+    margin: 18px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 15px;
+    color: var(--ink-2);
+  }
+  .facts li {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 22px 8px 0;
+  }
+  .fact-ic {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    margin-right: 7px;
+    border-radius: 50%;
+    background: var(--green-l);
+    color: var(--green-d);
+    flex: none;
+  }
+  /* The home screen starts on white and ends on lilac; the floating notes sit on its frame. */
+  .hero-stage {
+    margin-top: clamp(36px, 5vw, 64px);
+    padding-bottom: clamp(40px, 6vw, 96px);
+    background: linear-gradient(180deg, #fff 0, #fff 140px, var(--lilac) 140px, var(--lilac) 100%);
+  }
+  @media (max-width: 760px) {
+    .hero-stage {
+      background: linear-gradient(180deg, #fff 0, #fff 90px, var(--lilac) 90px, var(--lilac) 100%);
+    }
+  }
+  .hero-shot {
+    position: relative;
+  }
+
+  /* ---------- sections ---------- */
+  .s-team {
+    background: var(--lilac);
+  }
+  /* The quote sheet is at most 560 px wide. */
+  #documentos :global(.fig-doc) {
+    width: 100%;
+    max-width: 560px;
+  }
+  /* Pricing: the band's note and «Comparar planes» share one line, as in the mockup. The block takes
+     the note's size (so the shared line has the note's height) and the header and the band get back
+     the size of the body text. */
+  .price-band {
+    font-size: 14px;
+    text-wrap: pretty;
+  }
+  .price-band :global(.sec-h),
+  .price-band :global(.plans) {
+    font-size: 18px;
+    text-wrap: wrap;
+  }
+  .price-band :global(.plans) {
+    margin-bottom: 16px;
+  }
+  .price-band :global(.plans-note) {
+    display: inline;
+  }
+  @media (max-width: 760px) {
+    .price-band :global(.sec-h),
+    .price-band :global(.plans) {
+      font-size: 17px;
+    }
+  }
+</style>

@@ -786,7 +786,291 @@ export const es = {
     },
 
     // ── principal: start (agent «principal»: texts of /talleres, docs/25 §7.1) ──
-    home: {},
+    home: {
+      /** Hero: under the big name. */
+      hero: {
+        sub: 'El cerebro de tu taller de impresión 3D.',
+        lead: 'Sabe cuánto te cuesta cada gramo, qué imprime cada máquina, qué pedido se entrega mañana y cuánto ganaste este mes.',
+        facts: (days: number) => [`${days} días gratis`, 'Sin tarjeta', 'Web, Mac y Windows'],
+      },
+      /** Modules (`ModuleIndex`). */
+      modules: {
+        title: '13 módulos. Cero libretas.',
+        lead: 'Del primer gramo a la última entrega, en el mismo orden que el menú del sistema.',
+      },
+      /** Sections of the modules: name above, title, sentence and details. */
+      cost: {
+        kick: 'Costo por pieza',
+        title: 'Sabes cuánto ganas antes de imprimir.',
+        lead: 'Material, luz, desgaste de la impresora y piezas fallidas, al centavo y con los datos de tu taller.',
+        specs: [
+          {
+            name: 'Costo por gramo',
+            text: 'Promedio de tus rollos del mismo filamento, según lo disponible en cada uno.',
+          },
+          {
+            name: 'Precio de lista',
+            text: 'Por valor (lo escribes tú) o por fórmula (margen sobre el costo).',
+          },
+          {
+            name: 'Precio mínimo',
+            text: 'Alerta cuando un precio queda debajo de tu margen mínimo.',
+          },
+          {
+            name: 'Ganancia por canal',
+            text: 'Descuenta la comisión de cada canal, como Mercado Libre.',
+          },
+          {
+            name: 'Variantes y colecciones',
+            text: 'Colores agrupados bajo la misma pieza; sets con su propio precio.',
+          },
+        ],
+        /** The cost formula (`CostFormula`, terms of `costTerms`). */
+        formula: {
+          material: { name: 'Material', text: 'Gramos × costo por gramo × (1 + % de purga)' },
+          power: { name: 'Luz', text: 'Horas × consumo de la impresora (kW) × tarifa del kWh' },
+          machine: {
+            name: 'Máquina',
+            text: 'Horas × (precio de la impresora ÷ horas de vida + mantenimiento por hora)',
+          },
+          extras: { name: 'Extras', text: 'Extras + insumos de la pieza' },
+          total: { name: 'Costo', text: '(Material + Luz + Máquina + Extras) ÷ (1 − % de fallos)' },
+        },
+      },
+      orders: {
+        kick: 'Pedidos',
+        title: 'Ningún pedido se te escapa.',
+        lead: 'Del anticipo a la entrega, con el saldo y la fecha de entrega siempre a la vista.',
+        specs: [
+          {
+            name: 'Anticipo y abonos',
+            text: 'El saldo se cobra al entregar y la venta se registra automáticamente.',
+          },
+          {
+            name: 'Apartado de existencias',
+            text: 'Al aceptar, aparta las piezas terminadas; el resto pasa a producción.',
+          },
+          {
+            name: 'Asignación de impresoras',
+            text: 'Reparte los artículos entre tus impresoras y calcula la hora de término.',
+          },
+          { name: 'Filamento insuficiente', text: 'Alerta antes de iniciar la producción.' },
+          { name: 'Vistas', text: 'Tablero, lista y calendario de entregas.' },
+        ],
+      },
+      production: {
+        kick: 'Producción e impresoras',
+        title: 'Tus impresoras no descansan. Tú sí.',
+        lead: 'Cola por impresora, tiempo restante de cada trabajo y mantenimiento antes de la falla.',
+        specs: [
+          {
+            name: 'Cola automática',
+            text: 'Al terminar un trabajo inicia el siguiente; al terminar el último de un pedido, el pedido pasa a Listo.',
+          },
+          {
+            name: 'Registro de impresiones',
+            text: 'Pieza, cantidad, resultado, horas y filamento por rollo. Las fallidas también descuentan filamento.',
+          },
+          {
+            name: 'Mantenimiento por horas de uso',
+            text: 'Boquilla cada 300 h, ejes cada 200 h y cama cada 100 h, editables. Al completarlo se registra el gasto.',
+          },
+          {
+            name: 'Inversión recuperada',
+            text: 'La ganancia neta se reparte entre tus impresoras según sus horas de uso.',
+          },
+        ],
+      },
+      filament: {
+        kick: 'Filamento, insumos y compras',
+        title: 'Ningún rollo vacío a mitad de un pedido.',
+        lead: 'Cada impresión descuenta su filamento. El sistema avisa antes de que se acabe y arma la lista de compras.',
+        specs: [
+          {
+            name: 'Estados',
+            text: 'Nuevo, Normal, Stock bajo (300 g o menos), Crítico (150 g o menos) y Agotado.',
+          },
+          { name: 'Historial por rollo', text: 'Consumo y purga por separado, mermas y ajustes.' },
+          { name: 'Insumos', text: 'Argollas, imanes, cajas y bolsas, con existencia mínima.' },
+          {
+            name: 'Compras sugeridas',
+            text: 'Por proveedor, con cantidad y costo estimado. Se copian como texto para enviarlas por WhatsApp.',
+          },
+        ],
+      },
+      stock: {
+        kick: 'Existencias',
+        title: 'Lo que ya imprimiste también es dinero.',
+        lead: 'Piezas hechas, apartadas y disponibles, sin contar a mano.',
+        specs: [
+          {
+            name: 'Movimientos automáticos',
+            text: 'Cada impresión, venta, entrega y devolución suma o resta.',
+          },
+          { name: 'Ajustes', text: 'Corrección con nota si el conteo físico no coincide.' },
+          { name: 'Variantes', text: 'Existencia por color dentro de la misma pieza.' },
+          { name: 'Sets', text: 'Cuántos se pueden armar con las piezas disponibles.' },
+        ],
+      },
+      documents: {
+        kick: 'Cotizaciones y notas de venta',
+        title: 'Cotiza como empresa grande.',
+        lead: 'Con los datos de tu negocio, en PDF o lista para pegar en WhatsApp.',
+        specs: [
+          { name: 'PDF o impresión', text: 'Desde el pedido o la venta.' },
+          {
+            name: 'Texto para WhatsApp',
+            text: 'La misma cotización, lista para pegar en el chat.',
+          },
+          { name: 'Datos del negocio', text: 'Se capturan una vez en Ajustes.' },
+        ],
+      },
+      reports: {
+        kick: 'Reportes',
+        title: 'Ganancia real, no la de la libreta.',
+        lead: 'Ventas, gastos y ganancia neta por semana, canal y producto, contra el periodo anterior.',
+        specs: [
+          {
+            name: 'Distribución de cada $100',
+            text: 'Material, máquina, luz, comisiones, gastos y ganancia neta.',
+          },
+          {
+            name: 'Por canal y por producto',
+            text: 'Las colecciones se reparten entre sus piezas.',
+          },
+          { name: 'Gastos', text: 'Fijos y variables; los recurrentes se prorratean por día.' },
+          { name: 'Resumen', text: 'Para copiar y compartir.' },
+        ],
+      },
+      /** Alerts (`AlertsTable`, ids of `alerts`). */
+      alerts: {
+        kick: 'Alertas',
+        title: 'Te avisa antes de que sea problema.',
+        lead: 'Inicio junta lo que requiere atención, con el botón para resolverlo.',
+        caption: 'Alertas de Inicio',
+        head: { alert: 'Alerta', when: 'Cuándo aparece', action: 'Acción' },
+        items: {
+          filamentShort: {
+            name: 'Filamento insuficiente',
+            when: 'Un pedido aceptado requiere más filamento del disponible',
+            action: 'Agregar rollo',
+          },
+          criticalStock: {
+            name: 'Stock crítico',
+            when: 'Un filamento llega a 150 g o menos',
+            action: 'Ver filamento',
+          },
+          dueSoon: {
+            name: 'Entrega próxima',
+            when: 'Fecha de entrega en 2 días o menos, o vencida',
+            action: 'Abrir pedido',
+          },
+          balanceDue: {
+            name: 'Saldo por cobrar',
+            when: 'Una venta o un pedido tiene saldo',
+            action: 'Registrar abono',
+          },
+          priceBelowMin: {
+            name: 'Precio bajo el mínimo',
+            when: 'Un precio de lista queda debajo del margen mínimo',
+            action: 'Editar precio',
+          },
+          maintenance: {
+            name: 'Mantenimiento',
+            when: 'Una tarea está próxima o vencida',
+            action: 'Ver impresora',
+          },
+          lowSupply: {
+            name: 'Insumo bajo',
+            when: 'Un insumo llega a su mínimo o se agota',
+            action: 'Registrar compra',
+          },
+        },
+      },
+      /** Team (`RolesTable`, roles and areas of `roleMatrix`). */
+      team: {
+        kick: 'Equipo',
+        title: 'Tu equipo trabaja. Tus números quedan contigo.',
+        lead: 'Roles para administración, ventas y taller en el plan Negocio. Ventas no ve costos ni ganancia.',
+        caption: 'Módulos que ve cada rol',
+        areasHead: 'Módulos',
+        /** Full name and, for narrow phones, a short one (`null` = the same). */
+        roles: {
+          owner: { name: 'Dueño', short: null },
+          admin: { name: 'Administración', short: 'Admin.' },
+          sales: { name: 'Ventas', short: null },
+          shop: { name: 'Taller', short: null },
+        },
+        areas: {
+          selling: 'Ventas, pedidos y clientes',
+          workshop: 'Producción, existencias y filamento',
+          money: 'Costos, ganancia y reportes',
+          expenses: 'Gastos',
+          account: 'Usuarios y suscripción',
+        },
+        yes: 'sí',
+        no: 'no',
+      },
+      /** Data (`DataFacts`). */
+      data: {
+        kick: 'Datos',
+        title: 'Respaldado todos los días.',
+        facts: [
+          {
+            name: 'Copias de seguridad',
+            text: 'Automáticas, una por día. Se conservan las últimas 7 y se restaura cualquiera.',
+          },
+          {
+            name: 'Exportación a Excel',
+            text: 'Ventas, pedidos, clientes, productos y costos, filamentos, insumos y gastos, en CSV.',
+          },
+          {
+            name: 'Información separada',
+            text: 'Cada taller tiene su cuenta; ningún otro taller tiene acceso a tu información.',
+          },
+        ],
+      },
+      /** Pricing band. */
+      price: {
+        title: 'Paga por taller, no por impresora.',
+        lead: 'Empieza gratis: el plan Gratis no vence.',
+      },
+      /** Questions (`Faqs`). */
+      faq: {
+        title: 'Preguntas',
+        items: (name: string, days: number) => [
+          {
+            question: '¿Necesito tarjeta para la prueba?',
+            answer: `No. Son ${days} días del plan Negocio sin tarjeta. Al terminar, la cuenta pasa al plan Gratis sin perder información.`,
+          },
+          {
+            question: '¿Es compatible con mi impresora?',
+            answer: `Sí, con cualquier marca. ${name} no se conecta a la impresora: los gramos y el tiempo de impresión se capturan desde tu laminador (Bambu Studio, OrcaSlicer, PrusaSlicer o Cura).`,
+          },
+          {
+            question: '¿Emite facturas (CFDI)?',
+            answer:
+              'No. Genera cotizaciones y notas de venta. El CFDI se emite en tu sistema de facturación.',
+          },
+          {
+            question: '¿Funciona sin internet?',
+            answer:
+              'No. La información se guarda en tu cuenta para consultarla igual en la computadora y en el celular.',
+          },
+          {
+            question: '¿El costo incluye mi tiempo de trabajo?',
+            answer:
+              'No. El costo incluye material, luz, máquina, extras y reserva por fallos. El precio de venta lo defines tú.',
+          },
+          {
+            question: '¿Puedo exportar mi información?',
+            answer:
+              'Sí. Copia de seguridad completa o exportación a Excel (CSV), en cualquier momento.',
+          },
+          { question: '¿Puedo cancelar?', answer: 'Sí, desde Ajustes, sin llamadas.' },
+        ],
+      },
+    },
     // ── principal: end ──
 
     // ── precios: start (agent «precios»: texts of /talleres/precios, docs/25 §7.2) ──
