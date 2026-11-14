@@ -1,9 +1,15 @@
 ---
 // The page for workshops: pricing (docs/25 §7.2). Hidden until the system is out (docs/25 §2):
 // the middleware locks `/talleres` and this page locks itself too; never prerendered.
+// Header with the monthly or yearly toggle → the 3 plans → ¿Qué plan te toca? → founder price →
+// the full comparison → questions about paying → closing call.
 import SystemLayout from '@/layouts/SystemLayout.astro';
+import PeriodToggle from '@/components/system/PeriodToggle.astro';
 import PlanBand from '@/components/system/PlanBand.astro';
+import PlanFinder from '@/components/system/PlanFinder.astro';
+import CompareTable from '@/components/system/CompareTable.astro';
 import EndCta from '@/components/system/EndCta.astro';
+import Faqs from '@/components/site/Faqs.astro';
 import { site } from '@/config/site';
 import { systemVisible } from '@/config/system';
 import { es } from '@/i18n/es';
@@ -11,18 +17,19 @@ import { es } from '@/i18n/es';
 export const prerender = false;
 if (!systemVisible) return Astro.rewrite('/404');
 
-const { name, trialDays, appUrl, signUpPath } = site.system;
+const { name, trialDays, founderSeats, appUrl, signUpPath } = site.system;
 const t = es.system.pricing;
 const seo = es.system.seo.pricing(name);
 ---
 
 <SystemLayout title={seo.title} description={seo.description} current="pricing">
-  <section aria-labelledby="h1">
+  <section class="s-ph" aria-labelledby="h1">
     <div class="wrap">
       <h1 class="t-h1" id="h1">
         {t.title}
       </h1>
       <p class="lead">{t.lead}</p>
+      <PeriodToggle />
     </div>
   </section>
 
@@ -32,6 +39,27 @@ const seo = es.system.seo.pricing(name);
     </div>
   </section>
 
+  <PlanFinder />
+
+  <section aria-label={t.founder.label}>
+    <div class="wrap">
+      <div class="founder">
+        <b>{t.founder.title}</b>
+        <p>{t.founder.text(founderSeats)}</p>
+      </div>
+    </div>
+  </section>
+
+  <CompareTable />
+
+  <Faqs
+    faqs={t.pay.items(trialDays)}
+    title={t.pay.title}
+    headingId="pay-h"
+    headingClass="t-h2"
+    wide
+  />
+
   <EndCta
     id="end-h"
     title={t.end.title(trialDays)}
@@ -39,3 +67,47 @@ const seo = es.system.seo.pricing(name);
     primary={{ label: es.system.cta.tryFree, href: `${appUrl}${signUpPath}` }}
   />
 </SystemLayout>
+
+<style>
+  /* Page header: shorter padding than a section; title, lead and the toggle stacked. */
+  .s-ph {
+    padding: clamp(40px, 6vw, 88px) 0 clamp(32px, 4vw, 56px);
+  }
+  .s-ph .wrap {
+    display: grid;
+    gap: 20px;
+  }
+  .s-ph :global(.seg) {
+    justify-self: start;
+  }
+
+  /* Header of «Sobre el pago» (rendered by Faqs): the spacing of a section header (`.sec-h`). */
+  :global(section[aria-labelledby='pay-h'] .sec-h) {
+    display: grid;
+    gap: 16px;
+    margin-bottom: clamp(32px, 4.4vw, 60px);
+    max-width: 860px;
+  }
+
+  /* Founder price: a dark top rule, the name and its sentence (side by side on desktop). */
+  .founder {
+    display: grid;
+    gap: 14px;
+    border-top: 2px solid var(--ink);
+    padding-top: 22px;
+  }
+  .founder b {
+    font-size: clamp(26px, 2.8vw, 36px);
+    letter-spacing: -0.035em;
+  }
+  .founder p {
+    color: var(--ink-2);
+    max-width: 60ch;
+  }
+  @media (min-width: 1100px) {
+    .founder {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      column-gap: 64px;
+    }
+  }
+</style>
