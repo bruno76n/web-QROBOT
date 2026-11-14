@@ -12,7 +12,10 @@ import Glossary from '@/components/learn/Glossary.astro';
 import QuickCheck from '@/components/learn/QuickCheck.astro';
 import { es } from '@/i18n/es';
 import { isLearnTopic, learnTopicName } from '@/config/learn';
-import { learnTitle } from '@/lib/learn/content';
+import { learnTitle, learnUrl } from '@/lib/learn/content';
+import { glossaryGroups } from '@/lib/learn/glossary';
+import { articleJsonLd, breadcrumbJsonLd, definedTermSetJsonLd } from '@/lib/seo';
+import { site } from '@/config/site';
 import { getLearnPage, getLearnTopic, type LearnPageView } from '@/server/queries/learn';
 
 export const prerender = false;
@@ -32,9 +35,42 @@ if (!page) return Astro.rewrite('/404');
 const crumbs: { label: string; href: string }[] = [{ label: es.learn.name, href: '/aprende' }];
 if (parts.length === 2)
   crumbs.push({ label: learnTopicName(page.topic), href: `/aprende/${page.topic}` });
+// Structured data: breadcrumbs everywhere, Article on answers, DefinedTermSet on the glossary.
+const path = learnUrl(page.slug);
+const jsonLd: object[] = [
+  breadcrumbJsonLd(site.domain, [
+    ...crumbs.map((c) => ({ name: c.label, href: c.href })),
+    { name: page.title },
+  ]),
+];
+if (page.kind === 'glossary')
+  jsonLd.push(
+    definedTermSetJsonLd(
+      site.domain,
+      path,
+      page.title,
+      glossaryGroups(page.terms).flatMap((g) =>
+        g.terms.map((t) => ({ name: t.term, description: t.definition, id: t.id })),
+      ),
+    ),
+  );
+else if (page.kind !== 'section')
+  jsonLd.push(
+    articleJsonLd({
+      domain: site.domain,
+      path,
+      headline: page.title,
+      description: page.summary,
+      updatedAt: page.updatedAt,
+    }),
+  );
 ---
 
-<LearnLayout title={learnTitle(page.title)} description={page.summary || page.subtitle}>
+<LearnLayout
+  title={learnTitle(page.title)}
+  description={page.summary || page.subtitle}
+  jsonLd={jsonLd}
+>
   <PageHead
     title={page.title}
     subtitle={page.subtitle}

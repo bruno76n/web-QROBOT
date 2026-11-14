@@ -12,13 +12,17 @@ export const es = {
     mainNav: 'Principal',
   },
   header: {
-    nav: [{ label: 'Catálogo', href: '/catalogo' }],
+    nav: [
+      { label: 'Catálogo', href: '/catalogo' },
+      { label: 'Aprende', href: '/aprende' },
+    ],
     quote: 'Cotizar',
     /** Over the hero the header shows this instead of the logo (docs/03 §5). */
     social: { lead: 'Visita nuestras redes:', button: 'Instagram' },
     quoteHref: '/#pedido',
   },
   footer: {
+    navLabel: 'Secciones',
     whatsapp: 'WhatsApp',
     facebook: 'Facebook',
     instagram: 'Instagram',
@@ -46,6 +50,7 @@ export const es = {
         body: () => [
           'Ningún dato personal. El mensaje de tu pedido se arma en tu navegador y se va directo a WhatsApp: la web nunca lo recibe.',
           'Solo se miden estadísticas anónimas de visitas (qué páginas se abren y desde qué tipo de dispositivo), sin cookies y sin guardar tu IP. También se suma cuántas veces se toca cada botón de WhatsApp, como un contador por día, sin nada que te identifique.',
+          'En Aprende, si una búsqueda no encuentra nada, se guarda el texto que escribiste y el día, sin tu IP ni nada que te identifique. Sirve para saber qué respuestas faltan.',
         ],
       },
       {

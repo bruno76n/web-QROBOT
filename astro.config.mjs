@@ -40,5 +40,9 @@ export default defineConfig({
       styleDirective: { resources: ["'self'", "'unsafe-inline'"] },
     },
   },
-  vite: { plugins: [tailwindcss()] },
+  vite: {
+    plugins: [tailwindcss()],
+    // Scripts compiled so they run from Safari 14 (filters, search and tools of Aprende, docs/24 §4).
+    build: { target: ['chrome87', 'edge88', 'firefox78', 'safari14'] },
+  },
 });

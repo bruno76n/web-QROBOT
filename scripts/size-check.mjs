@@ -15,6 +15,22 @@ const budgets = [
   { label: 'Privacidad', url: '/privacidad', limitKb: 8 },
   // 404 and privacy carry no React: only the header and beacon scripts count (docs/15 §2)
   { label: '404', url: '/no-existe', limitKb: 8, status: 404 },
+  // Aprende: search, filters and tools are plain scripts, no React (docs/21 §13). `safari` also
+  // checks that its scripts run in Safari 14 (docs/24 §5–6).
+  { label: 'Aprende', url: '/aprende', limitKb: 25, safari: true },
+  { label: 'Aprende · tema', url: '/aprende/filamentos', limitKb: 25, safari: true },
+  { label: 'Aprende · ficha', url: '/aprende/filamentos/pla', limitKb: 25, safari: true },
+  { label: 'Aprende · ¿Cabe mi pieza?', url: '/aprende/maquinas/volumen-de-impresion', limitKb: 25, safari: true },
+  { label: 'Aprende · calculadora', url: '/aprende/negocio/costo', limitKb: 25, safari: true },
+];
+
+/**
+ * What Safari 14 cannot run (docs/24 §5): a direct `requestIdleCallback(` call, and regular
+ * expressions with lookbehind, which stop the whole script from loading before Safari 16.4.
+ */
+const safariBreakers = [
+  { name: 'requestIdleCallback', re: /(?:^|[^.\w])requestIdleCallback\(/ },
+  { name: 'lookbehind', re: /\(\?<[=!]/ },
 ];
 
 /**
@@ -40,6 +56,7 @@ async function jsOnOpen(base, html, { skipVisible = false } = {}) {
   // Follow the static imports of each file (React and Embla live in shared chunks).
   const seen = new Set();
   let total = 0;
+  const codes = [];
   const queue = [...srcs].map((src) => new URL(src, base).href);
   while (queue.length > 0) {
     const url = queue.shift();
@@ -51,13 +68,14 @@ async function jsOnOpen(base, html, { skipVisible = false } = {}) {
     total += gzipSync(buf).length;
     if (/\.m?js(\?|$)/.test(url)) {
       const code = buf.toString('utf8');
+      codes.push({ url, code });
       for (const m of code.matchAll(/(?:from|import)\s*["'](\.{1,2}\/[^"']+\.js)["']/g))
         queue.push(new URL(m[1], url).href);
     }
   }
   srcs.clear();
   seen.forEach((u) => srcs.add(u));
-  return { total, files: srcs.size };
+  return { total, files: srcs.size, codes };
 }
 
 /** Checks every budget against the server at `base`; returns the exit code (0 = all within budget). */
@@ -71,9 +89,17 @@ async function run(base) {
       continue;
     }
     checked++;
-    const { total, files } = await jsOnOpen(base, await res.text(), { skipVisible: b.skipVisible });
+    const { total, files, codes } = await jsOnOpen(base, await res.text(), {
+      skipVisible: b.skipVisible,
+    });
     const kb = total / KB;
-    const ok = kb <= b.limitKb;
+    const broken = b.safari
+      ? safariBreakers.flatMap((s) =>
+          codes.filter((c) => s.re.test(c.code)).map((c) => `${s.name} in ${c.url}`),
+        )
+      : [];
+    for (const m of broken) console.log(`  ✗ Safari 14: ${m}`);
+    const ok = kb <= b.limitKb && broken.length === 0;
     console.log(
       `${ok ? '✓' : '✗'} ${b.label} (${b.url}): ${kb.toFixed(1)} KB gzip in ${files} file(s), budget ${b.limitKb} KB`,
     );

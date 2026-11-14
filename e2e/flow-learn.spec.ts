@@ -4,6 +4,9 @@
  * keyboard of the search box. Run at 390, 820 and 1440 (and I, J, K at 360 below).
  */
 import { test, expect, type Page } from '@playwright/test';
+import { stubPhotoHost } from './stub-images';
+
+test.beforeEach(({ context }) => stubPhotoHost(context));
 
 /** The live search box of the page (the big one on the home page). */
 const searchBox = (page: Page) => page.getByRole('combobox', { name: 'Buscar en Aprende' }).first();
@@ -97,6 +100,41 @@ test('sin JavaScript: Enter lleva a la página de resultados', async ({ browser 
   await expect(page).toHaveURL(/\/aprende\/buscar\?q=petg/);
   await expect(page.locator('.res a').first()).toHaveAttribute('href', '/aprende/filamentos/petg');
   await context.close();
+});
+
+test('navegar inicio → Aprende → ficha → catálogo → Aprende sin errores y con el buscador vivo', async ({
+  page,
+}) => {
+  const problems: string[] = [];
+  page.on('console', (m) => {
+    if (m.type() === 'error') problems.push(m.text());
+  });
+  page.on('pageerror', (e) => problems.push(e.message));
+  await page.goto('/');
+  await page
+    .getByRole('navigation', { name: 'Principal' })
+    .getByRole('link', { name: 'Aprende' })
+    .click();
+  await expect(page).toHaveURL(/\/aprende$/);
+  await page
+    .getByRole('link', { name: /^Filamentos/ })
+    .first()
+    .click();
+  await expect(page).toHaveURL(/\/aprende\/filamentos$/);
+  await page.locator('.plist a').first().click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('PLA');
+  await page
+    .getByRole('navigation', { name: 'Principal' })
+    .getByRole('link', { name: 'Catálogo' })
+    .click();
+  await expect(page).toHaveURL(/\/catalogo$/);
+  await page
+    .getByRole('navigation', { name: 'Principal' })
+    .getByRole('link', { name: 'Aprende' })
+    .click();
+  await searchBox(page).fill('petg');
+  await expect(page.getByRole('option').first()).toBeVisible();
+  expect(problems, problems.join('\n')).toEqual([]);
 });
 
 test.describe('a 360 px', () => {
