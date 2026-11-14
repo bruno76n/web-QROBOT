@@ -317,6 +317,16 @@ export const es = {
     tooLong: (max: number) => `Máximo ${max} caracteres.`,
     badPrice: 'Escribe un precio, por ejemplo 50 o 1,250.',
     badSlug: 'Solo minúsculas, números y guiones.',
+    /** Tab «Aprende» of the panel (docs/12, docs/fases/fase-8.md 8.2–8.3). */
+    learn: {
+      // ── editor: start (agent «editor»: list and editor of the pages, 8.2) ──
+      editor: {},
+      // ── editor: end ──
+
+      // ── buscador: start (agent «buscador»: search block and searches without a result, 8.3) ──
+      search: {},
+      // ── buscador: end ──
+    },
   },
   catalog: {
     titleLines: ['Elige uno.', 'O cincuenta.'],
