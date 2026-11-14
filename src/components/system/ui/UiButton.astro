@@ -1,0 +1,23 @@
+---
+/**
+ * A drawn button of a system screen (docs/25 §6.3): a `<span>`, not a real button or link, because
+ * the screen is a picture (`role="img"`). `pri` is the dark main one, `sq` a square icon button.
+ * An optional icon from `ModuleIcon` or the `icon` slot goes before the label.
+ */
+import ModuleIcon from '../ModuleIcon.astro';
+import type { IconKey } from '@/config/system';
+
+interface Props {
+  pri?: boolean;
+  sq?: boolean;
+  icon?: IconKey | undefined;
+  class?: string | undefined;
+}
+const { pri = false, sq = false, icon, class: className } = Astro.props;
+---
+
+<span class:list={['ui-btn', { pri, sq }, className]}>
+  {icon && <ModuleIcon icon={icon} size={14} class="ic" />}
+  <slot name="icon" />
+  <slot />
+</span>

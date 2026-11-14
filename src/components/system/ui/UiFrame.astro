@@ -1,0 +1,29 @@
+---
+/**
+ * Frame of a system screen (docs/25 §6.3): a `<figure role="img">` whose `aria-label` describes the
+ * whole screen (what it shows and its key numbers), so screen readers get one sentence instead of
+ * the drawn interface. `win` draws an app window with its title bar; `card` a floating card.
+ * `class` goes on the figure (layout hooks such as `fig-app`), `inner` on the screen itself.
+ */
+interface Props {
+  /** Full description of the screen for screen readers. */
+  label: string;
+  kind?: 'win' | 'card';
+  class?: string | undefined;
+  inner?: string | undefined;
+}
+const { label, kind = 'win', class: className, inner } = Astro.props;
+---
+
+<figure class:list={['ui-fig', className]} role="img" aria-label={label}>
+  <div class:list={['ui', kind === 'win' ? 'ui-win' : 'ui-card', inner]}>
+    {kind === 'win' && (
+      <div class="ui-chrome" aria-hidden="true">
+        <i></i>
+        <i></i>
+        <i></i>
+      </div>
+    )}
+    <slot />
+  </div>
+</figure>
