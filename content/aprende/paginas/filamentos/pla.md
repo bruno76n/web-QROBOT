@@ -4,7 +4,7 @@ kind: sheet
 topic: filamentos
 title: PLA
 subtitle: El filamento más usado. Fácil de imprimir, rígido y con muchos colores.
-summary: Para figuras, decoración y piezas de interior que no cargan peso. Se deforma desde 57 °C, así que no sirve para el coche ni para lugares calientes.
+summary: Para figuras, decoración y piezas de interior que no cargan peso; para eso también sirve el PETG. Se deforma desde 57 °C, así que no sirve para el coche ni para lugares calientes.
 filters: []
 tags:
 - pla
@@ -30,6 +30,8 @@ order: 1
 reviewed: 2026-11
 cta: whatsapp
 faqs:
+- q: ¿PLA o PETG para figuras?
+  a: Cualquiera de los dos. El PETG sirve para todo lo que sirve el PLA y aguanta más golpes y calor; el PLA no sirve para todo lo del PETG. Si el PETG te sale igual o más barato, úsalo para todo.
 - q: ¿El PLA es biodegradable?
   a: Solo en composta industrial, con calor y humedad controlados. En la tierra o en la basura de la casa tarda años.
 - q: ¿PLA o PLA+?
@@ -69,6 +71,8 @@ faqs:
 ## Usos
 
 Figuras, llaveros, decoración, maquetas, prototipos, organizadores, piezas de exhibición.
+
+Todo esto también sale en PETG. Entre los dos, elige por precio y por los colores que encuentres.
 
 ## No se recomienda para
 

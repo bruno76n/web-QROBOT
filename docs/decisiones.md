@@ -350,3 +350,6 @@ Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y pre
 - **WebKit:** el proyecto `webkit` de Playwright (iPhone 13, flujos H–L) se activa solo si WebKit está instalado; aquí no lo está y no se pueden instalar navegadores. Se corre en la Mac con `pnpm exec playwright install webkit` y `pnpm e2e`.
 - **Pruebas de componentes Astro:** proyecto de Vitest `astro` (`vitest.astro.config.ts`, `getViteConfig`) para pintar componentes con la API de contenedor (prueba de inyección de `21 §14`).
 - Diferencias con las maquetas en `21 §11`.
+
+## 2026-11-13 · PLA y PETG (lo pidió el dueño)
+- El PETG sirve para todo lo que sirve el PLA y aguanta más; el PLA no sirve para todo lo del PETG. Para figuras y decoración decide el precio. El PETG entra al filtro Decoración.
