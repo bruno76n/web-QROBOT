@@ -25,6 +25,15 @@ export function AdminShell({ view, children }: Props) {
   const confirm = useConfirm();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const viewsRef = useRef<HTMLElement>(null);
+
+  // On phones the tabs slide inside their pill: the current one is brought into view.
+  useEffect(() => {
+    const views = viewsRef.current;
+    const current = views?.querySelector<HTMLElement>('[aria-current="page"]');
+    if (!views || !current || views.scrollWidth <= views.clientWidth) return;
+    views.scrollLeft = current.offsetLeft + current.offsetWidth - views.clientWidth + 4;
+  }, [view]);
 
   // The panel sweeps stale uploads in the background every time it opens (docs/12 §1).
   useEffect(() => {
@@ -82,7 +91,7 @@ export function AdminShell({ view, children }: Props) {
           <img src={Head} width={28} height={24} alt="" />
           {t.brand}
         </a>
-        <nav className="views" aria-label={t.tabs.label}>
+        <nav className="views" ref={viewsRef} aria-label={t.tabs.label}>
           <a
             className="vbtn"
             href="/admin"
