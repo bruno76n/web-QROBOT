@@ -1,0 +1,391 @@
+---
+/**
+ * Cost calculator of a printed piece (docs/21 §6.4), shared by Aprende (`[[calculadora-costo]]`)
+ * and the page for workshops (docs/25 §6): material, machine and other inputs with the example
+ * values, and the breakdown (material, electricity, machine, extras, subtotal, cost) recalculated
+ * while typing with src/lib/cost.ts. With `withPrice` it adds a sale price and the profit block
+ * (profit and how many times the cost, with `profitAt`). Nothing is saved or sent. Phone: one
+ * column and a bar fixed at the bottom with the cost; desktop: result fixed on the right.
+ */
+import { es } from '@/i18n/es';
+import {
+  computeCost,
+  costDefaults,
+  exampleSalePrice,
+  formatPesos,
+  profitAt,
+  type CostInput,
+} from '@/lib/cost';
+import { fillText } from '@/lib/learn/tables';
+
+interface Props {
+  /** Adds «Precio de venta» and the profit block. */
+  withPrice?: boolean;
+  title?: string;
+  /** `2` in Aprende (a section of the body), `3` in the page for workshops (inside its own section). */
+  headingLevel?: 2 | 3;
+  /** Prefix of the element ids, so two calculators never share an id. */
+  idPrefix?: string;
+}
+const {
+  withPrice = false,
+  title = es.learn.cost.title,
+  headingLevel = 2,
+  idPrefix = '',
+} = Astro.props;
+const t = es.learn.cost;
+const Heading = headingLevel === 3 ? 'h3' : 'h2';
+const first = computeCost(costDefaults);
+const firstProfit = profitAt(first.cost, exampleSalePrice);
+/** One input: the field it feeds, its unit before or after the number and its example value. */
+type Field = { key: keyof CostInput | 'price'; label: string; pre?: string; post?: string };
+const groups: { legend: string; fields: Field[] }[] = [
+  {
+    legend: t.groups.material,
+    fields: [
+      { key: 'grams', label: t.grams, post: 'g' },
+      { key: 'purgePct', label: t.purge, post: '%' },
+      { key: 'rollPrice', label: t.rollPrice, pre: '$' },
+      { key: 'rollGrams', label: t.rollGrams, post: 'g' },
+    ],
+  },
+  {
+    legend: t.groups.machine,
+    fields: [
+      { key: 'hours', label: t.hours, post: 'h' },
+      { key: 'watts', label: t.watts, post: 'W' },
+      { key: 'kwhPrice', label: t.kwh, pre: '$' },
+      { key: 'printerPrice', label: t.printerPrice, pre: '$' },
+      { key: 'lifeHours', label: t.lifeHours, post: 'h' },
+      { key: 'maintenancePerHour', label: t.maintenance, pre: '$' },
+    ],
+  },
+  {
+    legend: t.groups.other,
+    fields: [
+      { key: 'extras', label: t.extras, pre: '$' },
+      { key: 'failPct', label: t.fails, post: '%' },
+    ],
+  },
+  ...(withPrice
+    ? [{ legend: t.groups.sale, fields: [{ key: 'price' as const, label: t.price, pre: '$' }] }]
+    : []),
+];
+const value = (key: Field['key']) => String(key === 'price' ? exampleSalePrice : costDefaults[key]);
+const results: { key: keyof typeof first; label: string }[] = [
+  { key: 'material', label: t.material },
+  { key: 'electricity', label: t.electricity },
+  { key: 'machine', label: t.machine },
+  { key: 'extras', label: t.extrasResult },
+  { key: 'subtotal', label: t.subtotal },
+];
+/** «5.7 veces el costo», without a trailing «.0». */
+const timesText = (x: number) => fillText(t.times, { x: x.toFixed(1).replace(/\.0$/, '') });
+---
+
+<section class="calc" aria-labelledby={`${idPrefix}calc-h`} data-calc>
+  <form class="calc-f" data-calc-form>
+    <Heading id={`${idPrefix}calc-h`} class="calc-title">
+      {title}
+    </Heading>
+    {groups.map((g) => (
+      <fieldset>
+        <legend>{g.legend}</legend>
+        {g.fields.map((f) => (
+          <label for={`${idPrefix}c-${f.key}`}>
+            {f.label}
+            <span class="ig">
+              {f.pre && <span>{f.pre}</span>}
+              <input
+                id={`${idPrefix}c-${f.key}`}
+                name={f.key}
+                inputmode="decimal"
+                value={value(f.key)}
+                autocomplete="off"
+              />
+              {f.post && <span>{f.post}</span>}
+            </span>
+          </label>
+        ))}
+      </fieldset>
+    ))}
+  </form>
+  <div class="calc-r" id={`${idPrefix}calc-r`} aria-live="polite">
+    <dl>
+      {results.map((r) => (
+        <div>
+          <dt>{r.label}</dt>
+          <dd data-r={r.key}>{formatPesos(first[r.key])}</dd>
+        </div>
+      ))}
+    </dl>
+    <div class="tot">
+      <span>{t.total}</span>
+      <b data-r="cost">{formatPesos(first.cost)}</b>
+    </div>
+    {withPrice && (
+      <div
+        class:list={['gain', firstProfit && firstProfit.profit < 0 && 'neg']}
+        data-gain
+        data-times={t.times}
+        data-no-price={t.noPrice}
+      >
+        <div>
+          <span>{t.profit}</span>
+          <b data-r="profit">{firstProfit ? formatPesos(firstProfit.profit) : '—'}</b>
+        </div>
+        <span data-r="times">{firstProfit ? timesText(firstProfit.times) : t.noPrice}</span>
+      </div>
+    )}
+    <p class="tiny calc-note">{t.note}</p>
+  </div>
+  <div class="calc-bar" aria-hidden="true">
+    <span>
+      {t.total} <b data-r="cost">{formatPesos(first.cost)}</b>
+    </span>
+    <a href={`#${idPrefix}calc-r`}>{t.detail}</a>
+  </div>
+</section>
+
+<style>
+  .calc {
+    display: grid;
+    gap: 24px;
+  }
+  .calc-title {
+    grid-column: 1 / -1;
+    margin: 0;
+  }
+  .calc-f {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 18px;
+    align-content: start;
+  }
+  .calc-f fieldset {
+    grid-column: 1 / -1;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 18px;
+  }
+  .calc-f legend {
+    font-weight: 600;
+    font-size: 17px;
+    margin-bottom: 10px;
+    padding: 0;
+  }
+  .calc-f label {
+    display: grid;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--ink-2);
+    min-width: 0;
+  }
+  .calc-f .ig {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    min-width: 0;
+  }
+  .calc-f .ig:focus-within {
+    outline: 2px solid var(--purple);
+    outline-offset: 1px;
+    border-color: transparent;
+  }
+  .calc-f .ig span {
+    padding: 0 10px;
+    font-size: 15px;
+    color: var(--ink-2);
+    flex: none;
+  }
+  .calc-f .ig input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font-size: 17px;
+    padding: 0 10px;
+    font-variant-numeric: tabular-nums;
+  }
+  .calc-r {
+    border-radius: 18px;
+    background: var(--ink);
+    color: #fff;
+    padding: 22px 24px;
+    display: grid;
+    gap: 10px;
+    align-content: start;
+  }
+  .calc-r dl {
+    margin: 0;
+    display: grid;
+    gap: 6px;
+  }
+  .calc-r dl div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 15px;
+    color: #c9c9d1;
+    font-variant-numeric: tabular-nums;
+  }
+  .calc-r dl dd {
+    margin: 0;
+    color: #fff;
+  }
+  .calc-r .tot {
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    padding-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .calc-r .tot b {
+    font-size: clamp(34px, 4vw, 44px);
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+  /* Profit at the sale price: green, or red when the price is below the cost. */
+  .calc-r .gain {
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    padding-top: 12px;
+    display: grid;
+    gap: 4px;
+  }
+  .calc-r .gain div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+  .calc-r .gain b {
+    font-size: 26px;
+    letter-spacing: -0.03em;
+    color: #3ddc7a;
+  }
+  .calc-r .gain span {
+    color: #c9c9d1;
+    font-size: 15px;
+  }
+  .calc-r .gain.neg b {
+    color: #ff8a80;
+  }
+  .calc-note {
+    font-size: 13px;
+    line-height: 1.4;
+    color: #c9c9d1;
+  }
+  .calc-bar {
+    display: none;
+  }
+  @media (min-width: 1100px) {
+    .calc {
+      grid-template-columns: minmax(0, 1fr) 320px;
+      align-items: start;
+    }
+    .calc-r {
+      position: -webkit-sticky;
+      position: sticky;
+      top: calc(var(--top) + 24px);
+    }
+  }
+  @media (max-width: 560px) {
+    .calc-f,
+    .calc-f fieldset {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 760px) {
+    .calc-bar {
+      display: flex;
+      position: -webkit-sticky;
+      position: sticky;
+      bottom: 0;
+      z-index: 20;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: var(--ink);
+      color: #fff;
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+      border-radius: 14px 14px 0 0;
+      margin-top: -8px;
+    }
+    .calc-bar b {
+      font-size: 24px;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+    .calc-bar a {
+      color: #fff;
+      font-size: 15px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+  }
+</style>
+
+<script>
+  import { computeCost, costDefaults, formatPesos, profitAt, type CostInput } from '@/lib/cost';
+  import { fillText } from '@/lib/learn/tables';
+  import { parseAmount } from '@/lib/number';
+
+  let stop: AbortController | null = null;
+
+  /** Reads every input (empty or invalid counts as zero) and writes the breakdown and the profit. */
+  function update(box: HTMLElement) {
+    const input = { ...costDefaults };
+    let price = 0;
+    box.querySelectorAll<HTMLInputElement>('input[name]').forEach((i) => {
+      const n = parseAmount(i.value);
+      const v = Number.isFinite(n) ? n : 0;
+      if (i.name === 'price') price = v;
+      else input[i.name as keyof CostInput] = v;
+    });
+    const r = computeCost(input);
+    box.querySelectorAll<HTMLElement>('[data-r]').forEach((el) => {
+      const key = el.dataset.r as keyof typeof r;
+      if (key in r) el.textContent = formatPesos(r[key]);
+    });
+    const gain = box.querySelector<HTMLElement>('[data-gain]');
+    if (!gain) return;
+    const p = profitAt(r.cost, price);
+    gain.classList.toggle('neg', !!p && p.profit < 0);
+    const profit = gain.querySelector<HTMLElement>('[data-r="profit"]');
+    const times = gain.querySelector<HTMLElement>('[data-r="times"]');
+    if (profit) profit.textContent = p ? formatPesos(p.profit) : '—';
+    if (times)
+      times.textContent = p
+        ? fillText(gain.dataset.times || '', { x: p.times.toFixed(1).replace(/\.0$/, '') })
+        : gain.dataset.noPrice || '';
+  }
+
+  function setup() {
+    stop?.abort();
+    stop = new AbortController();
+    const signal = stop.signal;
+    document.querySelectorAll<HTMLElement>('[data-calc]').forEach((box) => {
+      const form = box.querySelector('form');
+      form?.addEventListener('input', () => update(box), { signal });
+      form?.addEventListener('submit', (e) => e.preventDefault(), { signal });
+      update(box);
+    });
+  }
+
+  document.addEventListener('astro:page-load', setup);
+  document.addEventListener('astro:before-swap', () => {
+    stop?.abort();
+    stop = null;
+  });
+</script>

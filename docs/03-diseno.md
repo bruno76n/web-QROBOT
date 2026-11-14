@@ -24,6 +24,10 @@ Se declaran como variables CSS y en el tema de Tailwind (`src/styles/global.css`
 | `--green` | `#00ae42` | Marca; botón de WhatsApp (texto `--ink` encima) |
 | `--lilac` | `#f1ecfd` | Recuadro «En corto» y cuadros «Truco» de Aprende (`21 §4.1`) |
 | `--green-l` | `#e3f5e9` | Burbuja del mensaje propio en el pedido |
+| `--green-d` | `#00873a` | Verde oscuro para texto sobre fondos claros (palomitas, «Sí» en tablas, ganancia) |
+| `--ink-3` | `#9b9ba5` | Texto apagado («—» de lo que no incluye un plan) |
+| `--red` · `--red-l` | `#c8302a` · `#fbeaea` | Avisos de error (Aprende, Para talleres) |
+| `--amber` · `--amber-l` | `#b4740a` · `#fdf3e1` | Cuadros «Cuidado» y nivel de calor medio |
 | `--top` | `68px` | Alto del header |
 | `--gutter` | `clamp(20px, 4.5vw, 64px)` | Margen lateral |
 | Ancho máximo | `1360px` | Contenido (`.wrap`) |

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { computeCost, costDefaults, formatPesos, maxFailPct, round2 } from './cost';
+import { computeCost, costDefaults, formatPesos, maxFailPct, profitAt, round2 } from './cost';
 
 describe('computeCost', () => {
   it('the example of negocio/costo gives $21.04 exactly', () => {
@@ -41,5 +41,20 @@ describe('formatPesos', () => {
   it('shows cents and thousands', () => {
     expect(formatPesos(21.04)).toBe('$21.04');
     expect(formatPesos(1234.5)).toBe('$1,234.50');
+    expect(formatPesos(-6.04)).toBe('−$6.04');
+  });
+});
+
+describe('profitAt', () => {
+  it('cost $21.04 and price $120 → $98.96 and 5.7 times', () => {
+    expect(profitAt(21.04, 120)).toEqual({ profit: 98.96, times: 5.7 });
+  });
+  it('a price below the cost gives a negative profit', () => {
+    expect(profitAt(21.04, 15)).toEqual({ profit: -6.04, times: 0.7 });
+  });
+  it('no price or a cost of 0 → null', () => {
+    expect(profitAt(21.04, 0)).toBeNull();
+    expect(profitAt(21.04, Number.NaN)).toBeNull();
+    expect(profitAt(0, 120)).toBeNull();
   });
 });

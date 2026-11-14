@@ -1,0 +1,90 @@
+---
+/**
+ * Questions as `<details>` (one opens at a time only if the person opens it), shared by Aprende
+ * and the page for workshops (docs/25 §6). In Aprende each question has its `#pregunta-N` anchor
+ * (docs/21 §4.1). The heading is the page's: Aprende passes its title and `blk-h`; the page for
+ * workshops wraps it in its section header (`sec-h`, `t-h2`) inside a `.wrap`.
+ */
+import { es } from '@/i18n/es';
+
+interface Props {
+  faqs: { question: string; answer: string; position?: number }[];
+  title?: string;
+  headingId?: string;
+  /** Class of the `h2`: `blk-h` in Aprende, `t-h2` in the page for workshops. */
+  headingClass?: string;
+  /** Page-for-workshops layout: content in a `.wrap` and the heading inside `header.sec-h`. */
+  wide?: boolean;
+}
+const {
+  faqs,
+  title = es.learn.faq,
+  headingId = 'faq-h',
+  headingClass = 'blk-h',
+  wide = false,
+} = Astro.props;
+---
+
+{faqs.length > 0 && (
+  <section aria-labelledby={headingId}>
+    <div class:list={[wide && 'wrap']}>
+      {wide ? (
+        <header class="sec-h">
+          <h2 class={headingClass} id={headingId}>
+            {title}
+          </h2>
+        </header>
+      ) : (
+        <h2 class={headingClass} id={headingId}>
+          {title}
+        </h2>
+      )}
+      <div class="faq">
+        {faqs.map((f) => (
+          <details id={f.position ? `pregunta-${f.position}` : undefined}>
+            <summary>{f.question}</summary>
+            <p>{f.answer}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .faq details {
+    border-bottom: 1px solid var(--line);
+    scroll-margin-top: calc(var(--top) + 16px);
+  }
+  .faq summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 22px 0;
+    min-height: 44px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    font-size: clamp(18px, 1.7vw, 20px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq summary::after {
+    content: '+';
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--ink-2);
+  }
+  .faq details[open] summary::after {
+    content: '−';
+  }
+  .faq details p {
+    padding: 0 0 22px;
+    color: var(--ink-2);
+    max-width: 64ch;
+  }
+</style>

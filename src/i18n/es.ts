@@ -600,7 +600,7 @@ export const es = {
     calendar: { when: 'Cada cuándo' },
     cost: {
       title: 'Calculadora de costo',
-      groups: { material: 'Material', machine: 'Máquina', other: 'Otros' },
+      groups: { material: 'Material', machine: 'Máquina', other: 'Otros', sale: 'Venta' },
       grams: 'Gramos de la pieza',
       purge: 'Purga',
       rollPrice: 'Precio del rollo',
@@ -621,6 +621,12 @@ export const es = {
       total: 'Costo',
       note: 'Valores de ejemplo. No se guarda nada.',
       detail: 'Ver detalle',
+      /** Calculator with a sale price (the page for workshops). */
+      price: 'Precio de venta',
+      profit: 'Ganancia',
+      /** `{x}`: how many times the cost, one decimal. */
+      times: '{x} veces el costo',
+      noPrice: 'Escribe un precio',
     },
     noResultsTable: 'Ningún filamento cumple todo eso. Quita un filtro.',
     search: {

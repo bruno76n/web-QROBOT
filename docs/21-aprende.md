@@ -138,7 +138,7 @@ Viven en `learn_datasets` (JSON) y se pintan en HTML; los filtros son un `<scrip
 Chips por periodo; cada bloque con su lista de tareas.
 
 ### 6.4 Calculadora de costo
-En `negocio/costo`. Lógica en `src/lib/learn/cost.ts` con la fórmula de `23 › negocio/costo`:
+En `negocio/costo`. El componente es compartido con Para talleres: `src/components/site/CostCalculator.astro` (`25 §6`). Lógica en `src/lib/cost.ts` con la fórmula de `23 › negocio/costo`:
 
 | Entrada | Por defecto (ejemplo) |
 |---|---|

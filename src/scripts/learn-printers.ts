@@ -6,7 +6,8 @@
  * `astro:before-swap` (docs/07 §1). Only `textContent` and `hidden` change: no `innerHTML`.
  */
 import { fitPiece, toMm, type Dims, type FitUnit } from '@/lib/learn/fit';
-import { fillText, parseAmount } from '@/lib/learn/tables';
+import { fillText } from '@/lib/learn/tables';
+import { parseAmount } from '@/lib/number';
 
 let stop: AbortController | null = null;
 

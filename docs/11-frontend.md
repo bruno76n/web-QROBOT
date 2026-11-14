@@ -14,12 +14,15 @@
 | Componente | Tipo | Notas |
 |---|---|---|
 | `BaseLayout.astro` | Astro | `<head>` con SEO (`14`), fuente precargada, `ClientRouter`, header, footer, `<main>` |
-| `Header.astro` | Astro + `<script>` | Pestaña negra al centro, Cotizar; el `<script>` pone la clase `over-hero` con `IntersectionObserver` (solo en el inicio) |
-| `Footer.astro` | Astro | Nombre grande que **ocupa el ancho exacto** (ajuste con `fitty` o `textFit`, o con unidad `cqw`; nunca medir a mano con `getBoundingClientRect` en cada resize) |
+| `Header.astro` | Astro + `<script>` | Pestaña negra al centro, Cotizar; ligas de `siteNav()` (`src/lib/nav.ts`); fijo arriba salvo con `sticky={false}` (Para talleres, desde `BaseLayout` con `stickyHeader`); el `<script>` pone la clase `over-hero` con `IntersectionObserver` (solo en el inicio) |
+| `Footer.astro` | Astro | Ligas de `siteNav()`. Nombre grande que **ocupa el ancho exacto** (ajuste con `fitty` o `textFit`, o con unidad `cqw`; nunca medir a mano con `getBoundingClientRect` en cada resize) |
 | `Logo.astro` | Astro | Inserta `assets/logo-cabeza.svg` |
 | `Picture.astro` | Astro | Recibe la foto (de `queries`) y pinta `<img>` con `srcset` de sus versiones, `sizes`, `width`/`height` (sin saltos), `loading="lazy"` salvo que se pida `priority` (hero, primera foto del producto: `fetchpriority="high"`) |
 | `ProductCard.astro` | Astro | Foto cuadrada, nombre, frase, "Desde $X", etiqueta "Más pedido" |
 | `Price.astro` | Astro | Usa `formatMoney` de `src/lib/money.ts` |
+| `CostCalculator.astro` | Astro + `<script>` | Calculadora de costo de Aprende y de Para talleres (`21 §6.4`, `25 §6`): `withPrice` suma precio de venta y ganancia (`profitAt`), `title`, `headingLevel` e `idPrefix`; sus estilos viven en el componente |
+| `Faqs.astro` | Astro | Preguntas en `<details>` de Aprende y Para talleres; `title`, `headingId`, `headingClass` y `wide` (encabezado de sección de Para talleres); sus estilos viven en el componente |
+| `Button.astro` | Astro | Variantes `black`, `green`, `outline` y `outlineLight` (`ui/button-variants.ts`) |
 | `ui/*` | React | Generados con shadcn (`npx shadcn add …`) y ajustados a los tokens de `03` (radio 8 px en botones, 20 px en tarjetas) |
 
 ## 3. Secciones

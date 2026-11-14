@@ -3,7 +3,6 @@ import {
   countText,
   fillText,
   filamentVisible,
-  parseAmount,
   printerLiters,
   splitMaterial,
   type FilamentRow,
@@ -76,16 +75,6 @@ describe('filamentVisible', () => {
     const f = { chip: 'exterior', toggles: ['open', 'brass'] };
     expect(filamentVisible(row({ printer: 'enclosed' }), f, toggles)).toBe(false);
     expect(filamentVisible(row({ printer: 'enclosed-better' }), f, toggles)).toBe(true);
-  });
-});
-
-describe('parseAmount', () => {
-  it('comma or point, spaces, and junk', () => {
-    expect(parseAmount('24,7')).toBe(24.7);
-    expect(parseAmount(' 1 000.5 ')).toBe(1000.5);
-    expect(parseAmount('25')).toBe(25);
-    expect(parseAmount('')).toBeNaN();
-    expect(parseAmount('abc')).toBeNaN();
   });
 });
 

@@ -1,4 +1,8 @@
-/** Cost of a piece (docs/21 §6.4, formula of docs/23 › negocio/costo). Money in pesos. */
+/**
+ * Cost of a printed piece (docs/21 §6.4, formula of docs/23 › negocio/costo) and the profit at a
+ * sale price (docs/25 §5). Shared by the calculator of Aprende and of the page for workshops.
+ * Money in pesos. Pure.
+ */
 
 /** Values the cost calculator reads. Prices in pesos, time in hours, percentages as 0-100. */
 export interface CostInput {
@@ -81,7 +85,23 @@ export function computeCost(input: CostInput): CostResult {
   return { material, electricity, machine, extras, subtotal, cost };
 }
 
-/** Formats pesos as `$21.04`, with thousands separators and two decimals. */
+/** `$21.04`, with thousands separators; a negative amount reads `−$6.04` (a real minus sign). */
 export function formatPesos(n: number): string {
-  return `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const abs = Math.abs(n).toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  return `${n < 0 ? '−' : ''}$${abs}`;
+}
+
+/** Example sale price of the calculator with price (the page for workshops). */
+export const exampleSalePrice = 120;
+
+/**
+ * Profit at a sale price and how many times the cost the price is (one decimal). `null` without a
+ * price or with a cost of 0; a negative profit is allowed (the price is below the cost).
+ */
+export function profitAt(cost: number, price: number): { profit: number; times: number } | null {
+  if (!(Number.isFinite(price) && price > 0) || !(Number.isFinite(cost) && cost > 0)) return null;
+  return { profit: round2(price - cost), times: Math.round((price / cost) * 10) / 10 };
 }
