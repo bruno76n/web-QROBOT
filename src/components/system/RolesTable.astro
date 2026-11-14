@@ -1,0 +1,145 @@
+---
+/**
+ * Who sees what, by role (docs/25 §7.1, mockup `.roles`): areas of the system in rows, roles in
+ * columns, ✓ or — in each cell with its «sí» / «no» for screen readers. On phones (≤ 760 px) the
+ * table slides sideways inside its box with the first column fixed (docs/24 §3), and the right
+ * edge fades while there is more to the right (the small script below sets `more`).
+ */
+import { roles } from '@/config/system';
+import { es } from '@/i18n/es';
+
+const t = es.system.home.team;
+---
+
+<div class="tbl-wrap" data-roles>
+  <table class="roles">
+    <caption class="vh">{t.caption}</caption>
+    <thead>
+      <tr>
+        <th scope="col">{t.what}</th>
+        {roles.columns.map((c) => (
+          <th scope="col" class="c">
+            {t.roles[c]}
+          </th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {roles.rows.map((row) => (
+        <tr>
+          <th scope="row">{t.rows[row.id]}</th>
+          {roles.columns.map((c) =>
+            row.sees.includes(c) ? (
+              <td class="y">
+                ✓<span class="vh">{t.yes}</span>
+              </td>
+            ) : (
+              <td class="no">
+                —<span class="vh">{t.no}</span>
+              </td>
+            ),
+          )}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<script>
+  // Fades the right edge of the roles table while it can still slide to the right. Starts on
+  // `astro:page-load` and removes its listeners on `astro:before-swap` (docs/07 §1).
+  let rolesStop: AbortController | null = null;
+  document.addEventListener('astro:page-load', () => {
+    rolesStop?.abort();
+    rolesStop = null;
+    const box = document.querySelector<HTMLElement>('[data-roles]');
+    if (!box) return;
+    rolesStop = new AbortController();
+    const more = () =>
+      box.classList.toggle('more', box.scrollLeft + box.clientWidth < box.scrollWidth - 2);
+    box.addEventListener('scroll', more, { passive: true, signal: rolesStop.signal });
+    window.addEventListener('resize', more, { signal: rolesStop.signal });
+    more();
+  });
+  document.addEventListener('astro:before-swap', () => {
+    rolesStop?.abort();
+    rolesStop = null;
+  });
+</script>
+
+<style>
+  .tbl-wrap {
+    position: relative;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+  .tbl-wrap.more {
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 36px), rgba(0, 0, 0, 0.25));
+    mask-image: linear-gradient(90deg, #000 calc(100% - 36px), rgba(0, 0, 0, 0.25));
+  }
+  .roles {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 16px;
+    background: #fff;
+  }
+  .roles th,
+  .roles td {
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  .roles th {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-2);
+    background: var(--soft);
+    white-space: nowrap;
+  }
+  .roles tr:last-child td {
+    border-bottom: 0;
+  }
+  .roles td.y,
+  .roles td.no,
+  .roles th.c {
+    text-align: center;
+  }
+  .roles td.y {
+    color: var(--green-d);
+    font-weight: 600;
+  }
+  .roles td.no {
+    color: var(--ink-3);
+  }
+  .roles tbody th {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+    background: #fff;
+    white-space: normal;
+  }
+  @media (max-width: 760px) {
+    .roles {
+      font-size: 15px;
+    }
+    /* The first column stays while the rest slides (docs/24 §3). */
+    .roles th:first-child,
+    .roles td:first-child {
+      position: -webkit-sticky;
+      position: sticky;
+      left: 0;
+      z-index: 1;
+      background: #fff;
+      box-shadow: 1px 0 0 var(--line);
+    }
+    .roles thead th:first-child {
+      background: var(--soft);
+    }
+    .roles td {
+      min-width: 9.5em;
+    }
+  }
+</style>

@@ -1,12 +1,24 @@
 ---
 // The page for workshops: main page (docs/25 §7.1). Hidden until the system is out (docs/25 §2):
 // the middleware locks `/talleres` and this page locks itself too; never prerendered.
+// Sections in order: hero with the Inicio screenshot (preloaded, it is the main image), the strip
+// of what it works with, «De cada $100», the tour, from the file to the delivery, the team, your
+// data, the calculator with price and its call, made in a workshop, plans, questions and the close.
 import SystemLayout from '@/layouts/SystemLayout.astro';
+import AppWindow from '@/components/system/AppWindow.astro';
 import SectionHead from '@/components/system/SectionHead.astro';
+import MoneySplit from '@/components/system/MoneySplit.astro';
+import FeatureTour from '@/components/system/FeatureTour.astro';
+import Flow from '@/components/system/Flow.astro';
+import RolesTable from '@/components/system/RolesTable.astro';
 import PlanBand from '@/components/system/PlanBand.astro';
 import EndCta from '@/components/system/EndCta.astro';
+import Button from '@/components/site/Button.astro';
+import CostCalculator from '@/components/site/CostCalculator.astro';
+import Faqs from '@/components/site/Faqs.astro';
+import Picture from '@/components/site/Picture.astro';
 import { site } from '@/config/site';
-import { systemVisible } from '@/config/system';
+import { systemShotWidths, systemVisible } from '@/config/system';
 import { es } from '@/i18n/es';
 import { systemBase } from '@/lib/system/visibility';
 
@@ -16,17 +28,179 @@ if (!systemVisible) return Astro.rewrite('/404');
 const { name, trialDays, appUrl, signUpPath } = site.system;
 const t = es.system.home;
 const seo = es.system.seo.home(name);
+const signUp = `${appUrl}${signUpPath}`;
+/** `sizes` of the hero screenshot (docs/25 §11); the preload uses the same. */
+const heroSizes = '(max-width: 760px) 100vw, 1232px';
+const heroSrcset = systemShotWidths
+  .map((w) => `/brand/talleres/inicio-${w}.webp ${w}w`)
+  .join(', ');
 ---
 
 <SystemLayout title={seo.title} description={seo.description} current="home">
-  <section aria-labelledby="h1">
+  <Fragment slot="head">
+    <link
+      rel="preload"
+      as="image"
+      imagesrcset={heroSrcset}
+      imagesizes={heroSizes}
+      fetchpriority="high"
+    />
+  </Fragment>
+
+  {/* Hero: title on the left, sentence, buttons and facts on the right; the app window below. */}
+  <section class="s-hero" aria-labelledby="h1">
     <div class="wrap">
-      <h1 class="t-h1" id="h1">
-        {t.title}
-      </h1>
+      <div class="hero-top">
+        <h1 class="t-h1" id="h1">
+          {t.title}
+        </h1>
+        <div class="hero-side">
+          <p class="lead">{t.lead}</p>
+          <div class="hero-cta">
+            <Button href={signUp} rel="noopener" arrow class="hero-btn">
+              {es.system.cta.tryDays(trialDays)}
+            </Button>
+            <Button href={`${systemBase}/precios`} variant="outline" class="hero-btn">
+              {es.system.cta.seePricing}
+            </Button>
+          </div>
+          <ul class="facts">
+            {t.facts.map((f) => (
+              <li>{f}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div class="hero-shot">
+        <AppWindow
+          shot="inicio"
+          alt={es.system.shots.inicio(name)}
+          sizes={heroSizes}
+          crop
+          priority
+        />
+      </div>
+    </div>
+    <div class="strip">
+      <div class="wrap strip-in">
+        <p class="strip-g">
+          <b>{t.strip.reads}</b>
+          {t.strip.slicers.map((s) => (
+            <span>{s}</span>
+          ))}
+        </p>
+        <p class="strip-g">
+          <b>{t.strip.account}</b>
+          {t.strip.places.map((s) => (
+            <span>{s}</span>
+          ))}
+        </p>
+      </div>
     </div>
   </section>
 
+  {/* «De cada $100»: the text on the left, the bar and its legend on the right. */}
+  <section id="funciones" aria-labelledby="money-h">
+    <div class="wrap split">
+      <div>
+        <h2 class="t-h2" id="money-h">
+          {t.money.title}
+        </h2>
+        <p class="lead">{t.money.lead(name)}</p>
+      </div>
+      <MoneySplit />
+    </div>
+  </section>
+
+  {/* Tour of the system. */}
+  <section class="band-soft" aria-labelledby="tour-h">
+    <div class="wrap">
+      <SectionHead id="tour-h" title={t.tour.title} lead={t.tour.lead} />
+      <FeatureTour />
+    </div>
+  </section>
+
+  {/* From the file to the delivery. */}
+  <section aria-labelledby="flow-h">
+    <div class="wrap">
+      <SectionHead id="flow-h" title={t.flow.title} lead={t.flow.lead} />
+      <Flow />
+    </div>
+  </section>
+
+  {/* The team: who sees what. */}
+  <section class="band-lilac" aria-labelledby="team-h">
+    <div class="wrap">
+      <SectionHead id="team-h" title={t.team.title} lead={t.team.lead} />
+      <RolesTable />
+      <p class="note-l">{t.team.note}</p>
+    </div>
+  </section>
+
+  {/* Your data: heading on the left, the 4 facts in two columns. */}
+  <section aria-labelledby="data-h">
+    <div class="wrap split top">
+      <div>
+        <h2 class="t-h2" id="data-h">
+          {t.data.title}
+        </h2>
+      </div>
+      <dl class="facts4">
+        {t.data.items.map((d) => (
+          <div>
+            <dt>{d.title}</dt>
+            <dd>{d.text}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  {/* The calculator with price and the call to create the piece in the system. */}
+  <section class="band-soft" id="calculadora" aria-labelledby="calc-sec-h">
+    <div class="wrap">
+      <SectionHead id="calc-sec-h" title={t.calc.title} lead={t.calc.lead(name)} />
+      <CostCalculator withPrice title={t.calc.calcTitle} headingLevel={3} />
+      <div class="calc-cta">
+        <div>
+          <b>{t.calc.ctaTitle}</b>
+          <p>{t.calc.ctaText(name)}</p>
+        </div>
+        <Button href={signUp} rel="noopener" arrow>
+          {es.system.cta.tryDays(trialDays)}
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  {/* Made in a workshop: the photo of the pieces and Q-404, and a link to the site. */}
+  <section aria-labelledby="story-h">
+    <div class="wrap story">
+      <figure class="story-ph">
+        <div class="shot" data-shot="taller">
+          <Picture
+            base="/brand/hero-desktop"
+            widths={[1200, 2400]}
+            width={2400}
+            height={1350}
+            sizes="(max-width: 1099px) 100vw, 660px"
+            alt={es.system.shots.taller}
+          />
+        </div>
+      </figure>
+      <div>
+        <h2 class="t-h2" id="story-h">
+          {t.story.title}
+        </h2>
+        <p class="lead">{t.story.lead(name)}</p>
+        <a class="link" href="/">
+          {t.story.link}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {/* Plans. */}
   <section class="band-soft" aria-labelledby="price-h">
     <div class="wrap">
       <SectionHead id="price-h" title={t.pricing.title} lead={t.pricing.lead} />
@@ -39,17 +213,280 @@ const seo = es.system.seo.home(name);
     </div>
   </section>
 
+  {/* Questions (shared component, with the section header of these pages). */}
+  <div class="faqs">
+    <Faqs
+      wide
+      title={t.faq.title}
+      headingId="faq-h"
+      headingClass="t-h2"
+      faqs={t.faq.items(name, trialDays)}
+    />
+  </div>
+
   <EndCta
     id="end-h"
     title={t.end.title}
     lead={t.end.lead(trialDays)}
-    primary={{ label: es.system.cta.tryFree, href: `${appUrl}${signUpPath}` }}
+    primary={{ label: es.system.cta.tryFree, href: signUp }}
     secondary={{ label: es.system.cta.download, href: `${systemBase}/descargar` }}
   />
 </SystemLayout>
 
 <style>
+  /* ---------- hero ---------- */
+  .s-hero {
+    padding: clamp(40px, 6vw, 88px) 0 0;
+  }
+  .hero-top {
+    display: grid;
+    gap: 24px;
+    align-items: end;
+  }
+  .hero-top .lead {
+    max-width: 40ch;
+  }
+  /* Spacing with margins, not `gap` in flex (Safari 14, docs/24 §5). */
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 4px -6px -6px;
+  }
+  .hero-cta :global(.hero-btn) {
+    margin: 6px;
+  }
+  .facts {
+    list-style: none;
+    margin: 18px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 15px;
+    color: var(--ink-2);
+  }
+  .facts li {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 22px 8px 0;
+  }
+  /* Green check before each fact. */
+  .facts li::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    border-radius: 50%;
+    flex: none;
+    background: var(--green-l)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300873a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12 4 4 8-8'/%3E%3C/svg%3E")
+      center / 10px no-repeat;
+  }
+  .hero-shot {
+    margin-top: clamp(36px, 5vw, 64px);
+  }
+  @media (min-width: 1100px) {
+    .hero-top {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      column-gap: 56px;
+    }
+    .hero-side {
+      padding-bottom: 10px;
+    }
+  }
+
+  /* Strip: what it works with. */
+  .strip {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    margin-top: clamp(48px, 6vw, 88px);
+  }
+  .strip-in {
+    display: grid;
+  }
+  .strip-g {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 18px 0;
+  }
+  .strip-g + .strip-g {
+    border-top: 1px solid var(--line);
+  }
+  .strip-g b {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-2);
+    margin-right: 18px;
+    white-space: nowrap;
+  }
+  .strip-g span {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-right: 22px;
+    white-space: nowrap;
+  }
+  @media (min-width: 1100px) {
+    .strip-in {
+      grid-template-columns: 1fr 1fr;
+    }
+    .strip-g + .strip-g {
+      border-top: 0;
+      border-left: 1px solid var(--line);
+      padding-left: 32px;
+    }
+  }
+
+  /* ---------- two columns: text and content («De cada $100», your data) ---------- */
+  .split {
+    display: grid;
+    gap: 40px;
+    align-items: center;
+  }
+  .split > * {
+    min-width: 0;
+  }
+  .split.top {
+    align-items: start;
+  }
+  @media (min-width: 1100px) {
+    .split {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      column-gap: 72px;
+    }
+  }
+  .split .lead,
+  .story .lead {
+    margin-top: 18px;
+  }
+
+  /* ---------- team ---------- */
+  .note-l {
+    margin-top: 16px;
+    font-size: 15px;
+    color: var(--ink-2);
+  }
+
+  /* ---------- your data ---------- */
+  .facts4 {
+    display: grid;
+    margin: 0;
+  }
+  .facts4 > div {
+    border-top: 1px solid var(--line);
+    padding: 22px 0;
+  }
+  .facts4 dt {
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+  .facts4 dd {
+    margin: 6px 0 0;
+    color: var(--ink-2);
+    max-width: 44ch;
+  }
+  @media (min-width: 761px) {
+    .facts4 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 48px;
+    }
+  }
+
+  /* ---------- calculator (shared component) and its call ---------- */
+  #calculadora :global(section.calc) {
+    padding: 0;
+  }
+  /* «Tu pieza» at the size of an h3 of the mockup. */
+  #calculadora :global(.calc-title) {
+    font-size: 1.17em;
+  }
+  .calc-cta {
+    margin-top: 28px;
+    border-radius: 18px;
+    background: var(--lilac);
+    padding: 22px 24px;
+    display: grid;
+    gap: 14px;
+    align-items: center;
+  }
+  .calc-cta b {
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    display: block;
+  }
+  .calc-cta p {
+    color: var(--ink-2);
+    font-size: 16px;
+  }
+  @media (min-width: 761px) {
+    .calc-cta {
+      grid-template-columns: minmax(0, 1fr) auto;
+      column-gap: 24px;
+    }
+  }
+
+  /* ---------- made in a workshop ---------- */
+  .story {
+    display: grid;
+    gap: 32px;
+    align-items: center;
+  }
+  .story > * {
+    min-width: 0;
+  }
+  .story-ph {
+    margin: 0;
+    border-radius: var(--r-card);
+    overflow: hidden;
+    background: #fbfbfb;
+  }
+  /* The photo cropped on its point of interest (pieces and Q-404); padding sets the proportion. */
+  .story-ph .shot {
+    position: relative;
+    overflow: hidden;
+  }
+  .story-ph .shot::before {
+    content: '';
+    display: block;
+    padding-top: 78%;
+  }
+  .story-ph .shot :global(img) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .shot[data-shot='taller'] :global(img) {
+    object-position: 80% 72%;
+  }
+  .story p {
+    color: var(--ink-2);
+    max-width: 52ch;
+  }
+  .story .link {
+    display: inline-block;
+    margin-top: 18px;
+  }
+  @media (min-width: 1100px) {
+    .story {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+      column-gap: 64px;
+    }
+  }
+
+  /* ---------- plans ---------- */
   .plans-more {
     margin-top: 22px;
+  }
+
+  /* ---------- questions: the section header of the shared component ---------- */
+  .faqs :global(.sec-h) {
+    display: grid;
+    gap: 16px;
+    margin-bottom: clamp(32px, 4.4vw, 60px);
+    max-width: 860px;
   }
 </style>
