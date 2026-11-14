@@ -846,10 +846,85 @@ export const es = {
       // ── costo-pedidos: end ──
 
       // ── taller: start (agent «taller»: UiPrinters, UiFilaments, UiPurchases, UiStock) ──
-      printers: {},
-      filaments: {},
-      purchases: {},
-      stock: {},
+      /** «Impresoras» (`UiPrinters`). */
+      printers: {
+        label: (name: string) =>
+          `Impresoras en ${name}: dos imprimiendo con su avance, tiempo restante y siguiente trabajo en cola, una disponible; horas de uso, estado de mantenimiento e inversión recuperada de cada una`,
+        title: 'Impresoras',
+        /** Units next to the numbers: «286 h», «62 %», «570 g». */
+        hoursValue: (n: number) => `${n} h`,
+        percent: (n: number) => `${n} %`,
+        grams: (n: string) => `${n} g`,
+        printing: (n: number, of: number) => `${n} de ${of} imprimiendo`,
+        /** «3 × Letrero de taquería · Pedido #3». */
+        job: (qty: number, piece: string, order: number) => `${qty} × ${piece} · Pedido #${order}`,
+        timeLeft: (h: number, min: number) => `Tiempo restante: ${h} h ${min} min`,
+        next: (job: string) => `Siguiente en cola: ${job}`,
+        emptyQueue: 'Cola vacía',
+        idle: 'Sin trabajo en curso',
+        hours: 'Horas de uso',
+        maintenance: 'Mantenimiento',
+        /** Maintenance due: «Boquilla en 14 h». */
+        due: { nozzle: (h: number) => `Boquilla en ${h} h` },
+        recovered: 'Inversión recuperada',
+        production: 'Producción · últimos 30 días',
+        prints: 'Impresiones',
+        good: 'Correctas',
+        failed: 'Fallidas',
+        filament: 'Filamento',
+      },
+      /** «Filamentos» (`UiFilaments`). */
+      filaments: {
+        label: (name: string) =>
+          `Filamentos en ${name}: siete filamentos con su costo por gramo, gramos disponibles y estado; TPU 95A Azul en stock bajo y PLA Silk Morado en crítico`,
+        title: 'Filamentos',
+        summary: (filaments: number, rolls: number, kg: string) =>
+          `${filaments} filamentos · ${rolls} rollos · ${kg} kg disponibles`,
+        addRoll: 'Agregar rollo',
+        filament: 'Filamento',
+        perGram: 'Costo/g',
+        available: 'Disponible',
+        state: 'Estado',
+        /** «2 rollos · Sunlu». */
+        rolls: (n: number, brand: string) => `${n} ${n === 1 ? 'rollo' : 'rollos'} · ${brand}`,
+        grams: (n: string) => `${n} g`,
+      },
+      /** «Compras sugeridas» (`UiPurchases`). */
+      purchases: {
+        label: (name: string, total: string) =>
+          `Compras sugeridas en ${name}: cuatro artículos agrupados por proveedor con cantidad y costo estimado de ${total}; el rollo de PLA Negro es urgente porque un pedido requiere más de lo disponible`,
+        title: 'Compras sugeridas',
+        summary: (items: number, total: string) => `${items} artículos · costo estimado ${total}`,
+        copy: 'Copiar pedido',
+        available: (grams: string) => `Disponible: ${grams} g`,
+        /** «Pedido #5 requiere 535 g · disponible: 410 g». */
+        needs: (order: number, needs: string, grams: string) =>
+          `Pedido #${order} requiere ${needs} g · disponible: ${grams} g`,
+        stock: (stock: number, min: number) => `Existencia: ${stock} · mínimo: ${min}`,
+        rolls: (n: number) => `${n} ${n === 1 ? 'rollo' : 'rollos'}`,
+        pieces: (n: number) => `${n} pzas`,
+        /** Estimated cost: «≈ $470». */
+        about: (amount: string) => `≈ ${amount}`,
+      },
+      /** «Existencias» (`UiStock`). */
+      stock: {
+        label: (name: string) =>
+          `Existencias en ${name}: piezas terminadas con existencia, apartadas para pedidos, disponibles y estado; variantes de color del dragón articulado y sets armables`,
+        title: 'Existencias',
+        summary: (pieces: number, reserved: number, available: number) =>
+          `${pieces} piezas · ${reserved} apartadas · ${available} disponibles`,
+        register: 'Registrar impresión',
+        product: 'Producto',
+        stock: 'Existencia',
+        reserved: 'Apartadas',
+        available: 'Disponibles',
+        state: 'Estado',
+        variants: (n: number) => `${n} variantes`,
+        sets: 'Sets',
+        /** «4 piezas · Falta: Figura de escritorio». */
+        setInfo: (pieces: number, missing: string) => `${pieces} piezas · Falta: ${missing}`,
+        buildable: 'armables',
+      },
       // ── taller: end ──
 
       // ── docs-reportes: start (agent «docs-reportes»: UiQuote, UiReports) ──
