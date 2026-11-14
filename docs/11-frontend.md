@@ -14,8 +14,10 @@
 | Componente | Tipo | Notas |
 |---|---|---|
 | `BaseLayout.astro` | Astro | `<head>` con SEO (`14`), fuente precargada, `ClientRouter`, header, footer, `<main>` |
-| `Header.astro` | Astro + `<script>` | Pestaña negra al centro, Cotizar; el `<script>` pone la clase `over-hero` con `IntersectionObserver` (solo en el inicio) |
-| `Footer.astro` | Astro | Nombre grande que **ocupa el ancho exacto** (ajuste con `fitty` o `textFit`, o con unidad `cqw`; nunca medir a mano con `getBoundingClientRect` en cada resize) |
+| `Header.astro` | Astro + `<script>` | Pestaña negra al centro, Cotizar; ligas de `siteNav()` (`src/lib/nav.ts`); fijo arriba salvo con `sticky={false}` (Para talleres, desde `BaseLayout` con `stickyHeader`); el `<script>` pone la clase `over-hero` con `IntersectionObserver` (solo en el inicio) |
+| `Footer.astro` | Astro | Ligas de `siteNav()`. Nombre grande que **ocupa el ancho exacto** (ajuste con `fitty` o `textFit`, o con unidad `cqw`; nunca medir a mano con `getBoundingClientRect` en cada resize) |
+| `Faqs.astro` | Astro | Preguntas en `<details>` de Aprende y Para talleres; `title`, `headingId`, `headingClass` y `side` (título a la izquierda en escritorio, Para talleres); sus estilos viven en el componente |
+| `Button.astro` | Astro | Variantes `black`, `green`, `outline` y `outlineLight` (`ui/button-variants.ts`) |
 | `Logo.astro` | Astro | Inserta `assets/logo-cabeza.svg` |
 | `Picture.astro` | Astro | Recibe la foto (de `queries`) y pinta `<img>` con `srcset` de sus versiones, `sizes`, `width`/`height` (sin saltos), `loading="lazy"` salvo que se pida `priority` (hero, primera foto del producto: `fetchpriority="high"`) |
 | `ProductCard.astro` | Astro | Foto cuadrada, nombre, frase, "Desde $X", etiqueta "Más pedido" |

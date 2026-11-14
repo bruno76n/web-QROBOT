@@ -364,3 +364,10 @@ Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y pre
 - **Pantallas del sistema en HTML, no capturas:** el dueño pidió que se vieran mejor que el sistema actual y que sirvan de referencia para el diseño del sistema que se distribuye (ronda 3 del sistema). Interfaz neutra; gráficas de un color (gris) con verde solo para la ganancia; datos de ejemplo de un taller «Eje Z» que cuadran entre sí (`25 §4, §6.3`).
 - **Solo lo que el sistema hace:** se quitaron leer el archivo del laminador, logo en cotizaciones, importar desde Excel, bitácora y varios talleres por cuenta (el sistema no los tiene). Planes: Gratis, Taller y Negocio por usuarios, impresoras y ventas y pedidos al mes.
 - **Palabras de sistema y frases de producto:** títulos con frase de impacto y el nombre del módulo arriba; en tablas y pantallas, vocabulario de sistema (Fecha de entrega, Saldo, Disponible, Stock bajo, Crítico, Vencido), nada coloquial (`25 §1`). Sin la sección «Hecho en Quick Robot».
+
+## 2026-11-14 · Fase 9 (plan v2) · Para talleres
+- **Rama:** la fase 9 hecha con el plan v1 queda en `fase-9-v1` como referencia (no se fusiona); `fase-9` se rehízo desde `main` con el plan v2. Lo que el plan v2 no cambia (cerrojo, menú, plataforma, preguntas, tokens, botones, header) se tomó de esa rama.
+- **Se construye sin la fase 8 y sin desplegar** (lo pidió el dueño): se lee `informe-fase-7.md` en lugar del 8 y el punto 5 de 9.11 (desplegar con el interruptor apagado) no se hace.
+- **`@lucide/astro`** (`06`, `25 §6.1`): íconos de los módulos y de la barra lateral de las pantallas del sistema.
+- **`Faqs` con `side`:** en Para talleres la sección lleva sus márgenes y el título a la izquierda en escritorio (maqueta `.s-faq .faq-in`); en Aprende queda igual.
+

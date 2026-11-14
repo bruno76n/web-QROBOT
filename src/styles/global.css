@@ -22,6 +22,13 @@
   --green: #00ae42;
   --green-l: #e3f5e9;
   --lilac: #f1ecfd;
+  --ink-3: #9b9ba5;
+  --green-d: #00873a;
+  --red: #c8302a;
+  --red-l: #fbeaea;
+  --amber: #b4740a;
+  --amber-l: #fdf3e1;
+  --amber-d: #8a5a06;
   --top: 68px;
   --gutter: clamp(20px, 4.5vw, 64px);
   --wrap-max: 1360px;

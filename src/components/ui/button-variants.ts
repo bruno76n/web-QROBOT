@@ -15,6 +15,11 @@ export const buttonVariants = cva(
       variant: {
         black: 'bg-ink text-white hover:bg-[#2c2c33]',
         green: 'bg-green text-ink hover:bg-[#00c24b]',
+        /** White with a light border that turns dark on hover (secondary action). */
+        outline: 'border border-solid border-line bg-white text-ink hover:border-ink',
+        /** Transparent with a white border, for dark bands. */
+        outlineLight:
+          'border border-solid border-white/40 bg-transparent text-white hover:border-white',
       },
       size: {
         default: 'min-h-[50px]',

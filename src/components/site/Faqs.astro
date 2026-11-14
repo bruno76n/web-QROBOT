@@ -1,0 +1,96 @@
+---
+/**
+ * Questions as `<details>`, shared by Aprende and the page for workshops (docs/25 §6.1). In Aprende
+ * each question has its `#pregunta-N` anchor (docs/21 §4.1) and the heading is a block title
+ * (`blk-h`). With `side` (page for workshops) the section has its own side margins, the heading
+ * goes to the left of the questions on desktop and takes the class of the page's titles.
+ */
+import { es } from '@/i18n/es';
+
+interface Props {
+  faqs: { question: string; answer: string; position?: number }[];
+  title?: string;
+  headingId?: string;
+  /** Class of the `h2`: `blk-h` in Aprende, `t-h2` in the page for workshops. */
+  headingClass?: string;
+  /** Heading on the left on desktop, inside the page margins (page for workshops). */
+  side?: boolean;
+}
+const {
+  faqs,
+  title = es.learn.faq,
+  headingId = 'faq-h',
+  headingClass = 'blk-h',
+  side = false,
+} = Astro.props;
+---
+
+{faqs.length > 0 && (
+  <section class:list={[side && 's-faq']} aria-labelledby={headingId}>
+    <div class:list={[side && 'wrap faq-in']}>
+      <h2 class={headingClass} id={headingId}>
+        {title}
+      </h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details id={f.position ? `pregunta-${f.position}` : undefined}>
+            <summary>{f.question}</summary>
+            <p>{f.answer}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .faq details {
+    border-bottom: 1px solid var(--line);
+    scroll-margin-top: calc(var(--top) + 16px);
+  }
+  .faq summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 22px 0;
+    min-height: 44px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    font-size: clamp(18px, 1.7vw, 20px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq summary::after {
+    content: '+';
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--ink-2);
+  }
+  .faq details[open] summary::after {
+    content: '−';
+  }
+  .faq details p {
+    padding: 0 0 22px;
+    color: var(--ink-2);
+    max-width: 64ch;
+  }
+  /* Page for workshops: heading on the left on desktop (grid gap with its Safari 14 alias). */
+  .faq-in {
+    display: grid;
+    grid-gap: 24px;
+    gap: 24px;
+  }
+  @media (min-width: 1100px) {
+    .faq-in {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      grid-column-gap: 64px;
+      column-gap: 64px;
+      align-items: start;
+    }
+  }
+</style>
