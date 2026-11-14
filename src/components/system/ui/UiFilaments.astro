@@ -1,12 +1,107 @@
 ---
 /**
- * System screen «Filamentos» (docs/25 §6.3), drawn in HTML with the sample data of `system-demo.ts` and
- * the labels of `es.system.ui`. Placeholder frame until the screen is drawn.
+ * System screen «Filamentos» (docs/25 §6.3, section «Filamento, insumos y compras»): the filaments
+ * in stock with their color, rolls and brand, cost per gram, grams available with a bar against
+ * the full rolls, and the state (Normal, Stock bajo in amber, Crítico in red). At ≤480 px the cost
+ * per gram hides (`hide-xs`, docs/25 §8). Sample data from `system-demo.ts` (`demoFilaments`,
+ * `demoFilamentTotals`), labels from `es.system.ui.filaments`.
  */
+import Plus from '@lucide/astro/icons/plus';
+import UiButton from './UiButton.astro';
 import UiFrame from './UiFrame.astro';
+import UiMeter from './UiMeter.astro';
+import UiPill from './UiPill.astro';
 import { site } from '@/config/site';
+import { demoFilaments, demoFilamentTotals } from '@/config/system-demo';
+import { es } from '@/i18n/es';
+import { formatPesos } from '@/lib/learn/cost';
+
+const t = es.system.ui.filaments;
+const states = es.system.ui.common.states;
+/** Color of the bar and the pill of each state: gray, amber or red. */
+const tones = { normal: undefined, lowStock: 'warn', critical: 'bad' } as const;
 ---
 
-<UiFrame label={site.system.name}>
-  <div class="ui-panel">Filamentos</div>
+<UiFrame label={t.label(site.system.name)} kind="card" inner="ui-fil">
+  <div class="ui-ph">
+    <span>
+      <b class="ui-t">{t.title}</b>
+      <span class="ui-meta">
+        {t.summary(
+          demoFilamentTotals.filaments,
+          demoFilamentTotals.rolls,
+          demoFilamentTotals.kg.toFixed(1),
+        )}
+      </span>
+    </span>
+    <UiButton pri>
+      <Plus slot="icon" class="ic" aria-hidden="true" />
+      {t.addRoll}
+    </UiButton>
+  </div>
+
+  {/* One row per filament: swatch, name, cost per gram, available and state. */}
+  <table class="ui-tbl">
+    <thead>
+      <tr>
+        <th>{t.filament}</th>
+        <th class="r hide-xs">{t.perGram}</th>
+        <th>{t.available}</th>
+        <th class="r">{t.state}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {demoFilaments.map((f) => (
+        <tr>
+          <td>
+            <svg class="sw" viewBox="0 0 14 14" aria-hidden="true">
+              <circle cx="7" cy="7" r="6.25" fill={f.color} />
+            </svg>
+            <span class="fl-n">
+              <b>{f.name}</b>
+              <span class="ui-meta">{t.rolls(f.rolls, f.brand)}</span>
+            </span>
+          </td>
+          <td class="r ui-num hide-xs">{formatPesos(f.perGram)}</td>
+          <td class="fl-q">
+            <UiMeter value={f.grams} max={f.rolls * f.rollGrams} tone={tones[f.state]} />
+            <span class="ui-num">{t.grams(f.grams.toLocaleString('en-US'))}</span>
+          </td>
+          <td class="r">
+            <UiPill tone={tones[f.state]}>{states[f.state]}</UiPill>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
 </UiFrame>
+
+<style>
+  /* Narrowest phones (≤380 px): tighter cells, swatch and pills so the table fits in the card. */
+  @media (max-width: 380px) {
+    .ui-tbl th,
+    .ui-tbl td {
+      padding-left: 4px;
+      padding-right: 4px;
+    }
+    .ui-tbl th:first-child,
+    .ui-tbl td:first-child {
+      padding-left: 0;
+    }
+    .ui-tbl th:last-child,
+    .ui-tbl td:last-child {
+      padding-right: 0;
+    }
+    .ui-tbl .sw {
+      margin-right: 6px;
+    }
+    .ui-tbl :global(.ui-pill) {
+      font-size: 11px;
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+    .ui-tbl :global(.ui-pill::before) {
+      margin-right: 4px;
+    }
+  }
+</style>
