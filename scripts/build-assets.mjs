@@ -2,14 +2,7 @@
 // Never touches assets/ or reference/. Never enlarges an image. Output is generated:
 // public/brand/, public/fonts/ and public/favicon.svg are git-ignored.
 import sharp from 'sharp';
-import {
-  copyFileSync,
-  existsSync,
-  mkdirSync,
-  readdirSync,
-  readFileSync,
-  statSync,
-} from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, extname, join } from 'node:path';
 
 // Project root and a helper to build absolute paths from it.
@@ -19,7 +12,13 @@ const QUALITY = 82; // docs/15 §3
 
 // Output folders (created when missing).
 const out = { brand: at('public/brand'), fonts: at('public/fonts') };
-for (const dir of [out.brand, out.fonts, at('public/brand/q404'), at('public/brand/ideas')]) {
+for (const dir of [
+  out.brand,
+  out.fonts,
+  at('public/brand/q404'),
+  at('public/brand/ideas'),
+  at('public/brand/talleres'),
+]) {
   mkdirSync(dir, { recursive: true });
 }
 
@@ -85,6 +84,17 @@ await responsive(
   [1200, 2400],
 );
 await responsive(at('reference/hero/hero-celular.webp'), out.brand, 'hero-mobile', [600, 1200]);
+
+// Screenshots of the system for the page for workshops (docs/25 §4); they exist even while
+// nothing links to them
+for (const f of readdirSync(at('assets/talleres'))) {
+  await responsive(
+    at('assets/talleres', f),
+    at('public/brand/talleres'),
+    basename(f, extname(f)),
+    [720, 1440, 2160],
+  );
+}
 
 // Share image 1200×630: only the logo (head) centred on white (vector, so it is never enlarged
 // from pixels), and apple-touch-icon

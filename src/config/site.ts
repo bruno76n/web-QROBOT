@@ -1,3 +1,5 @@
+import type { Plan } from '@/lib/system/plans';
+
 /**
  * Business data (docs/10 §6). The ONLY place for phone numbers, social links, domain and dates.
  * Values marked "provisional" come from docs/01 › Pendientes del dueño.
@@ -30,8 +32,54 @@ export const site = {
   timeZone: 'America/Mexico_City',
   /** `src` is `null` when there is no video. `speed` is the playback rate (0.5 = half speed). */
   video: { src: '/media/timelapse.mp4' as string | null, speed: 0.5 },
-  /** Quick Cerebro (the system) is not out yet: its calls in Aprende stay hidden (docs/21 §4.6). */
-  system: { enabled: false },
+  /**
+   * The system for workshops (docs/25 §4). While `enabled` is false its pages answer 404 and nothing
+   * links to them outside `pnpm dev` (docs/25 §2). Provisional values until the beta
+   * (docs/01 › Pendientes del dueño); turning it on is docs/25 §13.
+   */
+  system: {
+    enabled: false as boolean,
+    name: 'Quick Cerebro',
+    /** Address of the system: «Probar gratis» and «Entrar» lead there. */
+    appUrl: 'https://sistema.quickrobot.example',
+    signUpPath: '/crear-cuenta',
+    signInPath: '/entrar',
+    /** Installers; an empty `url` points to its row of the download page. */
+    downloads: {
+      mac: { url: '', minOs: 'macOS 12 o más nuevo' },
+      windows: { url: '', minOs: 'Windows 10 u 11 de 64 bits' },
+    },
+    /** Free trial of the Negocio plan, without a card. */
+    trialDays: 14,
+    /** Workshops that keep the founder price. */
+    founderSeats: 50,
+    /**
+     * Plans, cheapest first. Whole pesos with VAT; yearly = 10 months. `null` = no limit. They must
+     * match the plans of the system (checked when turning it on).
+     */
+    plans: [
+      { id: 'free', monthly: 0, yearly: 0, people: 1, printers: 2, orders: 15, workshops: 1 },
+      {
+        id: 'shop',
+        monthly: 149,
+        yearly: 1490,
+        people: 2,
+        printers: null,
+        orders: null,
+        workshops: 1,
+        recommended: true,
+      },
+      {
+        id: 'business',
+        monthly: 299,
+        yearly: 2990,
+        people: 8,
+        printers: null,
+        orders: null,
+        workshops: 3,
+      },
+    ] satisfies Plan[] as Plan[],
+  },
 } as const;
 
 /** Type of the business data. */

@@ -93,7 +93,8 @@ quick-robot-web/
 │  ├─ result.ts                Result<T> de las acciones (`10 §3`)
    │  └─ *.test.ts
    ├─ config/
-   │  ├─ site.ts                  dominio, WhatsApp, redes, fecha límite, imagen por defecto
+   │  ├─ site.ts                  dominio, WhatsApp, redes, fecha límite, imagen por defecto, `system` (`25 §4`)
+   │  ├─ system.ts                Para talleres: `systemVisible`, comparación, recorrido, $100, roles, plataformas
    │  ├─ categories.ts
    │  ├─ colors.ts
    │  ├─ ideas.ts                 las 7 ideas (`05 §3`)

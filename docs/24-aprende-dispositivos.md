@@ -35,7 +35,7 @@ Pruebas de Playwright: **390, 820 y 1440** (como el resto de la web, `16 §6`) y
 
 | Componente | Celular (≤ 760) | Tableta (761–1099) | Escritorio (≥ 1100) |
 |---|---|---|---|
-| **Header** | 56 px de alto. Logo · Catálogo · Aprende · Cotizar en una fila (≤ 480: logo sin nombre; Cotizar sin flecha; sobre la portada, solo el botón de Instagram, sin «Visita nuestras redes:») | 68 px. A ≤ 900 la pestaña negra se vuelve ligas normales | 68 px, pestaña negra al centro |
+| **Header** | 56 px de alto. Logo · Catálogo · Aprende · Cotizar en una fila (≤ 480: logo sin nombre; Cotizar sin flecha; sobre la portada, solo el botón de Instagram, sin «Visita nuestras redes:»; con la liga «Talleres», a ≤ 380 las ligas pierden relleno para caber) | 68 px. A ≤ 900 la pestaña negra se vuelve ligas normales | 68 px, pestaña negra al centro |
 | **Barra del buscador** (páginas internas) | Bajo el header, todo el ancho, 52 px de alto. Sin atajos de teclado | Igual, hasta 720 px de ancho | Igual, con ⌘K a la derecha del campo |
 | **Buscador grande** (portada) | 62 px de alto | 76 px | 76 px, hasta 860 px de ancho |
 | **Resultados del buscador** | **Hoja a pantalla completa**: campo arriba con «Cerrar», chips de tema, lista con scroll propio; la página de atrás no se mueve (`html.lock`) | Lista bajo el campo, máximo 70 % del alto de la pantalla | Igual que tableta |

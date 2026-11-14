@@ -108,6 +108,11 @@ Pendientes del dueño para Aprende: dónde corre Meilisearch (mientras no exista
 |---|---|---|
 | Dominio | `https://quickrobot.example` | Fase 1 (`src/config/site.ts`) |
 | Fecha límite de Navidad | 12 de diciembre | Fase 1 |
+| Nombre del sistema para talleres | Quick Cerebro | Fase 9 (`site.system.name`) |
+| Dirección del sistema | `https://sistema.quickrobot.example`, rutas `/crear-cuenta` y `/entrar` | Fase 9 (`site.system`) |
+| Instaladores de Mac y Windows | Sin archivo (`url: ''`; los botones llevan a su fila de `/talleres/descargar`); requisitos «macOS 12 o más nuevo» y «Windows 10 u 11 de 64 bits» | Fase 9 |
+| Prueba gratis y precio de fundador | 14 días del plan Negocio; 50 talleres | Fase 9 |
+| Planes | Gratis $0 · Taller $149/$1,490 · Negocio $299/$2,990, con los límites de `25 §4` | Fase 9 (`site.system.plans`) |
 
 ## Bloqueos
 

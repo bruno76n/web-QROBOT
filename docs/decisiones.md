@@ -361,3 +361,10 @@ Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y pre
 - **Nada duplicado:** la calculadora (con precio de venta para esta página), las preguntas y los tokens que usan Aprende y Para talleres pasan a piezas compartidas (`25 §6`). Las maquetas también comparten base: `reference/mockups/_base.css` y `_base.js` (las de Aprende se regeneraron con esa base y se ven igual, comprobado con capturas).
 - **Sin doble filete** (líneas morada y verde) en Para talleres: el dueño lo pidió (`25 §7`).
 - **Capturas:** de las maquetas del sistema, con un negocio de ejemplo («Eje Z») y piezas genéricas en lugar de personajes con licencia (`assets/talleres/`).
+
+## 2026-11-14 · Fase 9 · Datos y textos de Para talleres
+- **Guardia de encendido:** además de `https://` y no vacío, rechaza los dominios reservados para ejemplos (`.example`, `.test`, `.invalid`, `.localhost`). La dirección provisional (`sistema.quickrobot.example`) es `https://` y la habría dejado pasar; así no se puede encender sin la dirección real (`25 §12`).
+- **Pruebas de los datos en `tests/system-data.test.ts`:** el proyecto `unit` de Vitest no lee `src/config/`; la guardia vive en `src/lib/system/guard.ts` (pura, con su prueba) y la prueba de los datos reales queda junto a la de la semilla.
+- **Menú con tres ligas en 360 px:** con «Para talleres» (solo en `pnpm dev` mientras siga oculta) las ligas se encimaban con el logo. La maqueta lo resuelve aplastando el logo a 1 px; aquí, solo con tres ligas y ≤ 380 px, las ligas pierden relleno (4 px) y caben las tres junto al logo y Cotizar. Con dos ligas el header queda igual (`24 §3`).
+- **Fila de la comparación «Pedidos con anticipo y saldo»:** id `advances` (la de «Ventas y pedidos al mes» es `orders`).
+

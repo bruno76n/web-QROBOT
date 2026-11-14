@@ -649,6 +649,517 @@ export const es = {
       resultsFor: { one: '1 resultado para «{q}»', many: '{n} resultados para «{q}»' },
     },
   },
+  /**
+   * The page for workshops («Para talleres», docs/25), from the mockups in
+   * reference/mockups/talleres/. The system's name, days, limits and prices come in as arguments.
+   */
+  system: {
+    seo: {
+      home: (name: string) => ({
+        title: `${name} · Sistema para talleres de impresión 3D`,
+        description:
+          'Costo real al gramo, pedidos con anticipo, piezas apartadas y filamento por rollo. Sabes cuánto ganas en cada venta.',
+      }),
+      pricing: (name: string) => ({
+        title: `Precios · ${name}`,
+        description:
+          'Un precio por taller, no por impresora. Empieza gratis y cambia de plan cuando quieras.',
+      }),
+      download: (name: string) => ({
+        title: `Descargar · ${name}`,
+        description: 'Mac, Windows, navegador y celular, con la misma cuenta.',
+      }),
+    },
+    nav: {
+      features: 'Funciones',
+      pricing: 'Precios',
+      download: 'Descargar',
+      signIn: 'Entrar',
+      tryFree: 'Probar gratis',
+      /** Label of the phone menu of the product bar. */
+      more: (name: string) => `Más de ${name}`,
+    },
+    /** Shared calls to action. */
+    cta: {
+      tryDays: (days: number) => `Probar ${days} días gratis`,
+      tryFree: 'Probar gratis',
+      startFree: 'Empezar gratis',
+      seePricing: 'Ver precios',
+      download: 'Descargar la app',
+      comparePlans: 'Comparar los planes',
+    },
+    /** Alternative texts of the screenshots (docs/25 §4). */
+    shots: {
+      inicio: (name: string) =>
+        `Inicio de ${name}: lo vendido en 30 días, a dónde se va cada peso y lo que necesita atención hoy`,
+      pieza: (name: string) =>
+        `Pieza en ${name}: costo de $26.75 desglosado, precio de $120 y ganancia de $93`,
+      pedidos: (name: string) =>
+        `Tablero de pedidos de ${name}: pendientes, en producción, listos y entregados, con saldos`,
+      produccion: (name: string) =>
+        `Producción en ${name}: lo que se imprime en cada impresora y las impresiones que fallaron`,
+      existencias: (name: string) =>
+        `Existencias en ${name}: piezas libres y apartadas, con variantes de color`,
+      reportes: (name: string) =>
+        `Reportes de ${name}: ventas, ganancia real y a dónde se va cada peso`,
+      taller: 'Piezas impresas en Quick Robot: servilletero, llaveros con nombre, Q-404 y figuras',
+    },
+    home: {
+      title: 'Tu taller 3D, en orden.',
+      lead: 'Costo real al gramo, pedidos con anticipo, piezas apartadas y filamento por rollo. Sabes cuánto ganas en cada venta.',
+      facts: ['Sin tarjeta', 'Web, Mac y Windows', 'En pesos y en español'],
+      strip: {
+        reads: 'Lee el archivo de',
+        slicers: ['Bambu Studio', 'OrcaSlicer', 'PrusaSlicer'],
+        account: 'Una cuenta en',
+        places: ['Navegador', 'Mac', 'Windows', 'Celular'],
+      },
+      money: {
+        title: 'De cada $100 que vendes, sabes cuánto es tuyo.',
+        lead: (name: string) =>
+          `${name} reparte cada venta entre material, luz, desgaste de la impresora, piezas que salen mal, comisiones y gastos del negocio. Lo verde es tu ganancia real.`,
+        /** Names of the parts of the bar (ids of `config/system.ts › moneyExample`). */
+        parts: {
+          mat: 'Material',
+          maq: 'Máquina',
+          fail: 'Fallos (reserva)',
+          luz: 'Luz',
+          ext: 'Extras',
+          com: 'Comisiones',
+          gas: 'Gastos del negocio',
+          gan: 'Ganancia real',
+        },
+        /** Accessible name of the bar: every part with its amount. */
+        barLabel: (parts: string) => `De cada $100 vendidos: ${parts}`,
+        caption: 'De cada $100 vendidos. Ejemplo de un taller con 13 ventas en 30 días.',
+      },
+      tour: {
+        title: 'Todo el taller en un solo lugar.',
+        lead: 'Lo que hoy vive en la libreta, en Excel y en los chats de WhatsApp.',
+        /** Topics of the tour (ids of `config/system.ts › tour`). */
+        items: {
+          costos: {
+            title: 'Costos y precios',
+            text: 'Material, luz, máquina y piezas que salen mal. Tú pones el precio y ves la ganancia al momento.',
+            points: [
+              'Gramos y horas salen del archivo del laminador',
+              'Atajos para el precio: costo + 30 %, margen de 50 % o ×3',
+              'Variantes de color dentro de la misma pieza',
+            ],
+          },
+          pedidos: {
+            title: 'Pedidos con anticipo',
+            text: 'Lo pendiente, lo que se imprime, lo listo y lo entregado, con anticipos y saldos.',
+            points: [
+              'Anticipo, abonos y saldo de cada pedido',
+              'Aparta piezas que ya tienes hechas',
+              'Mensaje listo para mandar por WhatsApp',
+            ],
+          },
+          produccion: {
+            title: 'Producción por impresora',
+            text: 'Qué se imprime en cada máquina, cuánto falta y qué falló.',
+            points: [
+              'Cola por impresora',
+              'Fallos con el filamento que se perdió',
+              'Mantenimiento por horas de uso',
+            ],
+          },
+          existencias: {
+            title: 'Existencias y filamento',
+            text: 'Piezas libres y apartadas, y los gramos que le quedan a cada rollo.',
+            points: [
+              'Aviso cuando quedan pocas',
+              'Compras sugeridas por proveedor',
+              'Insumos: argollas, imanes, cajas',
+            ],
+          },
+          reportes: {
+            title: 'Reportes',
+            text: 'Ventas, ganancia real y a dónde se va cada peso.',
+            points: [
+              'Comparado contra el periodo anterior',
+              'Ganancia después de los gastos del negocio',
+              'Resumen para copiar y mandar',
+            ],
+          },
+        },
+      },
+      flow: {
+        title: 'Del archivo a la entrega.',
+        lead: 'Así se ve un pedido de 20 servilleteros para una taquería.',
+        steps: [
+          {
+            title: 'Arrastras el archivo',
+            text: 'Gramos, horas y filamentos salen del laminador.',
+            file: 'servilletero.3mf',
+            facts: ['45 g · 2 h 30 min', 'PLA Negro · 1 placa'],
+          },
+          {
+            title: 'Pones el precio',
+            text: 'Ves la ganancia antes de guardar.',
+            rows: [
+              ['Costo', '$26.75'],
+              ['Precio', '$120'],
+              ['Ganas', '$93.25'],
+            ],
+          },
+          {
+            title: 'Tomas el pedido',
+            text: 'Con anticipo; el saldo queda pendiente.',
+            head: 'Pedido #5 · Tacos El Güero',
+            sub: '20 servilleteros · $2,200',
+            rows: [['Anticipo', '$1,100']],
+          },
+          {
+            title: 'Lo mandas a imprimir',
+            text: 'A la cola de la impresora que esté libre.',
+            head: 'Bambu Lab P1S',
+            sub: 'Placa 2 de 4',
+            progress: '62 % · quedan 1 h 10 min',
+          },
+          {
+            title: 'Entregas y cobras',
+            text: 'El saldo se cobra al entregar y la ganancia entra a tus reportes.',
+            rows: [
+              ['Saldo cobrado', '$1,100'],
+              ['Ganancia', '$1,665'],
+            ],
+          },
+        ],
+      },
+      team: {
+        title: 'Tu equipo, sin enseñar tus números.',
+        lead: 'Cada persona entra con su cuenta y ve solo lo que le toca. Quien vende no ve costos ni ganancia.',
+        caption: 'Qué ve cada rol',
+        what: 'Qué ve',
+        /** Columns (ids of `config/system.ts › roles.columns`). */
+        roles: { owner: 'Dueño', admin: 'Administración', sales: 'Ventas', shop: 'Taller' },
+        /** Rows (ids of `config/system.ts › roles.rows`). */
+        rows: {
+          sales: 'Ventas, pedidos y clientes',
+          production: 'Producción, existencias y filamento',
+          costs: 'Costos, ganancia y reportes',
+          expenses: 'Gastos del negocio',
+          account: 'Personas, plan y pagos',
+        },
+        yes: 'sí',
+        no: 'no',
+        note: 'Roles y bitácora de quién hizo qué, en el plan Negocio.',
+      },
+      data: {
+        title: 'Tus datos son tuyos.',
+        items: [
+          { title: 'Copia diaria', text: 'Tu información se respalda sola todos los días.' },
+          {
+            title: 'Descarga todo',
+            text: 'Un archivo con productos, pedidos, clientes y movimientos, cuando quieras.',
+          },
+          {
+            title: 'Cada taller por separado',
+            text: 'Nadie más ve tu información: ni otros talleres ni tus empleados sin permiso.',
+          },
+          {
+            title: 'Nada se borra',
+            text: 'Si un cobro no pasa, tu cuenta queda en solo lectura hasta que pagues. Siempre puedes descargar todo.',
+          },
+        ],
+      },
+      calc: {
+        title: '¿Cuánto te cuesta esa pieza?',
+        lead: (name: string) => `Gratis y sin cuenta. Es la misma fórmula que usa ${name}.`,
+        calcTitle: 'Tu pieza',
+        ctaTitle: '¿Tienes el archivo del laminador?',
+        ctaText: (name: string) =>
+          `Créala en ${name} en un minuto: lee gramos y horas, y la guarda con su precio.`,
+      },
+      story: {
+        title: 'Lo usamos todos los días en nuestro taller.',
+        lead: (name: string) =>
+          `${name} nació en Quick Robot, un taller de impresión 3D en Guadalajara, para dejar la libreta: cuánto cuesta cada pieza, qué pedidos faltan y cuánto filamento queda.`,
+        link: 'Conoce Quick Robot',
+      },
+      pricing: {
+        title: 'Un precio por taller, no por impresora.',
+        lead: 'Agrega impresoras sin pagar más. Empieza gratis y cambia de plan cuando quieras.',
+      },
+      faq: {
+        title: 'Preguntas',
+        items: (name: string, days: number) => [
+          {
+            question: '¿Necesito tarjeta para probarlo?',
+            answer: `No. Tienes ${days} días del plan Negocio sin tarjeta. Al terminar pasas a Gratis y no se borra nada.`,
+          },
+          {
+            question: '¿Funciona con mi impresora?',
+            answer: `Sí. ${name} no se conecta a la impresora: lee el archivo del laminador o tú escribes gramos y horas. Sirve con cualquier marca.`,
+          },
+          {
+            question: '¿Hace facturas a mis clientes?',
+            answer:
+              'No. Hace cotizaciones y notas de venta con tu logo. La factura la sigues haciendo en tu sistema de facturación.',
+          },
+          {
+            question: '¿Funciona sin internet?',
+            answer:
+              'No. La web y la app guardan todo en tu cuenta, para que veas lo mismo en la computadora y en el celular.',
+          },
+          {
+            question: '¿Puedo pasar lo que tengo en Excel?',
+            answer:
+              'Sí. Productos, filamentos y clientes se cargan desde un archivo de Excel (CSV).',
+          },
+          {
+            question: '¿Puedo cancelar cuando quiera?',
+            answer: 'Sí, desde Ajustes. Antes de irte puedes descargar toda tu información.',
+          },
+        ],
+      },
+      end: {
+        title: 'Tu primera pieza con costo real, en 5 minutos.',
+        lead: (days: number) => `${days} días gratis, sin tarjeta.`,
+      },
+    },
+    /** The 3 plans: name, who it is for and what it brings (limits come in as arguments). */
+    plans: {
+      recommended: 'Recomendado',
+      perMonth: 'al mes',
+      perYear: 'al año',
+      forever: 'siempre',
+      /** Line under a monthly price: the yearly one. */
+      orYearly: (amount: string) => `o ${amount} al año`,
+      /** Line under a yearly price: what it comes to per month. */
+      perMonthEquals: (amount: string) => `Equivale a ${amount} al mes`,
+      note: (days: number) =>
+        `Precios en pesos mexicanos, con IVA. Los ${days} días de prueba son del plan Negocio, sin tarjeta.`,
+      free: {
+        name: 'Gratis',
+        for: 'Para empezar con una o dos impresoras.',
+        features: (p: { people: number; printers: number; orders: number }) => [
+          p.people === 1 ? '1 persona' : `${p.people} personas`,
+          `Hasta ${p.printers} impresoras`,
+          `${p.orders} ventas y pedidos al mes`,
+          'Costos, existencias y producción completos',
+          'Web, Mac, Windows y celular',
+        ],
+      },
+      shop: {
+        name: 'Taller',
+        for: 'Para el taller de una o dos personas.',
+        features: (p: { people: number }) => [
+          'Todo lo de Gratis',
+          `${p.people} personas`,
+          'Impresoras, ventas y pedidos sin límite',
+          'Tu logo en cotizaciones y notas',
+          'Ayuda por WhatsApp',
+        ],
+      },
+      business: {
+        name: 'Negocio',
+        for: 'Para el taller con empleados.',
+        features: (p: { people: number; workshops: number }) => [
+          'Todo lo de Taller',
+          `${p.people} personas con roles`,
+          'Empleados que no ven costos ni ganancia',
+          'Bitácora de quién hizo qué',
+          `Hasta ${p.workshops} talleres en una cuenta`,
+          'Ayuda prioritaria por WhatsApp',
+        ],
+      },
+    },
+    pricing: {
+      title: 'Un precio por taller, no por impresora.',
+      lead: 'Agrega impresoras sin pagar más. Empieza gratis y cambia de plan cuando quieras.',
+      period: {
+        label: 'Forma de pago',
+        monthly: 'Mensual',
+        yearly: 'Anual',
+        yearlyNote: '2 meses gratis',
+      },
+      plansLabel: 'Planes',
+      finder: {
+        title: '¿Qué plan te toca?',
+        lead: 'Mueve los números de tu taller.',
+        printers: 'Impresoras',
+        people: 'Personas que lo usan',
+        orders: 'Ventas y pedidos al mes',
+        /** The top of a slider: «20 o más». */
+        orMore: (n: number) => `${n} o más`,
+        result: 'Te toca',
+        /** Price line of the result. */
+        free: '$0, siempre',
+        amount: (amount: string, per: string) => `${amount} ${per}`,
+        /** Reasons (keys of `planReasons`, src/lib/system/plans.ts). */
+        reasons: {
+          freeLimits: (r: { printers: number; people: number; orders: number }) =>
+            `Hasta ${r.printers} impresoras, ${r.people === 1 ? '1 persona' : `${r.people} personas`} y ${r.orders} ventas y pedidos al mes`,
+          printers: (n: number, orMore: boolean) =>
+            `Con ${n}${orMore ? ' o más' : ''} impresoras pagas lo mismo que con 1`,
+          twoPeople: '2 personas en la misma cuenta',
+          roles: 'Más de 2 personas: roles para que cada quien vea lo suyo',
+          orders: (n: number) => `Más de ${n} ventas y pedidos al mes`,
+          contact: (n: number) => `Para más de ${n} personas, escríbenos por WhatsApp`,
+        },
+      },
+      founder: {
+        label: 'Precio de fundador',
+        title: 'Precio de fundador',
+        text: (seats: number) =>
+          `Los primeros ${seats} talleres que paguen conservan su precio mientras sigan suscritos, aunque después suba.`,
+      },
+      compare: {
+        title: 'Qué trae cada plan',
+        caption: 'Comparación de los planes Gratis, Taller y Negocio',
+        feature: 'Función',
+        included: 'Incluido',
+        notIncluded: 'No incluido',
+        noLimit: 'Sin límite',
+        /** Groups and rows (ids of `config/system.ts › compareGroups`). */
+        groups: {
+          limits: 'Límites',
+          shop: 'El taller',
+          team: 'Equipo',
+          where: 'Dónde y ayuda',
+        },
+        rows: {
+          people: 'Personas',
+          printers: 'Impresoras',
+          orders: 'Ventas y pedidos al mes',
+          workshops: 'Talleres en una cuenta',
+          cost: 'Costo real al gramo y precio por valor',
+          slicer: 'Leer el archivo del laminador',
+          advances: 'Pedidos con anticipo y saldo',
+          stock: 'Existencias, filamento e insumos',
+          production: 'Producción por impresora y mantenimiento',
+          reports: 'Reportes y ganancia real',
+          logo: 'Tu logo en cotizaciones y notas',
+          excel: 'Cargar desde Excel',
+          roles: 'Roles: Administración, Ventas y Taller',
+          hidden: 'Empleados que no ven costos ni ganancia',
+          log: 'Bitácora de quién hizo qué',
+          apps: 'Web, Mac, Windows y celular',
+          export: 'Descargar toda tu información',
+          help: 'Ayuda por WhatsApp',
+        },
+        /** Text cells (instead of ✓ or —). */
+        values: { yes: 'Sí', priority: 'Prioritaria' },
+      },
+      pay: {
+        title: 'Sobre el pago',
+        items: (days: number) => [
+          {
+            question: `¿Qué pasa al terminar los ${days} días?`,
+            answer:
+              'Pasas a Gratis. No se cobra nada porque no pedimos tarjeta. Si quieres seguir con Taller o Negocio, eliges plan y pagas.',
+          },
+          {
+            question: '¿Cómo pago?',
+            answer: 'Con tarjeta de crédito o débito. El cobro es automático cada mes o cada año.',
+          },
+          {
+            question: '¿Puedo cambiar de plan?',
+            answer: 'Sí, cuando quieras. La diferencia se ajusta en tu siguiente cobro.',
+          },
+          {
+            question: '¿Qué pasa si no pasa un cobro?',
+            answer:
+              'Te avisamos por correo y lo intentamos otra vez. Si no se paga, tu cuenta queda en solo lectura hasta que pagues; no se borra nada.',
+          },
+          {
+            question: '¿Puedo cancelar?',
+            answer:
+              'Sí, desde Ajustes, sin llamadas. Sigues en tu plan hasta el final del periodo pagado y después pasas a Gratis.',
+          },
+        ],
+      },
+      end: {
+        title: (days: number) => `Empieza con el plan Negocio, ${days} días gratis.`,
+        lead: 'Sin tarjeta. Al terminar eliges plan o te quedas en Gratis.',
+      },
+    },
+    download: {
+      title: 'Úsalo donde trabajes.',
+      lead: 'Una sola cuenta: lo que registras en la computadora aparece en el celular al momento.',
+      /** Main button by device (`detectPlatform`). */
+      main: {
+        mac: 'Descargar para Mac',
+        windows: 'Descargar para Windows',
+        mobile: 'Abrir en el navegador',
+        other: 'Abrir en el navegador',
+      },
+      openBrowser: 'Abrir en el navegador',
+      /** Line under the main button, by device. */
+      req: {
+        mac: (minOs: string) => `${minOs}. ¿Usas Windows? Está abajo.`,
+        windows: (minOs: string) => `${minOs}. ¿Usas Mac? Está abajo.`,
+        mobile: 'En el celular se usa desde el navegador. Agrégalo a tu pantalla de inicio.',
+        other: 'Funciona en cualquier navegador reciente.',
+      },
+      platformsTitle: 'Mac, Windows, navegador y celular',
+      forYou: 'Para tu equipo',
+      /** Rows of the platform list (ids of `config/system.ts › platforms`). */
+      platforms: {
+        mac: {
+          name: 'Mac',
+          what: 'App en el Dock que abre al encender la computadora.',
+          button: 'Descargar para Mac (.dmg)',
+        },
+        windows: {
+          name: 'Windows',
+          what: 'App en la barra de tareas que abre al encender la computadora.',
+          button: 'Descargar para Windows (.exe)',
+        },
+        other: {
+          name: 'Navegador',
+          req: 'Chrome, Safari, Edge o Firefox recientes',
+          what: 'Sin instalar nada, en cualquier computadora.',
+          button: 'Abrir en el navegador',
+        },
+        mobile: {
+          name: 'Celular',
+          req: 'iPhone o Android, desde el navegador',
+          what: 'Agrégalo a tu pantalla de inicio y ábrelo como una app.',
+          button: 'Abrir en el celular',
+        },
+      },
+      adds: {
+        title: 'Lo que suma la app',
+        lead: 'Es lo mismo que la web, con cosas de computadora.',
+        items: [
+          'Ícono en el Dock o en la barra de tareas',
+          'Abre sola al encender la computadora',
+          'Avisos cuando algo necesita atención',
+          'Notas y cotizaciones impresas sin la barra del navegador',
+          'Arrastras el archivo del laminador sobre la ventana',
+          'Misma cuenta y mismos datos que la web',
+        ],
+      },
+      install: {
+        title: 'Instalar',
+        mac: {
+          title: 'En Mac',
+          steps: (name: string) => [
+            'Abre el archivo .dmg que descargaste.',
+            `Arrastra ${name} a Aplicaciones.`,
+            'Ábrelo y entra con tu cuenta.',
+          ],
+        },
+        windows: {
+          title: 'En Windows',
+          steps: [
+            'Abre el archivo .exe que descargaste.',
+            'Sigue los pasos del instalador.',
+            'Ábrelo desde el menú Inicio y entra con tu cuenta.',
+          ],
+        },
+      },
+      end: {
+        title: '¿Todavía no tienes cuenta?',
+        lead: (days: number) =>
+          `Crea una y prueba el plan Negocio ${days} días gratis, sin tarjeta.`,
+      },
+    },
+  },
   underConstruction: {
     title: 'En construcción',
     text: 'Q-404 está armando la página. Vuelve pronto.',
