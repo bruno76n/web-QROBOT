@@ -67,4 +67,21 @@ export const modules: readonly { id: ModuleId; group: ModuleGroup }[] = [
 
 // ── descargar: start (agent «descargar»: download platforms; docs/25 §4, §7.3) ──
 
+/**
+ * Rows of the download page (`PlatformList`), in order. `id` is the platform `detectPlatform` gives
+ * (`other` is the browser row) and the anchor of the row; `download` is the installer of
+ * `site.system.downloads` it offers, or `null` when it opens the system in the browser. Texts in
+ * `es.system.download.platforms`.
+ */
+export type DownloadKey = keyof typeof site.system.downloads;
+export const platforms: readonly {
+  id: 'mac' | 'windows' | 'other' | 'mobile';
+  download: DownloadKey | null;
+}[] = [
+  { id: 'mac', download: 'mac' },
+  { id: 'windows', download: 'windows' },
+  { id: 'other', download: null },
+  { id: 'mobile', download: null },
+];
+
 // ── descargar: end ──
