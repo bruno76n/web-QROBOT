@@ -71,8 +71,8 @@ for (const d of devices) {
     await expect(marked).toContainText('Tu equipo');
     await expect(page.getByText('Tu equipo')).toHaveCount(1);
 
-    // No script of its own and no sideways scroll.
-    await expect(page.locator('main script, .system script')).toHaveCount(0);
+    // No script of its own (the product bar's menu script is shared) and no sideways scroll.
+    await expect(page.locator('.system script')).toHaveCount(0);
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
     );

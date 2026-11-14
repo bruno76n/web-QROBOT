@@ -2,7 +2,8 @@
  * Styles of the system screens drawn in HTML (docs/25 §6.3), from reference/mockups/talleres/_ui.css.
  * They are the reference of the design of the system: a neutral interface without purple; gray for
  * costs and structure, green only for profit, amber and red only for states (always with text).
- * One chart, one color (plus the green of the profit when needed). Tabular numbers. Every rule
+ * One chart, one color (plus the green of the profit when needed). Text colors reach 4.5:1
+ * (green text in `--green-text`, gray text in `--ink-2`). Tabular numbers. Every rule
  * hangs from `.ui` (or a `ui-` class). Bar sizes come as SVG attributes, never `style` (§9).
  * Breakpoints of the page: ≤480 · ≤760 · 761–1099 · ≥1100 (docs/24 §1). Safari 14: no
  * aspect-ratio, no gap in flex (margins), `-webkit-` prefixes on purpose (docs/24 §5).
@@ -75,7 +76,7 @@
   line-height: 1.2;
 }
 .ui .up {
-  color: var(--green-d);
+  color: var(--green-text);
   font-weight: 600;
 }
 
@@ -250,7 +251,7 @@
 }
 .ui-pill.ok {
   background: var(--green-l);
-  color: var(--green-d);
+  color: var(--green-text);
 }
 .ui-pill.warn {
   background: var(--amber-l);
@@ -331,7 +332,7 @@
   white-space: nowrap;
 }
 .ui-tbl .g {
-  color: var(--green-d);
+  color: var(--green-text);
   font-weight: 600;
 }
 .ui-tbl tfoot td {
@@ -472,7 +473,7 @@
 }
 .ui-ng {
   font-size: 11.5px;
-  color: var(--ink-3);
+  color: var(--ink-2);
   padding: 12px 8px 4px;
 }
 .ui-ni {
@@ -573,10 +574,10 @@
   font-size: 11.5px;
   font-weight: 500;
   letter-spacing: 0;
-  color: var(--green-d);
+  color: var(--green-text);
 }
 .kp.net dd {
-  color: var(--green-d);
+  color: var(--green-text);
 }
 .ui-row2 {
   display: grid;
@@ -775,7 +776,7 @@
   font-weight: 600;
 }
 .pz-res .g dd {
-  color: var(--green-d);
+  color: var(--green-text);
   font-size: 22px;
   letter-spacing: -0.03em;
 }
@@ -783,7 +784,7 @@
   margin-top: 12px;
   font-size: 12px;
   line-height: 1.35;
-  color: var(--green-d);
+  color: var(--green-text);
   display: flex;
   align-items: flex-start;
 }
@@ -866,7 +867,7 @@
   line-height: 1.25;
 }
 .ui-steps li:not(.done):not(.cur) b {
-  color: var(--ink-3);
+  color: var(--ink-2);
   font-weight: 500;
 }
 .ui-steps small {
@@ -1347,7 +1348,7 @@
   margin-left: 6px;
 }
 .sp-k .n b {
-  color: var(--green-d);
+  color: var(--green-text);
 }
 .sp-k i {
   width: 10px;
@@ -1471,7 +1472,7 @@
     margin-left: 16px;
     font-size: 12.5px;
     font-weight: 600;
-    color: var(--green-d);
+    color: var(--green-text);
     background: var(--green-l);
     border-radius: 6px;
     padding: 2px 7px;

@@ -70,13 +70,17 @@ test('M · en celular el menú de la barra se cierra al elegir «Módulos»', as
   await menu.getByRole('link', { name: 'Módulos', exact: true }).click();
   await expect(page).toHaveURL(/#modulos$/);
   await expect(menu).not.toHaveAttribute('open', '');
+  // The page scrolls smoothly to the section: wait until it lands with the heading uncovered.
   const heading = page.locator('#mod-h');
-  const covered = await heading.evaluate((el) => {
-    const r = el.getBoundingClientRect();
-    const hit = document.elementFromPoint(r.left + 4, r.top + 4);
-    return !hit || !el.contains(hit);
-  });
-  expect(covered).toBe(false);
+  await expect
+    .poll(() =>
+      heading.evaluate((el) => {
+        const r = el.getBoundingClientRect();
+        const hit = document.elementFromPoint(r.left + 4, r.top + 4);
+        return !!hit && el.contains(hit);
+      }),
+    )
+    .toBe(true);
 });
 
 test('M · cada pantalla del sistema es una imagen con nombre accesible', async ({ page }) => {

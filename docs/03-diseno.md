@@ -25,6 +25,7 @@ Se declaran como variables CSS y en el tema de Tailwind (`src/styles/global.css`
 | `--lilac` | `#f1ecfd` | Recuadro «En corto» y cuadros «Truco» de Aprende (`21 §4.1`) |
 | `--green-l` | `#e3f5e9` | Burbuja del mensaje propio en el pedido |
 | `--green-d` | `#00873a` | Verde oscuro para texto sobre fondos claros (palomitas, «Sí» en tablas, ganancia) |
+| `--green-text` | `#007a34` | Verde para texto chico sobre verde claro o gris (estados «Disponible», ganancia en las pantallas del sistema, «2 meses gratis»): `--green-d` no llega a 4.5:1 ahí |
 | `--ink-3` | `#9b9ba5` | Texto apagado («—» de lo que no incluye un plan) |
 | `--red` · `--red-l` | `#c8302a` · `#fbeaea` | Avisos de error y estado «Crítico» (Aprende, Para talleres) |
 | `--amber` · `--amber-l` · `--amber-d` | `#b4740a` · `#fdf3e1` · `#8a5a06` | Cuadros «Cuidado», nivel de calor medio y estado «Stock bajo» |
