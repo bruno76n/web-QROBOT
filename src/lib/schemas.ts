@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { colorIds } from '@/config/colors';
+import { faq, pageFrontmatter } from './learn/content';
 import { limits, slugPattern } from './publish';
 
 /** Shared Zod schemas: the panel forms and the server actions use the same ones (docs/06). */
@@ -137,5 +138,47 @@ export const clickInputSchema = z
 
 /** Window of the click statistics, in days. */
 export const clickStatsInputSchema = z.object({
+  days: z.number().int().min(1).max(365).default(30),
+});
+
+/** Id of a learning page (`learn-…`, from its slug). */
+export const learnIdSchema = z.string().min(1).max(160);
+
+/**
+ * A learning page as the panel saves it (`admin.saveLearnPage`): the editable fields of the page
+ * frontmatter (docs/21 §8), with the same rules, plus the Markdown body and the questions in order.
+ * Slug, topic and kind are not here: they change only in `content/aprende/`. The lists get an upper
+ * bound the files do not need.
+ */
+export const learnPageInputSchema = pageFrontmatter
+  .pick({
+    title: true,
+    subtitle: true,
+    summary: true,
+    tags: true,
+    related: true,
+    sources: true,
+    published: true,
+    cta: true,
+  })
+  .extend({
+    id: learnIdSchema,
+    bodyMd: z.string().max(100_000),
+    tags: pageFrontmatter.shape.tags.max(40),
+    /** Slugs of related pages; each must exist (`UNKNOWN_RELATED`). */
+    related: pageFrontmatter.shape.related.max(40),
+    /** Ids of `learn_sources`; each must exist (`VALIDATION` on `sources`). */
+    sources: pageFrontmatter.shape.sources.max(40),
+    /** Questions in the order they are shown; the first is `#pregunta-1`. */
+    faqs: z.array(faq).max(40),
+    /** Button text of the closing call; empty uses the default one. */
+    ctaText: z.string().max(200).default(''),
+  });
+export type LearnPageInput = z.infer<typeof learnPageInputSchema>;
+
+/** Inputs of the small learning actions: one page, the quick publish switch, the misses window. */
+export const learnIdInputSchema = z.object({ id: learnIdSchema });
+export const learnSetPublishedSchema = z.object({ id: learnIdSchema, published: z.boolean() });
+export const learnSearchMissesInputSchema = z.object({
   days: z.number().int().min(1).max(365).default(30),
 });

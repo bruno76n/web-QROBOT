@@ -27,6 +27,12 @@ export function errorText(failure: Failure | { code: 'OFFLINE' }): string {
       return t.errors.CATEGORY_IN_USE(
         ((details?.products as string[] | undefined) ?? []).join(', '),
       );
+    case 'UNKNOWN_RELATED':
+      return t.errors.UNKNOWN_RELATED(((details?.slugs as string[] | undefined) ?? []).join(', '));
+    case 'UNKNOWN_BLOCK':
+      return t.errors.UNKNOWN_BLOCK(
+        ((details?.marks as string[] | undefined) ?? []).map((m) => `[[${m}]]`).join(', '),
+      );
     case 'INTERNAL':
       return t.errors.INTERNAL(String(details?.errorId ?? '—'));
     case 'OFFLINE':
@@ -43,6 +49,7 @@ export function errorText(failure: Failure | { code: 'OFFLINE' }): string {
     case 'PHOTO_NOT_FOUND':
     case 'FILE_TYPE':
     case 'FILE_TOO_LARGE':
+    case 'SEARCH_UNAVAILABLE':
       return t.errors[code];
     default:
       return t.errors.INTERNAL('—');
