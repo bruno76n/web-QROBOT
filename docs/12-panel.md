@@ -74,6 +74,15 @@ Como el mockup:
 - Borrar se rechaza si un producto publicado se quedaría sin categoría; el mensaje lista cuáles.
 - En la ficha del producto, "Dónde aparece" muestra estas categorías, en este orden. El orden decide la categoría principal (migas).
 
+## 5c. Aprende (`/admin/aprende`, fase 8)
+
+Edita las páginas de Aprende que ya existen (crear y borrar páginas se hace con los archivos de `content/aprende/` y el importador, `21 §8`). Acciones (`10 §3`):
+
+- **Lista:** `admin.listLearnPages` trae todas las páginas (publicadas u ocultas) con título, tema, tipo, si está publicada y si se editó aquí. El interruptor de cada fila usa `admin.setLearnPublished`: muestra u oculta la página en Aprende y en el buscador al momento.
+- **Editor:** `admin.getLearnPage` trae el Markdown, las listas, las preguntas en orden y las fuentes que se pueden citar. «Guardar» llama `admin.saveLearnPage` con los campos editables (título, subtítulo, en corto, cuerpo, etiquetas, relacionadas, fuentes, preguntas, llamado y publicado). El servidor convierte el Markdown, rehace el texto de búsqueda y marca la página como **editada aquí**: desde entonces el importador ya no la toca, salvo con `--overwrite`. La dirección, el tema y el tipo no se editan.
+- **Errores al guardar:** una relacionada que ya no existe (`UNKNOWN_RELATED`, nombra cuáles), un bloque `[[…]]` que no existe (`UNKNOWN_BLOCK`, nombra cuál) o una fuente que no existe (`VALIDATION`). Si se guardó pero el buscador no se pudo actualizar, la respuesta es éxito con `search: 'failed'` y el panel muestra «Se guardó, pero el buscador no se actualizó. Toca «Actualizar buscador» en un rato.».
+- **Buscador y búsquedas sin resultado** (`22 §10`): `admin.learnSearchMisses` da las búsquedas sin resultado de los últimos días (de más a menos) y el estado del buscador (si hay Meilisearch, última sincronización y documentos); «Actualizar buscador» llama `admin.syncLearnIndex` (`SEARCH_UNAVAILABLE` si Meilisearch no responde).
+
 ## 6. Clics a WhatsApp (fase 5)
 
 En la pestaña Productos, encima de la lista, una línea: "Últimos 30 días: N toques a WhatsApp". En cada fila, el número de toques de ese producto. En la portada no aplica. Detalle en `18`.
@@ -102,6 +111,9 @@ Van en `src/i18n/es.ts` bajo `admin`. Del mockup, más los nuevos:
 | `TOO_MANY_PHOTOS` | Caben hasta 10 fotos por producto. |
 | `TOO_MANY_SLIDES` | Caben hasta 6 portadas. |
 | `PHOTO_NOT_FOUND` | Una foto no se encontró. Vuelve a subirla. |
+| `UNKNOWN_RELATED` | Estas páginas relacionadas ya no existen: {lista}. Quítalas de la lista. |
+| `UNKNOWN_BLOCK` | El cuerpo usa un bloque que no existe: {marcas}. Revisa lo que escribiste entre [[ ]]. |
+| `SEARCH_UNAVAILABLE` | El buscador no respondió. Intenta de nuevo en un rato. |
 | `FILE_TYPE` | Esa foto no se puede usar. Sube JPG, PNG, WEBP o una foto del iPhone. |
 | `FILE_TOO_LARGE` | La foto pesa demasiado (máximo 25 MB). |
 | `INTERNAL` | Algo salió mal. Intenta de nuevo. (Código: {errorId}) |

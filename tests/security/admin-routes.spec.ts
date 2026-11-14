@@ -9,6 +9,12 @@ const adminRequests = [
   { method: 'POST', path: '/_actions/admin.listProducts', body: {} },
   { method: 'POST', path: '/_actions/admin.saveProduct', body: { name: '' } },
   { method: 'POST', path: '/_actions/admin.deleteProduct', body: { nonsense: true } },
+  { method: 'POST', path: '/_actions/admin.listLearnPages', body: {} },
+  { method: 'POST', path: '/_actions/admin.getLearnPage', body: { id: 42 } },
+  { method: 'POST', path: '/_actions/admin.saveLearnPage', body: { id: '', title: '' } },
+  { method: 'POST', path: '/_actions/admin.setLearnPublished', body: { published: 'yes' } },
+  { method: 'POST', path: '/_actions/admin.learnSearchMisses', body: { days: -1 } },
+  { method: 'POST', path: '/_actions/admin.syncLearnIndex', body: { nonsense: true } },
   { method: 'POST', path: '/api/admin/upload', body: {} },
 ] as const;
 
