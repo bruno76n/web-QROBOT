@@ -102,7 +102,7 @@ Se mueve lo que usan dos secciones; el comportamiento de Aprende no cambia y sus
 
 | Pieza | Hoy | Cambio |
 |---|---|---|
-| `Faqs.astro` | `src/components/learn/` | Pasa a `src/components/site/`. Props nuevas: `title` y `headingId` (Aprende pasa `es.learn.faq`). Sus estilos `.faq` al componente |
+| `Faqs.astro` | `src/components/learn/` | Pasa a `src/components/site/`. Props nuevas: `title`, `headingId`, `headingClass` y `side` (Para talleres: título a la izquierda en escritorio). Sus estilos `.faq` al componente |
 | `Button.astro` + `button-variants.ts` | Variantes `black` y `green` | Se agregan `outline` (blanco con borde `--line`, borde `--ink` al pasar el mouse) y `outlineLight` (transparente con borde blanco, para el cierre oscuro) |
 | `Header.astro` | Fijo arriba | Prop `sticky` (por defecto `true`): en Para talleres el header se va con el scroll y se queda la barra del producto. Ligas de `siteNav()` |
 | `Footer.astro` | Ligas de `es.header.nav` | Ligas de `siteNav()` |
@@ -134,11 +134,13 @@ En `src/components/system/`, cada uno con sus estilos en su `<style>`:
 | `AlertsTable.astro` | Alerta, cuándo aparece y acción; en celular, filas apiladas | `.alerts` |
 | `RolesTable.astro` | Módulos que ve cada rol; en celular cabe completa («Admin.») | `.roles` |
 | `DataFacts.astro` | Copias de seguridad, exportación a Excel, información separada | `.facts3` |
-| `PlanBand.astro` | Los 3 planes en una banda (principal y precios) | `.plans` |
+| `PlanBand.astro` | Los 3 planes en una banda (principal y precios). Cada precio lleva los textos de los dos periodos en `data-monthly-*` y `data-yearly-*`, así `PeriodToggle` solo cambia texto. `trialNote={false}` (precios) deja la nota sin la frase de la prueba; el slot va en la línea de la nota («Comparar planes» en la principal) | `.plans` |
 | `PeriodToggle.astro` | Mensual o anual (+ script; sin JavaScript se ve el mensual y la línea «o $1,490 al año») | `.seg` |
 | `CompareTable.astro` | Comparación completa | `.cmp` |
 | `PlatformList.astro` | Mac, Windows, navegador y celular; la del equipo marcada «Tu equipo» | `.plats` |
 | `EndCta.astro` | Cierre oscuro «Tu taller merece un cerebro.» con uno o dos botones | `.s-end` |
+
+En `system.css` también vive lo que comparten la principal y Descargar: el fondo del hero (`.hero-stage`, blanco que termina en lila) y la tabla base (`.tbl-wrap`).
 
 ### 6.3 Pantallas del sistema (ilustraciones en HTML)
 
@@ -259,9 +261,9 @@ Las pantallas son HTML y SVG: sin imágenes que esperar. `system-ui.css` comprim
 | Guardia de encendido | Si `site.system.enabled` es `true`: `appUrl` y `downloads.*.url` son `https://` y no están vacíos, `name` no está vacío. Si no, la prueba falla y no se puede fusionar |
 | Seguridad (build de producción, `pnpm preview`) | `tests/security/system-hidden.spec.ts`: `/talleres`, `/talleres/`, `/talleres/precios`, `/talleres/descargar`, `/talleres/x`, `/%74alleres`, `/talleres%2Fprecios` → 404 con la página 404 de la web; el HTML de `/`, `/catalogo`, `/aprende` y `/aprende/negocio/costo` no contiene `/talleres`; ni el sitemap ni `robots.txt` |
 | `pnpm security` | Ningún `.html` con `talleres` en `dist/`; ningún archivo de `src/pages/talleres/` exporta `prerender = true`; cada uno contiene el cerrojo de §2; ningún `style=` en `src/components/system/` |
-| Flujos (Playwright con `pnpm dev`, `e2e/dev-talleres.spec.ts`, en Chromium y WebKit) | **M** principal: el nombre en grande en una línea en 360; `#modulos` lleva a Módulos debajo de la barra; cada pantalla del sistema tiene `role="img"` y nombre accesible; en 390 `UiHome` sin barra lateral · **N** precios: Anual → Taller $1,490 y «Equivale a $124 al mes»; Mensual regresa a $149 · **P** descargar con `User-Agent` de Mac, de Windows y de iPhone → su botón y su fila marcada |
+| Flujos (Playwright con `pnpm dev`, en Chromium y WebKit: `e2e/dev-talleres.spec.ts` M, `dev-talleres-precios.spec.ts` N, `dev-talleres-descargar.spec.ts` P y `dev-talleres-ligas.spec.ts` para el menú, el footer, el llamado de Aprende y el sitemap; WebKit con los proyectos `webkit-w390` y `webkit-w1440` de `playwright.admin.config.ts`, que se activan solo si WebKit está instalado) | **M** principal: el nombre en grande en una línea en 360; `#modulos` lleva a Módulos debajo de la barra; cada pantalla del sistema tiene `role="img"` y nombre accesible; en 390 `UiHome` sin barra lateral · **N** precios: Anual → Taller $1,490 y «Equivale a $124 al mes»; Mensual regresa a $149 · **P** descargar con `User-Agent` de Mac, de Windows y de iPhone → su botón y su fila marcada |
 | Visual | Las 3 páginas contra las maquetas en 360, 390, 820 y 1440; sin scroll horizontal |
-| Accesibilidad | axe sin errores serios en las 3 páginas (con `pnpm dev`) |
+| Accesibilidad | axe sin errores serios en las 3 páginas (con `pnpm dev`, `e2e/dev-talleres-a11y.spec.ts`, en 390, 820 y 1440) |
 | Regresión de Aprende | Las pruebas de Aprende siguen pasando sin cambios después de mover preguntas y tokens |
 
 Las pruebas de cabeceras y CSP (`headers.spec.ts`) y Lighthouse solo corren sobre el build de producción: las 3 rutas se agregan a `e2e/urls.ts` y a `lighthouserc.json` **al encender** (§13), no antes (darían 404).

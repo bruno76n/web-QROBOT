@@ -1,5 +1,7 @@
 // pnpm size — JavaScript budgets per page (docs/15 §2). Only pages that exist are checked.
 // Usage: pnpm build && pnpm size   (starts its own preview server unless BASE_URL is set)
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { gzipSync } from 'node:zlib';
 import { withPreview } from './_server.mjs';
 
@@ -32,6 +34,24 @@ const safariBreakers = [
   { name: 'requestIdleCallback', re: /(?:^|[^.\w])requestIdleCallback\(/ },
   { name: 'lookbehind', re: /\(\?<[=!]/ },
 ];
+
+/** Folder of the built client scripts. */
+const builtJs = 'dist/client/_astro';
+
+/**
+ * Safari 14 check over every built script of the public site (docs/24 §5, docs/25 §12), so it also
+ * covers pages that do not answer in the build, like the hidden page for workshops. The panel
+ * (`Admin*` files) is left out: its rules are not those of docs/24. Returns the problems found.
+ */
+function safariInBuild() {
+  if (!existsSync(builtJs)) return [`${builtJs} does not exist (pnpm build first)`];
+  return readdirSync(builtJs)
+    .filter((f) => f.endsWith('.js') && !f.startsWith('Admin'))
+    .flatMap((f) => {
+      const code = readFileSync(join(builtJs, f), 'utf8');
+      return safariBreakers.filter((s) => s.re.test(code)).map((s) => `${s.name} in ${f}`);
+    });
+}
 
 /**
  * Gzip size of the JavaScript a page loads on open: its scripts, preloaded modules, island
@@ -109,7 +129,12 @@ async function run(base) {
     console.error('No page found to check.');
     return 1;
   }
-  return failed ? 1 : 0;
+  const safari = safariInBuild();
+  for (const m of safari) console.log(`  ✗ Safari 14: ${m}`);
+  console.log(
+    `${safari.length ? '✗' : '✓'} Safari 14: every script of ${builtJs} (requestIdleCallback, lookbehind)`,
+  );
+  return failed || safari.length ? 1 : 0;
 }
 
 // Uses `BASE_URL` when set; otherwise starts a preview server of the build (port `PORT`).

@@ -51,7 +51,7 @@
 ### 9.7 Página principal
 - **Hacer:** `src/pages/talleres/index.astro` con las secciones de `25 §7.1` en orden: hero (`Wordmark`, `UiHome` y `UiFloats`), Módulos (`ModuleIndex`), las 7 secciones de módulos (`FeatureSection` con su pantalla; Costo con `CostFormula`; Reportes en `dark`), Alertas (`AlertsTable`), Equipo (`RolesTable`), Datos (`DataFacts`), `PlanBand` (+ `PeriodToggle` sin control visible: mensual), `Faqs`, `EndCta`. Las ligas de «Probar gratis», «Crear cuenta» e «Iniciar sesión» salen de `site.system`.
 - **Consultar:** `25 §7.1, §8, §9`, `reference/mockups/talleres/talleres.html`.
-- **Prueba (Playwright con `pnpm dev`, `e2e/dev-talleres.spec.ts`):** flujo **M** de `25 §12`.
+- **Prueba (Playwright con `pnpm dev`, `e2e/dev-talleres.spec.ts`; precios y descargar tienen el suyo, `25 §12`):** flujo **M** de `25 §12`.
 - **Listo cuando:** comparada con la maqueta en 360, 390, 820 y 1440; sin scroll horizontal; filas en `progreso.md`.
 
 ### 9.8 Precios
@@ -71,7 +71,7 @@
 
 ### 9.11 Revisión y cierre
 - **Hacer:**
-  1. Proyecto `webkit` en `playwright.admin.config.ts` para `dev-talleres.spec.ts`: flujos M, N y P en Chromium y WebKit.
+  1. Proyectos `webkit-w390` y `webkit-w1440` en `playwright.admin.config.ts` para `e2e/dev-talleres*.spec.ts`: flujos M, N y P en Chromium y WebKit.
   2. axe sin errores serios en las 3 páginas (con `pnpm dev`).
   3. La revisión de Safari de `pnpm size` (`requestIdleCallback`, lookbehind) se extiende a **todos** los `.js` de `dist/_astro/`, así cubre los scripts de las páginas ocultas. El presupuesto de `25 §11` y Lighthouse se miden al encender (las rutas dan 404 en el build); anótalo en el informe.
   4. Actualizar `15 §2` (presupuestos de Para talleres, «se mide al encender»), `16 §1` (glosario: Para talleres → `system`, plan → `plan`, pantalla del sistema → `ui`), `20`, `progreso.md`.
