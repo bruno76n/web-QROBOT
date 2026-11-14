@@ -1,0 +1,100 @@
+---
+/**
+ * The 13 modules of the system in their 3 menu groups (Vender, Taller, Negocio), each with its
+ * menu icon, its name and what it does (docs/25 §6.2, mockup `.mods`). One column on phones and
+ * tablets, three from 900 px.
+ */
+import ModuleIcon from './ModuleIcon.astro';
+import { moduleGroups, modules } from '@/config/system';
+import { es } from '@/i18n/es';
+
+const groups = moduleGroups.map((group) => ({
+  name: es.system.groups[group],
+  items: modules
+    .filter((m) => m.group === group)
+    .map((m) => ({ id: m.id, ...es.system.modules[m.id] })),
+}));
+---
+
+<div class="mods">
+  {groups.map((g) => (
+    <div class="mod-g">
+      <h3>{g.name}</h3>
+      <ul>
+        {g.items.map((m) => (
+          <li>
+            <span class="mod-ic">
+              <ModuleIcon icon={m.id} size={18} />
+            </span>
+            <span>
+              <b>{m.name}</b>
+              <span>{m.text}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+</div>
+
+<style>
+  /* Grid gaps with their Safari 14 alias. */
+  .mods {
+    display: grid;
+    grid-gap: 36px;
+    gap: 36px;
+  }
+  @media (min-width: 900px) {
+    .mods {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-column-gap: 40px;
+      column-gap: 40px;
+    }
+  }
+  /* Group name in purple over a dark rule. */
+  .mod-g h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--purple);
+    letter-spacing: 0;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .mod-g ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .mod-g li {
+    display: flex;
+    align-items: flex-start;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  /* Menu icon on a gray square. */
+  .mod-ic {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 14px;
+    flex: none;
+    color: var(--ink);
+  }
+  .mod-g li b {
+    display: block;
+    font-size: 18px;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
+  .mod-g li b + span {
+    display: block;
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--ink-2);
+    margin-top: 2px;
+  }
+</style>

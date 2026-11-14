@@ -59,6 +59,43 @@ export const modules: readonly { id: ModuleId; group: ModuleGroup }[] = [
 
 // ── principal: start (agent «principal»: cost formula, alerts, roles; docs/25 §4, §7.1) ──
 
+/** Terms of the cost of a piece, in the order of the formula (`CostFormula`); the total follows. */
+export type CostTerm = 'material' | 'power' | 'machine' | 'extras';
+export const costTerms: readonly CostTerm[] = ['material', 'power', 'machine', 'extras'];
+
+/** The 7 alerts of the system's home screen, in its order (`AlertsTable`). */
+export type AlertId =
+  | 'filamentShort'
+  | 'criticalStock'
+  | 'dueSoon'
+  | 'balanceDue'
+  | 'priceBelowMin'
+  | 'maintenance'
+  | 'lowSupply';
+export const alerts: readonly AlertId[] = [
+  'filamentShort',
+  'criticalStock',
+  'dueSoon',
+  'balanceDue',
+  'priceBelowMin',
+  'maintenance',
+  'lowSupply',
+];
+
+/** Roles of the Negocio plan, in the order of the table (`RolesTable`). */
+export type Role = 'owner' | 'admin' | 'sales' | 'shop';
+export const roles: readonly Role[] = ['owner', 'admin', 'sales', 'shop'];
+
+/** Areas of the system and the roles that see each one (`RolesTable`). */
+export type RoleArea = 'selling' | 'workshop' | 'money' | 'expenses' | 'account';
+export const roleMatrix: readonly { area: RoleArea; roles: readonly Role[] }[] = [
+  { area: 'selling', roles: ['owner', 'admin', 'sales'] },
+  { area: 'workshop', roles: ['owner', 'admin', 'shop'] },
+  { area: 'money', roles: ['owner', 'admin'] },
+  { area: 'expenses', roles: ['owner', 'admin'] },
+  { area: 'account', roles: ['owner'] },
+];
+
 // ── principal: end ──
 
 // ── precios: start (agent «precios»: rows of the plan comparison; docs/25 §4, §7.2) ──

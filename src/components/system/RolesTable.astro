@@ -1,0 +1,122 @@
+---
+/**
+ * Which areas of the system each role sees (docs/25 §6.2, mockup `.roles`): a check or a dash per
+ * role, with «sí» or «no» for screen readers. On phones (≤ 760 px) the table fits whole: narrow
+ * columns and «Admin.» instead of «Administración» (the full name stays for screen readers).
+ */
+import Check from '@lucide/astro/icons/check';
+import { roleMatrix, roles } from '@/config/system';
+import { es } from '@/i18n/es';
+
+const t = es.system.home.team;
+const head = roles.map((id) => t.roles[id]);
+const rows = roleMatrix.map((r) => ({
+  name: t.areas[r.area],
+  cells: roles.map((id) => r.roles.includes(id)),
+}));
+---
+
+<div class="tbl-wrap">
+  <table class="roles">
+    <caption class="sr-only">{t.caption}</caption>
+    <thead>
+      <tr>
+        <th scope="col">{t.areasHead}</th>
+        {head.map((role) => (
+          <th scope="col" class="c">
+            {role.short ? (
+              <>
+                <span class="nl">{role.name}</span>
+                <span class="ns" aria-hidden="true">
+                  {role.short}
+                </span>
+              </>
+            ) : (
+              role.name
+            )}
+          </th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((r) => (
+        <tr>
+          <th scope="row">{r.name}</th>
+          {r.cells.map((yes) =>
+            yes ? (
+              <td class="y">
+                <Check size={20} stroke-width={2.6} aria-hidden="true" />
+                <span class="sr-only">{t.yes}</span>
+              </td>
+            ) : (
+              <td class="no">
+                <span aria-hidden="true">—</span>
+                <span class="sr-only">{t.no}</span>
+              </td>
+            ),
+          )}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .roles {
+    background: #fff;
+  }
+  .roles td.y,
+  .roles td.no,
+  .roles th.c {
+    text-align: center;
+  }
+  .roles td.no {
+    color: var(--ink-3);
+  }
+  .roles td.y {
+    color: var(--green-d);
+  }
+  /* The lucide check renders outside this component's scope. */
+  .roles :global(svg) {
+    vertical-align: middle;
+  }
+  .roles thead th {
+    background: var(--soft);
+  }
+  .roles tbody th {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+    background: #fff;
+    white-space: normal;
+    text-align: left;
+  }
+  /* Phones: the whole table fits, with narrow columns and the short role name. */
+  .roles .ns {
+    display: none;
+  }
+  @media (max-width: 760px) {
+    .roles th,
+    .roles td {
+      padding: 12px 6px;
+    }
+    .roles tbody th {
+      padding-left: 12px;
+      font-size: 15px;
+    }
+    .roles thead th {
+      font-size: 12px;
+    }
+    .roles .nl {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+    .roles .ns {
+      display: inline;
+    }
+  }
+</style>
