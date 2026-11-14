@@ -1,12 +1,90 @@
 ---
 /**
- * System screen «Compras sugeridas» (docs/25 §6.3), drawn in HTML with the sample data of `system-demo.ts` and
- * the labels of `es.system.ui`. Placeholder frame until the screen is drawn.
+ * System screen «Compras sugeridas» (docs/25 §6.3, section «Filamento, insumos y compras»): the
+ * items to buy grouped by supplier, each group with its contact and a drawn «Copiar pedido»
+ * button; each item with why it is suggested (grams available, or stock and minimum), how many and
+ * the estimated cost. The filament an order needs more of than there is carries «Urgente».
+ * Sample data from `system-demo.ts` (`demoPurchases`, `demoPurchasesTotal`, `demoPurchaseNotes`,
+ * `demoFilaments`), labels from `es.system.ui.purchases`.
  */
+import Copy from '@lucide/astro/icons/copy';
+import UiButton from './UiButton.astro';
 import UiFrame from './UiFrame.astro';
+import UiPill from './UiPill.astro';
 import { site } from '@/config/site';
+import {
+  demoFilaments,
+  demoPurchaseNotes,
+  demoPurchases,
+  demoPurchasesTotal,
+} from '@/config/system-demo';
+import { es } from '@/i18n/es';
+import { formatMoney } from '@/lib/money';
+
+const t = es.system.ui.purchases;
+const urgent = es.system.ui.common.states.urgent;
+const total = formatMoney(demoPurchasesTotal * 100);
+const items = demoPurchases.reduce((n, p) => n + p.items.length, 0);
+const grams = (n: number) => n.toLocaleString('en-US');
+
+/** Each item with its note: why it is suggested and how many to buy. */
+const groups = demoPurchases.map((p) => ({
+  ...p,
+  items: p.items.map((item) => {
+    const note = demoPurchaseNotes[item.name];
+    if (!note) throw new Error(`No purchase note for ${item.name}`);
+    if (note.kind === 'supply') {
+      return { ...item, why: t.stock(note.stock, note.min), qty: t.pieces(note.pieces) };
+    }
+    const available = demoFilaments.find((f) => f.name === item.name)?.grams ?? 0;
+    return {
+      ...item,
+      urgent: Boolean(note.urgent),
+      why: note.urgent
+        ? t.needs(note.urgent.order, grams(note.urgent.needs), grams(available))
+        : t.available(grams(available)),
+      qty: t.rolls(note.rolls),
+    };
+  }),
+}));
 ---
 
-<UiFrame label={site.system.name}>
-  <div class="ui-panel">Compras sugeridas</div>
+<UiFrame label={t.label(site.system.name, total)} kind="card" inner="ui-cmp">
+  <div class="ui-ph">
+    <span>
+      <b class="ui-t">{t.title}</b>
+      <span class="ui-meta">{t.summary(items, total)}</span>
+    </span>
+  </div>
+
+  {/* One block per supplier: name, contact and the copy button, then its items. */}
+  {groups.map((g) => (
+    <div class="cp-g">
+      <div class="cp-gh">
+        <span>
+          <b>{g.supplier}</b>
+          <span class="ui-meta">{g.contact}</span>
+        </span>
+        <UiButton>
+          <Copy slot="icon" class="ic" aria-hidden="true" />
+          {t.copy}
+        </UiButton>
+      </div>
+      <ul>
+        {g.items.map((item) => (
+          <li>
+            <span class="cp-n">
+              <b>{item.name}</b>
+              {'urgent' in item && item.urgent && <UiPill tone="bad">{urgent}</UiPill>}
+              <span class="ui-meta">{item.why}</span>
+            </span>
+            <span class="cp-q">
+              <b class="ui-num">{item.qty}</b>
+              <span class="ui-meta ui-num">{t.about(formatMoney(item.amount * 100))}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
 </UiFrame>

@@ -1,0 +1,87 @@
+---
+// Test page `/dev/ui-taller` of the workshop screens of the page for workshops (docs/25 §6.3):
+// «Impresoras», «Filamentos» with «Compras sugeridas» side by side, and «Existencias», each in a
+// module section with the same variant as in the mockup so the screens get the same width. Only
+// exists in `astro dev` (404 otherwise); not linked anywhere. The section texts are filler copied
+// from the mockup: the real ones belong to the main page.
+import SystemLayout from '@/layouts/SystemLayout.astro';
+import FeatureSection from '@/components/system/FeatureSection.astro';
+import UiFilaments from '@/components/system/ui/UiFilaments.astro';
+import UiPrinters from '@/components/system/ui/UiPrinters.astro';
+import UiPurchases from '@/components/system/ui/UiPurchases.astro';
+import UiStock from '@/components/system/ui/UiStock.astro';
+
+export const prerender = false;
+// Test page: development only (docs/10 §9).
+if (!import.meta.env.DEV) return new Response(null, { status: 404 });
+
+// Filler texts of the three sections, as in the mockup.
+const production = {
+  kick: { icon: 'printers' as const, label: 'Producción e impresoras' },
+  title: 'Tus impresoras no descansan. Tú sí.',
+  lead: 'Cola por impresora, tiempo restante de cada trabajo y mantenimiento antes de la falla.',
+  specs: [
+    {
+      name: 'Cola automática',
+      text: 'Al terminar un trabajo inicia el siguiente; al terminar el último de un pedido, el pedido pasa a Listo.',
+    },
+    {
+      name: 'Registro de impresiones',
+      text: 'Pieza, cantidad, resultado, horas y filamento por rollo. Las fallidas también descuentan filamento.',
+    },
+    {
+      name: 'Mantenimiento por horas de uso',
+      text: 'Boquilla cada 300 h, ejes cada 200 h y cama cada 100 h, editables. Al completarlo se registra el gasto.',
+    },
+    {
+      name: 'Inversión recuperada',
+      text: 'La ganancia neta se reparte entre tus impresoras según sus horas de uso.',
+    },
+  ],
+};
+const filament = {
+  kick: { icon: 'filaments' as const, label: 'Filamento, insumos y compras' },
+  title: 'Ningún rollo vacío a mitad de un pedido.',
+  lead: 'Cada impresión descuenta su filamento. El sistema avisa antes de que se acabe y arma la lista de compras.',
+  specs: [
+    {
+      name: 'Estados',
+      text: 'Nuevo, Normal, Stock bajo (300 g o menos), Crítico (150 g o menos) y Agotado.',
+    },
+    { name: 'Historial por rollo', text: 'Consumo y purga por separado, mermas y ajustes.' },
+    { name: 'Insumos', text: 'Argollas, imanes, cajas y bolsas, con existencia mínima.' },
+    {
+      name: 'Compras sugeridas',
+      text: 'Por proveedor, con cantidad y costo estimado. Se copian como texto para enviarlas por WhatsApp.',
+    },
+  ],
+};
+const stock = {
+  kick: { icon: 'stock' as const, label: 'Existencias' },
+  title: 'Lo que ya imprimiste también es dinero.',
+  lead: 'Piezas hechas, apartadas y disponibles, sin contar a mano.',
+  specs: [
+    {
+      name: 'Movimientos automáticos',
+      text: 'Cada impresión, venta, entrega y devolución suma o resta.',
+    },
+    { name: 'Ajustes', text: 'Corrección con nota si el conteo físico no coincide.' },
+    { name: 'Variantes', text: 'Existencia por color dentro de la misma pieza.' },
+    { name: 'Sets', text: 'Cuántos se pueden armar con las piezas disponibles.' },
+  ],
+};
+---
+
+<SystemLayout title="UI taller (dev)" description="Pantallas del taller" current="home">
+  <meta slot="head" name="robots" content="noindex" />
+  <FeatureSection id="produccion" {...production}>
+    <UiPrinters />
+  </FeatureSection>
+  <FeatureSection id="filamento" {...filament} wide soft stageClass="two-ui">
+    <UiFilaments />
+    <UiPurchases />
+  </FeatureSection>
+  <FeatureSection id="existencias" {...stock} rev>
+    <UiStock />
+  </FeatureSection>
+</SystemLayout>
