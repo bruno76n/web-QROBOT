@@ -1,0 +1,56 @@
+---
+/**
+ * Monthly or yearly switch of the pricing page (docs/25 §6.2, mockup `.seg`): two buttons with
+ * `aria-pressed`, «Mensual» pressed when the page loads and «Anual» with «2 meses gratis». The
+ * behavior is in src/scripts/system-period.ts; without JavaScript the plans stay monthly with their
+ * yearly line below.
+ */
+import { es } from '@/i18n/es';
+
+const t = es.system.pricing.period;
+---
+
+<div class="seg" role="group" aria-label={t.label}>
+  <button type="button" data-period="monthly" aria-pressed="true">
+    {t.monthly}
+  </button>
+  <button type="button" data-period="yearly" aria-pressed="false">
+    {t.yearly} <small>{t.yearlyNote}</small>
+  </button>
+</div>
+
+<script>
+  import '@/scripts/system-period';
+</script>
+
+<style>
+  .seg {
+    display: inline-flex;
+    justify-self: start;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 3px;
+    background: var(--soft);
+  }
+  .seg button {
+    border: 0;
+    background: transparent;
+    min-height: 40px;
+    padding: 0 16px;
+    border-radius: 7px;
+    font-size: 15px;
+    cursor: pointer;
+    color: var(--ink-2);
+  }
+  .seg button[aria-pressed='true'] {
+    background: #fff;
+    color: var(--ink);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  }
+  /* The space before it is text (for the accessible name); the margin completes the mockup's 6 px. */
+  .seg small {
+    font-size: 12px;
+    color: var(--green-d);
+    margin-left: 2px;
+  }
+</style>

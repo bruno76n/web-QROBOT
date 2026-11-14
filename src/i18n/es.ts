@@ -790,7 +790,92 @@ export const es = {
     // ── principal: end ──
 
     // ── precios: start (agent «precios»: texts of /talleres/precios, docs/25 §7.2) ──
-    pricing: {},
+    pricing: {
+      title: 'Precios',
+      lead: 'Paga por taller, no por impresora. El plan Gratis no vence.',
+      /** Monthly or yearly (`PeriodToggle`). */
+      period: {
+        label: 'Periodo de pago',
+        monthly: 'Mensual',
+        yearly: 'Anual',
+        yearlyNote: '2 meses gratis',
+      },
+      /** Trial and founder price, two blocks under the plans. */
+      terms: {
+        label: 'Prueba y precio de fundador',
+        trial: 'Prueba',
+        trialText: (days: number) =>
+          `${days} días del plan Negocio, sin tarjeta. Al terminar, la cuenta pasa a Gratis o al plan que elijas.`,
+        founder: 'Precio de fundador',
+        founderText: (seats: number) =>
+          `Los primeros ${seats} talleres con suscripción conservan su precio mientras la suscripción siga activa.`,
+      },
+      /** Plan comparison (`CompareTable`, rows in `config/system.ts`). */
+      compare: {
+        title: 'Comparación',
+        /** Caption for screen readers: the plan names, «A, B y C». */
+        caption: (names: string[]) =>
+          `Comparación de los planes ${names.slice(0, -1).join(', ')} y ${names[names.length - 1] ?? ''}`,
+        feature: 'Función',
+        included: 'Incluido',
+        notIncluded: 'No incluido',
+        yes: 'Sí',
+        priority: 'Prioritario',
+        groups: {
+          limits: 'Límites',
+          modules: 'Módulos',
+          team: 'Equipo',
+          platforms: 'Plataformas y datos',
+          support: 'Soporte',
+        },
+        rows: {
+          users: 'Usuarios',
+          printers: 'Impresoras',
+          orders: 'Ventas y pedidos al mes',
+          cost: 'Costo por pieza y precios',
+          deposits: 'Pedidos con anticipo y saldo',
+          production: 'Producción e impresoras',
+          materials: 'Filamento, insumos y compras',
+          stock: 'Existencias',
+          documents: 'Cotizaciones y notas de venta',
+          reports: 'Reportes y gastos',
+          roles: 'Roles: Administración, Ventas y Taller',
+          salesView: 'Ventas sin acceso a costos ni ganancia',
+          platforms: 'Web, Mac y Windows',
+          backups: 'Copias de seguridad diarias',
+          excel: 'Exportación a Excel',
+          support: 'Soporte por WhatsApp',
+        },
+      },
+      /** Payment questions (`Faqs`). */
+      pay: {
+        title: 'Pago',
+        faqs: [
+          {
+            question: '¿Qué formas de pago aceptan?',
+            answer: 'Tarjeta de crédito o débito. El cargo es automático cada mes o cada año.',
+          },
+          {
+            question: '¿Puedo cambiar de plan?',
+            answer: 'Sí, en cualquier momento. La diferencia se ajusta en el siguiente cargo.',
+          },
+          {
+            question: '¿Qué pasa al terminar la prueba?',
+            answer: 'La cuenta pasa a Gratis. No hay cargo porque no se pidió tarjeta.',
+          },
+          {
+            question: '¿Qué pasa si un cargo no se completa?',
+            answer:
+              'Recibes un aviso por correo y se intenta de nuevo. Si no se completa, la cuenta queda en solo lectura hasta el pago; no se borra información.',
+          },
+          {
+            question: '¿Cómo cancelo?',
+            answer:
+              'Desde Ajustes. El plan sigue activo hasta el final del periodo pagado y después pasa a Gratis.',
+          },
+        ],
+      },
+    },
     // ── precios: end ──
 
     // ── descargar: start (agent «descargar»: texts of /talleres/descargar, docs/25 §7.3) ──

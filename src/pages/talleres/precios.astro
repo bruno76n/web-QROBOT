@@ -1,7 +1,15 @@
 ---
-// The page for workshops: pricing (docs/25 §7). Hidden until the system is out (docs/25 §2): the
-// middleware locks `/talleres` and this page locks itself too; never prerendered.
-import BaseLayout from '@/layouts/BaseLayout.astro';
+// The page for workshops: pricing (docs/25 §7.2, mockup talleres/precios.html). Header with the
+// monthly / yearly switch, the 3 plans, trial and founder price, the plan comparison, the payment
+// questions and the closing band. Hidden until the system is out (docs/25 §2): the middleware
+// locks `/talleres` and this page locks itself too; never prerendered.
+import SystemLayout from '@/layouts/SystemLayout.astro';
+import Faqs from '@/components/site/Faqs.astro';
+import CompareTable from '@/components/system/CompareTable.astro';
+import EndCta from '@/components/system/EndCta.astro';
+import PeriodToggle from '@/components/system/PeriodToggle.astro';
+import PlanBand from '@/components/system/PlanBand.astro';
+import SectionHead from '@/components/system/SectionHead.astro';
 import { site } from '@/config/site';
 import { systemVisible } from '@/config/system';
 import { es } from '@/i18n/es';
@@ -10,10 +18,85 @@ export const prerender = false;
 if (!systemVisible) return Astro.rewrite('/404');
 
 const seo = es.system.seo.pricing(site.system.name);
+const t = es.system.pricing;
+const { trialDays, founderSeats } = site.system;
 ---
 
-<BaseLayout title={seo.title} description={seo.description} stickyHeader={false}>
-  <div class="wrap py-16">
-    <h1>{seo.title}</h1>
-  </div>
-</BaseLayout>
+<SystemLayout title={seo.title} description={seo.description} current="pricing">
+  <!-- Header: title, sentence and the period switch. -->
+  <section class="s-ph" aria-labelledby="h1">
+    <div class="wrap s-ph-in">
+      <h1 class="t-h1" id="h1">
+        {t.title}
+      </h1>
+      <p class="lead">{t.lead}</p>
+      <PeriodToggle />
+    </div>
+  </section>
+
+  <!-- The 3 plans; the period switch changes their prices. -->
+  <section class="pt0" aria-label={es.system.plans.label}>
+    <div class="wrap">
+      <PlanBand headingLevel={2} />
+    </div>
+  </section>
+
+  <!-- Trial and founder price: two blocks with a rule on top. -->
+  <section class="pt0" aria-label={t.terms.label}>
+    <div class="wrap terms">
+      <div>
+        <h2 class="t-h3">{t.terms.trial}</h2>
+        <p>{t.terms.trialText(trialDays)}</p>
+      </div>
+      <div>
+        <h2 class="t-h3">{t.terms.founder}</h2>
+        <p>{t.terms.founderText(founderSeats)}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Plan comparison. -->
+  <section class="soft" aria-labelledby="cmp-h">
+    <div class="wrap">
+      <SectionHead id="cmp-h" title={t.compare.title} />
+      <CompareTable />
+    </div>
+  </section>
+
+  <!-- Payment questions. -->
+  <Faqs side faqs={[...t.pay.faqs]} title={t.pay.title} headingClass="t-h2" headingId="pay-h" />
+
+  <EndCta />
+</SystemLayout>
+
+<style>
+  /* Header of an inner page: smaller padding than a section; grid gap with its Safari 14 alias. */
+  .s-ph {
+    padding: clamp(40px, 6vw, 88px) 0 clamp(32px, 4vw, 56px);
+  }
+  .s-ph-in {
+    display: grid;
+    grid-gap: 20px;
+    gap: 20px;
+  }
+  /* Trial and founder price: stacked on phones, side by side from 761 px. */
+  .terms {
+    display: grid;
+    grid-gap: 0 48px;
+    gap: 0 48px;
+  }
+  .terms > div {
+    border-top: 2px solid var(--ink);
+    padding: 18px 0 8px;
+  }
+  .terms p {
+    margin-top: 8px;
+    color: var(--ink-2);
+    max-width: 52ch;
+  }
+  @media (min-width: 761px) {
+    .terms {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
