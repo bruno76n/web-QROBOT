@@ -63,6 +63,88 @@ export const modules: readonly { id: ModuleId; group: ModuleGroup }[] = [
 
 // ── precios: start (agent «precios»: rows of the plan comparison; docs/25 §4, §7.2) ──
 
+/** A limit of the plans that the comparison shows as a number or as its «no limit» word. */
+export type CompareLimit = 'users' | 'printers' | 'orders';
+
+/** Id of a plan, from the plans of `site.system`. */
+type ComparePlanId = (typeof site.system.plans)[number]['id'];
+
+/**
+ * One row of the plan comparison (texts in `es.system.pricing.compare.rows`):
+ * - `limit`: the plan's limit (the row id) from `site.system.plans`, with «Ilimitadas» (`f`) or
+ *   «Ilimitados» (`m`) when it has none;
+ * - `check`: included in every plan (`all`) or only in the plans with roles (`roles`);
+ * - `support`: WhatsApp support by plan (none, yes or priority).
+ */
+export type CompareRow =
+  | { id: CompareLimit; kind: 'limit'; unlimited: 'f' | 'm' }
+  | {
+      id:
+        | 'cost'
+        | 'deposits'
+        | 'production'
+        | 'materials'
+        | 'stock'
+        | 'documents'
+        | 'reports'
+        | 'roles'
+        | 'salesView'
+        | 'platforms'
+        | 'backups'
+        | 'excel';
+      kind: 'check';
+      in: 'all' | 'roles';
+    }
+  | { id: 'support'; kind: 'support'; plans: Record<ComparePlanId, 'yes' | 'priority' | null> };
+
+/** Groups of rows of the plan comparison, in order (texts in `es.system.pricing.compare.groups`). */
+export const compareGroups: readonly {
+  id: 'limits' | 'modules' | 'team' | 'platforms' | 'support';
+  rows: readonly CompareRow[];
+}[] = [
+  {
+    id: 'limits',
+    rows: [
+      { id: 'users', kind: 'limit', unlimited: 'm' },
+      { id: 'printers', kind: 'limit', unlimited: 'f' },
+      { id: 'orders', kind: 'limit', unlimited: 'm' },
+    ],
+  },
+  {
+    id: 'modules',
+    rows: [
+      { id: 'cost', kind: 'check', in: 'all' },
+      { id: 'deposits', kind: 'check', in: 'all' },
+      { id: 'production', kind: 'check', in: 'all' },
+      { id: 'materials', kind: 'check', in: 'all' },
+      { id: 'stock', kind: 'check', in: 'all' },
+      { id: 'documents', kind: 'check', in: 'all' },
+      { id: 'reports', kind: 'check', in: 'all' },
+    ],
+  },
+  {
+    id: 'team',
+    rows: [
+      { id: 'roles', kind: 'check', in: 'roles' },
+      { id: 'salesView', kind: 'check', in: 'roles' },
+    ],
+  },
+  {
+    id: 'platforms',
+    rows: [
+      { id: 'platforms', kind: 'check', in: 'all' },
+      { id: 'backups', kind: 'check', in: 'all' },
+      { id: 'excel', kind: 'check', in: 'all' },
+    ],
+  },
+  {
+    id: 'support',
+    rows: [
+      { id: 'support', kind: 'support', plans: { free: null, shop: 'yes', business: 'priority' } },
+    ],
+  },
+];
+
 // ── precios: end ──
 
 // ── descargar: start (agent «descargar»: download platforms; docs/25 §4, §7.3) ──
