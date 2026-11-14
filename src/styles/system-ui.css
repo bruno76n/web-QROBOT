@@ -47,7 +47,9 @@
   line-height: 1.4;
   color: var(--ink-2);
 }
+/* Inline with its text: the site's base styles make every svg a block. */
 .ui-meta .ic {
+  display: inline-block;
   width: 13px;
   height: 13px;
   margin-right: 5px;
