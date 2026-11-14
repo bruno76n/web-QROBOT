@@ -853,8 +853,79 @@ export const es = {
       // ── taller: end ──
 
       // ── docs-reportes: start (agent «docs-reportes»: UiQuote, UiReports) ──
-      quote: {},
-      reports: {},
+      /** Quote sheet (`UiQuote`). */
+      quote: {
+        /** Description of the whole screen for screen readers. */
+        label: (p: { system: string; business: string; items: number; total: string }) =>
+          `Cotización de ${p.system} con los datos del negocio ${p.business}, folio, vigencia, cliente, ${
+            ['un artículo', 'dos artículos', 'tres artículos', 'cuatro artículos'][p.items - 1] ??
+            `${p.items} artículos`
+          } y total de ${p.total}`,
+        title: 'Cotización',
+        /** «Impresión 3D · Guadalajara, Jal.». */
+        kindCity: (kind: string, city: string) => `${kind} · ${city}`,
+        /** «33 1234 5678 · hola@ejez.mx». */
+        contact: (phone: string, email: string) => `${phone} · ${email}`,
+        folio: (folio: string) => `Folio ${folio}`,
+        date: (date: string) => `Fecha: ${date}`,
+        validity: (days: number) => `Vigencia: ${days} días`,
+        customer: 'Cliente',
+        qty: 'Cant.',
+        description: 'Descripción',
+        unitPrice: 'P. unitario',
+        amount: 'Importe',
+        total: 'Total',
+        /** Short months of the dates of the screens («13 nov 2026»). */
+        months: [
+          'ene',
+          'feb',
+          'mar',
+          'abr',
+          'may',
+          'jun',
+          'jul',
+          'ago',
+          'sep',
+          'oct',
+          'nov',
+          'dic',
+        ],
+      },
+      /** Reports (`UiReports`). */
+      reports: {
+        /** Description of the whole screen for screen readers. */
+        label: (p: {
+          system: string;
+          days: number;
+          sales: string;
+          gross: string;
+          expenses: string;
+          net: string;
+          netPer100: string;
+        }) =>
+          `Reportes de ${p.system}, últimos ${p.days} días: ventas de ${p.sales}, ganancia bruta de ${p.gross}, gastos de ${p.expenses} y ganancia neta de ${p.net}; ventas por semana, distribución de cada $100 vendidos (ganancia neta ${p.netPer100}), productos con más ganancia y ventas por canal`,
+        title: 'Reportes',
+        /** «15 oct – 13 nov 2026 · comparado con 15 sep – 14 oct». */
+        period: (from: string, to: string, prevFrom: string, prevTo: string) =>
+          `${from} – ${to} · comparado con ${prevFrom} – ${prevTo}`,
+        /** An option of the period selector: «30 días», or «Todo» for the whole history. */
+        range: (days: number | null) => (days === null ? 'Todo' : `${days} días`),
+        copySummary: 'Copiar resumen',
+        netMargin: 'Margen neto',
+        /** «37.8 %». */
+        percent: (n: string) => `${n} %`,
+        per100: 'Distribución de cada $100 vendidos',
+        costsAndExpenses: 'Costos y gastos',
+        topProducts: 'Productos con más ganancia',
+        sold: (n: number) => (n === 1 ? '1 vendida' : `${n} vendidas`),
+        byChannel: 'Por canal',
+        channel: 'Canal',
+        count: 'Ventas',
+        amount: 'Importe',
+        fee: 'Comisión',
+        profit: 'Ganancia',
+        total: 'Total',
+      },
       // ── docs-reportes: end ──
     },
   },
