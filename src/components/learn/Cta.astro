@@ -1,12 +1,15 @@
 ---
 /**
  * Closing call of an Aprende page by its `cta` (docs/21 §4.6): `whatsapp` shows the quote text
- * (or the page's own `ctaText`) and the green button. `system` (Quick Cerebro) and `none` show
- * nothing: the system call is not built while `site.system.enabled` is false (docs/21 §16).
+ * (or the page's own `ctaText`) and the green button. `system` shows the page's `ctaText` and a
+ * black button to the page for workshops, only while that page is visible (`systemVisible`,
+ * docs/25 §2); hidden, it shows nothing. `none` shows nothing.
  */
 import { es } from '@/i18n/es';
 import { site } from '@/config/site';
+import { systemVisible } from '@/config/system';
 import { learnQuoteMessage, waLink } from '@/lib/whatsapp';
+import { systemBase } from '@/lib/system/visibility';
 
 interface Props {
   cta: 'whatsapp' | 'system' | 'none';
@@ -15,6 +18,7 @@ interface Props {
   title: string;
 }
 const { cta, ctaText, title } = Astro.props;
+const system = es.system.download.learnCta;
 ---
 
 {cta === 'whatsapp' && (
@@ -28,6 +32,20 @@ const { cta, ctaText, title } = Astro.props;
         rel="noopener"
       >
         {es.learn.cta.button}{' '}
+        <span class="ar" aria-hidden="true">
+          →
+        </span>
+      </a>
+    </div>
+  </div>
+)}
+
+{cta === 'system' && systemVisible && (
+  <div class="ap-cta">
+    <div class="wrap">
+      <p>{ctaText || system.text(site.system.name)}</p>
+      <a class="btn" href={systemBase}>
+        {system.button(site.system.name)}{' '}
         <span class="ar" aria-hidden="true">
           →
         </span>

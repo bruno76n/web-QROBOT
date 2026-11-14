@@ -794,7 +794,77 @@ export const es = {
     // ── precios: end ──
 
     // ── descargar: start (agent «descargar»: texts of /talleres/descargar, docs/25 §7.3) ──
-    download: {},
+    download: {
+      title: 'Descargar',
+      lead: 'Tu taller en el Dock o en la barra de tareas. Misma cuenta y misma información que en el navegador y el celular.',
+      /** Main button by the visitor's device (the server reads the `User-Agent`). */
+      main: {
+        mac: 'Descargar para Mac',
+        windows: 'Descargar para Windows',
+        browser: 'Abrir en el navegador',
+      },
+      /** Line under the buttons, by device; desktop ones get the requirement of the installer. */
+      req: {
+        mac: (minOs: string) => `${minOs}. Para Windows, más abajo.`,
+        windows: (minOs: string) => `${minOs}. Para Mac, más abajo.`,
+        mobile:
+          'En el celular se usa desde el navegador y se puede agregar a la pantalla de inicio.',
+        other: 'Funciona en cualquier navegador actual.',
+      },
+      /** `PlatformList`: one row per platform of `config/system.ts`. */
+      platforms: {
+        title: 'Plataformas',
+        yours: 'Tu equipo',
+        mac: {
+          name: 'Mac',
+          what: 'App de escritorio con ícono en el Dock.',
+          button: 'Descargar para Mac (.dmg)',
+        },
+        windows: {
+          name: 'Windows',
+          what: 'App de escritorio con ícono en la barra de tareas.',
+          button: 'Descargar para Windows (.exe)',
+        },
+        other: {
+          name: 'Navegador',
+          req: 'Chrome, Safari, Edge o Firefox actuales',
+          what: 'Sin instalación, desde cualquier computadora.',
+          button: 'Abrir en el navegador',
+        },
+        mobile: {
+          name: 'Celular',
+          req: 'iPhone o Android',
+          what: 'Desde el navegador; se puede agregar a la pantalla de inicio.',
+          button: 'Abrir en el celular',
+        },
+      },
+      install: {
+        title: 'Instalación',
+        mac: {
+          title: 'Mac',
+          steps: (name: string) => [
+            'Abre el archivo .dmg.',
+            `Arrastra ${name} a Aplicaciones.`,
+            'Abre la app e inicia sesión.',
+          ],
+        },
+        windows: {
+          title: 'Windows',
+          steps: [
+            'Abre el archivo .exe.',
+            'Sigue los pasos del instalador.',
+            'Abre la app desde el menú Inicio e inicia sesión.',
+          ],
+        },
+      },
+      /** Closing call `system` of an Aprende page (`learn/Cta.astro`, docs/21 §4.6). */
+      learnCta: {
+        /** Used when the page has no `ctaText`. */
+        text: (name: string) =>
+          `${name} lleva costos, pedidos, impresoras y filamento de tu taller en un solo lugar.`,
+        button: (name: string) => `Conocer ${name}`,
+      },
+    },
     // ── descargar: end ──
 
     /** Labels of the system screens drawn in HTML (docs/25 §6.3), with the vocabulary of a system. */
