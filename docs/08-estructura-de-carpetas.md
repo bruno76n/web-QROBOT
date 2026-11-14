@@ -53,7 +53,7 @@ quick-robot-web/
    │  ├─ BaseLayout.astro         <head> (SEO, `14`), header, footer, ClientRouter
    │  └─ LearnLayout.astro        Aprende: estilos (`src/styles/learn.css`), barra del buscador y scripts comunes
    ├─ lib/learn/                  lógica pura de Aprende: markdown, content, import, fit, cost, heat, tables, glossary, fuzzy, search-docs (`21`, `22`)
-   ├─ lib/system/                 lógica pura de Para talleres: visibility, plans, platform, bars (`25 §5`); en `lib/` también `nav.ts` (menú del sitio)
+   ├─ lib/system/                 lógica pura de Para talleres: visibility, plans, platform, bars, guard (`25 §5`, `§12`); en `lib/` también `nav.ts` (menú del sitio)
    ├─ scripts/                    scripts de navegador compartidos de Aprende: learn-search.ts (buscador), learn-printers.ts (¿Cabe mi pieza? e impresoras)
    ├─ components/
    │  ├─ learn/                   Aprende: Content, Node, Inline, Callout, Mark, PageHead, Article, TopicPages, Glossary, Search, Marked, tablas (FilamentTable, PrinterTable, MaintenanceCalendar), FitTool, CostCalculator, LearnScripts
@@ -93,7 +93,9 @@ quick-robot-web/
 │  ├─ result.ts                Result<T> de las acciones (`10 §3`)
    │  └─ *.test.ts
    ├─ config/
-   │  ├─ site.ts                  dominio, WhatsApp, redes, fecha límite, imagen por defecto
+   │  ├─ site.ts                  dominio, WhatsApp, redes, fecha límite, imagen por defecto, `system` (`25 §4`)
+   │  ├─ system.ts                Para talleres: `systemVisible`, módulos, fórmula, alertas, roles, comparación, plataformas
+   │  ├─ system-demo.ts           Para talleres: datos de ejemplo de las pantallas del sistema (taller «Eje Z»)
    │  ├─ categories.ts
    │  ├─ colors.ts
    │  ├─ ideas.ts                 las 7 ideas (`05 §3`)

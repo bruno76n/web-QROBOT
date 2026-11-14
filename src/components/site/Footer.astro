@@ -4,6 +4,7 @@
 import { es } from '@/i18n/es';
 import { site } from '@/config/site';
 import Logo from './Logo.astro';
+import { systemVisible } from '@/config/system';
 import { siteNav } from '@/lib/nav';
 
 // Year shown in the legal line.
@@ -36,7 +37,7 @@ const contacts = [
       ))}
     </div>
     <nav aria-label={es.footer.navLabel} class="flex w-full flex-wrap gap-x-7 text-[15px]">
-      {siteNav(false).map((item) => (
+      {siteNav(systemVisible).map((item) => (
         <a
           href={item.href}
           class="inline-flex min-h-11 items-center text-ink-2 no-underline hover:text-ink"

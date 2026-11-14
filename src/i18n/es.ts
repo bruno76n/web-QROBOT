@@ -643,6 +643,221 @@ export const es = {
       resultsFor: { one: '1 resultado para «{q}»', many: '{n} resultados para «{q}»' },
     },
   },
+  /**
+   * The page for workshops («Para talleres», docs/25), from the mockups in
+   * reference/mockups/talleres/, with the vocabulary of a system (docs/25 §1). The system's name,
+   * days, limits and prices come in as arguments. Each page and each system screen has its own
+   * block, marked with its start and end.
+   */
+  system: {
+    seo: {
+      home: (name: string) => ({
+        title: `${name} · Sistema para talleres de impresión 3D`,
+        description:
+          'Costo por pieza, pedidos con anticipo, impresoras, filamento, existencias y reportes en un solo sistema para tu taller de impresión 3D.',
+      }),
+      pricing: (name: string) => ({
+        title: `Precios · ${name}`,
+        description: 'Paga por taller, no por impresora. El plan Gratis no vence.',
+      }),
+      download: (name: string) => ({
+        title: `Descargar · ${name}`,
+        description: 'Web, Mac, Windows y celular, con la misma cuenta.',
+      }),
+    },
+    /** Product bar (`SystemNav`). */
+    nav: {
+      modules: 'Módulos',
+      pricing: 'Precios',
+      download: 'Descargar',
+      signIn: 'Iniciar sesión',
+      tryFree: 'Probar gratis',
+      /** Label of the phone menu of the product bar. */
+      menu: (name: string) => `Menú de ${name}`,
+    },
+    /** Shared calls to action. */
+    cta: {
+      tryDays: (days: number) => `Probar ${days} días gratis`,
+      tryFree: 'Probar gratis',
+      signUp: 'Crear cuenta',
+      signUpFree: 'Crear cuenta gratis',
+      seePricing: 'Ver precios',
+      downloadApp: 'Descargar app',
+      comparePlans: 'Comparar planes',
+    },
+    /** The 13 modules of the system, by group, in the order of its menu (`config/system.ts`). */
+    groups: { sell: 'Vender', shop: 'Taller', business: 'Negocio' },
+    modules: {
+      products: {
+        name: 'Productos',
+        text: 'Piezas y colecciones con costo, precio de lista, ganancia y disponibles.',
+      },
+      sales: { name: 'Ventas', text: 'Registro por canal, con comisión, abonos y devoluciones.' },
+      orders: {
+        name: 'Pedidos',
+        text: 'Cotizado, aceptado, en producción, listo y entregado, con anticipo y saldo.',
+      },
+      filaments: { name: 'Filamentos', text: 'Rollos, gramos disponibles y costo por gramo.' },
+      supplies: { name: 'Insumos', text: 'Argollas, imanes y empaques, con existencia mínima.' },
+      printers: {
+        name: 'Impresoras',
+        text: 'Cola de trabajos, horas de uso, mantenimiento e inversión recuperada.',
+      },
+      production: {
+        name: 'Producción',
+        text: 'Registro de cada impresión: resultado, horas y filamento usado.',
+      },
+      stock: {
+        name: 'Existencias',
+        text: 'Piezas terminadas: en existencia, apartadas y disponibles.',
+      },
+      purchases: {
+        name: 'Compras',
+        text: 'Compras sugeridas por proveedor, con cantidad y costo estimado.',
+      },
+      customers: { name: 'Clientes', text: 'Historial de pedidos y ventas, y saldo por cobrar.' },
+      expenses: {
+        name: 'Gastos',
+        text: 'Fijos y variables; los recurrentes se prorratean por día.',
+      },
+      reports: {
+        name: 'Reportes',
+        text: 'Ventas, ganancia bruta y ganancia neta por periodo, canal y producto.',
+      },
+      settings: {
+        name: 'Ajustes',
+        text: 'Tarifa de luz, margen mínimo, canales de venta y datos de tus cotizaciones.',
+      },
+    },
+    /** The 3 plans (`PlanBand`): name, who it is for and what it brings (limits as arguments). */
+    plans: {
+      label: 'Planes',
+      recommended: 'Recomendado',
+      perMonth: 'al mes',
+      perYear: 'al año',
+      noExpiry: 'sin vencimiento',
+      /** Line under a monthly price: the yearly one. */
+      orYearly: (amount: string) => `o ${amount} al año`,
+      /** Line under a yearly price: what it comes to per month. */
+      perMonthEquals: (amount: string) => `Equivale a ${amount} al mes`,
+      note: (days: number) =>
+        `Precios en pesos mexicanos, IVA incluido. Prueba de ${days} días del plan Negocio, sin tarjeta.`,
+      /** «Ilimitadas» impresoras, «Ilimitados» pedidos (`limitLabel`). */
+      unlimitedF: 'Ilimitadas',
+      unlimitedM: 'Ilimitados',
+      free: {
+        name: 'Gratis',
+        for: (printers: number) => `Una persona con hasta ${printers} impresoras.`,
+        features: (p: { users: number; printers: number; orders: number }) => [
+          p.users === 1 ? '1 usuario' : `${p.users} usuarios`,
+          `Hasta ${p.printers} impresoras`,
+          `${p.orders} ventas y pedidos al mes`,
+          'Todos los módulos',
+          'Copias de seguridad diarias',
+        ],
+      },
+      shop: {
+        name: 'Taller',
+        for: 'Más impresoras y pedidos, sin límites.',
+        features: (p: { users: number }) => [
+          'Todo lo de Gratis',
+          `${p.users} usuarios`,
+          'Impresoras ilimitadas',
+          'Ventas y pedidos ilimitados',
+          'Soporte por WhatsApp',
+        ],
+      },
+      business: {
+        name: 'Negocio',
+        for: 'Taller con empleados.',
+        features: (p: { users: number }) => [
+          'Todo lo de Taller',
+          `${p.users} usuarios con roles`,
+          'Ventas sin acceso a costos ni ganancia',
+          'Soporte prioritario por WhatsApp',
+        ],
+      },
+    },
+    /** Dark closing band of the 3 pages (`EndCta`). */
+    end: {
+      title: 'Tu taller merece un cerebro.',
+      lead: (days: number) =>
+        `${days} días del plan Negocio, gratis y sin tarjeta. Al terminar eliges plan o continúas en Gratis.`,
+    },
+
+    // ── principal: start (agent «principal»: texts of /talleres, docs/25 §7.1) ──
+    home: {},
+    // ── principal: end ──
+
+    // ── precios: start (agent «precios»: texts of /talleres/precios, docs/25 §7.2) ──
+    pricing: {},
+    // ── precios: end ──
+
+    // ── descargar: start (agent «descargar»: texts of /talleres/descargar, docs/25 §7.3) ──
+    download: {},
+    // ── descargar: end ──
+
+    /** Labels of the system screens drawn in HTML (docs/25 §6.3), with the vocabulary of a system. */
+    ui: {
+      /** Shared by several screens. */
+      common: {
+        /** States with a dot (`UiPill`). */
+        states: {
+          available: 'Disponible',
+          lowStock: 'Stock bajo',
+          critical: 'Crítico',
+          urgent: 'Urgente',
+          inProduction: 'En producción',
+          ready: 'Listo',
+          printing: 'Imprimiendo',
+          upToDate: 'Al día',
+          reserved: 'Apartado',
+          normal: 'Normal',
+        },
+        /** «De cada $100 vendidos» (keys of `demoPer100`). */
+        per100: {
+          expenses: 'Gastos del negocio',
+          material: 'Material',
+          machine: 'Máquina',
+          extras: 'Extras e insumos',
+          fees: 'Comisiones',
+          failures: 'Reserva por fallos',
+          power: 'Luz',
+          net: 'Ganancia neta',
+        },
+        sales: 'Ventas',
+        gross: 'Ganancia bruta',
+        expenses: 'Gastos',
+        net: 'Ganancia neta',
+        receivable: 'Por cobrar',
+        salesByWeek: 'Ventas por semana',
+        /** «▲ 14.6 %». */
+        up: (pct: string) => `▲ ${pct} %`,
+        timeLeft: 'Tiempo restante',
+      },
+
+      // ── inicio: start (agent «inicio»: UiSidebar, UiHome, UiFloats) ──
+      home: {},
+      // ── inicio: end ──
+
+      // ── costo-pedidos: start (agent «costo-pedidos»: UiPiece, UiOrder) ──
+      piece: {},
+      order: {},
+      // ── costo-pedidos: end ──
+
+      // ── taller: start (agent «taller»: UiPrinters, UiFilaments, UiPurchases, UiStock) ──
+      printers: {},
+      filaments: {},
+      purchases: {},
+      stock: {},
+      // ── taller: end ──
+
+      // ── docs-reportes: start (agent «docs-reportes»: UiQuote, UiReports) ──
+      quote: {},
+      reports: {},
+      // ── docs-reportes: end ──
+    },
+  },
   underConstruction: {
     title: 'En construcción',
     text: 'Q-404 está armando la página. Vuelve pronto.',

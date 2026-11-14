@@ -370,4 +370,8 @@ Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y pre
 - **Se construye sin la fase 8 y sin desplegar** (lo pidió el dueño): se lee `informe-fase-7.md` en lugar del 8 y el punto 5 de 9.11 (desplegar con el interruptor apagado) no se hace.
 - **`@lucide/astro`** (`06`, `25 §6.1`): íconos de los módulos y de la barra lateral de las pantallas del sistema.
 - **`Faqs` con `side`:** en Para talleres la sección lleva sus márgenes y el título a la izquierda en escritorio (maqueta `.s-faq .faq-in`); en Aprende queda igual.
+- **Guardia de encendido:** además de `https://` y no vacío, rechaza los dominios reservados para ejemplos (`.example`, `.test`, `.invalid`, `.localhost`): la dirección provisional es `https://` y la habría dejado pasar (`25 §12`).
+- **Menú con tres ligas en 360 px:** con «Talleres» (solo en `pnpm dev` mientras siga oculta) las ligas se encimaban con el logo; solo con tres ligas y ≤ 380 px pierden relleno (4 px). Con dos ligas el header queda igual (`24 §3`).
+- **Datos de ejemplo:** `src/config/system-demo.ts`; la ganancia bruta por semana ($40, $1,255, $1,370, $1,320 y $1,092) sale de las columnas de la maqueta y suma los $5,077. La lista de existencias de la maqueta es parcial (sus filas no suman las 25 piezas); la prueba revisa los totales.
+- **Bloques por agente:** en `es.ts`, `config/system.ts` y `system-demo.ts` cada página y cada grupo de pantallas tiene su bloque marcado (`── <agente>: start/end ──`), para que los agentes en paralelo no se pisen.
 
