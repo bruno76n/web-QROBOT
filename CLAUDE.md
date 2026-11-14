@@ -4,7 +4,7 @@ Web pública del taller de impresión 3D **Quick Robot** (Guadalajara): **muestr
 
 Documentación en `docs/` (empieza por `docs/README.md`; para arrancar y probar en local, `docs/continuar-en-local.md`). Plan general en `docs/20-plan-de-construccion.md`; **detalle de cada fase en `docs/fases/fase-N.md`**. Prompts en `docs/prompts.md`.
 
-**Dónde está cada cosa:** idea y alcance → `01` · referencias → `02` · diseño → `03` · páginas y flujos → `04` · textos → `05` · stack → `06` · arquitectura → `07` · carpetas → `08` · datos → `09` · servidor → `10` · interfaz → `11` · panel → `12` · seguridad → `13` · SEO → `14` · rendimiento e imágenes → `15` · convenciones y pruebas → `16` · despliegue → `17` · analítica → `18` · legal → `19` · **Aprende → `21`** · **buscador → `22`** · **contenido de Aprende → `23` y `content/aprende/`** · **dispositivos y Safari → `24`**.
+**Dónde está cada cosa:** idea y alcance → `01` · referencias → `02` · diseño → `03` · páginas y flujos → `04` · textos → `05` · stack → `06` · arquitectura → `07` · carpetas → `08` · datos → `09` · servidor → `10` · interfaz → `11` · panel → `12` · seguridad → `13` · SEO → `14` · rendimiento e imágenes → `15` · convenciones y pruebas → `16` · despliegue → `17` · analítica → `18` · legal → `19` · **Aprende → `21`** · **buscador → `22`** · **contenido de Aprende → `23` y `content/aprende/`** · **dispositivos y Safari → `24`** · **Para talleres (página del sistema, oculta) → `25`**.
 
 ## Lo que no se negocia
 
@@ -24,7 +24,8 @@ Documentación en `docs/` (empieza por `docs/README.md`; para arrancar y probar 
 14. **Aprende:** el Markdown se convierte a árbol (`src/lib/learn/markdown.ts`) al importar o guardar, nunca en cada visita, y se pinta con componentes; el texto de las páginas vive en D1 (carga inicial desde `content/aprende/`), no en `es.ts` (`docs/21 §5, §8`).
 15. **El navegador nunca habla con Meilisearch:** busca en `/api/aprende/buscar`, que usa Meilisearch o, si no está o falla, D1 (`docs/22 §1`). Las llaves de Meilisearch solo como secretos del Worker.
 16. **Código documentado, sin bitácora en los comentarios:** cada archivo y cada sección de código lleva arriba un comentario de para qué sirve y qué hace. Describe lo que el código hace **hoy**: si cambia, se reescribe el comentario; nunca dice «antes», «ahora», «se quitó» ni cita fases o fechas. La historia va en `docs/decisiones.md`, `docs/progreso.md`, los informes y los commits (`docs/16 §2`).
-17. **Scripts de Aprende probados en Chromium y WebKit;** sin `requestIdleCallback` directo ni APIs de la lista de `docs/24 §5`.
+17. **Scripts de Aprende y de Para talleres probados en Chromium y WebKit;** sin `requestIdleCallback` directo ni APIs de la lista de `docs/24 §5`.
+18. **Para talleres sigue oculta** mientras `site.system.enabled` sea `false`: `/talleres` y lo que cuelga responden 404 fuera de `pnpm dev` (cerrojo en el middleware y en cada página, nunca prerender, ninguna liga ni entrada en el sitemap). Se enciende solo con la lista de `docs/25 §13`.
 
 ## Stack (decidido)
 

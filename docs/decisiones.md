@@ -353,3 +353,11 @@ Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y pre
 
 ## 2026-11-13 · PLA y PETG (lo pidió el dueño)
 - El PETG sirve para todo lo que sirve el PLA y aguanta más; el PLA no sirve para todo lo del PETG. Para figuras y decoración decide el precio. El PETG entra al filtro Decoración.
+
+## 2026-11-13 · Plan de Para talleres (lo decidió el dueño con Claude)
+- **Qué:** la página de venta del sistema para talleres (Quick Cerebro) dentro de la web: principal, precios y descargar (`25`). Más parecida a las páginas de sistemas de su tipo que la propuesta anterior: la app como protagonista (capturas reales del sistema), recorrido por pantallas, del archivo a la entrega, roles, planes con «¿Qué plan te toca?».
+- **Oculta hasta que salga el sistema:** se construye y se publica, pero responde 404. Un solo interruptor (`site.system.enabled`); cerrojo en el middleware **y** en cada página (la ruta se compara decodificada, por `/%74alleres`); nunca prerender; sin ligas, sin sitemap y sin mención en `robots.txt` (un `Disallow` anunciaría la ruta). En `pnpm dev` se ve para construirla y probarla (`25 §2`).
+- **Cuentas, registro, entrar y pagos viven en el sistema:** la web solo enlaza (`25 §1`). Las maquetas viejas de crear cuenta y entrar no se construyen aquí.
+- **Nada duplicado:** la calculadora (con precio de venta para esta página), las preguntas y los tokens que usan Aprende y Para talleres pasan a piezas compartidas (`25 §6`). Las maquetas también comparten base: `reference/mockups/_base.css` y `_base.js` (las de Aprende se regeneraron con esa base y se ven igual, comprobado con capturas).
+- **Sin doble filete** (líneas morada y verde) en Para talleres: el dueño lo pidió (`25 §7`).
+- **Capturas:** de las maquetas del sistema, con un negocio de ejemplo («Eje Z») y piezas genéricas en lugar de personajes con licencia (`assets/talleres/`).

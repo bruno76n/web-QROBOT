@@ -14,12 +14,14 @@ Se trabaja **una fase a la vez**, en modo autónomo (`CLAUDE.md`). Cada fase en 
 | **6 · Base de Aprende** | Lógica pura (Markdown seguro, ¿cabe mi pieza?, costo, contenido), tablas en D1 (migración `0007`), importador de `content/aprende/`, consultas | El contenido de Aprende cargado en D1 local y listo para pintarse | [`fases/fase-6.md`](fases/fase-6.md) |
 | **7 · Páginas y buscador de Aprende** | Portada, temas, páginas, glosario, tablas con filtros, ¿Cabe mi pieza?, calculadora, buscador (Meilisearch con respaldo en D1), menú, SEO, privacidad | Aprende completo en local; flujos H–L pasan | [`fases/fase-7.md`](fases/fase-7.md) |
 | **8 · Panel de Aprende y publicación** | Pestaña Aprende del panel (editar, preguntas, publicar, buscador, búsquedas sin resultado) y publicación | Aprende en el dominio, editable desde el panel | [`fases/fase-8.md`](fases/fase-8.md) |
+| **9 · Para talleres (oculta)** | Lógica pura (cerrojo, planes, plataforma), piezas compartidas con Aprende (calculadora, preguntas, tokens), cerrojo en middleware y páginas, principal, precios y descargar, llamado de Aprende y sitemap condicionados, despliegue con el interruptor apagado | Las 3 páginas completas en `pnpm dev`; en el dominio responden 404 y nada las enlaza | [`fases/fase-9.md`](fases/fase-9.md) |
 
 ## Por qué este orden
 
 - **El panel antes que las páginas públicas:** así el catálogo se construye con productos y fotos de verdad (o la semilla pasada por el mismo proceso), no con datos inventados en los componentes.
 - **El inicio después del catálogo:** el inicio usa precios y productos (Navidad, Q-404) y el componente de fotos ya probado.
 - **Los componentes externos al final:** el dueño puede darlos antes, a la mitad o al final; nunca detienen la construcción (`11 §4`).
+- **Para talleres (9) después de Aprende:** reutiliza la calculadora y las preguntas de Aprende; se publica oculta para que el día que salga el sistema solo haya que encenderla (`25 §13`).
 - **Aprende (6–8) después del lanzamiento:** es una sección nueva sobre la web ya publicada; primero la base y el contenido, luego lo que se ve y al final el panel, para que el panel edite páginas que ya existen.
 - **Desplegar desde la fase 1:** los problemas de Cloudflare (adaptador, bindings, CSP) salen al principio y no el día del lanzamiento.
 

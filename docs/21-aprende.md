@@ -91,7 +91,7 @@ Letras A–Z arriba (las que tienen términos son ligas; las demás, grises). Ca
 | `cta` | Muestra |
 |---|---|
 | `whatsapp` | «¿Necesitas una pieza? Dinos qué necesitas y te decimos material, precio y fecha.» + botón verde «Cotizar por WhatsApp». Si la página trae `ctaText`, ese texto reemplaza la frase |
-| `system` | Llamado a Quick Cerebro con `ctaText`. **Oculto mientras `site.system.enabled` sea `false`** (el sistema todavía no sale); en su lugar no se muestra nada |
+| `system` | Llamado a Para talleres con `ctaText` y botón a `/talleres`. **Solo con `systemVisible`** (`25 §2`): mientras el sistema no salga no se muestra nada |
 | `none` | Nada |
 
 El mensaje de WhatsApp sale de `src/lib/whatsapp.ts` (`learnQuoteMessage(title)`: «Hola, vi «{título}» en su página y quiero cotizar una pieza.»).
@@ -279,4 +279,4 @@ Las maquetas (`reference/mockups/aprende/`) ya tienen el header de la web (Catá
 - Fotos de cada falla en los problemas (reusar las fotos de R2 con `owner_type = learn`).
 - «¿Te sirvió esta respuesta?» con contador por página.
 - Editar las tablas de datos desde el panel (hoy se cambian en `content/aprende/datos/` y se importan).
-- Llamados y página de Quick Cerebro cuando salga el sistema (`site.system.enabled = true`).
+- Llamados a Para talleres: se construyen en la fase 9 y se ven cuando el sistema salga (`25 §13`).

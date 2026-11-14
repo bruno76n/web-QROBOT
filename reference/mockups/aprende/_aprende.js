@@ -1,63 +1,11 @@
-/* Aprende · scripts de las maquetas.
-   Escritos para Chrome, Edge, Firefox y Safari 14 o más nuevo (docs/24 §5):
-   - sin ?. ni ??, sin Array.prototype.at, structuredClone, Object.hasOwn ni regex con lookbehind;
-   - requestIdleCallback y AbortSignal.timeout con reemplazo (Safari no tiene el primero; el segundo llega en Safari 16);
-   - matchMedia con addListener si no hay addEventListener (Safari 13 y anteriores);
-   - nada de innerHTML con datos: todo se arma con nodos de texto.
+/* Aprende · scripts de las maquetas, sobre ../_base.js (utilidades, header, copiar, tablas y calculadora
+   son compartidos). Mismas reglas de navegadores que _base.js (docs/24 §5).
    En la web real cada parte vive en su componente y arranca en astro:page-load (docs/07 §1). */
 (function () {
   'use strict';
 
-  /* ---------- compatibilidad ---------- */
-  var ric = (typeof window.requestIdleCallback === 'function')
-    ? window.requestIdleCallback.bind(window)
-    : function (cb) { return setTimeout(function () { cb({ didTimeout: false, timeRemaining: function () { return 0; } }); }, 1); };
-  function onMedia(query, fn) {
-    var mq = window.matchMedia(query);
-    if (mq.addEventListener) mq.addEventListener('change', fn); else mq.addListener(fn);
-    return mq;
-  }
-  function num(v) { var n = parseFloat(String(v).replace(/\s/g, '').replace(',', '.')); return isFinite(n) ? n : NaN; }
-  function norm(s) { return String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
-  function el(tag, attrs, kids) {
-    var e = document.createElement(tag);
-    if (attrs) Object.keys(attrs).forEach(function (k) {
-      if (k === 'text') e.textContent = attrs[k];
-      else if (k === 'cls') e.className = attrs[k];
-      else e.setAttribute(k, attrs[k]);
-    });
-    (kids || []).forEach(function (c) { if (c != null) e.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
-    return e;
-  }
-  function $(sel, root) { return (root || document).querySelector(sel); }
-  function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+  var Q = window.QRM, onMedia = Q.onMedia, num = Q.num, norm = Q.norm, el = Q.el, $ = Q.$, $$ = Q.$$;
   var D = window.APRENDE || {};
-
-  /* ---------- header y notas ---------- */
-  var h = document.getElementById('siteH');
-  function onScroll() { if (h) h.classList.toggle('line', window.pageYOffset > 8); }
-  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
-  $$('.mk-note button').forEach(function (b) { b.addEventListener('click', function () { b.parentNode.parentNode.removeChild(b.parentNode); }); });
-
-  /* ---------- copiar ---------- */
-  $$('.copy').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var pre = b.parentNode.querySelector('pre');
-      var text = pre ? pre.textContent : '';
-      function done() { b.textContent = 'Copiado'; setTimeout(function () { b.textContent = 'Copiar'; }, 1600); }
-      function legacy() {
-        var r = document.createRange(); r.selectNodeContents(pre);
-        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
-        try { document.execCommand('copy'); done(); } catch (e) { /* queda seleccionado para copiar a mano */ }
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, legacy); else legacy();
-    });
-  });
-
-  /* ---------- tablas que siguen a la derecha ---------- */
-  function more(w) { w.classList.toggle('more', w.scrollLeft + w.clientWidth < w.scrollWidth - 2); }
-  $$('.tbl-wrap').forEach(function (w) { more(w); w.addEventListener('scroll', function () { more(w); }, { passive: true }); });
-  window.addEventListener('resize', function () { $$('.tbl-wrap').forEach(more); });
 
   /* ---------- índice de la página en celular: cerrar al tocar una liga ---------- */
   $$('.ap-toc-m a').forEach(function (a) { a.addEventListener('click', function () { a.closest('details').open = false; }); });
@@ -186,28 +134,6 @@
     var id = b.getAttribute('data-id');
     $$('section', cal).forEach(function (s) { s.hidden = !(id === 'todas' || s.getAttribute('data-f') === id); });
   });
-
-  /* ---------- calculadora de costo (misma fórmula que src/lib/learn/cost.ts) ---------- */
-  var cf = document.getElementById('calc-f');
-  if (cf) {
-    var money = function (n) { return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); };
-    function v(id) { var n = num(document.getElementById(id).value); return isFinite(n) && n >= 0 ? n : 0; }
-    function calc() {
-      var perGram = v('c-roll') / Math.max(v('c-rollg'), 1);
-      var M = v('c-g') * perGram * (1 + v('c-purge') / 100);
-      var L = v('c-h') * (v('c-w') / 1000) * v('c-kwh');
-      var Q = v('c-h') * (v('c-printer') / Math.max(v('c-life'), 1) + v('c-maint'));
-      var E = v('c-extra');
-      var sub = M + L + Q + E;
-      var fail = Math.min(v('c-fail'), 90);
-      var total = sub / (1 - fail / 100);
-      [['r-m', M], ['r-l', L], ['r-q', Q], ['r-e', E], ['r-s', sub], ['r-t', total], ['r-tb', total]].forEach(function (p) {
-        var e = document.getElementById(p[0]); if (e) e.textContent = money(p[1]);
-      });
-    }
-    cf.addEventListener('input', function () { ric(calc); });
-    calc();
-  }
 
   /* ---------- buscador ---------- */
   var SYN = D.synonyms || {}, STOP = D.stopWords || [];

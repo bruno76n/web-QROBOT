@@ -122,4 +122,4 @@ Además, en todos los scripts de Aprende:
 | `glosario.html` | Glosario A–Z |
 | `buscar.html` | Resultados y estado sin resultados (`?q=xyz`) |
 
-Se generan con el contenido real de `content/aprende/` (`_datos.js`, `_aprende.css`, `_aprende.js`). Se abren desde la carpeta del proyecto, porque el logo y Q-404 se leen de `assets/`. Sus scripts siguen §5 y están revisados con ES-Check (ES2017).
+Se generan con el contenido real de `content/aprende/` (`_datos.js`, `_aprende.css`, `_aprende.js`) sobre la base compartida con Para talleres (`../_base.css`, `../_base.js`: header, footer, botones, tablas, preguntas y calculadora). Se abren desde la carpeta del proyecto, porque el logo y Q-404 se leen de `assets/`. Sus scripts siguen §5 y están revisados con ES-Check (ES2017).

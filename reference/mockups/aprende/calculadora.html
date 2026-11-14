@@ -7,7 +7,7 @@
 <!-- MAQUETA · Quick Robot web · Aprende. Generada de content/aprende/ (no editar a mano). Reglas de dispositivos: docs/24. -->
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="_base.css">
+<link rel="stylesheet" href="../_base.css">
 <link rel="stylesheet" href="_aprende.css">
 </head>
 <body>
@@ -40,7 +40,7 @@
 <div class="wrap ap-main">
   <div class="prose">
     <details class="ap-toc-m"><summary>En esta página</summary><nav class="toc" aria-label="En esta página"><a href="#formula">Fórmula</a><a href="#ejemplo-valores-de-muestra">Ejemplo (valores de muestra)</a></nav></details>
-    
+
     <h2 id="formula">Fórmula</h2>
 <div class="tbl-wrap wide" role="region" aria-label="Tabla" tabindex="0"><table>
 <thead>
@@ -78,15 +78,17 @@
 </table></div>
 <section class="calc" aria-labelledby="calc-h">
 <form class="calc-f" id="calc-f" onsubmit="return false">
-  <h2 id="calc-h" style="grid-column:1/-1;margin:0">Calculadora de costo</h2>
+  <h2 id="calc-h" class="calc-title">Calculadora de costo</h2>
   <fieldset><legend>Material</legend><label for="c-g">Gramos de la pieza<span class="ig"><input id="c-g" inputmode="decimal" value="25" autocomplete="off"><span>g</span></span></label><label for="c-purge">Purga<span class="ig"><input id="c-purge" inputmode="decimal" value="5" autocomplete="off"><span>%</span></span></label><label for="c-roll">Precio del rollo<span class="ig"><span>$</span><input id="c-roll" inputmode="decimal" value="450" autocomplete="off"></span></label><label for="c-rollg">Peso del rollo<span class="ig"><input id="c-rollg" inputmode="decimal" value="1000" autocomplete="off"><span>g</span></span></label></fieldset>
   <fieldset><legend>Máquina</legend><label for="c-h">Horas de impresión<span class="ig"><input id="c-h" inputmode="decimal" value="1.5" autocomplete="off"><span>h</span></span></label><label for="c-w">Consumo de la impresora<span class="ig"><input id="c-w" inputmode="decimal" value="150" autocomplete="off"><span>W</span></span></label><label for="c-kwh">Precio del kWh<span class="ig"><span>$</span><input id="c-kwh" inputmode="decimal" value="3.00" autocomplete="off"></span></label><label for="c-printer">Precio de la impresora<span class="ig"><span>$</span><input id="c-printer" inputmode="decimal" value="20000" autocomplete="off"></span></label><label for="c-life">Horas de vida<span class="ig"><input id="c-life" inputmode="decimal" value="5000" autocomplete="off"><span>h</span></span></label><label for="c-maint">Mantenimiento por hora<span class="ig"><span>$</span><input id="c-maint" inputmode="decimal" value="1.00" autocomplete="off"></span></label></fieldset>
   <fieldset><legend>Otros</legend><label for="c-extra">Extras<span class="ig"><span>$</span><input id="c-extra" inputmode="decimal" value="0" autocomplete="off"></span></label><label for="c-fail">Piezas que salen mal<span class="ig"><input id="c-fail" inputmode="decimal" value="5" autocomplete="off"><span>%</span></span></label></fieldset>
+
 </form>
 <div class="calc-r" id="calc-r" aria-live="polite">
   <dl><div><dt>Material</dt><dd id="r-m"></dd></div><div><dt>Electricidad</dt><dd id="r-l"></dd></div><div><dt>Máquina</dt><dd id="r-q"></dd></div><div><dt>Extras</dt><dd id="r-e"></dd></div><div><dt>Subtotal</dt><dd id="r-s"></dd></div></dl>
   <div class="tot"><span>Costo</span><b id="r-t"></b></div>
-  <p class="tiny" style="color:#c9c9d1">Valores de ejemplo. No se guarda nada.</p>
+
+  <p class="tiny calc-note">Valores de ejemplo. No se guarda nada.</p>
 </div>
 <div class="calc-bar" aria-hidden="true"><span>Costo <b id="r-tb"></b></span><a href="#calc-r">Ver detalle</a></div>
 </section>
@@ -167,8 +169,8 @@
 </tbody>
 </table></div>
 <aside class="callout "><img src="../../../assets/q404/q404-morado-verde.webp" alt="" width="72" height="114" loading="lazy"><div><b>Dato curioso</b><p>En el ejemplo, la máquina pesa casi tanto como el plástico. En piezas grandes y lentas, las horas de máquina suelen pesar más que el material.</p></div></aside>
-    
-    
+
+
     <div class="ap-rel-m"><h2>También te puede servir</h2><div class="rel"><a href="#sin-maqueta-negocio-precio"><span>Negocio</span><b>Precio</b></a><a href="#sin-maqueta-negocio-fallos"><span>Negocio</span><b>Reserva por fallos</b></a><a href="#sin-maqueta-maquinas-consumo-electrico"><span>Máquinas</span><b>Consumo eléctrico</b></a><a href="#sin-maqueta-filamentos-rendimiento-del-rollo"><span>Filamentos</span><b>Rendimiento del rollo</b></a></div></div>
     <div class="src"><h2>Fuentes</h2><ul><li>Quick Robot · Fórmula de costo del taller</li></ul></div>
   </div>
@@ -184,6 +186,7 @@
   </div>
 </footer>
 <div class="mk-note"><button type="button" aria-label="Cerrar nota">×</button><b>Maqueta · Costo de una pieza · Aprende.</b> Calculadora de costo con la fórmula del documento. <ul><li>Escritorio: resultado fijo a la derecha.</li><li>Celular: campos en una columna y barra fija abajo con el costo.</li></ul></div>
+<script src="../_base.js"></script>
 <script src="_datos.js"></script>
 <script src="_aprende.js"></script>
 </body>
