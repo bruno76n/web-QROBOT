@@ -35,7 +35,7 @@ Pruebas de Playwright: **390, 820 y 1440** (como el resto de la web, `16 §6`) y
 
 | Componente | Celular (≤ 760) | Tableta (761–1099) | Escritorio (≥ 1100) |
 |---|---|---|---|
-| **Header** | 56 px de alto. Logo · Catálogo · Aprende · Cotizar en una fila (≤ 480: logo sin nombre; Cotizar sin flecha) | 68 px. A ≤ 900 la pestaña negra se vuelve ligas normales | 68 px, pestaña negra al centro |
+| **Header** | 56 px de alto. Logo · Catálogo · Aprende · Cotizar en una fila (≤ 480: logo sin nombre; Cotizar sin flecha; sobre la portada, solo el botón de Instagram, sin «Visita nuestras redes:») | 68 px. A ≤ 900 la pestaña negra se vuelve ligas normales | 68 px, pestaña negra al centro |
 | **Barra del buscador** (páginas internas) | Bajo el header, todo el ancho, 52 px de alto. Sin atajos de teclado | Igual, hasta 720 px de ancho | Igual, con ⌘K a la derecha del campo |
 | **Buscador grande** (portada) | 62 px de alto | 76 px | 76 px, hasta 860 px de ancho |
 | **Resultados del buscador** | **Hoja a pantalla completa**: campo arriba con «Cerrar», chips de tema, lista con scroll propio; la página de atrás no se mueve (`html.lock`) | Lista bajo el campo, máximo 70 % del alto de la pantalla | Igual que tableta |
@@ -70,7 +70,7 @@ Pruebas de Playwright: **390, 820 y 1440** (como el resto de la web, `16 §6`) y
 | Safari 14 a 16.3 | **Funcional**: filtros, buscador, ¿Cabe mi pieza? y calculadora funcionan; el diseño puede verse incompleto (Tailwind 4 usa capas de CSS y funciones que esos Safari no entienden). Afecta a toda la web, no solo a Aprende |
 | Safari 13 o anterior, Internet Explorer | No se prueba |
 
-Para que los scripts sí corran desde Safari 14, en `astro.config.mjs`: `vite: { build: { target: ['es2020', 'chrome87', 'edge88', 'firefox78', 'safari14'] } }`. Vite 7 compila por defecto para Safari 16 en adelante. Si `pnpm size` se pasa del presupuesto por esto, se anota en `decisiones.md` y se usa `safari15`.
+Para que los scripts sí corran desde Safari 14, en `astro.config.mjs`: `vite: { build: { target: ['chrome87', 'edge88', 'firefox78', 'safari14'] } }` (Vite 7 rechaza `es2020` junto a navegadores: ya lo cubren). Vite 7 compila por defecto para Safari 16 en adelante. Si `pnpm size` se pasa del presupuesto por esto, se anota en `decisiones.md` y se usa `safari15`.
 
 ## 5. Reglas para que los filtros funcionen en Safari
 

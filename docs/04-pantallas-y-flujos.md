@@ -14,9 +14,12 @@ Cada página, cada sección y qué pasa al tocar cada cosa. Los textos exactos e
 | `/404` | No encontrada (con Q-404) | Estática |
 | `/admin` | Panel · Productos | Isla React, protegida |
 | `/admin/portada` | Panel · Portada | Isla React, protegida |
+| `/aprende`, `/aprende/[tema]`, `/aprende/[tema]/[pagina]`, `/aprende/glosario` | Aprende: portada, temas, respuestas y glosario | En el servidor (D1); tema o página inexistente u oculta → 404 (`21 §2`) |
+| `/aprende/buscar` | Resultados del buscador sin JavaScript | En el servidor, `noindex` (`22 §8`) |
+| `/api/aprende/buscar` | JSON del buscador | Worker (`22 §7`) |
 | `/sitemap.xml`, `/robots.txt` | Para buscadores | En el servidor (`14 §3`) |
 
-Todas las páginas públicas comparten **header** y **footer** (`03 §4`). En el header, "Navidad", "Ideas" y "Q-404" llevan a su sección del inicio (`/#navidad`, `/#ideas`, `/#q404`); "Catálogo" a `/catalogo`; **Cotizar** a `/#pedido`.
+Todas las páginas públicas comparten **header** y **footer** (`03 §4`). En el header, "Navidad", "Ideas" y "Q-404" llevan a su sección del inicio (`/#navidad`, `/#ideas`, `/#q404`); "Catálogo" a `/catalogo`; "Aprende" a `/aprende`; **Cotizar** a `/#pedido`. El footer repite Catálogo y Aprende.
 
 ## 2. Inicio (`/`)
 

@@ -26,6 +26,7 @@ Lo verifica `pnpm size` (`scripts/size-check.mjs`) leyendo el build.
 | Producto | ≤ 70 KB | Embla + galería + opciones (sin React: React solo con el recortador del panel) |
 | Catálogo | ≤ 25 KB al abrir | Sin islas pesadas: pestañas y tarjetas son HTML |
 | Inicio | ≤ 90 KB al abrir | Sin contar islas `client:visible` de más abajo ni `matter-js` (se carga al tocar) |
+| Aprende (portada, tema, ficha, ¿Cabe mi pieza?, calculadora) | ≤ 25 KB al abrir | Buscador, filtros y herramientas son `<script>` sin React (`21 §13`); `pnpm size` revisa también que no lleven `requestIdleCallback(` directo ni *lookbehind* (`24 §5`) |
 | Privacidad, 404 | 0 KB de React (≤ 8 KB en total) | Solo los `<script>` del header y `ClientRouter` |
 | Panel | Sin límite estricto | Se carga solo para el dueño; las librerías pesadas (`heic2any`, recortador) con carga diferida |
 

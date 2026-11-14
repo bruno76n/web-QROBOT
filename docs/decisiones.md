@@ -333,3 +333,20 @@ Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y pre
 - Tabla de filamentos: el PETG pasa de «cerrada recomendada» a «mejor cerrada» (`enclosed-better`); el interruptor «Mi impresora es abierta» ya no lo oculta, porque Bambu Lab lo recomienda cerrado pero no desaconseja la impresora abierta (a diferencia de ABS, ASA, PC y nylon).
 
 - `CLAUDE.md`: la regla de Safari entra como **17** (la 16 ya es la de código documentado).
+
+## 2026-11-14 · Pruebas del panel estables (antes de la fase 7)
+- Ordenar con el teclado, centrar la foto y volver a la lista esperaban tiempos fijos (250 ms) o revisaban una sola vez. Ahora esperan lo que se ve: la fila con la clase `drag` al levantarla, la fila de abajo que sube cuando dnd-kit toma el nuevo lugar (`moveDownWithKeyboard`), la foto nueva antes que la barra de progreso, y «Sin guardar» que desaparece antes de volver a la lista (`backToList`). Sin cambios en el panel.
+
+## 2026-11-14 · Fase 7: páginas y buscador de Aprende
+- **Estilos:** `src/styles/learn.css` sale de `_base.css` + `_aprende.css` de las maquetas, con cada regla dentro de `.learn` (el `<main>` de Aprende) para no tocar header, footer ni otras páginas. Los `style=""` de las maquetas pasan a clases (la CSP no permite estilos en línea nuevos).
+- **Búsqueda en D1 con tolerancia a errores:** si las palabras no aparecen tal cual, se comparan con títulos y etiquetas con la misma tolerancia que Meilisearch (`src/lib/learn/fuzzy.ts`), para que «petj» encuentre PETG sin Meilisearch (flujo H en local). Se busca con `instr()` en lugar de `LIKE`: D1 limita los patrones de `LIKE` a 50 bytes. `22 §8` al día.
+- **SDK de Meilisearch:** corre en el Worker con su opción `timeout` (1.5 s). El índice (`src/server/search-index.ts`) usa solo el esquema de la base, así los scripts lo corren en Node contra D1 local. La llave de escritura suma `indexes.get` (`22 §3`).
+- **Meilisearch real no probado:** no hay Docker en este entorno y no se permite ejecutar el binario descargado. `syncLearnIndex` y el endpoint se prueban con un Meilisearch simulado; `pnpm learn:search-setup` queda sin probar. Hasta que el dueño elija dónde corre (`22 §2`), el buscador usa D1.
+- **`learn:sync` y `--sync` solo en local:** la base de producción solo la lee el Worker; en producción el índice se actualiza desde el panel («Actualizar buscador», fase 8).
+- **Pasos numerados:** una lista numerada cuyos puntos empiezan en negrita se pinta con el estilo de pasos de la maqueta (`.steps`).
+- **Conteos y textos con número:** `es.ts` guarda formas `{ one, many }` con `{n}`; `countText`/`fillText` (`src/lib/learn/tables.ts`) las llenan en el servidor y en los scripts.
+- **Header en celular chico:** con «Aprende» en el menú no cabe «Visita nuestras redes:» sobre la portada a ≤ 480 px; ahí solo queda el botón de Instagram (el header sigue de 56 px). `24 §3` al día.
+- **`vite.build.target`:** sin `es2020` (Vite 7 lo rechaza junto a la lista de navegadores). El CSS no cambia: Tailwind 4 sigue pidiendo Safari 16.4 (`24 §4`).
+- **WebKit:** el proyecto `webkit` de Playwright (iPhone 13, flujos H–L) se activa solo si WebKit está instalado; aquí no lo está y no se pueden instalar navegadores. Se corre en la Mac con `pnpm exec playwright install webkit` y `pnpm e2e`.
+- **Pruebas de componentes Astro:** proyecto de Vitest `astro` (`vitest.astro.config.ts`, `getViteConfig`) para pintar componentes con la API de contenedor (prueba de inyección de `21 §14`).
+- Diferencias con las maquetas en `21 §11`.
