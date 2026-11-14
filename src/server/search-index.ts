@@ -1,14 +1,20 @@
 /**
  * The Meilisearch index of Aprende (docs/22 §4–6): where Meilisearch is, the index settings, the
- * documents built from D1 and the full rebuild with no moment of empty index. Uses only the
- * database schema (no Worker runtime), so the terminal scripts can run it against the local D1.
+ * documents built from D1, the full rebuild with no moment of empty index and the update of a single
+ * page saved in the panel. Uses only the database schema (no Worker runtime), so the terminal
+ * scripts can run it against the local D1.
  */
 import { Meilisearch } from 'meilisearch';
-import { asc } from 'drizzle-orm';
+import { asc, eq } from 'drizzle-orm';
 import type { DrizzleD1Database } from 'drizzle-orm/d1';
 import type { PrintersData, SearchConfig } from '@/lib/learn/content';
 import { bodyTextOf } from '@/lib/learn/import';
-import { buildSearchDocs, type SearchDoc } from '@/lib/learn/search-docs';
+import {
+  buildSearchDocs,
+  volumeSlug,
+  type SearchDoc,
+  type SearchPageRow,
+} from '@/lib/learn/search-docs';
 import * as schema from './db/schema';
 
 /** Any Drizzle client over D1 with this schema: the Worker's or a script's. */
@@ -70,28 +76,31 @@ export async function loadSearchDocs(
     }
   };
   const docs = buildSearchDocs({
-    pages: pages.map((p) => {
-      const extra = JSON.parse(p.extra || '{}') as {
-        terms?: { term: string; en: string | null; definition: string }[];
-      };
-      return {
-        id: p.id,
-        slug: p.slug,
-        topic: p.topic,
-        title: p.title,
-        summary: p.summary,
-        bodyText: bodyTextOf(p.bodyAst),
-        tags: JSON.parse(p.tags || '[]') as string[],
-        audience: p.audience,
-        published: p.published,
-        sortOrder: p.sortOrder,
-        ...(extra.terms ? { terms: extra.terms } : {}),
-      };
-    }),
+    pages: pages.map(toSearchPage),
     faqs,
     printers: parse<PrintersData | null>('impresoras', null),
   });
   return { docs, config: parse<SearchConfig>('buscador', { synonyms: {}, stopWords: [] }) };
+}
+
+/** A stored page as the document builder reads it: JSON columns parsed, body as plain text. */
+function toSearchPage(p: typeof schema.learnPages.$inferSelect): SearchPageRow {
+  const extra = JSON.parse(p.extra || '{}') as {
+    terms?: { term: string; en: string | null; definition: string }[];
+  };
+  return {
+    id: p.id,
+    slug: p.slug,
+    topic: p.topic,
+    title: p.title,
+    summary: p.summary,
+    bodyText: bodyTextOf(p.bodyAst),
+    tags: JSON.parse(p.tags || '[]') as string[],
+    audience: p.audience,
+    published: p.published,
+    sortOrder: p.sortOrder,
+    ...(extra.terms ? { terms: extra.terms } : {}),
+  };
 }
 
 export type SyncResult =
@@ -143,5 +152,63 @@ export async function syncLearnIndex(
   } catch (e) {
     console.error('learn index sync failed', { error: (e as Error).name });
     return { ok: false, code: 'SYNC_FAILED' };
+  }
+}
+
+/** Outcome of updating one page in the index: done, nothing to do (no `MEILI_HOST`) or failed. */
+export type PageIndexOutcome = 'updated' | 'skipped' | 'failed';
+
+/** Longest wait for each Meilisearch task when one page is updated from the panel. */
+export const pageTaskTimeoutMs = 5000;
+
+/**
+ * Updates the documents of one page in the live index, without a swap (docs/22 §6): deletes every
+ * document whose `pageId` is the page's, then adds the ones the page has now (none when it is
+ * hidden). Without `MEILI_HOST` it does nothing; any Meilisearch error or failed task gives
+ * `failed` and is logged with the error name only. D1 is never written here.
+ */
+export async function updateLearnPageIndex(
+  db: AnyDb,
+  meili: MeiliConfig | null,
+  pageId: string,
+): Promise<PageIndexOutcome> {
+  if (!meili) return 'skipped';
+  try {
+    const [pages, faqs, printers] = await db.batch([
+      db.select().from(schema.learnPages).where(eq(schema.learnPages.id, pageId)),
+      db
+        .select()
+        .from(schema.learnFaqs)
+        .where(eq(schema.learnFaqs.pageId, pageId))
+        .orderBy(asc(schema.learnFaqs.position)),
+      db.select().from(schema.learnDatasets).where(eq(schema.learnDatasets.key, 'impresoras')),
+    ]);
+    const page = pages[0];
+    // The printer rows only belong to the page with the volume table.
+    const printerRows =
+      page?.slug === volumeSlug && printers[0]
+        ? (JSON.parse(printers[0].data) as PrintersData)
+        : null;
+    const docs = buildSearchDocs({
+      pages: page ? [toSearchPage(page)] : [],
+      faqs,
+      printers: printerRows,
+    });
+    const index = new Meilisearch({ host: meili.host, apiKey: meili.writeKey }).index<SearchDoc>(
+      indexName,
+    );
+    const wait = { timeout: pageTaskTimeoutMs };
+    const removed = await index
+      .deleteDocuments({ filter: `pageId = ${JSON.stringify(pageId)}` })
+      .waitTask(wait);
+    if (removed.status !== 'succeeded') throw new Error(`delete task ${removed.status}`);
+    if (docs.length > 0) {
+      const added = await index.addDocuments(docs).waitTask(wait);
+      if (added.status !== 'succeeded') throw new Error(`add task ${added.status}`);
+    }
+    return 'updated';
+  } catch (e) {
+    console.error('learn page index update failed', { error: (e as Error).name });
+    return 'failed';
   }
 }

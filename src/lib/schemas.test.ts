@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { heroInputSchema, productInputSchema, reorderSchema, uploadFieldsSchema } from './schemas';
+import {
+  heroInputSchema,
+  learnPageInputSchema,
+  learnSearchMissesInputSchema,
+  learnSetPublishedSchema,
+  productInputSchema,
+  reorderSchema,
+  uploadFieldsSchema,
+} from './schemas';
 
 const photo = {
   id: 'f1',
@@ -111,5 +119,56 @@ describe('reorderSchema and uploadFieldsSchema', () => {
         originalHeight: '1',
       }).success,
     ).toBe(false);
+  });
+});
+
+describe('learnPageInputSchema', () => {
+  const page = {
+    id: 'learn-filamentos-pla',
+    title: 'PLA',
+    subtitle: '',
+    summary: '',
+    bodyMd: '',
+    tags: [],
+    related: ['filamentos/petg', ''],
+    sources: [],
+    faqs: [{ q: '¿Sí?', a: 'Sí.' }],
+    published: true,
+    cta: 'whatsapp',
+  };
+  it('accepts the editable fields and fills the button text', () => {
+    expect(learnPageInputSchema.parse(page)).toMatchObject({
+      ctaText: '',
+      related: ['filamentos/petg', ''],
+    });
+  });
+  it('keeps the rules of the page files', () => {
+    const bad = (o: object) => learnPageInputSchema.safeParse({ ...page, ...o }).success;
+    expect(bad({ title: '' })).toBe(false);
+    expect(bad({ title: 'x'.repeat(121) })).toBe(false);
+    expect(bad({ summary: 'x'.repeat(501) })).toBe(false);
+    expect(bad({ cta: 'email' })).toBe(false);
+    expect(bad({ related: ['Con Espacios'] })).toBe(false);
+    expect(bad({ faqs: [{ q: '', a: 'x' }] })).toBe(false);
+    expect(bad({ tags: Array.from({ length: 41 }, (_, i) => `t${i}`) })).toBe(false);
+    expect(bad({ bodyMd: 'x'.repeat(100_001) })).toBe(false);
+    expect(bad({ id: '' })).toBe(false);
+  });
+  it('slug, topic and kind are not part of it', () => {
+    const parsed = learnPageInputSchema.parse({ ...page, slug: 'otra', topic: 'x', kind: 'home' });
+    expect(parsed).not.toHaveProperty('slug');
+    expect(parsed).not.toHaveProperty('topic');
+    expect(parsed).not.toHaveProperty('kind');
+  });
+});
+
+describe('small learning inputs', () => {
+  it('publish switch and misses window', () => {
+    expect(learnSetPublishedSchema.safeParse({ id: 'learn-x', published: 'yes' }).success).toBe(
+      false,
+    );
+    expect(learnSearchMissesInputSchema.parse({})).toEqual({ days: 30 });
+    expect(learnSearchMissesInputSchema.safeParse({ days: 0 }).success).toBe(false);
+    expect(learnSearchMissesInputSchema.safeParse({ days: 366 }).success).toBe(false);
   });
 });

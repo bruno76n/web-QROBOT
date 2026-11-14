@@ -1,4 +1,4 @@
-import { and, asc, eq, inArray, ne, or, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, gte, inArray, ne, or, sql } from 'drizzle-orm';
 import { isLearnTopic, learnTopics, learnTopicName, type LearnTopicId } from '@/config/learn';
 import {
   expandSynonyms,
@@ -14,7 +14,10 @@ import type { LearnNode, MarkName } from '@/lib/learn/markdown';
 import { wordMatches, words as fuzzyWords } from '@/lib/learn/fuzzy';
 import { getDb, schema, type Db } from '../db/client';
 
-/** Reading Aprende (docs/21 §9). Only published pages ever leave this file. */
+/**
+ * Reading Aprende (docs/21 §9). The public functions return published pages only; the ones named
+ * `…ForAdmin` and the search misses are for the panel, behind its session (docs/10 §3).
+ */
 
 /** Link to a related page. */
 export interface LearnTopicLink {
@@ -431,4 +434,145 @@ export async function searchLearnD1(
       text: r.summary,
     })),
   };
+}
+
+// ---- Panel (docs/12, fase 8): every page, published or not ----
+
+/** A page as the panel lists it. */
+export interface LearnPageRow {
+  id: string;
+  slug: string;
+  title: string;
+  topic: string;
+  kind: (typeof schema.learnKindValues)[number];
+  published: boolean;
+  /** True once saved from the panel: the importer leaves it alone. */
+  editedInPanel: boolean;
+  /** Unix ms of the last change. */
+  updatedAt: number;
+}
+
+/** Every page, published or not, ordered by slug (the home first, then each topic with its pages). */
+export async function listLearnPagesForAdmin(db: Db = getDb()): Promise<LearnPageRow[]> {
+  const rows = await db
+    .select({
+      id: schema.learnPages.id,
+      slug: schema.learnPages.slug,
+      title: schema.learnPages.title,
+      topic: schema.learnPages.topic,
+      kind: schema.learnPages.kind,
+      published: schema.learnPages.published,
+      editedInPanel: schema.learnPages.editedInPanel,
+      updatedAt: schema.learnPages.updatedAt,
+    })
+    .from(schema.learnPages)
+    .orderBy(asc(schema.learnPages.slug));
+  return rows.map((r) => ({ ...r, updatedAt: r.updatedAt.getTime() }));
+}
+
+/** A page with everything the editor needs, plus the sources it can cite. */
+export interface LearnPageDetail extends LearnPageRow {
+  subtitle: string;
+  summary: string;
+  bodyMd: string;
+  tags: string[];
+  /** Slugs of related pages, in order. */
+  related: string[];
+  /** Ids of cited sources, in order. */
+  sources: string[];
+  cta: (typeof schema.learnCtaValues)[number];
+  ctaText: string;
+  /** Month of the last review, `YYYY-MM` (read only: it comes from the files). */
+  reviewed: string;
+  /** Questions in order. */
+  faqs: { q: string; a: string }[];
+  /** Every source in `learn_sources`, by name, for the «Fuentes» field. */
+  sourceOptions: LearnSource[];
+}
+
+/** One page by id, published or not, for the editor; `null` when the id does not exist. One round trip. */
+export async function getLearnPageForAdmin(
+  id: string,
+  db: Db = getDb(),
+): Promise<LearnPageDetail | null> {
+  const [pages, faqs, sources] = await db.batch([
+    db.select().from(schema.learnPages).where(eq(schema.learnPages.id, id)),
+    db
+      .select()
+      .from(schema.learnFaqs)
+      .where(eq(schema.learnFaqs.pageId, id))
+      .orderBy(asc(schema.learnFaqs.position)),
+    db.select().from(schema.learnSources).orderBy(asc(schema.learnSources.name)),
+  ]);
+  const row = pages[0];
+  if (!row) return null;
+  return {
+    id: row.id,
+    slug: row.slug,
+    title: row.title,
+    topic: row.topic,
+    kind: row.kind,
+    published: row.published,
+    editedInPanel: row.editedInPanel,
+    updatedAt: row.updatedAt.getTime(),
+    subtitle: row.subtitle,
+    summary: row.summary,
+    bodyMd: row.bodyMd,
+    tags: json<string[]>(row.tags, []),
+    related: json<string[]>(row.related, []),
+    sources: json<string[]>(row.sources, []),
+    cta: row.cta,
+    ctaText: row.ctaText,
+    reviewed: row.reviewed,
+    faqs: faqs.map((f) => ({ q: f.question, a: f.answer })),
+    sourceOptions: sources,
+  };
+}
+
+/** A search without results, added up over the window. */
+export interface LearnSearchMiss {
+  /** Normalized text of the search. */
+  query: string;
+  count: number;
+}
+
+/** Most searches without results the panel lists. */
+export const searchMissesLimit = 100;
+
+/**
+ * Searches without results since the day `since` (`YYYY-MM-DD`, included), added up per search and
+ * ordered from the most repeated; ties in alphabetical order. At most 100.
+ */
+export async function listSearchMisses(
+  since: string,
+  db: Db = getDb(),
+): Promise<LearnSearchMiss[]> {
+  const total = sql<number>`sum(${schema.learnSearchMisses.count})`;
+  const rows = await db
+    .select({ query: schema.learnSearchMisses.query, count: total })
+    .from(schema.learnSearchMisses)
+    .where(gte(schema.learnSearchMisses.day, since))
+    .groupBy(schema.learnSearchMisses.query)
+    .orderBy(desc(total), asc(schema.learnSearchMisses.query))
+    .limit(searchMissesLimit);
+  return rows.map((r) => ({ query: r.query, count: Number(r.count) }));
+}
+
+/** State of the search index as the last full sync left it (docs/22 §6). */
+export interface LearnIndexState {
+  /** ISO date of the last full sync; `null` if it never ran. */
+  syncedAt: string | null;
+  /** Documents loaded by that sync; `null` if it never ran. */
+  docs: number | null;
+}
+
+/** Reads `learn_index_synced_at` and `learn_index_docs` from `settings`. */
+export async function getLearnIndexState(db: Db = getDb()): Promise<LearnIndexState> {
+  const rows = await db
+    .select()
+    .from(schema.settings)
+    .where(inArray(schema.settings.key, ['learn_index_synced_at', 'learn_index_docs']));
+  const value = (k: string) => rows.find((r) => r.key === k)?.value ?? null;
+  const docs = value('learn_index_docs');
+  return { syncedAt: value('learn_index_synced_at'), docs: docs === null ? null : Number(docs) };
 }

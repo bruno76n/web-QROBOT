@@ -276,6 +276,13 @@ export const es = {
       CATEGORY_IN_USE: (names: string) =>
         `No se puede borrar: estos productos publicados se quedarían sin categoría: ${names}.`,
       TOO_MANY_CATEGORIES: 'Caben hasta 30 categorías.',
+      UNKNOWN_RELATED: (slugs: string) =>
+        `Estas páginas relacionadas ya no existen: ${slugs}. Quítalas de la lista.`,
+      UNKNOWN_BLOCK: (marks: string) =>
+        `El cuerpo usa un bloque que no existe: ${marks}. Revisa lo que escribiste entre [[ ]].`,
+      SEARCH_UNAVAILABLE: 'El buscador no respondió. Intenta de nuevo en un rato.',
+      SEARCH_NOT_UPDATED:
+        'Se guardó, pero el buscador no se actualizó. Toca «Actualizar buscador» en un rato.',
       PHOTO_NOT_FOUND: 'Una foto no se encontró. Vuelve a subirla.',
       FILE_TYPE: 'Esa foto no se puede usar. Sube JPG, PNG, WEBP o una foto del iPhone.',
       FILE_TOO_LARGE: 'La foto pesa demasiado (máximo 25 MB).',

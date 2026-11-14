@@ -58,6 +58,12 @@ Las URL de fotos se arman con `photoUrl(photo, width)`, que solo usa anchos de `
 | `admin.resetHero` | — | Borra todas las portadas y sus fotos (D1 y R2): el inicio vuelve a la foto por defecto | — |
 | `admin.exportBackup` | — | Devuelve el JSON de `09 §5` | — |
 | `admin.cleanupPending` | — | Borra fotos `pending` de más de 24 h (se llama al abrir el panel) | — |
+| `admin.listLearnPages` | — | Todas las páginas de Aprende, publicadas o no: `{ id, slug, title, topic, kind, published, editedInPanel, updatedAt }[]` por slug | — |
+| `admin.getLearnPage` | `{ id }` | Página para el editor: lo de la lista más `subtitle`, `summary`, `bodyMd`, `tags`, `related`, `sources`, `cta`, `ctaText`, `reviewed`, `faqs: { q, a }[]` en orden y `sourceOptions` (todas las fuentes) | `NOT_FOUND` |
+| `admin.saveLearnPage` | `id`, `title`, `subtitle`, `summary`, `bodyMd`, `tags`, `related`, `sources`, `faqs: { q, a }[]` en orden, `published`, `cta`, `ctaText` (`learnPageInputSchema`, sale del esquema de `content.ts`) | Convierte el Markdown (`markdown.ts`), arma `search_text`, marca `edited_in_panel` y reemplaza las preguntas, todo en un `batch`; después actualiza esa página en Meilisearch (`22 §6`). Devuelve `{ id, slug, published, updatedAt, search }` con `search`: `updated` · `skipped` (sin Meilisearch) · `failed` (la página quedó guardada; el panel avisa). Slug, tema y tipo no se editan | `VALIDATION` (también fuente que no existe: `details.fields.sources`, `details.ids`), `NOT_FOUND`, `UNKNOWN_BLOCK` (`details.marks`), `UNKNOWN_RELATED` (`details.slugs`) |
+| `admin.setLearnPublished` | `{ id, published }` | Interruptor rápido; actualiza esa página en Meilisearch. No marca `edited_in_panel`. Devuelve lo mismo que `saveLearnPage` | `NOT_FOUND` |
+| `admin.learnSearchMisses` | `{ days }` (1–365, 30 por defecto) | `{ days, misses: { query, count }[], index: { configured, syncedAt, docs } }`: búsquedas sin resultado sumadas, de más a menos (máximo 100), y el estado del buscador (`22 §10`) | — |
+| `admin.syncLearnIndex` | — | `syncLearnIndex()` completo. `{ skipped: true }` sin Meilisearch; si no, `{ skipped: false, docs, syncedAt }` | `SEARCH_UNAVAILABLE` |
 
 ## 4. Subir fotos (`POST /api/admin/upload`)
 
@@ -89,6 +95,9 @@ Mismos códigos en servidor y panel. Texto en español en `src/i18n/es.ts` (`12 
 | `TOO_MANY_PHOTOS` | 422 | `Result` | Más de 10 |
 | `TOO_MANY_SLIDES` | 422 | `Result` | Más de 6 |
 | `PHOTO_NOT_FOUND` | 422 | `Result` | `photoId` que no existe o es de otro dueño |
+| `UNKNOWN_RELATED` | 422 | `Result` | Página de Aprende con relacionadas que no existen; `details.slugs` |
+| `UNKNOWN_BLOCK` | 422 | `Result` | Cuerpo de Aprende con una marca `[[…]]` desconocida; `details.marks` |
+| `SEARCH_UNAVAILABLE` | 503 | `Result` | Meilisearch no respondió al actualizar el buscador completo |
 | `FILE_TYPE` | 415 | Respuesta del endpoint de subida | No es JPG, PNG ni WEBP, o los bytes no coinciden (las HEIC se convierten a JPG en el navegador) |
 | `FILE_TOO_LARGE` | 413 | Respuesta del endpoint de subida | Original > 25 MB o versión > 2 MB |
 | `INTERNAL` | 500 | `ActionError` / endpoint | Inesperado; solo se muestra el `errorId` |
