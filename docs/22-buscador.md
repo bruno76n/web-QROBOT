@@ -87,7 +87,7 @@ Los sinónimos de `buscador.json` son de un sentido («se despega» → «adhesi
 Cuándo corre:
 - `pnpm learn:sync` (local o `--remote`) y `pnpm learn:import --sync`.
 - Botón «Actualizar buscador» del panel (fase 8).
-- Al guardar una página en el panel: solo esa página (borra por filtro `pageId = …` y agrega sus documentos), sin `swap`.
+- Al guardar una página en el panel o usar su interruptor de publicar: solo esa página (`updateLearnPageIndex`, en `src/server/search-index.ts`: borra por filtro `pageId = …` y agrega sus documentos; una página oculta solo se borra), sin `swap`. Si Meilisearch falla, la página queda guardada y la acción responde éxito con `search: 'failed'`; el panel avisa que se actualice el buscador.
 
 Sin `MEILI_HOST` no hace nada y lo dice (`{ ok: true, skipped: true }`).
 

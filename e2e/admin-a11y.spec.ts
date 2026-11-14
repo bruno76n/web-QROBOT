@@ -29,3 +29,15 @@ test('portada', async ({ page }) => {
   );
   expect(serious, JSON.stringify(serious, null, 2)).toEqual([]);
 });
+
+test('aprende: lista, buscador y editor', async ({ page }) => {
+  await page.goto('/admin/aprende?p=learn-filamentos-pla');
+  await expect(page.getByLabel('Título', { exact: true })).toBeVisible({ timeout: 30_000 });
+  const results = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+    .analyze();
+  const serious = results.violations.filter(
+    (v) => v.impact === 'serious' || v.impact === 'critical',
+  );
+  expect(serious, JSON.stringify(serious, null, 2)).toEqual([]);
+});

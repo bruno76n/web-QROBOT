@@ -72,6 +72,17 @@ describe('unwrap and error texts', () => {
       'No hay conexión. Tus cambios siguen aquí; intenta guardar de nuevo.',
     );
   });
+  it('names the pages and blocks of the learning editor errors', () => {
+    expect(
+      errorText({ ok: false, code: 'UNKNOWN_RELATED', details: { slugs: ['a/b', 'c'] } }),
+    ).toBe('Estas páginas relacionadas ya no existen: a/b, c. Quítalas de la lista.');
+    expect(errorText({ ok: false, code: 'UNKNOWN_BLOCK', details: { marks: ['tabla:x'] } })).toBe(
+      'El cuerpo usa un bloque que no existe: [[tabla:x]]. Revisa lo que escribiste entre [[ ]].',
+    );
+    expect(errorText({ ok: false, code: 'SEARCH_UNAVAILABLE' })).toBe(
+      'El buscador no respondió. Intenta de nuevo en un rato.',
+    );
+  });
   it('lists missing pieces in plain Spanish', () => {
     expect(missingList(['photo'])).toBe('una foto');
     expect(missingList(['photo', 'category', 'price'])).toBe(

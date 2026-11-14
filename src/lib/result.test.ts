@@ -13,7 +13,7 @@ describe('Result', () => {
       details: { missing: ['photo'] },
     });
   });
-  it('has the eleven codes of docs/10 §5', () => {
-    expect(errorCodes).toHaveLength(15);
+  it('has the codes of docs/10 §5', () => {
+    expect(errorCodes).toHaveLength(18);
   });
 });

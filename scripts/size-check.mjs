@@ -39,18 +39,62 @@ const safariBreakers = [
 const builtJs = 'dist/client/_astro';
 
 /**
- * Safari 14 check over every built script of the public site (docs/24 §5, docs/25 §12), so it also
- * covers pages that do not answer in the build, like the hidden page for workshops. The panel
- * (`Admin*` files) is left out: its rules are not those of docs/24. Returns the problems found.
+ * Safari 14 check over the page scripts of the build (docs/24 §5, docs/25 §12): every `<script>` of
+ * an Astro page or component (files `*.astro_astro_type_script_*`) and every file it imports, so it
+ * also covers pages that do not answer in the build, like the hidden page for workshops. The React
+ * islands of the panel are not page scripts: their rules are not those of docs/24. Returns the
+ * problems found.
  */
 function safariInBuild() {
   if (!existsSync(builtJs)) return [`${builtJs} does not exist (pnpm build first)`];
-  return readdirSync(builtJs)
-    .filter((f) => f.endsWith('.js') && !f.startsWith('Admin'))
-    .flatMap((f) => {
-      const code = readFileSync(join(builtJs, f), 'utf8');
-      return safariBreakers.filter((s) => s.re.test(code)).map((s) => `${s.name} in ${f}`);
-    });
+  const queue = readdirSync(builtJs).filter(
+    (f) => f.endsWith('.js') && f.includes('.astro_astro_type_script_'),
+  );
+  const seen = new Set();
+  const problems = [];
+  while (queue.length > 0) {
+    const f = queue.shift();
+    if (seen.has(f) || !existsSync(join(builtJs, f))) continue;
+    seen.add(f);
+    const code = readFileSync(join(builtJs, f), 'utf8');
+    for (const s of safariBreakers) if (s.re.test(code)) problems.push(`${s.name} in ${f}`);
+    // Follow the static imports of the same folder (shared chunks of the page scripts).
+    for (const m of code.matchAll(/(?:from|import)\s*["']\.\/([^"']+\.js)["']/g)) queue.push(m[1]);
+  }
+  return problems;
+}
+
+/** Every file under `dir` with one of the extensions. */
+const walk = (dir, exts) =>
+  readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+    e.isDirectory()
+      ? walk(join(dir, e.name), exts)
+      : exts.some((x) => e.name.endsWith(x))
+        ? [join(dir, e.name)]
+        : [],
+  );
+
+/**
+ * Safari 14 check over the source of every browser script we write: the `<script>` blocks of the
+ * Astro components and pages, and `src/scripts/`. Scripts of pages rendered on demand can be
+ * inlined into their HTML instead of becoming files of the build, so the build check alone does not
+ * see the scripts of the hidden pages (docs/25 §12).
+ */
+function safariInSource() {
+  const astro = walk('src', ['.astro']).flatMap((f) =>
+    [...readFileSync(f, 'utf8').matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].map((m) => ({
+      f,
+      code: m[1],
+    })),
+  );
+  const scripts = existsSync('src/scripts')
+    ? walk('src/scripts', ['.ts', '.js'])
+        .filter((f) => !/\.test\.[jt]s$/.test(f))
+        .map((f) => ({ f, code: readFileSync(f, 'utf8') }))
+    : [];
+  return [...astro, ...scripts].flatMap(({ f, code }) =>
+    safariBreakers.filter((s) => s.re.test(code)).map((s) => `${s.name} in ${f}`),
+  );
 }
 
 /**
@@ -129,10 +173,10 @@ async function run(base) {
     console.error('No page found to check.');
     return 1;
   }
-  const safari = safariInBuild();
+  const safari = [...safariInBuild(), ...safariInSource()];
   for (const m of safari) console.log(`  ✗ Safari 14: ${m}`);
   console.log(
-    `${safari.length ? '✗' : '✓'} Safari 14: every script of ${builtJs} (requestIdleCallback, lookbehind)`,
+    `${safari.length ? '✗' : '✓'} Safari 14: page scripts of ${builtJs} with their imports, and the source of every browser script (requestIdleCallback, lookbehind)`,
   );
   return failed || safari.length ? 1 : 0;
 }

@@ -1,4 +1,4 @@
-/** Hook that keeps the selected product id in the URL query (`?p=`). */
+/** Hook that keeps the selected item id (a product, a page of Aprende) in the URL query (`?p=`). */
 
 import { useCallback, useEffect, useState } from 'react';
 
@@ -6,7 +6,8 @@ import { useCallback, useEffect, useState } from 'react';
 const read = () => new URLSearchParams(window.location.search).get('p');
 
 /**
- * The selected product lives in the URL (`/admin?p=<id>`, `?p=new`) so it survives a reload (docs/12 §2).
+ * The selected item lives in the URL (`/admin?p=<id>`, `?p=new`, `/admin/aprende?p=<id>`) so it
+ * survives a reload (docs/12 §2).
  * Returns the current value and a setter that pushes a history entry (null clears it).
  */
 export function useUrlSelection(): [string | null, (next: string | null) => void] {

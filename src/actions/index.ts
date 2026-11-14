@@ -4,6 +4,7 @@ import { backup } from './admin/backup';
 import { categories } from './admin/categories';
 import { clicks } from './admin/clicks';
 import { hero } from './admin/hero';
+import { learn } from './admin/learn';
 import { products } from './admin/products';
 
 /**
@@ -11,5 +12,5 @@ import { products } from './admin/products';
  * `/_actions/admin.<name>` (docs/10 §3, docs/13 §2), the prefix the middleware protects.
  */
 export const server = {
-  admin: { ...products, ...categories, ...hero, ...backup, ...clicks },
+  admin: { ...products, ...categories, ...hero, ...backup, ...clicks, ...learn },
 };

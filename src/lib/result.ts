@@ -14,6 +14,9 @@ export const errorCodes = [
   'CATEGORY_PROTECTED',
   'CATEGORY_IN_USE',
   'TOO_MANY_CATEGORIES',
+  'UNKNOWN_RELATED',
+  'UNKNOWN_BLOCK',
+  'SEARCH_UNAVAILABLE',
   'FILE_TYPE',
   'FILE_TOO_LARGE',
   'INTERNAL',
@@ -26,7 +29,7 @@ export type ErrorCode = (typeof errorCodes)[number];
 export interface Failure {
   ok: false;
   code: ErrorCode;
-  /** Extra data for the panel, e.g. `{ missing: ['photo'] }` or `{ fields: {...} }`. */
+  /** Extra data for the panel, e.g. `{ missing: ['photo'] }`, `{ slugs: [...] }` or `{ fields: {...} }`. */
   details?: Record<string, unknown>;
 }
 

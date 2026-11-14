@@ -25,7 +25,7 @@ const pageSlug = z.union([
 const topicField = z.union([z.literal(''), z.enum(learnTopicIds)]);
 
 /** Question and answer of a page. */
-const faq = z.object({ q: z.string().min(1), a: z.string().min(1) });
+export const faq = z.object({ q: z.string().min(1), a: z.string().min(1) });
 /** Filter chip: `id` is the filter key, `label` the visible text. */
 const chip = z.object({ id: slugPart, label: z.string().min(1) });
 /** Internal link inside the learning section. */
