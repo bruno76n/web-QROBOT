@@ -632,6 +632,7 @@ export const es = {
       pageTitle: (q: string) => `Resultados para «${q}» · Aprende · Quick Robot`,
       pageTitleEmpty: 'Buscar · Aprende · Quick Robot',
       heading: 'Buscar en Aprende',
+      crumb: 'Buscar',
       resultsFor: { one: '1 resultado para «{q}»', many: '{n} resultados para «{q}»' },
     },
   },

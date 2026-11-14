@@ -18,6 +18,9 @@ interface Props {
   data: LearnData;
 }
 const { node, data } = Astro.props;
+// A numbered list whose every item starts in bold («**La idea.** …») is a list of steps (numbered boxes).
+const isSteps =
+  node.t === 'ol' && node.items.every((item) => item[0]?.t === 'p' && item[0].c[0]?.t === 'strong');
 ---
 
 {node.t === 'h' ? (

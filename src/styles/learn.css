@@ -2072,4 +2072,18 @@ html.lock {
   gap: 14px;
 }
 /* «Dato curioso» on mint: the mockup's green label falls under 4.5:1 contrast; the darker green passes. */
-.learn .callout b, .learn .fact-big b { color: var(--green-dd); }
+.learn .callout b,
+.learn .fact-big b {
+  color: var(--green-dd);
+}
+/* Tailwind's reset removes list markers; the mockups show them in the body of a page. */
+.learn .prose ul {
+  list-style: disc;
+}
+.learn .prose ol {
+  list-style: decimal;
+}
+.learn .prose .steps,
+.learn .prose .plist {
+  list-style: none;
+}
