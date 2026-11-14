@@ -1,27 +1,130 @@
 ---
 // The page for workshops: download (docs/25 §7.3). Hidden until the system is out (docs/25 §2):
 // the middleware locks `/talleres` and this page locks itself too; never prerendered.
+// No scripts: the server reads the `User-Agent` once to pick the main button, the line under it and
+// the marked row of the platform list (the response varies by `User-Agent`); it is not stored.
 import SystemLayout from '@/layouts/SystemLayout.astro';
+import AppWindow from '@/components/system/AppWindow.astro';
+import SectionHead from '@/components/system/SectionHead.astro';
+import PlatformList from '@/components/system/PlatformList.astro';
 import EndCta from '@/components/system/EndCta.astro';
+import Button from '@/components/site/Button.astro';
 import { site } from '@/config/site';
-import { systemVisible } from '@/config/system';
+import { systemShotWidths, systemVisible } from '@/config/system';
 import { es } from '@/i18n/es';
+import { detectPlatform } from '@/lib/system/platform';
+import { systemBase } from '@/lib/system/visibility';
 
 export const prerender = false;
 if (!systemVisible) return Astro.rewrite('/404');
 
-const { name, trialDays, appUrl, signUpPath } = site.system;
+const { name, trialDays, appUrl, signUpPath, downloads } = site.system;
 const t = es.system.download;
 const seo = es.system.seo.download(name);
+
+// The visitor's device decides the main button; caches must keep one copy per `User-Agent`.
+const platform = detectPlatform(Astro.request.headers.get('user-agent'));
+Astro.response.headers.append('Vary', 'User-Agent');
+
+// Main button: the installer of a computer (its row below while it has no file), or the system in
+// the browser for phones and anything else. Computers also get «Abrir en el navegador» beside it.
+const installer = platform === 'mac' || platform === 'windows' ? platform : null;
+const mainHref = installer
+  ? downloads[installer].url || `${systemBase}/descargar#${installer}`
+  : appUrl;
+const mainRel = /^https?:/.test(mainHref) ? 'noopener' : undefined;
+const req = installer ? t.req[installer](downloads[installer].minOs) : t.req[platform as 'mobile'];
+
+// The screenshot at the right: full width up to 1099 px, then 7 of 12 columns of the content.
+const shotSizes = '(min-width: 1100px) 700px, 100vw';
+const shotSrcset = systemShotWidths
+  .map((w) => `/brand/talleres/pedidos-${w}.webp ${w}w`)
+  .join(', ');
 ---
 
 <SystemLayout title={seo.title} description={seo.description} current="download">
-  <section aria-labelledby="h1">
+  <Fragment slot="head">
+    <link
+      rel="preload"
+      as="image"
+      imagesrcset={shotSrcset}
+      imagesizes={shotSizes}
+      fetchpriority="high"
+    />
+  </Fragment>
+
+  {/* Header: title, sentence, the button for this device and, at the right, the orders board. */}
+  <section class="s-ph" aria-labelledby="h1">
+    <div class="wrap dl-top">
+      <div>
+        <h1 class="t-h1" id="h1">
+          {t.title}
+        </h1>
+        <p class="lead">{t.lead}</p>
+        <div class="dl-main">
+          <Button href={mainHref} rel={mainRel} arrow class="dl-btn" data-dl-main>
+            {t.main[platform]}
+          </Button>
+          {installer && (
+            <Button href={appUrl} rel="noopener" variant="outline" class="dl-btn">
+              {t.openBrowser}
+            </Button>
+          )}
+        </div>
+        <p class="dl-req">{req}</p>
+      </div>
+      <AppWindow
+        shot="pedidos"
+        alt={es.system.shots.pedidos(name)}
+        sizes={shotSizes}
+        crop
+        priority
+      />
+    </div>
+  </section>
+
+  {/* Every way to use it, with the visitor's one marked. */}
+  <section class="pt0" aria-labelledby="plats-h">
     <div class="wrap">
-      <h1 class="t-h1" id="h1">
-        {t.title}
-      </h1>
-      <p class="lead">{t.lead}</p>
+      <SectionHead id="plats-h" title={t.platformsTitle} />
+      <PlatformList current={platform} />
+    </div>
+  </section>
+
+  {/* What the desktop app adds to the web. */}
+  <section class="band-soft" aria-labelledby="adds-h">
+    <div class="wrap">
+      <SectionHead id="adds-h" title={t.adds.title} lead={t.adds.lead} />
+      <ul class="adds">
+        {t.adds.items.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {/* How to install on Mac and on Windows. */}
+  <section aria-labelledby="inst-h">
+    <div class="wrap">
+      <SectionHead id="inst-h" title={t.install.title} />
+      <div class="steps2">
+        <div>
+          <h3 class="t-h3">{t.install.mac.title}</h3>
+          <ol>
+            {t.install.mac.steps(name).map((step) => (
+              <li>{step}</li>
+            ))}
+          </ol>
+        </div>
+        <div>
+          <h3 class="t-h3">{t.install.windows.title}</h3>
+          <ol>
+            {t.install.windows.steps.map((step) => (
+              <li>{step}</li>
+            ))}
+          </ol>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -32,3 +135,83 @@ const seo = es.system.seo.download(name);
     primary={{ label: es.system.cta.tryFree, href: `${appUrl}${signUpPath}` }}
   />
 </SystemLayout>
+
+<style>
+  /* Header of an inner page: less room than a regular section. */
+  .s-ph {
+    padding: clamp(40px, 6vw, 88px) 0 clamp(32px, 4vw, 56px);
+  }
+  /* Text and screenshot: one column, side by side from 1100 px. */
+  .dl-top {
+    display: grid;
+    gap: 20px;
+    align-items: center;
+  }
+  @media (min-width: 1100px) {
+    .dl-top {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    }
+  }
+  .dl-top .lead {
+    margin-top: 18px;
+  }
+  /* Buttons spaced with margins, not `gap` in flex (Safari 14, docs/24 §5). */
+  .dl-main {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 6px -6px -6px;
+  }
+  .dl-main :global(.dl-btn) {
+    margin: 6px;
+  }
+  .dl-req {
+    margin-top: 14px;
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+
+  /* What the app adds: one column on phones, two from 761 px. */
+  .adds {
+    display: grid;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .adds li {
+    border-top: 1px solid var(--line);
+    padding: 16px 0;
+    font-size: 17px;
+  }
+  @media (min-width: 761px) {
+    .adds {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 48px;
+    }
+  }
+
+  /* Install steps: Mac and Windows side by side from 761 px. */
+  .steps2 {
+    display: grid;
+    gap: 32px;
+  }
+  .steps2 ol {
+    margin: 12px 0 0;
+    padding-left: 1.3em;
+    list-style: decimal;
+    display: grid;
+    gap: 8px;
+    color: var(--ink-2);
+  }
+  /* Phones: the 17 px body text of the mockup. */
+  @media (max-width: 760px) {
+    .steps2 ol {
+      font-size: 17px;
+    }
+  }
+  @media (min-width: 761px) {
+    .steps2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 48px;
+    }
+  }
+</style>
