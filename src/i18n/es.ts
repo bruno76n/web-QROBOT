@@ -532,6 +532,8 @@ export const es = {
     cta: {
       text: '¿Necesitas una pieza? Dinos qué necesitas y te decimos material, precio y fecha.',
       button: 'Cotizar por WhatsApp',
+      /** Button of the `system` call (docs/21 §4.6), only while the page for workshops is visible. */
+      system: (name: string) => `Conoce ${name}`,
     },
     filaments: {
       label: 'Tabla de filamentos',

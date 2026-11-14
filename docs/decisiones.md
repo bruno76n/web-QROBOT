@@ -373,4 +373,4 @@ Se revierte "Publicar sin límites" (`e06d6da`): quitar el bloqueo de foto y pre
 - **Botones con `Button.astro`** (variantes `black`, `green`, `outline`, `outlineLight`) en lugar de la clase `.btn` de la maqueta: 1 px más de relleno por lado, el resto igual.
 - **Header de la web en Para talleres:** el de toda la web (ligas en negritas, sin flecha en Cotizar, ancho completo), no el de la maqueta; la barra del producto sí es la de la maqueta.
 - **`system.css` repite de `learn.css`** `.lead`, `.link` y el espacio de las secciones (cada uno con su prefijo, `.system` o `.learn`); se revisa al integrar la fase.
-
+- **Botón del llamado `system` de Aprende:** «Conoce Quick Cerebro» (`es.learn.cta.system(name)`); ninguna maqueta lo muestra.
