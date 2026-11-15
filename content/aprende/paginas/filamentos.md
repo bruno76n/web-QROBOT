@@ -26,7 +26,7 @@ audience: all
 published: true
 order: 0
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 faqs:
 - q: ¿PLA o PETG?
   a: 'Para figuras, llaveros y decoración, cualquiera de los dos: decide el precio y los colores que encuentres. El PETG sirve para todo lo que sirve el PLA, pero el PLA no sirve para todo lo del PETG: las piezas que se golpean, se doblan un poco o pueden pasar de 57 °C (un coche, una ventana con sol) van en PETG.'

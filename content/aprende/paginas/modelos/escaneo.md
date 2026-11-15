@@ -22,7 +22,7 @@ audience: all
 published: true
 order: 9
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 ---
 
 - El escaneo sale con huecos y ruido; casi siempre hay que limpiarlo.

@@ -70,7 +70,7 @@ Referencia visual: `reference/mockups/aprende/`, una maqueta por tipo de pantall
 3. **Filamentos de un vistazo**: PLA, PETG, ABS, ASA, TPU y PC con boquilla, cama y calor que aguanta (de `learn_datasets › filamentos`). Liga «Tabla completa» a `/aprende/filamentos`.
 4. **Más buscado**: las 6 ligas de `featured`. Más adelante puede salir de las búsquedas reales; hoy es fija.
 5. **Dato curioso**: uno de `learn_datasets › datos-curiosos`, elegido por el día del año (así el HTML es el mismo todo el día).
-6. Preguntas de la página `index` y el llamado de WhatsApp.
+6. Preguntas de la página `index`. La portada no lleva llamado (`cta: none`, §4.6).
 
 ### 4.3 Página de tema (`/aprende/[tema]`)
 
@@ -95,6 +95,8 @@ Letras A–Z arriba (las que tienen términos son ligas; las demás, grises). Ca
 | `none` | Nada |
 
 El mensaje de WhatsApp sale de `src/lib/whatsapp.ts` (`learnQuoteMessage(title)`: «Hola, vi «{título}» en su página y quiero cotizar una pieza.»).
+
+**Qué página lleva cada llamado.** El `cta: whatsapp` vive solo en las 10 páginas del tema **Encargar**, que existen para que la persona pida. El resto de Aprende va con `cta: none`: es un lugar para leer respuestas, no una asesoría, y WhatsApp sigue a la mano en el header, el footer y las páginas de producto. Las 4 páginas con `cta: system` no cambian (`25 §2`).
 
 ## 5. Contenido en Markdown
 

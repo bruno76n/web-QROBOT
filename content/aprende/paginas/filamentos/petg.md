@@ -28,7 +28,7 @@ audience: all
 published: true
 order: 4
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 faqs:
 - q: ¿Puedo usar PETG en lugar de PLA?
   a: 'Sí, para todo. Sirve para lo mismo y aguanta más golpes y calor. Lo que decide es el precio: si encuentras PETG igual o más barato, no necesitas PLA. Al revés no: el PLA no aguanta lo que aguanta el PETG.'

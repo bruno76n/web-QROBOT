@@ -24,7 +24,7 @@ audience: all
 published: true
 order: 3
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 ---
 
 1. Lava la pieza con agua y jabón para quitar grasa.

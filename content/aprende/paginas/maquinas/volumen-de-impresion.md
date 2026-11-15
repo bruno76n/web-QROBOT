@@ -62,7 +62,7 @@ audience: all
 published: true
 order: 9
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 faqs:
 - q: ¿Qué pasa si mi pieza no cabe?
   a: Se divide en partes que se unen con clavijas, cola de milano o tornillos, y se pegan. Ver Dividir piezas.

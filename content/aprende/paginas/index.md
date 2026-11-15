@@ -13,7 +13,7 @@ audience: all
 published: true
 order: 0
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 featured:
 - label: ¿Por qué se despega la primera capa?
   href: /aprende/problemas/primera-capa

@@ -25,7 +25,7 @@ audience: all
 published: true
 order: 1
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 ---
 
 | Archivo | Guarda | Se edita en | Notas |

@@ -23,7 +23,7 @@ audience: all
 published: true
 order: 6
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 faqs:
 - q: ¿Por qué se agrieta mi pieza de ABS?
   a: 'Se enfría disparejo: el aire frío encoge unas capas antes que otras. Cierra la impresora y apaga el ventilador de capa.'

@@ -28,7 +28,7 @@ audience: all
 published: true
 order: 3
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 ---
 
 - La licencia del modelo la pone quien lo subió, pero el personaje es de su dueño (estudio, editorial, empresa).

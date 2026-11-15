@@ -24,7 +24,7 @@ audience: all
 published: true
 order: 14
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 faqs:
 - q: ¿Se puede dejar el rollo en el AMS?
   a: Sí, con desecante dentro y la tapa cerrada. Para nylon y TPU, mejor en caja seca.

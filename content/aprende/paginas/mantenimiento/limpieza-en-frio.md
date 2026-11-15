@@ -21,7 +21,7 @@ audience: all
 published: true
 order: 4
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 ---
 
 ## Pasos

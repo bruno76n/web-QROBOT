@@ -28,8 +28,7 @@ audience: all
 published: true
 order: 0
 reviewed: 2026-11
-cta: whatsapp
-ctaText: ¿No encuentras tu problema? Mándanos foto por WhatsApp.
+cta: none
 chips:
 - id: primera-capa
   label: Primera capa

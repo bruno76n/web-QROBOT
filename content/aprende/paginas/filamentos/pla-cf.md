@@ -22,7 +22,7 @@ audience: all
 published: true
 order: 3
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 faqs:
 - q: ¿Es más fuerte que el PLA?
   a: Es más rígido (se dobla menos), pero aguanta menos golpes. Si la pieza se golpea, usa PETG.

@@ -27,7 +27,7 @@ audience: all
 published: true
 order: 7
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 faqs:
 - q: ¿Cuánto dura al sol?
   a: Años, mucho más que PLA, PETG o ABS. Los colores claros se calientan menos que los oscuros.

@@ -28,7 +28,7 @@ audience: all
 published: true
 order: 2
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 faqs:
 - q: ¿Cuánto tiempo brilla?
   a: Depende de cuánta luz recibió antes y del grosor de la pieza. Más luz y paredes más gruesas dan más brillo.

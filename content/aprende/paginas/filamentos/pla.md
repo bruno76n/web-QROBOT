@@ -28,7 +28,7 @@ audience: all
 published: true
 order: 1
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 faqs:
 - q: ¿PLA o PETG para figuras?
   a: Cualquiera de los dos. El PETG sirve para todo lo que sirve el PLA y aguanta más golpes y calor; el PLA no sirve para todo lo del PETG. Si el PETG te sale igual o más barato, úsalo para todo.

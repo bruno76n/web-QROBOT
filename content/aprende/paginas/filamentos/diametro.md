@@ -19,7 +19,7 @@ audience: all
 published: true
 order: 19
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 ---
 
 - Revisa el diámetro en el manual de tu impresora o en el extrusor.

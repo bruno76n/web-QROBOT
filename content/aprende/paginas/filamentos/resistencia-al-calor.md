@@ -28,7 +28,7 @@ audience: all
 published: true
 order: 15
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 faqs:
 - q: ¿Qué filamento uso para una pieza del coche?
   a: Dentro, PETG o ABS. En el tablero o por fuera, ASA.

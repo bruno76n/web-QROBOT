@@ -26,7 +26,7 @@ audience: all
 published: true
 order: 14
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 ---
 
 | Marca | Causa | Qué hacer |

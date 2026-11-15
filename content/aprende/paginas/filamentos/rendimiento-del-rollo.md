@@ -24,7 +24,7 @@ audience: all
 published: true
 order: 18
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 ---
 
 ## Tabla (1.75 mm)

@@ -23,7 +23,7 @@ audience: all
 published: true
 order: 3
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 ---
 
 | Pieza | Paredes |

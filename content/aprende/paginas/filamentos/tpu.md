@@ -27,7 +27,7 @@ audience: all
 published: true
 order: 8
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 faqs:
 - q: ¿Por qué se atora el TPU en el extrusor?
   a: Al ser blando, se dobla si va rápido o si hay espacio entre los engranes y la entrada de la boquilla. Baja la velocidad.

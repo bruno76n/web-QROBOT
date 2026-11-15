@@ -23,7 +23,7 @@ audience: all
 published: true
 order: 9
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 ---
 
 > **Cuidado.** Si la maraña cubre la boquilla, el plástico puede llegar al hotend. Apaga, deja enfriar y retíralo con cuidado antes de seguir.

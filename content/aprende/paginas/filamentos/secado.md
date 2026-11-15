@@ -26,7 +26,7 @@ audience: all
 published: true
 order: 13
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 faqs:
 - q: ¿Cada cuánto hay que secar?
   a: Los que dicen «siempre», antes de cada uso. Los demás, cuando el rollo estuvo abierto días o ves las señales de arriba.

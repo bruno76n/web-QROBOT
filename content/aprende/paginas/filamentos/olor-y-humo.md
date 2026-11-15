@@ -22,7 +22,7 @@ audience: all
 published: true
 order: 22
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 ---
 
 Ver la página completa en [Seguridad › Emisiones](/aprende/seguridad/emisiones).

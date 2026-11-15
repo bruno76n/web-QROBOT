@@ -25,7 +25,7 @@ audience: all
 published: true
 order: 13
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 ---
 
 1. **Orientación:** que la fuerza no separe capas.

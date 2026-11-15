@@ -25,7 +25,7 @@ audience: all
 published: true
 order: 4
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 ---
 
 > **Cuidado.** Juguetes impresos con piezas chicas no son para menores de 3 años: se pueden tragar.

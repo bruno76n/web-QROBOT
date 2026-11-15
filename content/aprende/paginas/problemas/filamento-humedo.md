@@ -23,7 +23,7 @@ audience: all
 published: true
 order: 10
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 ---
 
 Ver la tabla de temperaturas en [Filamentos › Secado](/aprende/filamentos/secado).

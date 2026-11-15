@@ -165,7 +165,7 @@ revisado: 2026-11
    - ¿Cuándo hay que secar el filamento?
    - ¿Por qué una pieza cuesta más que su plástico?
 5. **Dato curioso** (rota uno al azar de la lista de abajo en cada visita).
-6. **Llamados.** Dos franjas: «¿Tienes taller?» → Quick Cerebro. «¿Necesitas una pieza?» → cotizar por WhatsApp.
+6. **Llamado.** Una franja: «¿Tienes taller?» → Quick Cerebro (oculta mientras el sistema no salga). La portada **no** lleva llamado de WhatsApp (`21 §4.6`).
 
 **Datos curiosos de la portada** (rotan)
 
@@ -2496,7 +2496,7 @@ revisado: 2026-11
    1. ¿La cama está limpia? Lávala con agua y jabón.
    2. ¿El filamento está seco? Si truena, sécalo.
    3. ¿En el laminador está la placa y el material correctos?
-5. Dato curioso, Preguntas, Llamado («¿No encuentras tu problema? Mándanos foto por WhatsApp»).
+5. Dato curioso y Preguntas. **Sin llamado:** el tema de problemas lleva `cta: none` (`21 §4.6`).
 
 Cada página de problema lleva: «En corto» · Cómo se ve · Causas (de la más común a la menos común) · Qué hacer (pasos) · Para que no se repita · Preguntas.
 

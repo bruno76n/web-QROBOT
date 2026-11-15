@@ -28,7 +28,7 @@ audience: all
 published: true
 order: 6
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 ---
 
 | Programa | Para | Costo |

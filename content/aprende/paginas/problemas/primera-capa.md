@@ -28,7 +28,7 @@ audience: all
 published: true
 order: 1
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 faqs:
 - q: ¿Puedo limpiar con acetona?
   a: Solo la placa de PEI liso, y a lo mucho una vez al mes. En PEI texturizado o satinado, nunca.

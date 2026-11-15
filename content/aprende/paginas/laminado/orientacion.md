@@ -24,7 +24,7 @@ audience: all
 published: true
 order: 7
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 ---
 
 Reglas, en este orden:

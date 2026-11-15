@@ -21,7 +21,7 @@ audience: all
 published: true
 order: 11
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 ---
 
 En el diseño, un chaflán de 0.5 mm en la orilla de la base lo disimula.

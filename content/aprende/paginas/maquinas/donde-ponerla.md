@@ -26,7 +26,7 @@ audience: all
 published: true
 order: 11
 reviewed: 2026-11
-cta: whatsapp
+cta: none
 ---
 
 - Mesa firme que no se mueva con la impresora.
