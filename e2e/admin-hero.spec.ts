@@ -61,8 +61,15 @@ test('se pueden ordenar las portadas con el teclado y quitar una', async ({ page
   await page.getByRole('button', { name: 'Guardar portada' }).click();
   await toast(page, 'Portada guardada');
 
-  await page.locator('.sl').nth(1).getByRole('button', { name: 'Quitar', exact: true }).click();
-  await expect(page.locator('.sl')).toHaveCount(1);
+  // Right after the drop the list is still settling, and a click that lands mid-render is lost:
+  // the click is repeated while there are still two slides.
+  const slides = page.locator('.sl');
+  await expect(async () => {
+    if ((await slides.count()) === 2) {
+      await slides.nth(1).getByRole('button', { name: 'Quitar', exact: true }).click();
+    }
+    await expect(slides).toHaveCount(1);
+  }).toPass({ timeout: 15_000 });
   await page.getByRole('button', { name: 'Guardar portada' }).click();
   await toast(page, 'Portada guardada');
   await page.reload();

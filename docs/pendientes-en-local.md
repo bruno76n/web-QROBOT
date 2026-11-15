@@ -36,7 +36,9 @@ Requisitos: `wrangler` con la sesión de la cuenta de Cloudflare (`pnpm exec wra
 
 Si algo falla a la mitad: no repetir con `--overwrite`. El importador se puede volver a correr sin riesgo (solo agrega), y el respaldo del paso 2 permite volver atrás.
 
-## 2. Pruebas en Safari (WebKit)
+## 2. Pruebas en Safari (WebKit) — **hecho el 2026-11-14**, menos la revisión a mano del punto 4
+
+`pnpm e2e` en verde en la Mac: 436 pruebas, 0 fallos, con los tres proyectos de WebKit corriendo (9 + 18 + 18). Nada falló solo en Safari. Hubo que arreglar tres cosas de las pruebas, no del producto: la detección de WebKit no miraba la ruta de macOS, dos pruebas del panel usaban `check()` contra un interruptor que guarda solo, y un clic se perdía mientras dnd-kit acomodaba la lista (`decisiones.md`, `24 §6`). **Sigue pendiente el punto 4**, que es a mano en un iPhone real y en Safari de Mac.
 
 En la nube no se pudo instalar WebKit. En la Mac:
 

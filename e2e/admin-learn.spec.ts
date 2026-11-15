@@ -117,16 +117,21 @@ test('el interruptor oculta y publica la página al momento', async ({ page }) =
   await page.getByPlaceholder('Buscar página').fill('pla editado');
   const listSwitch = page.getByRole('checkbox', { name: 'Publicada: PLA editado' });
   await expect(listSwitch).toBeChecked({ timeout: 30_000 });
-  await listSwitch.uncheck();
+  // Same as the editor switch below: the state follows the save, not the click.
+  await listSwitch.click();
   await toast(page, 'Página oculta');
+  await expect(listSwitch).not.toBeChecked();
   expect((await page.request.get(PUBLIC_URL)).status()).toBe(404);
 
   await openEditor(page);
   const editorSwitch = page.getByRole('checkbox', { name: 'Publicada', exact: true });
   await expect(editorSwitch).not.toBeChecked();
   await expect(page.getByRole('link', { name: 'Ver página ↗' })).toHaveCount(0);
-  await editorSwitch.check();
+  // The switch is controlled by the saved page, so its state changes when the save answers, not
+  // on the click itself: `check()` would race it.
+  await editorSwitch.click();
   await toast(page, 'Página publicada');
+  await expect(editorSwitch).toBeChecked();
   await expect(page.getByRole('link', { name: 'Ver página ↗' })).toHaveAttribute(
     'href',
     PUBLIC_URL,

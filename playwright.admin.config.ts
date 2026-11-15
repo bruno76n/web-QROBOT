@@ -30,7 +30,14 @@ const widths = [
  * (`pnpm exec playwright install webkit`), so the suite still runs where there is only Chromium.
  */
 function hasWebKit(): boolean {
-  const dirs = [process.env.PLAYWRIGHT_BROWSERS_PATH, `${process.env.HOME}/.cache/ms-playwright`];
+  // Playwright keeps its browsers in a different folder per system: `~/.cache` on Linux,
+  // `~/Library/Caches` on macOS, `AppData\Local` on Windows.
+  const dirs = [
+    process.env.PLAYWRIGHT_BROWSERS_PATH,
+    `${process.env.HOME}/.cache/ms-playwright`,
+    `${process.env.HOME}/Library/Caches/ms-playwright`,
+    process.env.LOCALAPPDATA ? `${process.env.LOCALAPPDATA}/ms-playwright` : undefined,
+  ];
   return dirs.some(
     (d) => !!d && existsSync(d) && readdirSync(d).some((n) => n.startsWith('webkit-')),
   );

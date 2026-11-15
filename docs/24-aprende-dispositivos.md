@@ -104,6 +104,8 @@ Además, en todos los scripts de Aprende:
 1. **Playwright con WebKit**: agregar un proyecto `webkit` (iPhone 13, 390 px) en `playwright.config.ts` y correr ahí los flujos de Aprende **H a L** (`21 §15`), además de Chromium. WebKit de Playwright es el motor de Safari.
 2. **ES-Check o el build**: `pnpm build` con el `target` de §4; una prueba busca en `dist/` que no queden `requestIdleCallback(` sin reemplazo ni expresiones con `(?<=` / `(?<!`.
 3. **A mano antes de publicar** (informe de la fase 8): en un iPhone real y en Safari de Mac, abrir `/aprende`, buscar «petj», filtrar filamentos (Exterior y sol + Mi impresora es abierta → solo PETG), ¿Cabe mi pieza? con 25 × 10 × 5 cm y la calculadora con el ejemplo ($21.04).
+4. **Dónde busca WebKit:** `hasWebKit()`, en las dos configuraciones de Playwright, mira `PLAYWRIGHT_BROWSERS_PATH`, `~/.cache/ms-playwright` (Linux), `~/Library/Caches/ms-playwright` (macOS) y `%LOCALAPPDATA%\ms-playwright` (Windows). Si no lo encuentra, los proyectos de WebKit no se agregan y la suite corre solo en Chromium **sin avisar**; por eso, antes de confiar en una corrida, conviene ver que `pnpm exec playwright test --list` liste `webkit`, y `--list` de la configuración del panel liste `webkit-w390` y `webkit-w1440`.
+5. **Primera corrida con WebKit: 2026-11-14 en la Mac**, con `pnpm exec playwright install webkit`. Verde: 9 pruebas en `webkit` (flujos H–L de Aprende en iPhone 13), 18 en `webkit-w390` y 18 en `webkit-w1440` (flujos M, N y P de Para talleres). Nada falló solo en Safari, así que las reglas de §5 bastaron. Falta lo de a mano del punto 3.
 
 ## 7. Maquetas
 
